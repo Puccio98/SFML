@@ -16,13 +16,11 @@ public:
 
     virtual ~AnimationComponent();
 
-    void addAnimation(std::string key, float animation_timer,
+    void addAnimation(const std::string &key, float animation_timer,
                       int start_frame_x, int start_frame_y, int frames_x, int frames_y, int width,
-                      int height);
+                      int height, bool canBeInterrupted = true);
 
-    void play(const std::string &key, const float &dt, const float &mod_percent = 1.f, bool priority = false);
-
-    void updateAnimation(std::string animation);
+    void play(const std::string &key, const float &dt, const float &mod_percent = 1.f);
 };
 
 

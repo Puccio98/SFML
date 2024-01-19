@@ -26,10 +26,11 @@ void Game::initWindow() {
     ifs.close();
     this->fullscreen = fullscreen;
     windowSettings.antialiasingLevel = antialiasing_level;
-    if(this->fullscreen)
-    this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Fullscreen, windowSettings);
+    if (this->fullscreen)
+        this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Fullscreen, windowSettings);
     else
-        this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Titlebar | sf::Style::Close, windowSettings);
+        this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Titlebar | sf::Style::Close,
+                                            windowSettings);
     this->window->setFramerateLimit(framerate_limit);
     this->window->setVerticalSyncEnabled(vertical_sync_enabled);
 }
@@ -71,11 +72,12 @@ void Game::update() {
 void Game::updateSFMLEvents() {
     sf::Event event;
 
-    //sembrerebbe essere inutile
-   /* while (this->window->pollEvent(event)) {
+    // Plot twist non è inutile, ma non so cosa fa
+    //TODO::check this->window->pollEvent
+    while (this->window->pollEvent(event)) {
         if (event.type == sf::Event::Closed)
             this->window->close();
-    }*/
+    }
 }
 
 void Game::render() {
@@ -111,11 +113,10 @@ void Game::endApplication() {
 void Game::initKeys() {
     std::ifstream ifs("Config/supported_keys.ini");
 
-    if(ifs.is_open())
-    {
+    if (ifs.is_open()) {
         std::string key = "";
         int key_value = 0;
-        while(ifs >> key >> key_value) {
+        while (ifs >> key >> key_value) {
             this->supportedKeys[key] = key_value;
         }
     }

@@ -2,8 +2,9 @@
 
 #include "GameState.h"
 
-GameState::GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State*>* states) : State(window,
-                                                                                                  supportedKeys, states) {
+GameState::GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states)
+        : State(window,
+                supportedKeys, states) {
     this->initKeybinds();
     this->initTextures();
     this->initPlayers();
@@ -36,6 +37,10 @@ void GameState::updateInput(const float &dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MOVE_RIGHT"])))
         this->player->move(1.f, 0.f, dt);
 
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        this->player->attack(dt);
+    }
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["CLOSE"])))
         this->endState();
 }
@@ -54,7 +59,7 @@ void GameState::initKeybinds() {
 }
 
 void GameState::initTextures() {
-    if(!this->textures["PLAYER_SHEET"].loadFromFile("Resources/images/sprites/player/PLAYER_SHEET.png")) {
+    if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/images/sprites/player/PLAYER_SHEET.png")) {
         throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_IDLE_TEXTURE";
     }
 }
