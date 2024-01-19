@@ -10,7 +10,7 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
 
     this->animationComponent->addAnimation("IDLE", 2.f, 0, 0, 13, 0, 192, 192);
     this->animationComponent->addAnimation("WALK", 2.f, 0, 1, 11, 1, 192, 192);
-    this->animationComponent->addAnimation("ATTACK", 2.f, 0, 2, 13, 2, 192 * 2, 192);
+    this->animationComponent->addAnimation("ATTACK", 2.f, 0, 2, 13, 2, 192 * 2, 192, false);
 }
 
 Player::~Player() {
@@ -43,4 +43,8 @@ void Player::update(const float &dt) {
                                                    this->movementComponent->getMaxVelocity());
 
     this->hitboxComponent->update();
+}
+
+void Player::attack(const float &dt) {
+    this->animationComponent->play("ATTACK", dt);
 }

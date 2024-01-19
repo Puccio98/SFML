@@ -11,13 +11,14 @@ private:
     void initVariables();
 
 public:
-    Player(float x, float y, sf::Texture& texture_sheet);
+    Player(float x, float y, sf::Texture &texture_sheet);
 
     virtual ~Player();
 
     //Functions
-    void update(const float& dt) override;
+    void update(const float &dt) override;
 
+    void attack(const float &dt);
 };
 
 
