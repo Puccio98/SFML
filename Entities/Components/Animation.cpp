@@ -1,7 +1,6 @@
 #include "Animation.h"
 
-Animation::~Animation() {
-}
+Animation::~Animation() = default;
 
 void Animation::play(const float &dt, float mod_percent) {
     mod_percent = std::abs(mod_percent);
@@ -29,7 +28,7 @@ void Animation::reset() {
 
 Animation::Animation(sf::Sprite &sprite, sf::Texture &texture_sheet, float animation_timer,
                      int start_frame_x, int start_frame_y, int frames_x, int frames_y,
-                     int width, int height) : sprite(sprite), textureSheet(texture_sheet) {
+                     int width, int height, bool canBeInterrupted) : sprite(sprite), textureSheet(texture_sheet) {
     this->width = width;
     this->height = height;
     this->animationTimer = animation_timer;
@@ -41,5 +40,11 @@ Animation::Animation(sf::Sprite &sprite, sf::Texture &texture_sheet, float anima
 
     this->sprite.setTexture(this->textureSheet, true);
     this->sprite.setTextureRect(this->startRect);
+
+    this->canBeInterrupted = canBeInterrupted;
+}
+
+bool Animation::isFinished() const {
+    return this->currentRect == this->endRect;
 }
 
