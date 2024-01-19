@@ -22,7 +22,7 @@ add_executable(SFML
         Tile/Tile.h)
 
 set(SFML_STATIC_LIBRARIES TRUE)
-set(SFML_DIR C:/libs/SFML-2.6.0/lib/cmake/SFML)
+set(SFML_DIR C:/libs/SFML-2.6.1/lib/cmake/SFML)
 find_package(SFML COMPONENTS system window graphics audio network REQUIRED)
 
 include_directories(C:/libs/SFML-2.6.1/include/SFML)
