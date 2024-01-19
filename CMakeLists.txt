@@ -17,7 +17,9 @@ add_executable(SFML
         States/EditorState.cpp
         States/EditorState.h
         Entities/Components/HitboxComponent.cpp
-        Entities/Components/HitboxComponent.h)
+        Entities/Components/HitboxComponent.h
+        Tile/Tile.cpp
+        Tile/Tile.h)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/libs/SFML-2.6.0/lib/cmake/SFML)
@@ -30,11 +32,11 @@ include_directories(C:/libs/SFML-2.6.1/include/SFML)
 add_custom_command(
         TARGET SFML POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E remove_directory $<TARGET_FILE_DIR:SFML>/Config
-        COMMAND ${CMAKE_COMMAND} -E copy_directory  ${CMAKE_SOURCE_DIR}/Config $<TARGET_FILE_DIR:SFML>/Config
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Config $<TARGET_FILE_DIR:SFML>/Config
         COMMAND ${CMAKE_COMMAND} -E remove_directory $<TARGET_FILE_DIR:SFML>/Fonts
-        COMMAND ${CMAKE_COMMAND} -E copy_directory  ${CMAKE_SOURCE_DIR}/Fonts $<TARGET_FILE_DIR:SFML>/Fonts
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Fonts $<TARGET_FILE_DIR:SFML>/Fonts
         COMMAND ${CMAKE_COMMAND} -E remove_directory $<TARGET_FILE_DIR:SFML>/Resources
-        COMMAND ${CMAKE_COMMAND} -E copy_directory  ${CMAKE_SOURCE_DIR}/Resources $<TARGET_FILE_DIR:SFML>/Resources
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources $<TARGET_FILE_DIR:SFML>/Resources
 )
 
 
