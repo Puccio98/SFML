@@ -5,13 +5,13 @@
 
 class GameState : public State {
 private:
-    Player *player;
+    Player *player{};
 
     void initTextures();
 
     void initKeybinds() override;
 
-    void initPlayers();
+    void initPlayer();
 
 public:
     GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states);

@@ -10,9 +10,9 @@ Entity::~Entity() {
     delete this->animationComponent;
 }
 
-void Entity::move(const float dir_x, const float dir_y, const float &dt) {
+void Entity::move(sf::Vector2f direction, const float &dt) {
     if (this->movementComponent) {
-        this->movementComponent->move(dir_x, dir_y, dt); //Sets velocity, rename function
+        this->movementComponent->setDirection(direction); //Sets velocity, rename function
     }
 }
 
@@ -22,7 +22,7 @@ void Entity::update(const float &dt) {
 
 void Entity::render(sf::RenderTarget &target) {
     target.draw(this->sprite);
-    if(this->hitboxComponent)
+    if (this->hitboxComponent)
         this->hitboxComponent->render(target);
 }
 
@@ -43,16 +43,16 @@ void Entity::initVariables() {
     this->animationComponent = nullptr;
 }
 
-void Entity::createMovementComponent(const float maxVelocity, const float acceleration, const float deceleraton) {
-    this->movementComponent = new MovementComponent(this->sprite, maxVelocity, acceleration, deceleraton);
+void Entity::createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration) {
+    this->movementComponent = new MovementComponent(this->sprite, maxVelocity, acceleration, deceleration);
 }
 
 void Entity::createAnimationComponent(sf::Texture &texture_sheet) {
     this->animationComponent = new AnimationComponent(this->sprite, texture_sheet);
 }
 
-void Entity::createHitboxComponent(sf::Sprite &sprite, float offset_x, float offset_y, float width, float height) {
-    this->hitboxComponent = new HitboxComponent(sprite, offset_x, offset_y, width, height);
+void Entity::createHitboxComponent(sf::Sprite &_sprite, float offset_x, float offset_y, float width, float height) {
+    this->hitboxComponent = new HitboxComponent(_sprite, offset_x, offset_y, width, height);
 }
 
 
