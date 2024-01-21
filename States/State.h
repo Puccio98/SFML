@@ -5,13 +5,13 @@
 
 class State {
 private:
-    void debugMousePosition();
+    __attribute__((unused)) void debugMousePosition() const;
 
 protected:
-    std::stack<State*>* states;
-    sf::RenderWindow* window;
+    std::stack<State *> *states;
+    sf::RenderWindow *window;
     bool quit;
-    std::map<std::string, int>* supportedKeys;
+    std::map<std::string, int> *supportedKeys;
     std::map<std::string, int> keybinds;
 
     sf::Vector2i mousePosScreen;
@@ -25,17 +25,25 @@ protected:
     virtual void initKeybinds() = 0;
 
 public:
-    State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
+    State(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states);
 
     virtual ~State();
 
-    const bool& getQuit() const;
+    const bool &getQuit() const;
 
     virtual void endState();
+
     virtual void updateMousePositions();
-    virtual void updateInput(const float& dt) = 0;
-    virtual void update(const float& dt) = 0;
-    virtual void render(sf::RenderTarget* target) = 0;
+
+    virtual void updateInput(const float &dt) = 0;
+
+    virtual void update(const float &dt);
+
+    virtual void render(sf::RenderTarget *target) = 0;
+
+    virtual void handleEvent(sf::Event &event, const float &dt) = 0;
+
+    void pollEvents(const float &dt);
 };
 
 #endif //SFML_STATE_H

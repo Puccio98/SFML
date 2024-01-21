@@ -37,8 +37,6 @@ public:
     //Update
     void updateDT();
 
-    void updateSFMLEvents();
-
     void update();
 
     //Render
