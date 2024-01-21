@@ -54,7 +54,6 @@ Game::~Game() {
 
 //Functions
 void Game::update() {
-    this->updateSFMLEvents();
     if (this->states.empty()) {
         this->endApplication();
         this->window->close();
@@ -66,17 +65,6 @@ void Game::update() {
 
         delete this->states.top();
         this->states.pop();
-    }
-}
-
-void Game::updateSFMLEvents() {
-    sf::Event event;
-
-    // Plot twist non è inutile, ma non so cosa fa
-    //TODO::check this->window->pollEvent
-    while (this->window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed)
-            this->window->close();
     }
 }
 

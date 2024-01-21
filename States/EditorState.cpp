@@ -1,8 +1,8 @@
 #include "EditorState.h"
 
 EditorState::EditorState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys,
-                             std::stack<State *> *states) : State(window,
-                                                                  supportedKeys, states) {
+                         std::stack<State *> *states) : State(window,
+                                                              supportedKeys, states) {
     this->initFonts();
     this->initVariables();
     EditorState::initKeybinds();
@@ -17,11 +17,10 @@ EditorState::~EditorState() {
 }
 
 void EditorState::updateInput(const float &dt) {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["CLOSE"])))
-        this->endState();
 }
 
 void EditorState::update(const float &dt) {
+    State::update(dt);
     this->updateMousePositions();
     this->updateInput(dt);
     this->updateButtons();
@@ -73,4 +72,10 @@ void EditorState::updateButtons() {
 //Initializer Functions
 void EditorState::initVariables() {
 
+}
+
+void EditorState::handleEvent(sf::Event &event, const float &dt) {
+    if (event.type == sf::Event::KeyPressed && event.key.code == this->keybinds["CLOSE"]) {
+        this->endState();
+    }
 }
