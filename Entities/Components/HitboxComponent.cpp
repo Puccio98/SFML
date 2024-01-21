@@ -20,9 +20,10 @@ void HitboxComponent::render(sf::RenderTarget &target) {
 }
 
 void HitboxComponent::update() {
-    this->hitbox.setPosition(this->sprite.getPosition().x + this->offsetX, this->sprite.getPosition().y + this->offsetY);
+    this->hitbox.setPosition(this->sprite.getPosition().x + this->offsetX,
+                             this->sprite.getPosition().y + this->offsetY);
 }
 
-bool HitboxComponent::checkIntersect(const sf::FloatRect& frect) {
+bool HitboxComponent::checkIntersect(const sf::FloatRect &frect) {
     return this->hitbox.getGlobalBounds().intersects(frect);
 }

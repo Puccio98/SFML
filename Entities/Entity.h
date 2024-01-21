@@ -14,24 +14,30 @@ private:
 protected:
     sf::Sprite sprite;
 
-    HitboxComponent* hitboxComponent;
-    MovementComponent* movementComponent;
-    AnimationComponent* animationComponent;
+    HitboxComponent *hitboxComponent;
+    MovementComponent *movementComponent;
+    AnimationComponent *animationComponent;
 public:
     Entity();
 
     virtual ~Entity();
 
     //Compoent Functons
-    void setTexture(sf::Texture& texture);
-    void createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration);
-    void createAnimationComponent(sf::Texture & texture_sheet);
-    void createHitboxComponent(sf::Sprite& sprite, float offset_x, float offset_y, float width, float height);
+    void setTexture(sf::Texture &texture);
+
+    void createMovementComponent(float maxVelocity, float acceleration, float deceleration);
+
+    void createAnimationComponent(sf::Texture &texture_sheet);
+
+    void createHitboxComponent(sf::Sprite &_sprite, float offset_x, float offset_y, float width, float height);
 
     //Functions
-    virtual void setPosition(const float x, const float y);
-    virtual void move(float x, float y, const float &dt);
+    virtual void setPosition(float x, float y);
+
+    virtual void move(sf::Vector2f direction, const float &dt);
+
     virtual void update(const float &dt);
+
     virtual void render(sf::RenderTarget &target);
 };
 

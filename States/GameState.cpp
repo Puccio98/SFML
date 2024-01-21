@@ -5,9 +5,9 @@
 GameState::GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states)
         : State(window,
                 supportedKeys, states) {
-    this->initKeybinds();
+    GameState::initKeybinds();
     this->initTextures();
-    this->initPlayers();
+    this->initPlayer();
 }
 
 GameState::~GameState() {
@@ -29,14 +29,16 @@ void GameState::render(sf::RenderTarget *target = nullptr) {
 
 void GameState::updateInput(const float &dt) {
     //Update player input
+    sf::Vector2f direction(0, 0);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MOVE_UP"])))
-        this->player->move(0.f, -1.f, dt);
+        direction.y = -1;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MOVE_LEFT"])))
-        this->player->move(-1.f, 0.f, dt);
+        direction.x = -1;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MOVE_DOWN"])))
-        this->player->move(0.f, 1.f, dt);
+        direction.y = 1;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MOVE_RIGHT"])))
-        this->player->move(1.f, 0.f, dt);
+        direction.x = 1;
+    this->player->move(direction, dt);
 }
 
 void GameState::initKeybinds() {
@@ -58,7 +60,7 @@ void GameState::initTextures() {
     }
 }
 
-void GameState::initPlayers() {
+void GameState::initPlayer() {
     this->player = new Player(0, 0, this->textures["PLAYER_SHEET"]);
 }
 
