@@ -31,15 +31,15 @@ void Player::update(const float &dt) {
     else if (this->movementComponent->getState(MOVEMENT_STATES::MOVING_LEFT)) {
         this->sprite.setOrigin(0.f, 0.f);
         this->sprite.setScale(1.f, 1.f);
-        this->animationComponent->play("WALK", dt, this->movementComponent->getVelocity().x /
+        this->animationComponent->play("WALK", dt, this->movementComponent->getVelocityMagnitude() /
                                                    this->movementComponent->getMaxVelocity());
     } else if (this->movementComponent->getState(MOVEMENT_STATES::MOVING_RIGHT)) {
         this->sprite.setOrigin(258.f, 0.f);
         this->sprite.setScale(-1.f, 1.f);
-        this->animationComponent->play("WALK", dt, this->movementComponent->getVelocity().x /
+        this->animationComponent->play("WALK", dt, this->movementComponent->getVelocityMagnitude() /
                                                    this->movementComponent->getMaxVelocity());
     } else
-        this->animationComponent->play("WALK", dt, this->movementComponent->getVelocity().y /
+        this->animationComponent->play("WALK", dt, this->movementComponent->getVelocityMagnitude() /
                                                    this->movementComponent->getMaxVelocity());
 
     this->hitboxComponent->update();

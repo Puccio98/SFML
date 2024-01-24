@@ -27,6 +27,7 @@ private:
     float acceleration;
     float deceleration;
 
+    __attribute__((unused)) void debugVelocity() const;
     //Initializer FUnctions
 
 
@@ -37,6 +38,7 @@ public:
 
     //Accessors
     float getMaxVelocity() const;
+    float getVelocityMagnitude() const;
 
     const sf::Vector2f &getVelocity() const;
 
@@ -50,6 +52,8 @@ public:
     void handleFriction(const float &dt);
 
     void checkVelocity();
+
+    void getAccelerationVector();
 };
 
 

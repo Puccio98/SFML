@@ -4,7 +4,7 @@ Animation::~Animation() = default;
 
 void Animation::play(const float &dt, float mod_percent) {
     mod_percent = std::abs(mod_percent);
-    if (mod_percent < 0.5f) mod_percent = 0.3f;
+    if (mod_percent < 0.5f) mod_percent = 0.5f;
     this->timer += (mod_percent) * 30.f * dt;
     if (this->timer >= this->animationTimer) {
         //reset timer

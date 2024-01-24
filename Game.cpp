@@ -95,7 +95,7 @@ void Game::initState() {
 }
 
 void Game::endApplication() {
-    std::cout << "ending apllication!";
+    std::cout << "ending application!";
 }
 
 void Game::initKeys() {
