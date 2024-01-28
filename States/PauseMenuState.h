@@ -20,7 +20,15 @@ public:
 
     void handleEvent(sf::Event &event, const float &dt) override;
 
-protected:
+    bool isPaused() const;
+
+    void setPause(bool pause);
+
+    void update(const float &dt) override;
+
+
+private:
+    bool paused = false;
 };
 
 
