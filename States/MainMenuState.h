@@ -33,8 +33,6 @@ private:
 
     void initFonts();
 
-    void initKeybinds() override;
-
     void initButtons();
 
     void updateButtons();

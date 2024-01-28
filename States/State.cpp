@@ -45,5 +45,19 @@ void State::update(const float &dt) {
     this->pollEvents(dt);
 }
 
+void State::initKeybinds(std::string keybindsFilePath) {
+    std::ifstream ifs(keybindsFilePath);
+
+    if (ifs.is_open()) {
+        std::string key;
+        std::string key_value;
+        while (ifs >> key >> key_value) {
+            this->keybinds[key] = this->supportedKeys->at(key_value);
+        }
+    }
+
+    ifs.close();
+}
+
 
 

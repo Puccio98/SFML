@@ -9,8 +9,6 @@ private:
 
     void initTextures();
 
-    void initKeybinds() override;
-
     void initPlayer();
 
 public:

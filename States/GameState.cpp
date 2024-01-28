@@ -5,7 +5,7 @@
 GameState::GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states)
         : State(window,
                 supportedKeys, states) {
-    GameState::initKeybinds();
+    State::initKeybinds("Config/gamestate_keybinds.ini");
     this->initTextures();
     this->initPlayer();
 }
@@ -39,19 +39,6 @@ void GameState::updateInput(const float &dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MOVE_RIGHT"])))
         direction.x = 1;
     this->player->move(direction, dt);
-}
-
-void GameState::initKeybinds() {
-    std::ifstream ifs("Config/gamestate_keybinds.ini");
-
-    if (ifs.is_open()) {
-        std::string key;
-        std::string key_value;
-        while (ifs >> key >> key_value) {
-            this->keybinds[key] = this->supportedKeys->at(key_value);
-        }
-    }
-    ifs.close();
 }
 
 void GameState::initTextures() {

@@ -22,7 +22,7 @@ protected:
     std::map<std::string, sf::Texture> textures;
 
     //Functions
-    virtual void initKeybinds() = 0;
+    virtual void initKeybinds(std::string keybindsFilePath);
 
 public:
     State(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states);
