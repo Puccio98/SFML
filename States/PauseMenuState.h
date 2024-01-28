@@ -27,7 +27,6 @@ public:
 
     void update(const float &dt) override;
 
-    void initFonts();
 
 private:
     bool paused = false;
@@ -38,7 +37,13 @@ private:
 
     void initTexts();
 
+    void initFonts();
+
     void initContainer(const sf::RenderWindow *window);
+
+    void initButton();
+
+    void updateButtons();
 };
 
 

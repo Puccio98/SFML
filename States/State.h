@@ -24,12 +24,13 @@ protected:
     //Functions
     virtual void initKeybinds(std::string keybindsFilePath);
 
+
 public:
     State(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states);
 
     virtual ~State();
 
-    const bool &getQuit() const;
+    virtual bool isQuit() const;
 
     virtual void endState();
 

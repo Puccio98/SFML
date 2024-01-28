@@ -70,4 +70,8 @@ void GameState::handleEvent(sf::Event &event, const float &dt) {
     }
 }
 
+bool GameState::isQuit() const {
+    return this->quit || this->pauseMenuState.isQuit();
+}
+
 

@@ -9,10 +9,6 @@ State::State(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys
 
 State::~State() = default;
 
-const bool &State::getQuit() const {
-    return this->quit;
-}
-
 void State::updateMousePositions() {
     this->mousePosScreen = sf::Mouse::getPosition();
     this->mousePosWindow = sf::Mouse::getPosition(*this->window);
@@ -57,6 +53,10 @@ void State::initKeybinds(std::string keybindsFilePath) {
     }
 
     ifs.close();
+}
+
+bool State::isQuit() const {
+    return quit;
 }
 
 
