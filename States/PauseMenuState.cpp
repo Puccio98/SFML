@@ -108,7 +108,7 @@ void PauseMenuState::initButton() {
                                        sf::Color(120, 50, 80, 0),
                                        sf::Color(150, 50, 80, 0),
                                        sf::Color(90, 40, 60, 0));
-    this->buttons["CLOSE"] = new Button(x, 500, width, height, &this->font, "Close", 40,
+    this->buttons["CLOSE"] = new Button(x, 400, width, height, &this->font, "Close", 40,
                                         sf::Color(120, 50, 80, 200),
                                         sf::Color(150, 50, 80, 250),
                                         sf::Color(90, 40, 60, 50),
