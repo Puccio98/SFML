@@ -25,6 +25,9 @@ public:
     void render(sf::RenderTarget *target) override;
 
     void handleEvent(sf::Event &event, const float &dt) override;
+
+    bool isQuit() const override;
+
 };
 
 #endif //SFML_GAMESTATE_H

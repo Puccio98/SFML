@@ -8,7 +8,7 @@ void Game::initWindow() {
     this->videoModes = sf::VideoMode::getFullscreenModes();
 
     sf::VideoMode window_bounds(sf::VideoMode::getDesktopMode());
-    bool fullscreen = false;
+    fullscreen = false;
     std::string title = "None";
     unsigned framerate_limit = 120;
     bool vertical_sync_enabled = false;
@@ -24,7 +24,6 @@ void Game::initWindow() {
     }
 
     ifs.close();
-    this->fullscreen = fullscreen;
     windowSettings.antialiasingLevel = antialiasing_level;
     if (this->fullscreen)
         this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Fullscreen, windowSettings);
@@ -33,6 +32,8 @@ void Game::initWindow() {
                                             windowSettings);
     this->window->setFramerateLimit(framerate_limit);
     this->window->setVerticalSyncEnabled(vertical_sync_enabled);
+    this->window->setKeyRepeatEnabled(false);
+
 }
 
 //Constructors/Destructors
@@ -55,12 +56,12 @@ Game::~Game() {
 //Functions
 void Game::update() {
     if (this->states.empty()) {
-        this->endApplication();
+        Game::endApplication();
         this->window->close();
     }
 
     this->states.top()->update(this->dt);
-    if (this->states.top()->getQuit()) {
+    if (this->states.top()->isQuit()) {
         this->states.top()->endState();
 
         delete this->states.top();
@@ -102,7 +103,7 @@ void Game::initKeys() {
     std::ifstream ifs("Config/supported_keys.ini");
 
     if (ifs.is_open()) {
-        std::string key = "";
+        std::string key;
         int key_value = 0;
         while (ifs >> key >> key_value) {
             this->supportedKeys[key] = key_value;

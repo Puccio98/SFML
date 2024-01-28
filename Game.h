@@ -32,7 +32,7 @@ public:
 
     //Functions
     //Regular
-    void endApplication();
+    static void endApplication();
 
     //Update
     void updateDT();

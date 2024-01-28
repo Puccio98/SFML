@@ -30,6 +30,7 @@ PauseMenuState::PauseMenuState(sf::RenderWindow *window, std::map<std::string, i
     this->initFonts();
     this->initContainer(window);
     this->initTexts();
+    this->initButton();
 }
 
 void PauseMenuState::initContainer(const sf::RenderWindow *window) {
@@ -71,10 +72,47 @@ void PauseMenuState::update(const float &dt) {
     State::update(dt);
     this->updateMousePositions();
     this->updateInput(dt);
+    this->updateButtons();
+}
+
+void PauseMenuState::updateButtons() {
+    for (auto &button: buttons) {
+        button.second->update(mousePosView);
+    }
+
+    if (this->buttons["GAME"]->isPressed()) {
+        this->paused = false;
+    }
+
+    if (this->buttons["CLOSE"]->isPressed()) {
+        this->quit = true;
+    }
+
 }
 
 void PauseMenuState::initFonts() {
     if (!this->font.loadFromFile("../Fonts/Roboto-Black.ttf")) {
         throw ("ERROR::PAUSEMENUSTATE::COULD NOT LOAD FONT");
     };
+}
+
+void PauseMenuState::initButton() {
+    float width = 250.f;
+    float height = 50.f;
+    float x = this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f;
+
+    this->buttons["GAME"] = new Button(x, 300, width, height, &this->font, "Return to Game", 40,
+                                       sf::Color(120, 50, 80, 200),
+                                       sf::Color(150, 50, 80, 250),
+                                       sf::Color(90, 40, 60, 50),
+                                       sf::Color(120, 50, 80, 0),
+                                       sf::Color(150, 50, 80, 0),
+                                       sf::Color(90, 40, 60, 0));
+    this->buttons["CLOSE"] = new Button(x, 400, width, height, &this->font, "Close", 40,
+                                        sf::Color(120, 50, 80, 200),
+                                        sf::Color(150, 50, 80, 250),
+                                        sf::Color(90, 40, 60, 50),
+                                        sf::Color(120, 50, 80, 0),
+                                        sf::Color(150, 50, 80, 0),
+                                        sf::Color(90, 40, 60, 0));
 }

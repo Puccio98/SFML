@@ -3,6 +3,7 @@
 
 #include "GameState.h"
 #include "EditorState.h"
+#include "SettingsState.h"
 #include "../Resource Files/Button.h"
 
 class MainMenuState : public State {
@@ -17,6 +18,8 @@ public:
     void update(const float &dt) override;
 
     void render(sf::RenderTarget *target) override;
+
+    void renderButtons(sf::RenderTarget &target);
 
 private:
     //Variables
@@ -37,7 +40,6 @@ private:
 
     void updateButtons();
 
-    void renderButtons(sf::RenderTarget &target);
 
 public:
     void handleEvent(sf::Event &event, const float &dt) override;
