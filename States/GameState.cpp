@@ -4,7 +4,7 @@
 
 GameState::GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states)
         : State(window,
-                supportedKeys, states), pauseMenuState(PauseMenuState(window, supportedKeys, states)) {
+                supportedKeys, states), pauseMenuState(PauseMenuState(window, supportedKeys)) {
 
     State::initKeybinds("Config/gamestate_keybinds.ini");
     this->initTextures();

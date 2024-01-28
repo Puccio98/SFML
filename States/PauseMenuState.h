@@ -7,10 +7,11 @@
 
 
 #include "State.h"
+#include "../Resource Files/Button.h"
 
 class PauseMenuState : public State {
 public:
-    PauseMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states);
+    PauseMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys);
 
     ~PauseMenuState() override;
 
@@ -26,9 +27,18 @@ public:
 
     void update(const float &dt) override;
 
+    void initFonts();
 
 private:
     bool paused = false;
+    sf::RectangleShape container;
+    sf::Font font;
+    sf::Text menuText;
+    std::map<std::string, Button *> buttons;
+
+    void initTexts();
+
+    void initContainer(const sf::RenderWindow *window);
 };
 
 
