@@ -19,7 +19,9 @@ add_executable(SFML
         Entities/Components/HitboxComponent.cpp
         Entities/Components/HitboxComponent.h
         Tile/Tile.cpp
-        Tile/Tile.h)
+        Tile/Tile.h
+        States/PauseMenuState.cpp
+        States/PauseMenuState.h)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/libs/SFML-2.6.1/lib/cmake/SFML)

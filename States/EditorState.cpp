@@ -5,7 +5,7 @@ EditorState::EditorState(sf::RenderWindow *window, std::map<std::string, int> *s
                                                               supportedKeys, states) {
     this->initFonts();
     this->initVariables();
-    EditorState::initKeybinds();
+    State::initKeybinds("Config/menustate_keybinds.ini");
     this->initButtons();
 
 }
@@ -30,20 +30,6 @@ void EditorState::render(sf::RenderTarget *target) {
     if (!target)
         target = this->window;
     this->renderButtons(target);
-}
-
-void EditorState::initKeybinds() {
-    std::ifstream ifs("Config/editorstate_keybinds.ini");
-
-    if (ifs.is_open()) {
-        std::string key;
-        std::string key_value;
-        while (ifs >> key >> key_value) {
-            this->keybinds[key] = this->supportedKeys->at(key_value);
-        }
-    }
-
-    ifs.close();
 }
 
 void EditorState::initFonts() {

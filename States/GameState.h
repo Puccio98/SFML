@@ -1,15 +1,14 @@
 #ifndef SFML_GAMESTATE_H
 #define SFML_GAMESTATE_H
 
-#include "State.h"
+#include "PauseMenuState.h"
 
 class GameState : public State {
 private:
     Player *player{};
+    PauseMenuState pauseMenuState;
 
     void initTextures();
-
-    void initKeybinds() override;
 
     void initPlayer();
 

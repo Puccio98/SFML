@@ -8,7 +8,7 @@ MainMenuState::MainMenuState(sf::RenderWindow *window, std::map<std::string, int
     this->initFonts();
     this->initVariables();
     this->initBackground();
-    MainMenuState::initKeybinds();
+    State::initKeybinds("Config/menustate_keybinds.ini");
     this->initButtons();
 
 }
@@ -35,20 +35,6 @@ void MainMenuState::render(sf::RenderTarget *target) {
         target = this->window;
     target->draw(this->background);
     this->renderButtons(*target);
-}
-
-void MainMenuState::initKeybinds() {
-    std::ifstream ifs("Config/mainmenustate_keybinds.ini");
-
-    if (ifs.is_open()) {
-        std::string key;
-        std::string key_value;
-        while (ifs >> key >> key_value) {
-            this->keybinds[key] = this->supportedKeys->at(key_value);
-        }
-    }
-
-    ifs.close();
 }
 
 void MainMenuState::initFonts() {

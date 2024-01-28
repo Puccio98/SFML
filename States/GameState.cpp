@@ -4,8 +4,9 @@
 
 GameState::GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states)
         : State(window,
-                supportedKeys, states) {
-    GameState::initKeybinds();
+                supportedKeys, states), pauseMenuState(PauseMenuState(window, supportedKeys)) {
+
+    State::initKeybinds("Config/gamestate_keybinds.ini");
     this->initTextures();
     this->initPlayer();
 }
@@ -15,16 +16,23 @@ GameState::~GameState() {
 }
 
 void GameState::update(const float &dt) {
-    State::update(dt);
-    this->updateMousePositions();
-    this->updateInput(dt);
-    this->player->update(dt);
+    if (!pauseMenuState.isPaused()) {
+        State::update(dt);
+        this->updateMousePositions();
+        this->updateInput(dt);
+        this->player->update(dt);
+    } else {
+        pauseMenuState.update(dt);
+    }
 }
 
 void GameState::render(sf::RenderTarget *target = nullptr) {
     if (!target)
         target = this->window;
     this->player->render(*target);
+    if (pauseMenuState.isPaused()) {
+        pauseMenuState.render(target);
+    }
 }
 
 void GameState::updateInput(const float &dt) {
@@ -41,19 +49,6 @@ void GameState::updateInput(const float &dt) {
     this->player->move(direction, dt);
 }
 
-void GameState::initKeybinds() {
-    std::ifstream ifs("Config/gamestate_keybinds.ini");
-
-    if (ifs.is_open()) {
-        std::string key;
-        std::string key_value;
-        while (ifs >> key >> key_value) {
-            this->keybinds[key] = this->supportedKeys->at(key_value);
-        }
-    }
-    ifs.close();
-}
-
 void GameState::initTextures() {
     if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/images/sprites/player/PLAYER_SHEET.png")) {
         throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_IDLE_TEXTURE";
@@ -65,8 +60,9 @@ void GameState::initPlayer() {
 }
 
 void GameState::handleEvent(sf::Event &event, const float &dt) {
-    if (event.type == sf::Event::KeyPressed && event.key.code == this->keybinds["CLOSE"]) {
-        this->endState();
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == this->keybinds["CLOSE"]) { this->endState(); }
+        if (event.key.code == this->keybinds["PAUSE"]) { this->pauseMenuState.setPause(true); }
     }
 
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
