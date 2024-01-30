@@ -35,7 +35,7 @@ PauseMenuState::PauseMenuState(sf::RenderWindow *window, std::map<std::string, i
 
 void PauseMenuState::initContainer(const sf::RenderWindow *window) {
     container.setSize(sf::Vector2f(sf::Vector2f(window->getSize()) / 2.f));
-    container.setFillColor(sf::Color::Red);
+    container.setFillColor(sf::Color(40, 40, 80, 200));
     container.setPosition(
             sf::Vector2f(window->getSize()) / 2.f -
             sf::Vector2f(container.getGlobalBounds().width / 2.f, container.getGlobalBounds().height / 2.f));
@@ -43,9 +43,9 @@ void PauseMenuState::initContainer(const sf::RenderWindow *window) {
 
 void PauseMenuState::initTexts() {
     menuText.setFont(font);
-    menuText.setFillColor(sf::Color::White);
-    menuText.setString("PAUSED");
-    menuText.setCharacterSize(60);
+    menuText.setFillColor(sf::Color(200, 200, 200, 200));
+    menuText.setString("Paused");
+    menuText.setCharacterSize(40);
     menuText.setPosition(
             container.getPosition().x + container.getSize().x / 2.f -
             menuText.getGlobalBounds().width / 2.f,
@@ -87,7 +87,6 @@ void PauseMenuState::updateButtons() {
     if (this->buttons["CLOSE"]->isPressed()) {
         this->quit = true;
     }
-
 }
 
 void PauseMenuState::initFonts() {
@@ -100,15 +99,16 @@ void PauseMenuState::initButton() {
     float width = 250.f;
     float height = 50.f;
     float x = this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f;
+    float basePosY = this->container.getPosition().y;
 
-    this->buttons["GAME"] = new Button(x, 300, width, height, &this->font, "Return to Game", 40,
+    this->buttons["GAME"] = new Button(x, basePosY + 100, width, height, &this->font, "Return to Game", 40,
                                        sf::Color(120, 50, 80, 200),
                                        sf::Color(150, 50, 80, 250),
                                        sf::Color(90, 40, 60, 50),
                                        sf::Color(120, 50, 80, 0),
                                        sf::Color(150, 50, 80, 0),
                                        sf::Color(90, 40, 60, 0));
-    this->buttons["CLOSE"] = new Button(x, 400, width, height, &this->font, "Close", 40,
+    this->buttons["CLOSE"] = new Button(x, basePosY + 150, width, height, &this->font, "Close", 40,
                                         sf::Color(120, 50, 80, 200),
                                         sf::Color(150, 50, 80, 250),
                                         sf::Color(90, 40, 60, 50),
