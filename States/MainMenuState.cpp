@@ -19,14 +19,9 @@ MainMenuState::~MainMenuState() {
     }
 }
 
-void MainMenuState::updateInput(const float &dt) {
-
-}
-
 void MainMenuState::update(const float &dt) {
     State::update(dt);
     this->updateMousePositions();
-    this->updateInput(dt);
     this->updateButtons();
 }
 
@@ -44,37 +39,37 @@ void MainMenuState::initFonts() {
 }
 
 void MainMenuState::initButtons() {
-    this->buttons["GAME_STATE"] = new Button(100, 100, 150, 50, &this->font, "New Game", 50,
+    this->buttons["GAME_STATE"] = new GUI::Button(100, 100, 150, 50, &this->font, "New Game", 50,
+                                                  sf::Color(120, 50, 80, 200),
+                                                  sf::Color(150, 50, 80, 250),
+                                                  sf::Color(90, 40, 60, 50),
+                                                  sf::Color(120, 50, 80, 0),
+                                                  sf::Color(150, 50, 80, 0),
+                                                  sf::Color(90, 40, 60, 0));
+
+    this->buttons["SETTING_STATE"] = new GUI::Button(100, 200, 150, 50, &this->font, "Settings", 50,
+                                                     sf::Color(120, 50, 80, 200),
+                                                     sf::Color(150, 50, 80, 250),
+                                                     sf::Color(90, 40, 60, 50),
+                                                     sf::Color(120, 50, 80, 0),
+                                                     sf::Color(150, 50, 80, 0),
+                                                     sf::Color(90, 40, 60, 0));
+
+    this->buttons["EDITOR_STATE"] = new GUI::Button(100, 300, 150, 50, &this->font, "Editor", 50,
+                                                    sf::Color(120, 50, 80, 200),
+                                                    sf::Color(150, 50, 80, 250),
+                                                    sf::Color(90, 40, 60, 50),
+                                                    sf::Color(120, 50, 80, 0),
+                                                    sf::Color(150, 50, 80, 0),
+                                                    sf::Color(90, 40, 60, 0));
+
+    this->buttons["CLOSE"] = new GUI::Button(100, 400, 150, 50, &this->font, "Close Game", 50,
                                              sf::Color(120, 50, 80, 200),
                                              sf::Color(150, 50, 80, 250),
                                              sf::Color(90, 40, 60, 50),
                                              sf::Color(120, 50, 80, 0),
                                              sf::Color(150, 50, 80, 0),
                                              sf::Color(90, 40, 60, 0));
-
-    this->buttons["SETTING_STATE"] = new Button(100, 200, 150, 50, &this->font, "Settings", 50,
-                                                sf::Color(120, 50, 80, 200),
-                                                sf::Color(150, 50, 80, 250),
-                                                sf::Color(90, 40, 60, 50),
-                                                sf::Color(120, 50, 80, 0),
-                                                sf::Color(150, 50, 80, 0),
-                                                sf::Color(90, 40, 60, 0));
-
-    this->buttons["EDITOR_STATE"] = new Button(100, 300, 150, 50, &this->font, "Editor", 50,
-                                               sf::Color(120, 50, 80, 200),
-                                               sf::Color(150, 50, 80, 250),
-                                               sf::Color(90, 40, 60, 50),
-                                               sf::Color(120, 50, 80, 0),
-                                               sf::Color(150, 50, 80, 0),
-                                               sf::Color(90, 40, 60, 0));
-
-    this->buttons["CLOSE"] = new Button(100, 400, 150, 50, &this->font, "Close Game", 50,
-                                        sf::Color(120, 50, 80, 200),
-                                        sf::Color(150, 50, 80, 250),
-                                        sf::Color(90, 40, 60, 50),
-                                        sf::Color(120, 50, 80, 0),
-                                        sf::Color(150, 50, 80, 0),
-                                        sf::Color(90, 40, 60, 0));
 }
 
 void MainMenuState::renderButtons(sf::RenderTarget &target) {
@@ -95,7 +90,7 @@ void MainMenuState::updateButtons() {
     }
 
 
-    //New Game
+    //Setting State
     if (this->buttons["SETTING_STATE"]->isPressed()) {
         this->states->push(new SettingsState(this->window, this->supportedKeys, this->states));
     }
@@ -126,6 +121,7 @@ void MainMenuState::initBackground() {
 void MainMenuState::initVariables() {
 
 }
+
 
 void MainMenuState::handleEvent(sf::Event &event, const float &dt) {
     if (event.type == sf::Event::KeyPressed && event.key.code == this->keybinds["CLOSE"]) {

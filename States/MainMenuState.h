@@ -13,8 +13,6 @@ public:
     ~MainMenuState() override;
 
     //Functions
-    void updateInput(const float &dt) override;
-
     void update(const float &dt) override;
 
     void render(sf::RenderTarget *target) override;
@@ -27,7 +25,7 @@ private:
     sf::RectangleShape background;
     sf::Font font;
 
-    std::map<std::string, Button *> buttons;
+    std::map<std::string, GUI::Button *> buttons;
 
     //Functions
     void initVariables();

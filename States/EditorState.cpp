@@ -16,13 +16,9 @@ EditorState::~EditorState() {
     }
 }
 
-void EditorState::updateInput(const float &dt) {
-}
-
 void EditorState::update(const float &dt) {
     State::update(dt);
     this->updateMousePositions();
-    this->updateInput(dt);
     this->updateButtons();
 }
 

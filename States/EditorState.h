@@ -11,8 +11,6 @@ public:
     virtual ~EditorState();
 
     //Functions
-    void updateInput(const float &dt) override;
-
     void update(const float &dt) override;
 
     void render(sf::RenderTarget *target) override;
@@ -20,7 +18,7 @@ public:
 private:
     //Variables
     sf::Font font;
-    std::map<std::string, Button *> buttons;
+    std::map<std::string, GUI::Button *> buttons;
 
     //Functions
     void initVariables();

@@ -70,6 +70,10 @@ void GameState::handleEvent(sf::Event &event, const float &dt) {
     }
 }
 
+/**
+ * Chiude gamestate se è stata richiesta la chiusura del gioco da menu di pausa o direttamente da gamestate
+ * @return
+ */
 bool GameState::isQuit() const {
     return this->quit || this->pauseMenuState.isQuit();
 }

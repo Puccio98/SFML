@@ -15,8 +15,6 @@ public:
 
     ~PauseMenuState() override;
 
-    void updateInput(const float &dt) override;
-
     void render(sf::RenderTarget *target) override;
 
     void handleEvent(sf::Event &event, const float &dt) override;
@@ -33,7 +31,7 @@ private:
     sf::RectangleShape container;
     sf::Font font;
     sf::Text menuText;
-    std::map<std::string, Button *> buttons;
+    std::map<std::string, GUI::Button *> buttons;
 
     void initTexts();
 

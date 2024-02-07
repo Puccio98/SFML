@@ -36,8 +36,6 @@ public:
 
     virtual void updateMousePositions();
 
-    virtual void updateInput(const float &dt) = 0;
-
     virtual void update(const float &dt);
 
     virtual void render(sf::RenderTarget *target) = 0;
