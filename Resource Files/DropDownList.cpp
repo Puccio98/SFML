@@ -31,11 +31,6 @@ void GUI::DropDownList::render(sf::RenderTarget &target) {
 void GUI::DropDownList::update(const sf::Vector2f &mousePos) {
     this->activeElement->update(mousePos);
 
-    if (this->activeElement->isPressed()) {
-        std::cout << this->showList << "\n";
-        this->showList = !showList;
-    }
-
     if (this->showList) {
         for (auto &button: this->buttons) {
             button->update(mousePos);
@@ -47,4 +42,16 @@ GUI::DropDownList::~DropDownList() {
     delete this->activeElement;
     for (auto &i: this->buttons)
         delete i;
+}
+
+void GUI::DropDownList::handleEvent(sf::Event &event, const sf::Vector2f mousePos) {
+    if (this->showList) {
+        for (auto &button: this->buttons) {
+            button->handleEvent(event, mousePos);
+        }
+    }
+    this->activeElement->handleEvent(event, mousePos);
+    if (this->activeElement->isPressed()) {
+        this->showList = !this->showList;
+    }
 };

@@ -127,4 +127,8 @@ void MainMenuState::handleEvent(sf::Event &event, const float &dt) {
     if (event.type == sf::Event::KeyPressed && event.key.code == this->keybinds["CLOSE"]) {
         this->endState();
     }
+
+    for (auto &button: this->buttons) {
+        button.second->handleEvent(event, mousePosView);
+    }
 }

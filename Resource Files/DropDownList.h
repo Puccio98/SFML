@@ -15,6 +15,8 @@ namespace GUI {
 
         void render(sf::RenderTarget &target);
 
+        void handleEvent(sf::Event &event, const sf::Vector2f mousePos);
+
     private:
         GUI::Button *activeElement;
         std::vector<GUI::Button *> buttons;

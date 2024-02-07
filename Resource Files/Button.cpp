@@ -49,7 +49,7 @@ void GUI::Button::update(const sf::Vector2f mousePos) {
 
         //TODO:: Trasforma in eventi con handleEvent
         //Pressed
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->locked) {
             this->buttonState = BTN_ACTIVE;
         }
     }
@@ -83,4 +83,14 @@ std::string GUI::Button::getText() const {
 
 void GUI::Button::setText(const std::string text) {
     this->text.setString(text);
+}
+
+void GUI::Button::handleEvent(sf::Event &event, const sf::Vector2f mousePos) {
+    if (this->shape.getGlobalBounds().contains(mousePos) &&
+        event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+        this->locked = true;
+        return;
+    }
+
+    this->locked = false;
 }

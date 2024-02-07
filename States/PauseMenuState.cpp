@@ -15,6 +15,9 @@ void PauseMenuState::handleEvent(sf::Event &event, const float &dt) {
             event.key.code == this->keybinds["CLOSE"]) { this->paused = false; }
     }
 
+    for (auto &button: this->buttons) {
+        button.second->handleEvent(event, mousePosView);
+    }
 }
 
 

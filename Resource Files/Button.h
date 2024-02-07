@@ -30,6 +30,8 @@ namespace GUI {
         sf::Color hoverColor;
         sf::Color activeColor;
 
+        bool locked = false;
+
     public:
         Button(float x, float y, float width, float height, sf::Font *font, std::string text,
                unsigned int character_size,
@@ -50,6 +52,8 @@ namespace GUI {
         bool isPressed() const;
 
         std::string getText() const;
+
+        void handleEvent(sf::Event &event, const sf::Vector2f mousePos);
     };
 
 }

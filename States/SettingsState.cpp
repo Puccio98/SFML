@@ -43,6 +43,12 @@ void SettingsState::handleEvent(sf::Event &event, const float &dt) {
     if (event.type == sf::Event::KeyPressed && event.key.code == this->keybinds["CLOSE"]) {
         this->endState();
     }
+
+    for (auto &button: this->buttons) {
+        button.second->handleEvent(event, mousePosView);
+    }
+
+    this->dropDownList->handleEvent(event, mousePosView);
 }
 
 void SettingsState::initBackground() {
@@ -66,7 +72,7 @@ void SettingsState::renderButtons(sf::RenderTarget &target) {
 }
 
 void SettingsState::initButtons() {
-    this->buttons["EXIT_STATE"] = new GUI::Button(500, 200, 150, 50, &this->font, "Quit", 50,
+    this->buttons["EXIT_STATE"] = new GUI::Button(100, 400, 150, 50, &this->font, "Quit", 50,
                                                   sf::Color(120, 50, 80, 200),
                                                   sf::Color(150, 50, 80, 250),
                                                   sf::Color(90, 40, 60, 50),
