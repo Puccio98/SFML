@@ -4,6 +4,7 @@ GUI::DropDownList::DropDownList(float x, float y, float width, float height, sf:
                                 std::vector<std::string> &options,
                                 unsigned default_index) : font(font),
                                                           showList(false) {
+    this->selectedElement = default_index;
     unsigned nrOfElements = options.size();
     std::cout << "number of elements: " << nrOfElements;
 
@@ -23,7 +24,7 @@ GUI::DropDownList::DropDownList(float x, float y, float width, float height, sf:
                                 sf::Color(90, 40, 60, 50),
                                 sf::Color(120, 50, 80, 0),
                                 sf::Color(150, 50, 80, 0),
-                                sf::Color(90, 40, 60, 0)));
+                                sf::Color(90, 40, 60, 0), i));
     }
 
 }
@@ -45,6 +46,7 @@ void GUI::DropDownList::update(const sf::Vector2f &mousePos) {
             button->update(mousePos);
 
             if (button->isPressed()) {
+                this->selectedElement = button->getId();
                 this->activeElement->setText(button->getText());
                 this->showList = false;
             }

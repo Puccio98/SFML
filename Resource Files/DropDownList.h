@@ -19,6 +19,7 @@ namespace GUI {
 
     private:
         GUI::Button *activeElement;
+        short unsigned selectedElement;
         std::vector<GUI::Button *> buttons;
         sf::Font &font;
         bool showList;

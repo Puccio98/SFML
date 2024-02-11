@@ -17,6 +17,7 @@ enum button_states {
 namespace GUI {
     class Button {
     private:
+        short unsigned id;
         short unsigned buttonState;
         sf::RectangleShape shape;
         sf::Font *font;
@@ -26,6 +27,7 @@ namespace GUI {
         sf::Color textHoverColor;
         sf::Color textActiveColor;
 
+        //TODO:: Creare struct per gestire triplettte di colori e aggiungere outlineColor.
         sf::Color idleColor;
         sf::Color hoverColor;
         sf::Color activeColor;
@@ -36,7 +38,7 @@ namespace GUI {
         Button(float x, float y, float width, float height, sf::Font *font, std::string text,
                unsigned int character_size,
                sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color, sf::Color idle_color,
-               sf::Color hover_color, sf::Color active_color);
+               sf::Color hover_color, sf::Color active_color, short unsigned id = 0);
 
         virtual ~Button();
 
@@ -56,6 +58,8 @@ namespace GUI {
         void handleEvent(sf::Event &event, const sf::Vector2f mousePos);
 
         void reset();
+
+        unsigned short getId() const;
     };
 
 }

@@ -4,7 +4,8 @@ GUI::Button::Button(float x, float y, float width, float height, sf::Font *font,
                     unsigned character_size,
                     sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
                     sf::Color idle_color,
-                    sf::Color hover_color, sf::Color active_color) {
+                    sf::Color hover_color, sf::Color active_color, short unsigned id) {
+    this->id = id;
     this->buttonState = BTN_IDLE;
     this->shape.setPosition(sf::Vector2f(x, y));
     this->shape.setSize(sf::Vector2f(width, height));
@@ -96,4 +97,8 @@ void GUI::Button::handleEvent(sf::Event &event, const sf::Vector2f mousePos) {
 
 void GUI::Button::reset() {
     this->locked = false;
+}
+
+unsigned short GUI::Button::getId() const {
+    return id;
 }

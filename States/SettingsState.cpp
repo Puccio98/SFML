@@ -81,13 +81,21 @@ void SettingsState::renderButtons(sf::RenderTarget &target) {
 }
 
 void SettingsState::initButtons() {
-    this->buttons["EXIT_STATE"] = new GUI::Button(100, 400, 150, 50, &this->font, "Back", 50,
-                                                  sf::Color(120, 50, 80, 200),
-                                                  sf::Color(150, 50, 80, 250),
-                                                  sf::Color(90, 40, 60, 50),
-                                                  sf::Color(120, 50, 80, 0),
-                                                  sf::Color(150, 50, 80, 0),
-                                                  sf::Color(90, 40, 60, 0));
+    this->buttons["BACK"] = new GUI::Button(100, 400, 150, 50, &this->font, "Back", 50,
+                                            sf::Color(120, 50, 80, 200),
+                                            sf::Color(150, 50, 80, 250),
+                                            sf::Color(90, 40, 60, 50),
+                                            sf::Color(120, 50, 80, 0),
+                                            sf::Color(150, 50, 80, 0),
+                                            sf::Color(90, 40, 60, 0));
+
+    this->buttons["APPLY"] = new GUI::Button(300, 400, 150, 50, &this->font, "Apply", 50,
+                                             sf::Color(120, 50, 80, 200),
+                                             sf::Color(150, 50, 80, 250),
+                                             sf::Color(90, 40, 60, 50),
+                                             sf::Color(120, 50, 80, 0),
+                                             sf::Color(150, 50, 80, 0),
+                                             sf::Color(90, 40, 60, 0));
 
 }
 
@@ -96,8 +104,12 @@ void SettingsState::updateButtons() {
         button.second->update(mousePosView);
     }
 
-    if (this->buttons["EXIT_STATE"]->isPressed()) {
+    if (this->buttons["BACK"]->isPressed()) {
         this->endState();
+    }
+
+    if (this->buttons["APPLY"]->isPressed()) {
+        
     }
 
     for (auto &ddl: this->dropDownList) {
