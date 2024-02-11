@@ -47,9 +47,8 @@ void GUI::Button::update(const sf::Vector2f mousePos) {
     if (this->shape.getGlobalBounds().contains(mousePos)) {
         this->buttonState = BTN_HOVER;
 
-        //TODO:: Trasforma in eventi con handleEvent
         //Pressed
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->locked) {
+        if (this->locked) {
             this->buttonState = BTN_ACTIVE;
         }
     }
@@ -92,5 +91,9 @@ void GUI::Button::handleEvent(sf::Event &event, const sf::Vector2f mousePos) {
         return;
     }
 
+    this->locked = false;
+}
+
+void GUI::Button::reset() {
     this->locked = false;
 }

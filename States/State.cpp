@@ -1,6 +1,7 @@
 #include "State.h"
 
-State::State(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states) {
+State::State(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
+             sf::Font &font) : font(font) {
     this->states = states;
     this->window = window;
     this->supportedKeys = supportedKeys;

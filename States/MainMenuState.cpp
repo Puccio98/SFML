@@ -3,9 +3,7 @@
 #include "MainMenuState.h"
 
 MainMenuState::MainMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys,
-                             std::stack<State *> *states) : State(window,
-                                                                  supportedKeys, states) {
-    this->initFonts();
+                             std::stack<State *> *states, sf::Font &font) : State(window, supportedKeys, states, font) {
     this->initVariables();
     this->initBackground();
     State::initKeybinds("Config/menustate_keybinds.ini");
@@ -30,12 +28,6 @@ void MainMenuState::render(sf::RenderTarget *target) {
         target = this->window;
     target->draw(this->background);
     this->renderButtons(*target);
-}
-
-void MainMenuState::initFonts() {
-    if (!this->font.loadFromFile("../Fonts/Roboto-Black.ttf")) {
-        throw ("ERROR::MAINMENUSTATE::COULD NOT LOAD FONT");
-    };
 }
 
 void MainMenuState::initButtons() {
@@ -86,18 +78,22 @@ void MainMenuState::updateButtons() {
 
     //New Game
     if (this->buttons["GAME_STATE"]->isPressed()) {
-        this->states->push(new GameState(this->window, this->supportedKeys, this->states));
+        this->states->push(new GameState(this->window, this->supportedKeys, this->states, font));
     }
 
 
     //Setting State
     if (this->buttons["SETTING_STATE"]->isPressed()) {
-        this->states->push(new SettingsState(this->window, this->supportedKeys, this->states));
+        //TODO:: Spostare i bottoni in state.h e creare una funzione ResetButtons che ogni volta che apriamo un nuovo state resetta i bottoni dello stato di partenza
+        for (auto &button: this->buttons) {
+            button.second->reset();
+        }
+        this->states->push(new SettingsState(this->window, this->supportedKeys, this->states, font));
     }
 
     //Editor
     if (this->buttons["EDITOR_STATE"]->isPressed()) {
-        this->states->push(new EditorState(this->window, this->supportedKeys, this->states));
+        this->states->push(new EditorState(this->window, this->supportedKeys, this->states, font));
     }
 
     //Exit Game

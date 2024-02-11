@@ -1,9 +1,8 @@
 #include "EditorState.h"
 
 EditorState::EditorState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys,
-                         std::stack<State *> *states) : State(window,
-                                                              supportedKeys, states) {
-    this->initFonts();
+                         std::stack<State *> *states, sf::Font &font) : State(window,
+                                                                              supportedKeys, states, font) {
     this->initVariables();
     State::initKeybinds("Config/menustate_keybinds.ini");
     this->initButtons();
@@ -28,11 +27,6 @@ void EditorState::render(sf::RenderTarget *target) {
     this->renderButtons(target);
 }
 
-void EditorState::initFonts() {
-    if (!this->font.loadFromFile("../Fonts/Roboto-Black.ttf")) {
-        throw ("ERROR::EDITORSTATE::COULD NOT LOAD FONT");
-    };
-}
 
 void EditorState::initButtons() {
 

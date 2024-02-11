@@ -5,9 +5,7 @@
 #include "SettingsState.h"
 
 SettingsState::SettingsState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys,
-                             std::stack<State *> *states) : State(window, supportedKeys, states) {
-
-    this->initFonts();
+                             std::stack<State *> *states, sf::Font &font) : State(window, supportedKeys, states, font) {
     this->initBackground();
     State::initKeybinds("Config/menustate_keybinds.ini");
     this->initButtons();
@@ -57,12 +55,6 @@ void SettingsState::initBackground() {
                          static_cast<float>(this->window->getSize().y))
     );
     this->background.setFillColor(sf::Color::White);
-}
-
-void SettingsState::initFonts() {
-    if (!this->font.loadFromFile("../Fonts/Roboto-Black.ttf")) {
-        throw ("ERROR::SETTINGSTATE::COULD NOT LOAD FONT");
-    };
 }
 
 void SettingsState::renderButtons(sf::RenderTarget &target) {

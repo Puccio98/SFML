@@ -13,7 +13,8 @@ private:
     void initPlayer();
 
 public:
-    GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states);
+    GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
+              sf::Font &font);
 
     virtual ~GameState();
 

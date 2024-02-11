@@ -13,6 +13,7 @@ private:
     float dt;
 
     std::stack<State *> states;
+    sf::Font font;
     sf::ContextSettings windowSettings;
     std::map<std::string, int> supportedKeys;
 
@@ -24,6 +25,8 @@ private:
     void initState();
 
     void initKeys();
+
+    void initFonts();
 
 public:
     Game();

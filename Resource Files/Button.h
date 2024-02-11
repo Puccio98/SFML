@@ -54,6 +54,8 @@ namespace GUI {
         std::string getText() const;
 
         void handleEvent(sf::Event &event, const sf::Vector2f mousePos);
+
+        void reset();
     };
 
 }

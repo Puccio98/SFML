@@ -6,7 +6,8 @@
 
 class EditorState : public State {
 public:
-    EditorState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states);
+    EditorState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
+                sf::Font &font);
 
     virtual ~EditorState();
 
@@ -17,13 +18,11 @@ public:
 
 private:
     //Variables
-    sf::Font font;
     std::map<std::string, GUI::Button *> buttons;
 
     //Functions
     void initVariables();
 
-    void initFonts();
 
     void initButtons();
 

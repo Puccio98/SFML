@@ -11,7 +11,7 @@
 
 class PauseMenuState : public State {
 public:
-    PauseMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys);
+    PauseMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, sf::Font &font);
 
     ~PauseMenuState() override;
 
@@ -29,13 +29,10 @@ public:
 private:
     bool paused = false;
     sf::RectangleShape container;
-    sf::Font font;
     sf::Text menuText;
     std::map<std::string, GUI::Button *> buttons;
 
     void initTexts();
-
-    void initFonts();
 
     void initContainer(const sf::RenderWindow *window);
 

@@ -20,13 +20,15 @@ protected:
 
     //Resources
     std::map<std::string, sf::Texture> textures;
+    sf::Font &font;
 
     //Functions
     virtual void initKeybinds(std::string keybindsFilePath);
 
 
 public:
-    State(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states);
+    State(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
+          sf::Font &font);
 
     virtual ~State();
 

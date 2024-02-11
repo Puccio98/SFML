@@ -2,9 +2,10 @@
 
 #include "GameState.h"
 
-GameState::GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states)
+GameState::GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
+                     sf::Font &font)
         : State(window,
-                supportedKeys, states), pauseMenuState(PauseMenuState(window, supportedKeys)) {
+                supportedKeys, states, font), pauseMenuState(PauseMenuState(window, supportedKeys, font)) {
 
     State::initKeybinds("Config/gamestate_keybinds.ini");
     this->initTextures();

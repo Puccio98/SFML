@@ -12,16 +12,13 @@
 class SettingsState : public State {
 private:
     sf::RectangleShape background;
-    sf::Font font;
 
     //TODO Sposterei la mappa di bottoni in state
     std::map<std::string, GUI::Button *> buttons;
-    GUI::DropDownList *dropDownList;
+    GUI::DropDownList *dropDownList = nullptr;
 
     void initBackground();
 
-    //TODO spostare font in Game.cpp e passare i font ai vari stati
-    void initFonts();
 
     void initButtons();
 
@@ -30,7 +27,8 @@ private:
     void renderButtons(sf::RenderTarget &target);
 
 public:
-    SettingsState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states);
+    SettingsState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
+                  sf::Font &font);
 
     ~SettingsState() override;
 

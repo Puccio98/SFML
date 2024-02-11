@@ -21,12 +21,11 @@ void PauseMenuState::handleEvent(sf::Event &event, const float &dt) {
 }
 
 
-PauseMenuState::PauseMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys)
+PauseMenuState::PauseMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, sf::Font &font)
         : State(window,
                 supportedKeys,
-                nullptr) {
+                nullptr, font) {
     State::initKeybinds("Config/menustate_keybinds.ini");
-    this->initFonts();
     this->initContainer(window);
     this->initTexts();
     this->initButton();
@@ -85,12 +84,6 @@ void PauseMenuState::updateButtons() {
     if (this->buttons["CLOSE"]->isPressed()) {
         this->quit = true;
     }
-}
-
-void PauseMenuState::initFonts() {
-    if (!this->font.loadFromFile("../Fonts/Roboto-Black.ttf")) {
-        throw ("ERROR::PAUSEMENUSTATE::COULD NOT LOAD FONT");
-    };
 }
 
 void PauseMenuState::initButton() {
