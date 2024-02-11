@@ -1,9 +1,10 @@
 #include "DropDownList.h"
 
-GUI::DropDownList::DropDownList(float x, float y, float width, float height, sf::Font &font, std::string options[],
+GUI::DropDownList::DropDownList(float x, float y, float width, float height, sf::Font &font,
+                                std::vector<std::string> &options,
                                 unsigned default_index) : font(font),
                                                           showList(false) {
-    unsigned nrOfElements = options->size();
+    unsigned nrOfElements = options.size();
     std::cout << "number of elements: " << nrOfElements;
 
     for (size_t i = 0; i < nrOfElements; i++) {

@@ -15,10 +15,11 @@ private:
 
     //TODO Sposterei la mappa di bottoni in state
     std::map<std::string, GUI::Button *> buttons;
-    GUI::DropDownList *dropDownList = nullptr;
+    std::map<std::string, GUI::DropDownList *> dropDownList;
 
     void initBackground();
 
+    void initDropDownLists();
 
     void initButtons();
 
@@ -37,6 +38,10 @@ public:
     void handleEvent(sf::Event &event, const float &dt) override;
 
     void update(const float &dt) override;
+
+    void renderDropDownLists(sf::RenderTarget *target);
+
+    void updateDropDownLists();
 };
 
 #endif //SFML_SETTINGSSTATE_H

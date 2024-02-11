@@ -9,13 +9,16 @@ SettingsState::SettingsState(sf::RenderWindow *window, std::map<std::string, int
     this->initBackground();
     State::initKeybinds("Config/menustate_keybinds.ini");
     this->initButtons();
+    this->initDropDownLists();
 }
 
 SettingsState::~SettingsState() {
     for (auto &button: this->buttons) {
         delete button.second;
     }
-    delete this->dropDownList;
+    for (auto &ddl: this->dropDownList) {
+        delete ddl.second;
+    }
 }
 
 void SettingsState::update(const float &dt) {
@@ -23,7 +26,13 @@ void SettingsState::update(const float &dt) {
 
     this->updateMousePositions();
     this->updateButtons();
-    this->dropDownList->update(mousePosView);
+    updateDropDownLists();
+}
+
+void SettingsState::updateDropDownLists() {
+    for (auto &ddl: dropDownList) {
+        ddl.second->update(mousePosView);
+    }
 }
 
 
@@ -34,7 +43,13 @@ void SettingsState::render(sf::RenderTarget *target) {
 
     target->draw(this->background);
     this->renderButtons(*target);
-    this->dropDownList->render(*target);
+    renderDropDownLists(target);
+}
+
+void SettingsState::renderDropDownLists(sf::RenderTarget *target) {
+    for (auto &ddl: dropDownList) {
+        ddl.second->render(*target);
+    }
 }
 
 void SettingsState::handleEvent(sf::Event &event, const float &dt) {
@@ -46,7 +61,9 @@ void SettingsState::handleEvent(sf::Event &event, const float &dt) {
         button.second->handleEvent(event, mousePosView);
     }
 
-    this->dropDownList->handleEvent(event, mousePosView);
+    for (auto &ddl: this->dropDownList) {
+        ddl.second->handleEvent(event, mousePosView);
+    }
 }
 
 void SettingsState::initBackground() {
@@ -64,7 +81,7 @@ void SettingsState::renderButtons(sf::RenderTarget &target) {
 }
 
 void SettingsState::initButtons() {
-    this->buttons["EXIT_STATE"] = new GUI::Button(100, 400, 150, 50, &this->font, "Quit", 50,
+    this->buttons["EXIT_STATE"] = new GUI::Button(100, 400, 150, 50, &this->font, "Back", 50,
                                                   sf::Color(120, 50, 80, 200),
                                                   sf::Color(150, 50, 80, 250),
                                                   sf::Color(90, 40, 60, 50),
@@ -72,8 +89,6 @@ void SettingsState::initButtons() {
                                                   sf::Color(150, 50, 80, 0),
                                                   sf::Color(90, 40, 60, 0));
 
-    std::string options[] = {"pippo", "paolo", "paperino", "topolino", "pluto"};
-    this->dropDownList = new GUI::DropDownList(100, 100, 200, 50, font, options);
 }
 
 void SettingsState::updateButtons() {
@@ -85,5 +100,12 @@ void SettingsState::updateButtons() {
         this->endState();
     }
 
-    this->dropDownList->update(mousePosView);
+    for (auto &ddl: this->dropDownList) {
+        ddl.second->update(mousePosView);
+    }
+}
+
+void SettingsState::initDropDownLists() {
+    std::vector<std::string> options = {"1920x1080", "800x600", "640x480"};
+    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(100, 100, 200, 50, font, options);
 }
