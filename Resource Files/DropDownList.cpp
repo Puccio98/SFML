@@ -7,17 +7,25 @@ GUI::DropDownList::DropDownList(float x, float y, float width, float height, sf:
     unsigned nrOfElements = options.size();
     std::cout << "number of elements: " << nrOfElements;
 
+    this->activeElement = new GUI::Button(x, y, width, height, &this->font, options[default_index], 12,
+                                          sf::Color(120, 50, 80, 200),
+                                          sf::Color(150, 50, 80, 250),
+                                          sf::Color(90, 40, 60, 50),
+                                          sf::Color(120, 50, 80, 0),
+                                          sf::Color(150, 50, 80, 0),
+                                          sf::Color(90, 40, 60, 0));
+
     for (size_t i = 0; i < nrOfElements; i++) {
-        this->buttons.push_back(new GUI::Button(x, y + (height * (float) i), width, height, &this->font, options[i], 12,
-                                                sf::Color(120, 50, 80, 200),
-                                                sf::Color(150, 50, 80, 250),
-                                                sf::Color(90, 40, 60, 50),
-                                                sf::Color(120, 50, 80, 0),
-                                                sf::Color(150, 50, 80, 0),
-                                                sf::Color(90, 40, 60, 0)));
+        this->buttons.push_back(
+                new GUI::Button(x, y + (height * ((float) i + 1)), width, height, &this->font, options[i], 12,
+                                sf::Color(120, 50, 80, 200),
+                                sf::Color(150, 50, 80, 250),
+                                sf::Color(90, 40, 60, 50),
+                                sf::Color(120, 50, 80, 0),
+                                sf::Color(150, 50, 80, 0),
+                                sf::Color(90, 40, 60, 0)));
     }
 
-    this->activeElement = new Button(*this->buttons[default_index]);
 }
 
 void GUI::DropDownList::render(sf::RenderTarget &target) {
@@ -35,6 +43,11 @@ void GUI::DropDownList::update(const sf::Vector2f &mousePos) {
     if (this->showList) {
         for (auto &button: this->buttons) {
             button->update(mousePos);
+
+            if (button->isPressed()) {
+                this->activeElement->setText(button->getText());
+                this->showList = false;
+            }
         }
     }
 }
