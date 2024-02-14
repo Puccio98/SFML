@@ -41,6 +41,7 @@ Game::Game() {
     this->initVariables();
     this->initWindow();
     this->initKeys();
+    this->initFonts();
     this->initState();
 }
 
@@ -92,7 +93,7 @@ void Game::updateDT() {
 }
 
 void Game::initState() {
-    this->states.push(new MainMenuState(this->window, &this->supportedKeys, &states));
+    this->states.push(new MainMenuState(this->window, &this->supportedKeys, &states, font));
 }
 
 void Game::endApplication() {
@@ -119,4 +120,8 @@ void Game::initVariables() {
     this->fullscreen = false;
 }
 
-
+void Game::initFonts() {
+    if (!this->font.loadFromFile("../Fonts/Roboto-Black.ttf")) {
+        throw ("ERROR::GAME::COULD NOT LOAD FONT");
+    };
+}

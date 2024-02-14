@@ -1,9 +1,5 @@
 #include "PauseMenuState.h"
 
-void PauseMenuState::updateInput(const float &dt) {
-
-}
-
 void PauseMenuState::render(sf::RenderTarget *target) {
     target->draw(this->container);
 
@@ -19,15 +15,17 @@ void PauseMenuState::handleEvent(sf::Event &event, const float &dt) {
             event.key.code == this->keybinds["CLOSE"]) { this->paused = false; }
     }
 
+    for (auto &button: this->buttons) {
+        button.second->handleEvent(event, mousePosView);
+    }
 }
 
 
-PauseMenuState::PauseMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys)
+PauseMenuState::PauseMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, sf::Font &font)
         : State(window,
                 supportedKeys,
-                nullptr) {
+                nullptr, font) {
     State::initKeybinds("Config/menustate_keybinds.ini");
-    this->initFonts();
     this->initContainer(window);
     this->initTexts();
     this->initButton();
@@ -71,7 +69,6 @@ void PauseMenuState::setPause(bool pause) {
 void PauseMenuState::update(const float &dt) {
     State::update(dt);
     this->updateMousePositions();
-    this->updateInput(dt);
     this->updateButtons();
 }
 
@@ -89,30 +86,24 @@ void PauseMenuState::updateButtons() {
     }
 }
 
-void PauseMenuState::initFonts() {
-    if (!this->font.loadFromFile("../Fonts/Roboto-Black.ttf")) {
-        throw ("ERROR::PAUSEMENUSTATE::COULD NOT LOAD FONT");
-    };
-}
-
 void PauseMenuState::initButton() {
     float width = 250.f;
     float height = 50.f;
     float x = this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f;
     float basePosY = this->container.getPosition().y;
 
-    this->buttons["GAME"] = new Button(x, basePosY + 100, width, height, &this->font, "Return to Game", 40,
-                                       sf::Color(120, 50, 80, 200),
-                                       sf::Color(150, 50, 80, 250),
-                                       sf::Color(90, 40, 60, 50),
-                                       sf::Color(120, 50, 80, 0),
-                                       sf::Color(150, 50, 80, 0),
-                                       sf::Color(90, 40, 60, 0));
-    this->buttons["CLOSE"] = new Button(x, basePosY + 150, width, height, &this->font, "Close", 40,
-                                        sf::Color(120, 50, 80, 200),
-                                        sf::Color(150, 50, 80, 250),
-                                        sf::Color(90, 40, 60, 50),
-                                        sf::Color(120, 50, 80, 0),
-                                        sf::Color(150, 50, 80, 0),
-                                        sf::Color(90, 40, 60, 0));
+    this->buttons["GAME"] = new GUI::Button(x, basePosY + 100, width, height, &this->font, "Return to Game", 40,
+                                            sf::Color(120, 50, 80, 200),
+                                            sf::Color(150, 50, 80, 250),
+                                            sf::Color(90, 40, 60, 50),
+                                            sf::Color(120, 50, 80, 0),
+                                            sf::Color(150, 50, 80, 0),
+                                            sf::Color(90, 40, 60, 0));
+    this->buttons["CLOSE"] = new GUI::Button(x, basePosY + 150, width, height, &this->font, "Close", 40,
+                                             sf::Color(120, 50, 80, 200),
+                                             sf::Color(150, 50, 80, 250),
+                                             sf::Color(90, 40, 60, 50),
+                                             sf::Color(120, 50, 80, 0),
+                                             sf::Color(150, 50, 80, 0),
+                                             sf::Color(90, 40, 60, 0));
 }

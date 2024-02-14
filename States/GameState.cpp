@@ -2,9 +2,10 @@
 
 #include "GameState.h"
 
-GameState::GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states)
+GameState::GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
+                     sf::Font &font)
         : State(window,
-                supportedKeys, states), pauseMenuState(PauseMenuState(window, supportedKeys)) {
+                supportedKeys, states, font), pauseMenuState(PauseMenuState(window, supportedKeys, font)) {
 
     State::initKeybinds("Config/gamestate_keybinds.ini");
     this->initTextures();
@@ -60,6 +61,7 @@ void GameState::initPlayer() {
 }
 
 void GameState::handleEvent(sf::Event &event, const float &dt) {
+
     if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == this->keybinds["CLOSE"]) { this->endState(); }
         if (event.key.code == this->keybinds["PAUSE"]) { this->pauseMenuState.setPause(true); }
@@ -70,6 +72,10 @@ void GameState::handleEvent(sf::Event &event, const float &dt) {
     }
 }
 
+/**
+ * Chiude gamestate se è stata richiesta la chiusura del gioco da menu di pausa o direttamente da gamestate
+ * @return
+ */
 bool GameState::isQuit() const {
     return this->quit || this->pauseMenuState.isQuit();
 }

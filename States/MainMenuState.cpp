@@ -3,9 +3,7 @@
 #include "MainMenuState.h"
 
 MainMenuState::MainMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys,
-                             std::stack<State *> *states) : State(window,
-                                                                  supportedKeys, states) {
-    this->initFonts();
+                             std::stack<State *> *states, sf::Font &font) : State(window, supportedKeys, states, font) {
     this->initVariables();
     this->initBackground();
     State::initKeybinds("Config/menustate_keybinds.ini");
@@ -19,14 +17,9 @@ MainMenuState::~MainMenuState() {
     }
 }
 
-void MainMenuState::updateInput(const float &dt) {
-
-}
-
 void MainMenuState::update(const float &dt) {
     State::update(dt);
     this->updateMousePositions();
-    this->updateInput(dt);
     this->updateButtons();
 }
 
@@ -37,44 +30,38 @@ void MainMenuState::render(sf::RenderTarget *target) {
     this->renderButtons(*target);
 }
 
-void MainMenuState::initFonts() {
-    if (!this->font.loadFromFile("../Fonts/Roboto-Black.ttf")) {
-        throw ("ERROR::MAINMENUSTATE::COULD NOT LOAD FONT");
-    };
-}
-
 void MainMenuState::initButtons() {
-    this->buttons["GAME_STATE"] = new Button(100, 100, 150, 50, &this->font, "New Game", 50,
+    this->buttons["GAME_STATE"] = new GUI::Button(100, 100, 150, 50, &this->font, "New Game", 50,
+                                                  sf::Color(120, 50, 80, 200),
+                                                  sf::Color(150, 50, 80, 250),
+                                                  sf::Color(90, 40, 60, 50),
+                                                  sf::Color(120, 50, 80, 0),
+                                                  sf::Color(150, 50, 80, 0),
+                                                  sf::Color(90, 40, 60, 0));
+
+    this->buttons["SETTING_STATE"] = new GUI::Button(100, 200, 150, 50, &this->font, "Settings", 50,
+                                                     sf::Color(120, 50, 80, 200),
+                                                     sf::Color(150, 50, 80, 250),
+                                                     sf::Color(90, 40, 60, 50),
+                                                     sf::Color(120, 50, 80, 0),
+                                                     sf::Color(150, 50, 80, 0),
+                                                     sf::Color(90, 40, 60, 0));
+
+    this->buttons["EDITOR_STATE"] = new GUI::Button(100, 300, 150, 50, &this->font, "Editor", 50,
+                                                    sf::Color(120, 50, 80, 200),
+                                                    sf::Color(150, 50, 80, 250),
+                                                    sf::Color(90, 40, 60, 50),
+                                                    sf::Color(120, 50, 80, 0),
+                                                    sf::Color(150, 50, 80, 0),
+                                                    sf::Color(90, 40, 60, 0));
+
+    this->buttons["CLOSE"] = new GUI::Button(100, 400, 150, 50, &this->font, "Close Game", 50,
                                              sf::Color(120, 50, 80, 200),
                                              sf::Color(150, 50, 80, 250),
                                              sf::Color(90, 40, 60, 50),
                                              sf::Color(120, 50, 80, 0),
                                              sf::Color(150, 50, 80, 0),
                                              sf::Color(90, 40, 60, 0));
-
-    this->buttons["SETTING_STATE"] = new Button(100, 200, 150, 50, &this->font, "Settings", 50,
-                                                sf::Color(120, 50, 80, 200),
-                                                sf::Color(150, 50, 80, 250),
-                                                sf::Color(90, 40, 60, 50),
-                                                sf::Color(120, 50, 80, 0),
-                                                sf::Color(150, 50, 80, 0),
-                                                sf::Color(90, 40, 60, 0));
-
-    this->buttons["EDITOR_STATE"] = new Button(100, 300, 150, 50, &this->font, "Editor", 50,
-                                               sf::Color(120, 50, 80, 200),
-                                               sf::Color(150, 50, 80, 250),
-                                               sf::Color(90, 40, 60, 50),
-                                               sf::Color(120, 50, 80, 0),
-                                               sf::Color(150, 50, 80, 0),
-                                               sf::Color(90, 40, 60, 0));
-
-    this->buttons["CLOSE"] = new Button(100, 400, 150, 50, &this->font, "Close Game", 50,
-                                        sf::Color(120, 50, 80, 200),
-                                        sf::Color(150, 50, 80, 250),
-                                        sf::Color(90, 40, 60, 50),
-                                        sf::Color(120, 50, 80, 0),
-                                        sf::Color(150, 50, 80, 0),
-                                        sf::Color(90, 40, 60, 0));
 }
 
 void MainMenuState::renderButtons(sf::RenderTarget &target) {
@@ -91,18 +78,22 @@ void MainMenuState::updateButtons() {
 
     //New Game
     if (this->buttons["GAME_STATE"]->isPressed()) {
-        this->states->push(new GameState(this->window, this->supportedKeys, this->states));
+        this->states->push(new GameState(this->window, this->supportedKeys, this->states, font));
     }
 
 
-    //New Game
+    //Setting State
     if (this->buttons["SETTING_STATE"]->isPressed()) {
-        this->states->push(new SettingsState(this->window, this->supportedKeys, this->states));
+        //TODO:: Spostare i bottoni in state.h e creare una funzione ResetButtons che ogni volta che apriamo un nuovo state resetta i bottoni dello stato di partenza
+        for (auto &button: this->buttons) {
+            button.second->reset();
+        }
+        this->states->push(new SettingsState(this->window, this->supportedKeys, this->states, font));
     }
 
     //Editor
     if (this->buttons["EDITOR_STATE"]->isPressed()) {
-        this->states->push(new EditorState(this->window, this->supportedKeys, this->states));
+        this->states->push(new EditorState(this->window, this->supportedKeys, this->states, font));
     }
 
     //Exit Game
@@ -127,8 +118,13 @@ void MainMenuState::initVariables() {
 
 }
 
+
 void MainMenuState::handleEvent(sf::Event &event, const float &dt) {
     if (event.type == sf::Event::KeyPressed && event.key.code == this->keybinds["CLOSE"]) {
         this->endState();
+    }
+
+    for (auto &button: this->buttons) {
+        button.second->handleEvent(event, mousePosView);
     }
 }

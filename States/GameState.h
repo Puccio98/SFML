@@ -13,12 +13,13 @@ private:
     void initPlayer();
 
 public:
-    GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states);
+    GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
+              sf::Font &font);
 
     virtual ~GameState();
 
     //Functions
-    void updateInput(const float &dt) override;
+    void updateInput(const float &dt);
 
     void update(const float &dt) override;
 
