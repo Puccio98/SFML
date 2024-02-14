@@ -17,12 +17,14 @@ namespace GUI {
 
         void handleEvent(sf::Event &event, const sf::Vector2f mousePos);
 
+        unsigned short getSelectedElementId() const;
+
     private:
         GUI::Button *activeElement;
-        short unsigned selectedElement;
         std::vector<GUI::Button *> buttons;
         sf::Font &font;
         bool showList;
+        unsigned int selectedElementId;
     };
 }
 

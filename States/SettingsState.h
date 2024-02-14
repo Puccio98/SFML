@@ -17,6 +17,11 @@ private:
     std::map<std::string, GUI::Button *> buttons;
     std::map<std::string, GUI::DropDownList *> dropDownList;
 
+    sf::Text optionsText;
+    std::vector<sf::VideoMode> videoModes;
+
+    void initVariables();
+
     void initBackground();
 
     void initDropDownLists();
@@ -26,6 +31,8 @@ private:
     void updateButtons();
 
     void renderButtons(sf::RenderTarget &target);
+
+    void initOptionsText();
 
 public:
     SettingsState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
