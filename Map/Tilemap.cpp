@@ -14,7 +14,7 @@ Tilemap::Tilemap() {
 
         this->map[x].resize(this->maxSize.y);
         for (int y = 0; y < maxSize.y; y++) {
-            //this->map[x].emplace_back();
+            // this->map[x].emplace_back();
 
             this->map[x][y].resize(this->layers, Tile(x * this->gridSizeF, y * this->gridSizeF, this->gridSizeF));
             // secondo me non serve a nulla il ciclo for su Z, almeno per ora
