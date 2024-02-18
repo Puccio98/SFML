@@ -72,8 +72,8 @@ void SettingsState::handleEvent(sf::Event &event, const float &dt) {
 
 void SettingsState::initBackground() {
     this->background.setSize(
-            sf::Vector2f(static_cast<float>(this->window->getSize().x),
-                         static_cast<float>(this->window->getSize().y))
+            sf::Vector2f(static_cast<float>(this->window->getView().getSize().x),
+                         static_cast<float>(this->window->getView().getSize().y))
     );
     this->background.setFillColor(sf::Color::White);
 }
@@ -139,8 +139,16 @@ void SettingsState::initDropDownLists() {
     for (auto &i: this->videoModes) {
         videomodes_str.push_back(std::to_string(i.width) + 'x' + std::to_string(i.height));
     }
-    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(100, 100, 200, 50, font, videomodes_str,
-                                                             0);
+
+    int index = 0;
+    sf::Vector2u currentVideoModeSize = this->window->getSize();
+    for (int i = 0; i < this->videoModes.size(); i++) {
+        if (this->videoModes[i].width == currentVideoModeSize.x &&
+            this->videoModes[i].height == currentVideoModeSize.y) {
+            index = i;
+        }
+    }
+    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(300, 100, 200, 50, font, videomodes_str, index);
 }
 
 void SettingsState::initOptionsText() {
@@ -152,5 +160,11 @@ void SettingsState::initOptionsText() {
 }
 
 void SettingsState::initVariables() {
-    this->videoModes = sf::VideoMode::getFullscreenModes();
+    // Recuperiamo tutte le videomode accettate dal monitor
+    //this->videoModes = sf::VideoMode::getFullscreenModes();
+    //Scegliamo noi quali videomode rendere disponibili
+    this->videoModes.emplace_back(1920, 1080);
+    this->videoModes.emplace_back(1600, 900);
+    this->videoModes.emplace_back(1366, 768);
+    this->videoModes.emplace_back(1280, 720);
 }
