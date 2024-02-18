@@ -2,11 +2,13 @@
 #define SFML_GAMESTATE_H
 
 #include "PauseMenuState.h"
+#include "../Map/TileMap.h"
 
 class GameState : public State {
 private:
     Player *player{};
     PauseMenuState pauseMenuState;
+    Tilemap map;
 
     void initTextures();
 

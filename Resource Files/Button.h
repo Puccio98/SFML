@@ -27,7 +27,7 @@ namespace GUI {
         sf::Color textHoverColor;
         sf::Color textActiveColor;
 
-        //TODO:: Creare struct per gestire triplettte di colori e aggiungere outlineColor.
+        //TODO:: Creare struct per gestire triplette di colori e aggiungere outlineColor.
         sf::Color idleColor;
         sf::Color hoverColor;
         sf::Color activeColor;
@@ -61,7 +61,6 @@ namespace GUI {
 
         unsigned short getId() const;
     };
-
 }
 
 
