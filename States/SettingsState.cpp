@@ -116,7 +116,16 @@ void SettingsState::updateButtons() {
         //TODO: ogni volta che faccio una selezione, active element dovrebbe essere sostituito con un nuovo bottone piuttosto che modificargli il testo.
         //Non c'è più bisogno di usare selectedElementId, possiamo usare activeElement.id
         short activeElementId = this->dropDownList["RESOLUTION"]->getSelectedElementId();
-        this->window->create(this->videoModes[activeElementId], "test");
+
+        // Recupera view originale, setta la dimensione della finestra e gli applica la view originale
+        sf::View view = this->window->getView();
+        this->window->setSize(
+                sf::Vector2u(this->videoModes[activeElementId].width, this->videoModes[activeElementId].height));
+        this->window->setView(view);
+
+        auto desktop = sf::VideoMode::getDesktopMode();
+        this->window->setPosition(sf::Vector2i(desktop.width / 2 - window->getSize().x / 2,
+                                               desktop.height / 2 - window->getSize().y / 2));
     }
 
     for (auto &ddl: this->dropDownList) {

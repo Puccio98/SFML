@@ -30,6 +30,7 @@ void Game::initWindow() {
     else
         this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Titlebar | sf::Style::Close,
                                             windowSettings);
+
     this->window->setFramerateLimit(framerate_limit);
     this->window->setVerticalSyncEnabled(vertical_sync_enabled);
     this->window->setKeyRepeatEnabled(false);
