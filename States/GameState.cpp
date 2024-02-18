@@ -30,6 +30,8 @@ void GameState::update(const float &dt) {
 void GameState::render(sf::RenderTarget *target = nullptr) {
     if (!target)
         target = this->window;
+
+    this->map.render(*target);
     this->player->render(*target);
     if (pauseMenuState.isPaused()) {
         pauseMenuState.render(target);

@@ -78,6 +78,9 @@ void MainMenuState::updateButtons() {
 
     //New Game
     if (this->buttons["GAME_STATE"]->isPressed()) {
+        for (auto &button: this->buttons) {
+            button.second->reset();
+        }
         this->states->push(new GameState(this->window, this->supportedKeys, this->states, font));
     }
 
@@ -93,6 +96,9 @@ void MainMenuState::updateButtons() {
 
     //Editor
     if (this->buttons["EDITOR_STATE"]->isPressed()) {
+        for (auto &button: this->buttons) {
+            button.second->reset();
+        }
         this->states->push(new EditorState(this->window, this->supportedKeys, this->states, font));
     }
 
