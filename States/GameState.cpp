@@ -63,7 +63,6 @@ void GameState::initPlayer() {
 }
 
 void GameState::handleEvent(sf::Event &event, const float &dt) {
-
     if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == this->keybinds["CLOSE"]) { this->endState(); }
         if (event.key.code == this->keybinds["PAUSE"]) { this->pauseMenuState.setPause(true); }

@@ -11,8 +11,9 @@ void PauseMenuState::render(sf::RenderTarget *target) {
 
 void PauseMenuState::handleEvent(sf::Event &event, const float &dt) {
     if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == this->keybinds["PAUSE"] ||
-            event.key.code == this->keybinds["CLOSE"]) { this->paused = false; }
+        if (event.key.code == this->keybinds["PAUSE"] || event.key.code == this->keybinds["CLOSE"]) {
+            this->setPause(false);
+        }
     }
 
     for (auto &button: this->buttons) {
@@ -64,6 +65,12 @@ bool PauseMenuState::isPaused() const {
 void PauseMenuState::setPause(bool pause) {
     this->paused = pause;
 
+    //Se esce da menu di pausa resetta bottoni
+    if (!pause) {
+        for (auto &button: this->buttons) {
+            button.second->reset();
+        }
+    }
 }
 
 void PauseMenuState::update(const float &dt) {
@@ -78,10 +85,11 @@ void PauseMenuState::updateButtons() {
     }
 
     if (this->buttons["GAME"]->isPressed()) {
-        this->paused = false;
+        this->setPause(false);
     }
 
     if (this->buttons["CLOSE"]->isPressed()) {
+        this->setPause(false);
         this->quit = true;
     }
 }
