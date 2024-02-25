@@ -8,7 +8,8 @@
 
 class MainMenuState : public State {
 public:
-    MainMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
+    MainMenuState(sf::RenderWindow *window, GraphicsSettings &graphicsSettings,
+                  std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
                   sf::Font &font);
 
     ~MainMenuState() override;
@@ -24,7 +25,7 @@ private:
     //Variables
     sf::Texture backgroundTexture;
     sf::RectangleShape background;
-
+    GraphicsSettings &graphicsSettings;
     std::map<std::string, GUI::Button *> buttons;
 
     //Functions

@@ -27,7 +27,9 @@ add_executable(SFML
         "Resource Files/DropDownList.cpp"
         "Resource Files/DropDownList.h"
         Map/Tilemap.cpp
-        Map/Tilemap.h)
+        Map/Tilemap.h
+        Settings/GraphicsSettings.cpp
+        Settings/GraphicsSettings.h)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/libs/SFML-2.6.1/lib/cmake/SFML)

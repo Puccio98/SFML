@@ -4,8 +4,10 @@
 
 #include "SettingsState.h"
 
-SettingsState::SettingsState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys,
-                             std::stack<State *> *states, sf::Font &font) : State(window, supportedKeys, states, font) {
+SettingsState::SettingsState(sf::RenderWindow *window, GraphicsSettings &graphicsSettings,
+                             std::map<std::string, int> *supportedKeys,
+                             std::stack<State *> *states, sf::Font &font) : State(window, supportedKeys, states, font),
+                                                                            graphicsSettings(graphicsSettings) {
     this->initVariables();
     this->initBackground();
     State::initKeybinds("Config/menustate_keybinds.ini");
@@ -126,6 +128,10 @@ void SettingsState::updateButtons() {
         auto desktop = sf::VideoMode::getDesktopMode();
         this->window->setPosition(sf::Vector2i(desktop.width / 2 - window->getSize().x / 2,
                                                desktop.height / 2 - window->getSize().y / 2));
+
+        //aggiorno la risoluzione nel file
+        this->graphicsSettings.resolution = this->videoModes[activeElementId];
+        this->graphicsSettings.save();
     }
 
     for (auto &ddl: this->dropDownList) {
