@@ -8,7 +8,7 @@ class GameState : public State {
 private:
     Player *player{};
     PauseMenuState pauseMenuState;
-    Tilemap map;
+    Tilemap *tilemap;
 
     void initTextures();
 
@@ -29,6 +29,8 @@ public:
     void handleEvent(sf::Event &event, const float &dt) override;
 
     bool isQuit() const override;
+
+    void initTilemap();
 
 };
 

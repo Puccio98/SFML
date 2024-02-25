@@ -6,19 +6,23 @@ EditorState::EditorState(StateData &stateData) :
     this->initVariables();
     State::initKeybinds("Config/menustate_keybinds.ini");
     this->initButtons();
-
+    this->initTileMap();
+    this->initGui();
 }
 
 EditorState::~EditorState() {
     for (auto &button: this->buttons) {
         delete button.second;
     }
+
+    delete this->tilemap;
 }
 
 void EditorState::update(const float &dt) {
     if (!pauseMenuState.isPaused()) {
         State::update(dt);
         this->updateMousePositions();
+        this->updateGui();
         this->updateButtons();
     } else {
         pauseMenuState.update(dt);
@@ -29,8 +33,11 @@ void EditorState::render(sf::RenderTarget *target) {
     if (!target)
         target = this->stateData.window;
     this->renderButtons(target);
-    this->map.render(*target);
+    this->renderGui(target);
 
+    if (!pauseMenuState.isPaused()) {
+        target->draw(this->selectorRect);
+    }
 
     if (pauseMenuState.isPaused()) {
         pauseMenuState.render(target);
@@ -54,12 +61,11 @@ void EditorState::updateButtons() {
         button.second->update(this->mousePosView);
     }
 
-    this->map.update();
+    this->tilemap->update();
 }
 
 //Initializer Functions
 void EditorState::initVariables() {
-
 }
 
 void EditorState::handleEvent(sf::Event &event, const float &dt) {
@@ -75,4 +81,24 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
  */
 bool EditorState::isQuit() const {
     return this->quit || this->pauseMenuState.isQuit();
+}
+
+void EditorState::initTileMap() {
+    this->tilemap = new Tilemap(this->stateData.gridSize, 15, 10);
+}
+
+void EditorState::initGui() {
+    this->selectorRect.setSize(sf::Vector2f(this->stateData.gridSize, this->stateData.gridSize));
+    this->selectorRect.setFillColor(sf::Color::Transparent);
+    this->selectorRect.setOutlineThickness(1.f);
+    this->selectorRect.setOutlineColor(sf::Color::Red);
+}
+
+void EditorState::updateGui() {
+    this->selectorRect.setPosition(this->mousePosGrid.x * this->stateData.gridSize,
+                                   this->mousePosGrid.y * this->stateData.gridSize);
+}
+
+void EditorState::renderGui(sf::RenderTarget *target) {
+    this->tilemap->render(*target);
 }

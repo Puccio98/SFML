@@ -10,6 +10,10 @@ void State::updateMousePositions() {
     this->mousePosScreen = sf::Mouse::getPosition();
     this->mousePosWindow = sf::Mouse::getPosition(*this->stateData.window);
     this->mousePosView = this->stateData.window->mapPixelToCoords(sf::Mouse::getPosition(*this->stateData.window));
+    this->mousePosGrid = sf::Vector2u(
+            static_cast<unsigned>(this->mousePosView.x) / static_cast<unsigned> (this->stateData.gridSize),
+            static_cast<unsigned>(this->mousePosView.y) / static_cast<unsigned> (this->stateData.gridSize)
+    );
 }
 
 __attribute__((unused)) void State::debugMousePosition() const {

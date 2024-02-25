@@ -25,7 +25,8 @@ private:
     //Variables
     PauseMenuState pauseMenuState;
     std::map<std::string, GUI::Button *> buttons;
-    Tilemap map;
+    Tilemap *tilemap;
+    sf::RectangleShape selectorRect;
 
     //Functions
     void initVariables();
@@ -34,8 +35,15 @@ private:
 
     void updateButtons();
 
+    void updateGui();
+
     void renderButtons(sf::RenderTarget *target);
 
+    void renderGui(sf::RenderTarget *target);
+
+    void initTileMap();
+
+    void initGui();
 };
 
 

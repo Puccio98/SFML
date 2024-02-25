@@ -7,6 +7,7 @@ GameState::GameState(StateData &stateData)
 
     State::initKeybinds("Config/gamestate_keybinds.ini");
     this->initTextures();
+    this->initTilemap();
     this->initPlayer();
 }
 
@@ -29,7 +30,7 @@ void GameState::render(sf::RenderTarget *target = nullptr) {
     if (!target)
         target = this->stateData.window;
 
-    this->map.render(*target);
+    this->tilemap->render(*target);
     this->player->render(*target);
     if (pauseMenuState.isPaused()) {
         pauseMenuState.render(target);
@@ -77,6 +78,10 @@ void GameState::handleEvent(sf::Event &event, const float &dt) {
  */
 bool GameState::isQuit() const {
     return this->quit || this->pauseMenuState.isQuit();
+}
+
+void GameState::initTilemap() {
+    this->tilemap = new Tilemap(50.f, 15, 10);
 }
 
 
