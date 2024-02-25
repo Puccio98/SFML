@@ -36,6 +36,8 @@ Game::~Game() {
         delete this->states.top();
         this->states.pop();
     }
+
+    delete stateData;
 }
 
 //Functions
@@ -77,7 +79,7 @@ void Game::updateDT() {
 }
 
 void Game::initState() {
-    this->states.push(new MainMenuState(*stateData, *graphicsSettings));
+    this->states.push(new MainMenuState(*stateData));
 }
 
 void Game::endApplication() {

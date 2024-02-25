@@ -2,9 +2,7 @@
 
 #include "MainMenuState.h"
 
-MainMenuState::MainMenuState(StateData &stateData, GraphicsSettings &graphicsSettings) : State(stateData),
-                                                                                         graphicsSettings(
-                                                                                                 graphicsSettings) {
+MainMenuState::MainMenuState(StateData &stateData) : State(stateData) {
     this->initVariables();
     this->initBackground();
     State::initKeybinds("Config/menustate_keybinds.ini");
