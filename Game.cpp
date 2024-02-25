@@ -24,7 +24,7 @@ Game::Game() {
     this->initWindow();
     this->initKeys();
     this->initFonts();
-    this->stateData = new State::StateData(&states, this->window, &this->supportedKeys, &font, graphicsSettings);
+    this->stateData = new StateData(&states, this->window, &this->supportedKeys, &font, graphicsSettings);
     this->initState();
 }
 

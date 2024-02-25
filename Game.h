@@ -12,7 +12,7 @@ private:
     sf::Clock dtClock;
     float dt;
 
-    State::StateData *stateData;
+    StateData *stateData;
     std::string graphicsSettingsFilePath = "Config/graphics.ini";
     std::stack<State *> states;
     sf::Font font;

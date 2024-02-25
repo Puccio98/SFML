@@ -30,6 +30,7 @@ add_executable(SFML
         Map/Tilemap.h
         Settings/GraphicsSettings.cpp
         Settings/GraphicsSettings.h
+        States/StateData.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

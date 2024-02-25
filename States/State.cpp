@@ -1,6 +1,6 @@
 #include "State.h"
 
-State::State(State::StateData &stateData) : stateData(stateData) {
+State::State(StateData &stateData) : stateData(stateData) {
     this->quit = false;
 }
 
