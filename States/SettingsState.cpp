@@ -1,13 +1,6 @@
-//
-// Created by malte on 28/01/2024.
-//
-
 #include "SettingsState.h"
 
-SettingsState::SettingsState(sf::RenderWindow *window, GraphicsSettings &graphicsSettings,
-                             std::map<std::string, int> *supportedKeys,
-                             std::stack<State *> *states, sf::Font &font) : State(window, supportedKeys, states, font),
-                                                                            graphicsSettings(graphicsSettings) {
+SettingsState::SettingsState(StateData &stateData) : State(stateData) {
     this->initVariables();
     this->initBackground();
     State::initKeybinds("Config/menustate_keybinds.ini");
@@ -42,7 +35,7 @@ void SettingsState::updateDropDownLists() {
 
 void SettingsState::render(sf::RenderTarget *target) {
     if (!target) {
-        target = this->window;
+        target = this->stateData.window;
     }
 
     target->draw(this->background);
@@ -74,8 +67,8 @@ void SettingsState::handleEvent(sf::Event &event, const float &dt) {
 
 void SettingsState::initBackground() {
     this->background.setSize(
-            sf::Vector2f(static_cast<float>(this->window->getView().getSize().x),
-                         static_cast<float>(this->window->getView().getSize().y))
+            sf::Vector2f(static_cast<float>(this->stateData.window->getView().getSize().x),
+                         static_cast<float>(this->stateData.window->getView().getSize().y))
     );
     this->background.setFillColor(sf::Color::White);
 }
@@ -87,7 +80,7 @@ void SettingsState::renderButtons(sf::RenderTarget &target) {
 }
 
 void SettingsState::initButtons() {
-    this->buttons["BACK"] = new GUI::Button(100, 400, 150, 50, &this->font, "Back", 50,
+    this->buttons["BACK"] = new GUI::Button(100, 400, 150, 50, this->stateData.font, "Back", 50,
                                             sf::Color(120, 50, 80, 200),
                                             sf::Color(150, 50, 80, 250),
                                             sf::Color(90, 40, 60, 50),
@@ -95,7 +88,7 @@ void SettingsState::initButtons() {
                                             sf::Color(150, 50, 80, 0),
                                             sf::Color(90, 40, 60, 0));
 
-    this->buttons["APPLY"] = new GUI::Button(300, 400, 150, 50, &this->font, "Apply", 50,
+    this->buttons["APPLY"] = new GUI::Button(300, 400, 150, 50, this->stateData.font, "Apply", 50,
                                              sf::Color(120, 50, 80, 200),
                                              sf::Color(150, 50, 80, 250),
                                              sf::Color(90, 40, 60, 50),
@@ -120,18 +113,18 @@ void SettingsState::updateButtons() {
         short activeElementId = this->dropDownList["RESOLUTION"]->getSelectedElementId();
 
         // Recupera view originale, setta la dimensione della finestra e gli applica la view originale
-        sf::View view = this->window->getView();
-        this->window->setSize(
+        sf::View view = this->stateData.window->getView();
+        this->stateData.window->setSize(
                 sf::Vector2u(this->videoModes[activeElementId].width, this->videoModes[activeElementId].height));
-        this->window->setView(view);
+        this->stateData.window->setView(view);
 
         auto desktop = sf::VideoMode::getDesktopMode();
-        this->window->setPosition(sf::Vector2i(desktop.width / 2 - window->getSize().x / 2,
-                                               desktop.height / 2 - window->getSize().y / 2));
+        this->stateData.window->setPosition(sf::Vector2i(desktop.width / 2 - this->stateData.window->getSize().x / 2,
+                                                         desktop.height / 2 - this->stateData.window->getSize().y / 2));
 
         //aggiorno la risoluzione nel file
-        this->graphicsSettings.resolution = this->videoModes[activeElementId];
-        this->graphicsSettings.save();
+        this->stateData.graphicsSettings->resolution = this->videoModes[activeElementId];
+        this->stateData.graphicsSettings->save();
     }
 
     for (auto &ddl: this->dropDownList) {
@@ -147,18 +140,19 @@ void SettingsState::initDropDownLists() {
     }
 
     int index = 0;
-    sf::Vector2u currentVideoModeSize = this->window->getSize();
+    sf::Vector2u currentVideoModeSize = this->stateData.window->getSize();
     for (int i = 0; i < this->videoModes.size(); i++) {
         if (this->videoModes[i].width == currentVideoModeSize.x &&
             this->videoModes[i].height == currentVideoModeSize.y) {
             index = i;
         }
     }
-    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(300, 100, 200, 50, font, videomodes_str, index);
+    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(300, 100, 200, 50, *this->stateData.font, videomodes_str,
+                                                             index);
 }
 
 void SettingsState::initOptionsText() {
-    this->optionsText.setFont(this->font);
+    this->optionsText.setFont(*this->stateData.font);
     this->optionsText.setPosition(sf::Vector2f(50.f, 100.f));
     this->optionsText.setCharacterSize(30.f);
     this->optionsText.setFillColor(sf::Color(0, 0, 0, 255));

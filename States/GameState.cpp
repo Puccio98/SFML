@@ -2,10 +2,8 @@
 
 #include "GameState.h"
 
-GameState::GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
-                     sf::Font &font)
-        : State(window,
-                supportedKeys, states, font), pauseMenuState(PauseMenuState(window, supportedKeys, font)) {
+GameState::GameState(StateData &stateData)
+        : State(stateData), pauseMenuState(PauseMenuState(stateData)) {
 
     State::initKeybinds("Config/gamestate_keybinds.ini");
     this->initTextures();
@@ -29,7 +27,7 @@ void GameState::update(const float &dt) {
 
 void GameState::render(sf::RenderTarget *target = nullptr) {
     if (!target)
-        target = this->window;
+        target = this->stateData.window;
 
     this->map.render(*target);
     this->player->render(*target);

@@ -1,9 +1,8 @@
 #include "EditorState.h"
 
-EditorState::EditorState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys,
-                         std::stack<State *> *states, sf::Font &font) :
-        State(window, supportedKeys, states, font),
-        pauseMenuState(PauseMenuState(window, supportedKeys, font)) {
+EditorState::EditorState(StateData &stateData) :
+        State(stateData),
+        pauseMenuState(PauseMenuState(stateData)) {
     this->initVariables();
     State::initKeybinds("Config/menustate_keybinds.ini");
     this->initButtons();
@@ -28,7 +27,7 @@ void EditorState::update(const float &dt) {
 
 void EditorState::render(sf::RenderTarget *target) {
     if (!target)
-        target = this->window;
+        target = this->stateData.window;
     this->renderButtons(target);
     this->map.render(*target);
 

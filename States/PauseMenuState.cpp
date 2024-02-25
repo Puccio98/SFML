@@ -22,12 +22,11 @@ void PauseMenuState::handleEvent(sf::Event &event, const float &dt) {
 }
 
 
-PauseMenuState::PauseMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, sf::Font &font)
-        : State(window,
-                supportedKeys,
-                nullptr, font) {
+PauseMenuState::PauseMenuState(StateData &stateData)
+        : State(stateData) {
+    // *(new State::StateData(nullptr, stateData.window, stateData.supportedKeys, stateData.font))
     State::initKeybinds("Config/menustate_keybinds.ini");
-    this->initContainer(window);
+    this->initContainer(stateData.window);
     this->initTexts();
     this->initButton();
 }
@@ -41,7 +40,7 @@ void PauseMenuState::initContainer(const sf::RenderWindow *window) {
 }
 
 void PauseMenuState::initTexts() {
-    menuText.setFont(font);
+    menuText.setFont(*stateData.font);
     menuText.setFillColor(sf::Color(200, 200, 200, 200));
     menuText.setString("Paused");
     menuText.setCharacterSize(40);
@@ -100,14 +99,15 @@ void PauseMenuState::initButton() {
     float x = this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f;
     float basePosY = this->container.getPosition().y;
 
-    this->buttons["GAME"] = new GUI::Button(x, basePosY + 100, width, height, &this->font, "Return to Game", 40,
+    this->buttons["GAME"] = new GUI::Button(x, basePosY + 100, width, height, this->stateData.font, "Return to Game",
+                                            40,
                                             sf::Color(120, 50, 80, 200),
                                             sf::Color(150, 50, 80, 250),
                                             sf::Color(90, 40, 60, 50),
                                             sf::Color(120, 50, 80, 0),
                                             sf::Color(150, 50, 80, 0),
                                             sf::Color(90, 40, 60, 0));
-    this->buttons["CLOSE"] = new GUI::Button(x, basePosY + 150, width, height, &this->font, "Close", 40,
+    this->buttons["CLOSE"] = new GUI::Button(x, basePosY + 150, width, height, this->stateData.font, "Close", 40,
                                              sf::Color(120, 50, 80, 200),
                                              sf::Color(150, 50, 80, 250),
                                              sf::Color(90, 40, 60, 50),

@@ -8,8 +8,7 @@
 
 class EditorState : public State {
 public:
-    EditorState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
-                sf::Font &font);
+    EditorState(StateData &stateData);
 
     virtual ~EditorState();
 

@@ -8,9 +8,7 @@
 
 class MainMenuState : public State {
 public:
-    MainMenuState(sf::RenderWindow *window, GraphicsSettings &graphicsSettings,
-                  std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
-                  sf::Font &font);
+    MainMenuState(StateData &stateData, GraphicsSettings &graphicsSettings);
 
     ~MainMenuState() override;
 

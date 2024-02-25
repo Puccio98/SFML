@@ -13,7 +13,6 @@
 class SettingsState : public State {
 private:
     sf::RectangleShape background;
-    GraphicsSettings &graphicsSettings;
     //TODO Sposterei la mappa di bottoni in state
     std::map<std::string, GUI::Button *> buttons;
     std::map<std::string, GUI::DropDownList *> dropDownList;
@@ -36,9 +35,7 @@ private:
     void initOptionsText();
 
 public:
-    SettingsState(sf::RenderWindow *window, GraphicsSettings &graphicsSettings,
-                  std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
-                  sf::Font &font);
+    SettingsState(StateData &stateData);
 
     ~SettingsState() override;
 

@@ -11,7 +11,7 @@
 
 class PauseMenuState : public State {
 public:
-    PauseMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, sf::Font &font);
+    PauseMenuState(StateData &stateData);
 
     ~PauseMenuState() override;
 
