@@ -2,8 +2,10 @@
 
 #include "MainMenuState.h"
 
-MainMenuState::MainMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys,
-                             std::stack<State *> *states, sf::Font &font) : State(window, supportedKeys, states, font) {
+MainMenuState::MainMenuState(sf::RenderWindow *window, GraphicsSettings &graphicsSettings,
+                             std::map<std::string, int> *supportedKeys,
+                             std::stack<State *> *states, sf::Font &font) : State(window, supportedKeys, states, font),
+                                                                            graphicsSettings(graphicsSettings) {
     this->initVariables();
     this->initBackground();
     State::initKeybinds("Config/menustate_keybinds.ini");
@@ -91,7 +93,8 @@ void MainMenuState::updateButtons() {
         for (auto &button: this->buttons) {
             button.second->reset();
         }
-        this->states->push(new SettingsState(this->window, this->supportedKeys, this->states, font));
+        this->states->push(
+                new SettingsState(this->window, this->graphicsSettings, this->supportedKeys, this->states, font));
     }
 
     //Editor
