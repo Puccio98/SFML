@@ -2,12 +2,13 @@
 #define SFML_EDITORSTATE_H
 
 #include "State.h"
+#include "PauseMenuState.h"
 #include "../Resource Files/Button.h"
+#include "../Map/Tilemap.h"
 
 class EditorState : public State {
 public:
-    EditorState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
-                sf::Font &font);
+    EditorState(StateData &stateData);
 
     virtual ~EditorState();
 
@@ -16,22 +17,33 @@ public:
 
     void render(sf::RenderTarget *target) override;
 
+    void handleEvent(sf::Event &event, const float &dt) override;
+
+    bool isQuit() const override;
+
 private:
     //Variables
+    PauseMenuState pauseMenuState;
     std::map<std::string, GUI::Button *> buttons;
+    Tilemap *tilemap;
+    sf::RectangleShape selectorRect;
 
     //Functions
     void initVariables();
-
 
     void initButtons();
 
     void updateButtons();
 
+    void updateGui();
+
     void renderButtons(sf::RenderTarget *target);
 
-public:
-    void handleEvent(sf::Event &event, const float &dt) override;
+    void renderGui(sf::RenderTarget *target);
+
+    void initTileMap();
+
+    void initGui();
 };
 
 

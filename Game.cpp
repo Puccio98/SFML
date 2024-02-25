@@ -24,6 +24,7 @@ Game::Game() {
     this->initWindow();
     this->initKeys();
     this->initFonts();
+    this->stateData = new StateData(&states, this->window, &this->supportedKeys, &font, graphicsSettings);
     this->initState();
 }
 
@@ -35,6 +36,8 @@ Game::~Game() {
         delete this->states.top();
         this->states.pop();
     }
+
+    delete stateData;
 }
 
 //Functions
@@ -76,7 +79,7 @@ void Game::updateDT() {
 }
 
 void Game::initState() {
-    this->states.push(new MainMenuState(this->window, *this->graphicsSettings, &this->supportedKeys, &states, font));
+    this->states.push(new MainMenuState(*stateData));
 }
 
 void Game::endApplication() {

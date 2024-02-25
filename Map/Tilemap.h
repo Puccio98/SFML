@@ -9,16 +9,20 @@ private:
     float gridSizeF;
     unsigned layers;
     sf::Vector2u maxSize;
-    std::vector<std::vector<std::vector<Tile>>> map;
+    std::vector<std::vector<std::vector<Tile *>>> map;
 
 public:
-    Tilemap();
+    Tilemap(float gridSize, unsigned width, unsigned height);
 
     virtual ~Tilemap();
 
     void update();
 
     void render(sf::RenderTarget &target);
+
+    void addTile();
+
+    void removeTile();
 };
 
 

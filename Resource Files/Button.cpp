@@ -44,11 +44,12 @@ void GUI::Button::render(sf::RenderTarget &target) {
 
 void GUI::Button::update(const sf::Vector2f mousePos) {
     this->buttonState = BTN_IDLE;
-    //hover
+
+    // Hover
     if (this->shape.getGlobalBounds().contains(mousePos)) {
         this->buttonState = BTN_HOVER;
 
-        //Pressed
+        // Pressed
         if (this->locked) {
             this->buttonState = BTN_ACTIVE;
         }

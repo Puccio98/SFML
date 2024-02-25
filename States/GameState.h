@@ -8,15 +8,14 @@ class GameState : public State {
 private:
     Player *player{};
     PauseMenuState pauseMenuState;
-    Tilemap map;
+    Tilemap *tilemap;
 
     void initTextures();
 
     void initPlayer();
 
 public:
-    GameState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State *> *states,
-              sf::Font &font);
+    explicit GameState(StateData &stateData);
 
     virtual ~GameState();
 
@@ -30,6 +29,8 @@ public:
     void handleEvent(sf::Event &event, const float &dt) override;
 
     bool isQuit() const override;
+
+    void initTilemap();
 
 };
 

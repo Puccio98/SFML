@@ -29,7 +29,9 @@ add_executable(SFML
         Map/Tilemap.cpp
         Map/Tilemap.h
         Settings/GraphicsSettings.cpp
-        Settings/GraphicsSettings.h)
+        Settings/GraphicsSettings.h
+        States/StateData.h
+)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/libs/SFML-2.6.1/lib/cmake/SFML)
