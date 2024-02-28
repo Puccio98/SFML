@@ -73,6 +73,16 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
         if (event.key.code == this->keybinds["CLOSE"]) { this->endState(); }
         if (event.key.code == this->keybinds["PAUSE"]) { this->pauseMenuState.setPause(true); }
     }
+
+    if(!this->pauseMenuState.isPaused()) {
+        if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            this->tilemap->addTile(this->mousePosGrid.x, this->mousePosGrid.y, 0);
+        }
+
+        if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
+            this->tilemap->removeTile(this->mousePosGrid.x, this->mousePosGrid.y, 0);
+        }
+    }
 }
 
 /**

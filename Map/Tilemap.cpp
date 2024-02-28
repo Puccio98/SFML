@@ -7,26 +7,23 @@ Tilemap::Tilemap(float gridSize, unsigned width, unsigned height) {
     this->maxSize.y = height;
     this->layers = 1;
 
-    //TODO:: Verifica che emplace serva davvero, forse resize chiama il costruttore e basta quello
     this->map.resize(this->maxSize.x);
     for (int x = 0; x < this->maxSize.x; x++) {
-        //this->tilemap.emplace_back();
-
         this->map[x].resize(this->maxSize.y);
         for (int y = 0; y < maxSize.y; y++) {
-            // this->tilemap[x].emplace_back();
-
             // mappa default
             //this->map[x][y].resize(this->layers, new Tile(x * this->gridSizeF, y * this->gridSizeF, this->gridSizeF));
             //mappa vuota
             this->map[x][y].resize(this->layers, nullptr);
-
         }
+    }
+
+    if(!this->tileTextureSheet.loadFromFile("Resources/Images/Tiles/grass1.png")) {
+        std::cout << "ERROR::TILEMAP::FAILED TO LOAD TILETEXTURESHEET\n";
     }
 }
 
 Tilemap::~Tilemap() {
-
     // Elimino tutte le tile
     for (auto &x: this->map) {
         for (auto &y: x) {
@@ -53,10 +50,17 @@ void Tilemap::render(sf::RenderTarget &target) {
     }
 }
 
-void Tilemap::removeTile() {
-
+void Tilemap::removeTile(const unsigned index_x, const unsigned index_y, const unsigned index_z) {
+    if(index_x < this->maxSize.x && index_y < this->maxSize.y && index_z < this->layers) {
+        delete this->map[index_x][index_y][index_z];
+        this->map[index_x][index_y][index_z] = nullptr;
+    }
 }
 
-void Tilemap::addTile() {
-
+void Tilemap::addTile(const unsigned index_x, const unsigned index_y, const unsigned index_z) {
+    if(index_x < this->maxSize.x && index_y < this->maxSize.y && index_z < this->layers) {
+        if(this->map[index_x][index_y][index_z] == nullptr) {
+            this->map[index_x][index_y][index_z] = new Tile(index_x * this->gridSizeF, index_y * this->gridSizeF, this->gridSizeF, this->tileTextureSheet);
+        }
+    }
 }

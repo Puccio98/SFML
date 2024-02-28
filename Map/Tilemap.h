@@ -10,6 +10,7 @@ private:
     unsigned layers;
     sf::Vector2u maxSize;
     std::vector<std::vector<std::vector<Tile *>>> map;
+    sf::Texture tileTextureSheet;
 
 public:
     Tilemap(float gridSize, unsigned width, unsigned height);
@@ -20,9 +21,9 @@ public:
 
     void render(sf::RenderTarget &target);
 
-    void addTile();
+    void addTile(unsigned index_x, unsigned index_y, unsigned index_z);
 
-    void removeTile();
+    void removeTile(unsigned index_x, unsigned index_y, unsigned index_z);
 };
 
 
