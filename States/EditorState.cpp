@@ -66,6 +66,7 @@ void EditorState::updateButtons() {
 
 //Initializer Functions
 void EditorState::initVariables() {
+
 }
 
 void EditorState::handleEvent(sf::Event &event, const float &dt) {
@@ -81,6 +82,10 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
 
         if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
             this->tilemap->removeTile(this->mousePosGrid.x, this->mousePosGrid.y, 0);
+        }
+
+        if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
+            this->tilemap->changeTile();
         }
     }
 }

@@ -6,6 +6,7 @@ Tilemap::Tilemap(float gridSize, unsigned width, unsigned height) {
     this->maxSize.x = width;
     this->maxSize.y = height;
     this->layers = 1;
+    this->textureRect = sf::IntRect(0, 0, static_cast<int>(gridSize), static_cast<int>(gridSize));
 
     this->map.resize(this->maxSize.x);
     for (int x = 0; x < this->maxSize.x; x++) {
@@ -18,7 +19,7 @@ Tilemap::Tilemap(float gridSize, unsigned width, unsigned height) {
         }
     }
 
-    if(!this->tileTextureSheet.loadFromFile("Resources/Images/Tiles/grass1.png")) {
+    if(!this->tileTextureSheet.loadFromFile("Resources/Images/Tiles/tilesheet1.png")) {
         std::cout << "ERROR::TILEMAP::FAILED TO LOAD TILETEXTURESHEET\n";
     }
 }
@@ -60,7 +61,25 @@ void Tilemap::removeTile(const unsigned index_x, const unsigned index_y, const u
 void Tilemap::addTile(const unsigned index_x, const unsigned index_y, const unsigned index_z) {
     if(index_x < this->maxSize.x && index_y < this->maxSize.y && index_z < this->layers) {
         if(this->map[index_x][index_y][index_z] == nullptr) {
-            this->map[index_x][index_y][index_z] = new Tile(index_x * this->gridSizeF, index_y * this->gridSizeF, this->gridSizeF, this->tileTextureSheet);
+            this->map[index_x][index_y][index_z] = new Tile(index_x * this->gridSizeF, index_y * this->gridSizeF, this->gridSizeF, this->tileTextureSheet, this->textureRect);
         }
     }
+}
+
+void Tilemap::changeTile() {
+    int tileSize = 100; //TODO: sistema questa variabile poi
+    int width = this->tileTextureSheet.getSize().x;
+    int height = this->tileTextureSheet.getSize().y;
+    int originalHorizontalPosition = this->textureRect.left / tileSize;
+    int originalVerticalPosition = this->textureRect.top / tileSize;
+    int lastHorizontalPosition = width / tileSize;
+    int lastVerticalPosition = height / tileSize;
+    int nextHorizontalPosition = (originalHorizontalPosition + 1) % lastHorizontalPosition;
+    if (nextHorizontalPosition == 0) {
+        int nextVerticalPosition = (originalVerticalPosition + 1) % lastVerticalPosition;
+        this->textureRect.top = nextVerticalPosition * tileSize;
+    }
+    this->textureRect.left = nextHorizontalPosition * tileSize;
+
+    //TODO: aggiungere preview tile
 }
