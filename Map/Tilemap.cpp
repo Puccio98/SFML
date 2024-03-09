@@ -72,7 +72,7 @@ void Tilemap::addTile(const unsigned index_x, const unsigned index_y, const unsi
 }
 
 void Tilemap::changeTile() {
-    int tileSize = 100; //TODO: sistema questa variabile poi
+    int tileSize = 50; //TODO: sistema questa variabile poi
     int width = this->tileTextureSheet.getSize().x;
     int height = this->tileTextureSheet.getSize().y;
     int originalHorizontalPosition = this->textureRect.left / tileSize;

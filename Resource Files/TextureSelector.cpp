@@ -12,11 +12,10 @@ TextureSelector::TextureSelector(float x, float y, float width, float height, co
     this->sheet.setTexture(texture_sheet);
     this->sheet.setPosition(x, y);
 
-    if(this->sheet.getGlobalBounds().width > this->bounds.getGlobalBounds().width) {
+    if(this->sheet.getGlobalBounds().width > this->bounds.getGlobalBounds().width ||
+        this->sheet.getGlobalBounds().height > this->bounds.getGlobalBounds().height)
+    {
         this->sheet.setTextureRect(sf::IntRect(0, 0, this->bounds.getGlobalBounds().width, this->bounds.getGlobalBounds().height));
-    }
-    if(this->sheet.getGlobalBounds().height > this->bounds.getGlobalBounds().height) {
-        this->sheet.setTextureRect(sf::IntRect(0, 0, this->bounds.getGlobalBounds().height, this->bounds.getGlobalBounds().width));
     }
 }
 
