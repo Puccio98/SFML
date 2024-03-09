@@ -19,9 +19,13 @@ Tilemap::Tilemap(float gridSize, unsigned width, unsigned height) {
         }
     }
 
-    if(!this->tileTextureSheet.loadFromFile("Resources/Images/Tiles/tilesheet1.png")) {
+    if (!this->tileTextureSheet.loadFromFile("Resources/Images/Tiles/tilesheet1.png")) {
         std::cout << "ERROR::TILEMAP::FAILED TO LOAD TILETEXTURESHEET\n";
     }
+}
+
+const sf::Texture &Tilemap::getTileTextureSheet() const {
+    return tileTextureSheet;
 }
 
 Tilemap::~Tilemap() {
@@ -52,16 +56,17 @@ void Tilemap::render(sf::RenderTarget &target) {
 }
 
 void Tilemap::removeTile(const unsigned index_x, const unsigned index_y, const unsigned index_z) {
-    if(index_x < this->maxSize.x && index_y < this->maxSize.y && index_z < this->layers) {
+    if (index_x < this->maxSize.x && index_y < this->maxSize.y && index_z < this->layers) {
         delete this->map[index_x][index_y][index_z];
         this->map[index_x][index_y][index_z] = nullptr;
     }
 }
 
 void Tilemap::addTile(const unsigned index_x, const unsigned index_y, const unsigned index_z) {
-    if(index_x < this->maxSize.x && index_y < this->maxSize.y && index_z < this->layers) {
-        if(this->map[index_x][index_y][index_z] == nullptr) {
-            this->map[index_x][index_y][index_z] = new Tile(index_x * this->gridSizeF, index_y * this->gridSizeF, this->gridSizeF, this->tileTextureSheet, this->textureRect);
+    if (index_x < this->maxSize.x && index_y < this->maxSize.y && index_z < this->layers) {
+        if (this->map[index_x][index_y][index_z] == nullptr) {
+            this->map[index_x][index_y][index_z] = new Tile(index_x * this->gridSizeF, index_y * this->gridSizeF,
+                                                            this->gridSizeF, this->tileTextureSheet, this->textureRect);
         }
     }
 }
@@ -82,4 +87,8 @@ void Tilemap::changeTile() {
     this->textureRect.left = nextHorizontalPosition * tileSize;
 
     //TODO: aggiungere preview tile
+}
+
+const sf::IntRect &Tilemap::getTextureRect() const {
+    return textureRect;
 }

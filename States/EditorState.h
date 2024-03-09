@@ -27,11 +27,14 @@ private:
     std::map<std::string, GUI::Button *> buttons;
     Tilemap *tilemap;
     sf::RectangleShape selectorRect;
+    sf::Text cursorText;
 
     //Functions
     void initVariables();
 
     void initButtons();
+
+    void initTexts();
 
     void updateButtons();
 

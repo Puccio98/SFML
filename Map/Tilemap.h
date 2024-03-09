@@ -26,7 +26,11 @@ public:
 
     void removeTile(unsigned index_x, unsigned index_y, unsigned index_z);
 
+    const sf::IntRect &getTextureRect() const;
+
     void changeTile();
+
+    const sf::Texture &getTileTextureSheet() const;
 };
 
 
