@@ -3,8 +3,10 @@
 
 #include "State.h"
 #include "PauseMenuState.h"
+#include "../Resource Files/TextureSelector.h"
 #include "../Resource Files/Button.h"
 #include "../Map/Tilemap.h"
+#include "../Resource Files/TextureSelector.h"
 
 class EditorState : public State {
 public:
@@ -28,6 +30,8 @@ private:
     Tilemap *tilemap;
     sf::RectangleShape selectorRect;
     sf::Text cursorText;
+
+    TextureSelector *textureSelector;
 
     //Functions
     void initVariables();

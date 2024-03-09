@@ -31,6 +31,8 @@ add_executable(SFML
         Settings/GraphicsSettings.cpp
         Settings/GraphicsSettings.h
         States/StateData.h
+        "Resource Files/TextureSelector.cpp"
+        "Resource Files/TextureSelector.h"
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

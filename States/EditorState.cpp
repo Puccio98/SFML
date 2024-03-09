@@ -17,6 +17,7 @@ EditorState::~EditorState() {
     }
 
     delete this->tilemap;
+    delete this->textureSelector;
 }
 
 void EditorState::update(const float &dt) {
@@ -111,6 +112,8 @@ void EditorState::initGui() {
     this->selectorRect.setOutlineColor(sf::Color::Red);
     this->selectorRect.setTexture(&this->tilemap->getTileTextureSheet());
     this->selectorRect.setTextureRect(this->tilemap->getTextureRect());
+
+    this->textureSelector = new TextureSelector(20.f, 20.f, 500.f, 500.f, this->tilemap->getTileTextureSheet());
 }
 
 void EditorState::updateGui() {
@@ -120,12 +123,17 @@ void EditorState::updateGui() {
 
     std::stringstream ss;
     this->cursorText.setPosition(this->mousePosView.x + 20, this->mousePosView.y - 20);
-    ss << this->mousePosView.x << " x " << this->mousePosView.y << "\n";
+    ss << this->mousePosView.x << " x " << this->mousePosView.y << "\n"
+    << this->mousePosGrid.x << this->mousePosGrid.y << "\n"
+    << this->tilemap->getTextureRect().left << this->tilemap->getTextureRect().top << "\n";
     this->cursorText.setString(ss.str());
+
+    this->textureSelector->update();
 }
 
 void EditorState::renderGui(sf::RenderTarget *target) {
     this->tilemap->render(*target);
+    this->textureSelector->render(*target);
 }
 
 void EditorState::initTexts() {
