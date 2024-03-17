@@ -6,7 +6,7 @@ Tilemap::Tilemap(float gridSize, unsigned width, unsigned height) {
     this->maxSize.x = width;
     this->maxSize.y = height;
     this->layers = 1;
-    this->textureRect = sf::IntRect(0, 0, static_cast<int>(gridSize), static_cast<int>(gridSize));
+    this->tileTextureRect = sf::IntRect(0, 0, static_cast<int>(gridSize), static_cast<int>(gridSize));
 
     this->map.resize(this->maxSize.x);
     for (int x = 0; x < this->maxSize.x; x++) {
@@ -66,29 +66,37 @@ void Tilemap::addTile(const unsigned index_x, const unsigned index_y, const unsi
     if (index_x < this->maxSize.x && index_y < this->maxSize.y && index_z < this->layers) {
         if (this->map[index_x][index_y][index_z] == nullptr) {
             this->map[index_x][index_y][index_z] = new Tile(index_x * this->gridSizeF, index_y * this->gridSizeF,
-                                                            this->gridSizeF, this->tileTextureSheet, this->textureRect);
+                                                            this->gridSizeF, this->tileTextureSheet,
+                                                            this->tileTextureRect);
         }
     }
 }
+
+const sf::IntRect &Tilemap::getTextureRect() const {
+    return tileTextureRect;
+}
+
 
 void Tilemap::changeTile() {
     int tileSize = 50; //TODO: sistema questa variabile poi
     int width = this->tileTextureSheet.getSize().x;
     int height = this->tileTextureSheet.getSize().y;
-    int originalHorizontalPosition = this->textureRect.left / tileSize;
-    int originalVerticalPosition = this->textureRect.top / tileSize;
+    int originalHorizontalPosition = this->tileTextureRect.left / tileSize;
+    int originalVerticalPosition = this->tileTextureRect.top / tileSize;
     int lastHorizontalPosition = width / tileSize;
     int lastVerticalPosition = height / tileSize;
     int nextHorizontalPosition = (originalHorizontalPosition + 1) % lastHorizontalPosition;
     if (nextHorizontalPosition == 0) {
         int nextVerticalPosition = (originalVerticalPosition + 1) % lastVerticalPosition;
-        this->textureRect.top = nextVerticalPosition * tileSize;
+        this->tileTextureRect.top = nextVerticalPosition * tileSize;
     }
-    this->textureRect.left = nextHorizontalPosition * tileSize;
+    this->tileTextureRect.left = nextHorizontalPosition * tileSize;
 
     //TODO: aggiungere preview tile
 }
 
-const sf::IntRect &Tilemap::getTextureRect() const {
-    return textureRect;
+
+void Tilemap::changeTile(const sf::Vector2u &mousePosGrid) {
+    this->tileTextureRect.left = static_cast<int>(mousePosGrid.x * gridSizeU);
+    this->tileTextureRect.top = static_cast<int>(mousePosGrid.y * gridSizeU);
 }
