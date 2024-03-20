@@ -27,10 +27,11 @@ private:
     //Variables
     PauseMenuState pauseMenuState;
     std::map<std::string, GUI::Button *> buttons;
-    Tilemap *tilemap;
+    Tilemap *tileMap;
     sf::RectangleShape previewTexture;
     sf::Text cursorText;
     bool showTextureSelector;
+    sf::RectangleShape sideBar;
 
     TextureSelector *textureSelector;
 
