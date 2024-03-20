@@ -7,7 +7,6 @@ MainMenuState::MainMenuState(StateData &stateData) : State(stateData) {
     this->initBackground();
     State::initKeybinds("Config/menustate_keybinds.ini");
     this->initButtons();
-
 }
 
 MainMenuState::~MainMenuState() {

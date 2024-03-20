@@ -28,8 +28,9 @@ private:
     PauseMenuState pauseMenuState;
     std::map<std::string, GUI::Button *> buttons;
     Tilemap *tilemap;
-    sf::RectangleShape selectorRect;
+    sf::RectangleShape previewTexture;
     sf::Text cursorText;
+    bool showTextureSelector;
 
     TextureSelector *textureSelector;
 

@@ -41,7 +41,7 @@ void EditorState::render(sf::RenderTarget *target) {
 
     if (!pauseMenuState.isPaused() && !this->textureSelector->isActive()) {
         target->draw(this->cursorText);
-        target->draw(this->selectorRect);
+        target->draw(this->previewTexture);
     }
 
     if (pauseMenuState.isPaused()) {
@@ -51,7 +51,13 @@ void EditorState::render(sf::RenderTarget *target) {
 
 
 void EditorState::initButtons() {
-
+    this->buttons["TOGGLE_TEXTURE_SELECTOR"] = new GUI::Button(this->stateData.window->getSize().x - 50, 0, 50, 50, this->stateData.font, "TS", 30,
+                                                  sf::Color(120, 50, 80, 200),
+                                                  sf::Color(150, 50, 80, 250),
+                                                  sf::Color(90, 40, 60, 50),
+                                                  sf::Color(120, 50, 80, 100),
+                                                  sf::Color(150, 50, 80, 100),
+                                                  sf::Color(90, 40, 60, 100));
 }
 
 void EditorState::renderButtons(sf::RenderTarget *target) {
@@ -66,12 +72,17 @@ void EditorState::updateButtons() {
         button.second->update(this->mousePosView);
     }
 
+    if (this->buttons["TOGGLE_TEXTURE_SELECTOR"]->isPressed()) {
+        this->buttons["TOGGLE_TEXTURE_SELECTOR"]->reset();
+        this->showTextureSelector = !this->showTextureSelector;
+    }
+
     this->tilemap->update();
 }
 
 //Initializer Functions
 void EditorState::initVariables() {
-
+    this->showTextureSelector = false;
 }
 
 void EditorState::handleEvent(sf::Event &event, const float &dt) {
@@ -81,6 +92,10 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
     }
 
     if (!this->pauseMenuState.isPaused()) {
+        for (auto &button: this->buttons) {
+            button.second->handleEvent(event, mousePosView);
+        }
+
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
             if (this->textureSelector->isActive()) {
                 this->tilemap->changeTile(this->textureSelector->getMousePosGrid());
@@ -118,24 +133,26 @@ void EditorState::initTileMap() {
 }
 
 void EditorState::initGui() {
-    this->selectorRect.setSize(sf::Vector2f(this->stateData.gridSize, this->stateData.gridSize));
-    this->selectorRect.setFillColor(sf::Color(255, 255, 255, 100));
-    this->selectorRect.setOutlineThickness(1.f);
-    this->selectorRect.setOutlineColor(sf::Color::Red);
-    this->selectorRect.setTexture(&this->tilemap->getTileTextureSheet());
-    this->selectorRect.setTextureRect(this->tilemap->getTextureRect());
+    this->previewTexture.setSize(sf::Vector2f(this->stateData.gridSize, this->stateData.gridSize));
+    this->previewTexture.setFillColor(sf::Color(255, 255, 255, 100));
+    this->previewTexture.setOutlineThickness(1.f);
+    this->previewTexture.setOutlineColor(sf::Color::Red);
+    this->previewTexture.setTexture(&this->tilemap->getTileTextureSheet());
+    this->previewTexture.setTextureRect(this->tilemap->getTextureRect());
 
     this->textureSelector = new TextureSelector(0.f, 0.f, this->stateData.gridSize,
                                                 this->tilemap->getTileTextureSheet());
 }
 
 void EditorState::updateGui() {
-    this->textureSelector->update(this->mousePosWindow);
+    if(this->showTextureSelector) {
+        this->textureSelector->update(this->mousePosWindow);
+    }
 
     if (!this->textureSelector->isActive()) {
-        this->selectorRect.setPosition(this->mousePosGrid.x * this->stateData.gridSize,
+        this->previewTexture.setPosition(this->mousePosGrid.x * this->stateData.gridSize,
                                        this->mousePosGrid.y * this->stateData.gridSize);
-        this->selectorRect.setTextureRect(this->tilemap->getTextureRect());
+        this->previewTexture.setTextureRect(this->tilemap->getTextureRect());
     }
 
     std::stringstream ss;
@@ -148,7 +165,9 @@ void EditorState::updateGui() {
 
 void EditorState::renderGui(sf::RenderTarget *target) {
     this->tilemap->render(*target);
-    this->textureSelector->render(*target);
+    if(this->showTextureSelector) {
+        this->textureSelector->render(*target);
+    }
 }
 
 void EditorState::initTexts() {

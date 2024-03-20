@@ -26,5 +26,4 @@ public:
     void render(sf::RenderTarget &target);
 };
 
-
 #endif //SFML_TILE_H
