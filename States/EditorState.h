@@ -27,12 +27,16 @@ private:
     //Variables
     PauseMenuState pauseMenuState;
     std::map<std::string, GUI::Button *> buttons;
-    Tilemap *tilemap;
+    Tilemap *tileMap;
     sf::RectangleShape previewTexture;
     sf::Text cursorText;
     bool showTextureSelector;
+    sf::Time textureSelectorTimer = sf::seconds(5);
+    sf::Clock clock;
+    sf::RectangleShape sideBar;
 
     TextureSelector *textureSelector;
+    sf::Texture tileTextureSheet;
 
     //Functions
     void initVariables();
@@ -52,6 +56,8 @@ private:
     void initTileMap();
 
     void initGui();
+
+    void openTextureSelector();
 };
 
 

@@ -44,7 +44,6 @@ void TextureSelector::render(sf::RenderTarget &target) {
         target.draw(this->selector);
     }
     target.draw(this->selected);
-
 }
 
 
@@ -73,17 +72,22 @@ void TextureSelector::setSelectedTile(const sf::Vector2u &posGrid) {
     this->selected.setPosition(posGrid.x * gridSize, posGrid.y * gridSize);
 }
 
-void TextureSelector::setSelectedTile() {
+void TextureSelector::setSelectedTile(int dir_x, int dir_y) {
     int originalHorizontalPosition = this->selected.getPosition().x / gridSize;
     int originalVerticalPosition = this->selected.getPosition().y / gridSize;
-    int lastHorizontalPosition = this->bounds.getSize().x / gridSize;
-    int lastVerticalPosition = this->bounds.getSize().y / gridSize;
-    int nextHorizontalPosition = (originalHorizontalPosition + 1) % lastHorizontalPosition;
-    if (nextHorizontalPosition == 0) {
-        int nextVerticalPosition = (originalVerticalPosition + 1) % lastVerticalPosition;
-        this->selected.setPosition(this->selected.getPosition().x, nextVerticalPosition * gridSize);
-    }
-    this->selected.setPosition(nextHorizontalPosition * gridSize, this->selected.getPosition().y);
+    int horizontalBound = this->bounds.getSize().x / gridSize;
+    int verticalBound = this->bounds.getSize().y / gridSize;
+    int nextHorizontalPosition = (originalHorizontalPosition + dir_x >= horizontalBound ||
+                                  originalHorizontalPosition + dir_x < 0) ?
+                                 originalHorizontalPosition : (originalHorizontalPosition + dir_x);
+    int nextVerticalPosition = (originalVerticalPosition + dir_y >= verticalBound ||
+                                originalVerticalPosition + dir_y < 0) ?
+                               originalVerticalPosition : (originalVerticalPosition + dir_y);
+
+    this->selected.setPosition(nextHorizontalPosition * gridSize, nextVerticalPosition * gridSize);
 }
 
+const sf::RectangleShape &TextureSelector::getSelected() const {
+    return this->selected;
+}
 
