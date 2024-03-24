@@ -26,6 +26,10 @@ void EditorState::update(const float &dt) {
         this->updateMousePositions();
         this->updateGui();
         this->updateButtons();
+        std::cout << this->textureSelectorTimer.asMicroseconds() << "\n";
+        if (this->clock.getElapsedTime() > this->textureSelectorTimer) {
+            this->showTextureSelector = false;
+        }
     } else {
         pauseMenuState.update(dt);
     }
@@ -76,6 +80,7 @@ void EditorState::updateButtons() {
     if (this->buttons["TOGGLE_TEXTURE_SELECTOR"]->isPressed()) {
         this->buttons["TOGGLE_TEXTURE_SELECTOR"]->reset();
         this->showTextureSelector = !this->showTextureSelector;
+        this->clock.restart();
     }
 
     this->tileMap->update();
@@ -115,18 +120,27 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
         }
 
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
+            this->openTextureSelector();
             this->textureSelector->setSelectedTile(1, 0);
         }
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
+            this->openTextureSelector();
             this->textureSelector->setSelectedTile(-1, 0);
         }
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up) {
+            this->openTextureSelector();
             this->textureSelector->setSelectedTile(0, -1);
         }
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down) {
+            this->openTextureSelector();
             this->textureSelector->setSelectedTile(0, 1);
         }
     }
+}
+
+void EditorState::openTextureSelector() {
+    clock.restart();
+    showTextureSelector = true;
 }
 
 /**
@@ -153,8 +167,10 @@ void EditorState::initGui() {
     this->sideBar.setFillColor(sf::Color(50, 50, 50, 100));
     this->sideBar.setOutlineColor(sf::Color(200, 200, 200, 150));
     this->sideBar.setOutlineThickness(1.f);
-    this->textureSelector = new TextureSelector(0.f, 0.f, this->stateData.gridSize,
-                                                this->tileMap->getTileTextureSheet());
+    this->textureSelector = new TextureSelector(
+            this->stateData.window->getSize().x - this->tileMap->getTileTextureSheet().getSize().x -
+            this->sideBar.getSize().x, 0.f, this->stateData.gridSize,
+            this->tileMap->getTileTextureSheet());
     this->previewTexture.setSize(sf::Vector2f(this->stateData.gridSize, this->stateData.gridSize));
     this->previewTexture.setFillColor(sf::Color(255, 255, 255, 100));
     this->previewTexture.setOutlineThickness(1.f);

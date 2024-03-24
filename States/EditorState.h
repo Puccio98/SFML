@@ -31,6 +31,8 @@ private:
     sf::RectangleShape previewTexture;
     sf::Text cursorText;
     bool showTextureSelector;
+    sf::Time textureSelectorTimer = sf::seconds(5);
+    sf::Clock clock;
     sf::RectangleShape sideBar;
 
     TextureSelector *textureSelector;
@@ -54,6 +56,8 @@ private:
     void initTileMap();
 
     void initGui();
+
+    void openTextureSelector();
 };
 
 
