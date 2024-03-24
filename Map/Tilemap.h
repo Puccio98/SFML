@@ -11,10 +11,9 @@ private:
     sf::Vector2u maxSize;
     std::vector<std::vector<std::vector<Tile *>>> map;
     sf::Texture tileTextureSheet;
-    sf::IntRect tileTextureRect;
 
 public:
-    Tilemap(float gridSize, unsigned width, unsigned height);
+    Tilemap(float gridSize, unsigned width, unsigned height, sf::Texture &_tileTextureSheet);
 
     virtual ~Tilemap();
 
@@ -22,15 +21,9 @@ public:
 
     void render(sf::RenderTarget &target);
 
-    void addTile(unsigned index_x, unsigned index_y, unsigned index_z);
+    void addTile(unsigned index_x, unsigned index_y, unsigned index_z, sf::Vector2f tileTexturePosition);
 
     void removeTile(unsigned index_x, unsigned index_y, unsigned index_z);
-
-    const sf::IntRect &getTextureRect() const;
-
-    void changeTile();
-
-    void changeTile(const sf::Vector2u &mousePosGrid);
 
     const sf::Texture &getTileTextureSheet() const;
 };

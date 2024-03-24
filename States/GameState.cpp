@@ -81,7 +81,7 @@ bool GameState::isQuit() const {
 }
 
 void GameState::initTilemap() {
-    this->tilemap = new Tilemap(50.f, 15, 10);
+//    this->tilemap = new Tilemap(50.f, 15, 10);
 }
 
 

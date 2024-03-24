@@ -31,6 +31,8 @@ public:
     void setSelectedTile(const sf::Vector2u &posGrid);
 
     void setSelectedTile();
+
+    const sf::RectangleShape &getSelected() const;
 };
 
 

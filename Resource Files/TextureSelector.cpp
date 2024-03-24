@@ -44,7 +44,6 @@ void TextureSelector::render(sf::RenderTarget &target) {
         target.draw(this->selector);
     }
     target.draw(this->selected);
-
 }
 
 
@@ -86,4 +85,7 @@ void TextureSelector::setSelectedTile() {
     this->selected.setPosition(nextHorizontalPosition * gridSize, this->selected.getPosition().y);
 }
 
+const sf::RectangleShape &TextureSelector::getSelected() const {
+    return this->selected;
+}
 

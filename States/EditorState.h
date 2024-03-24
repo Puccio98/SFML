@@ -34,6 +34,7 @@ private:
     sf::RectangleShape sideBar;
 
     TextureSelector *textureSelector;
+    sf::Texture tileTextureSheet;
 
     //Functions
     void initVariables();

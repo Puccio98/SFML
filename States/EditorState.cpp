@@ -99,10 +99,10 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
 
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
             if (this->textureSelector->isActive()) {
-                this->tileMap->changeTile(this->textureSelector->getMousePosGrid());
                 this->textureSelector->setSelectedTile(this->textureSelector->getMousePosGrid());
             } else {
-                this->tileMap->addTile(this->mousePosGrid.x, this->mousePosGrid.y, 0);
+                this->tileMap->addTile(this->mousePosGrid.x, this->mousePosGrid.y, 0,
+                                       this->textureSelector->getSelected().getPosition());
             }
         }
 
@@ -115,7 +115,6 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
         }
 
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
-            this->tileMap->changeTile();
             this->textureSelector->setSelectedTile();
         }
     }
@@ -130,7 +129,11 @@ bool EditorState::isQuit() const {
 }
 
 void EditorState::initTileMap() {
-    this->tileMap = new Tilemap(this->stateData.gridSize, 15, 10);
+    if (!this->tileTextureSheet.loadFromFile("Resources/Images/Tiles/tilesheet1.png")) {
+        std::cout << "ERROR::TILEMAP::FAILED TO LOAD TILETEXTURESHEET\n";
+    }
+
+    this->tileMap = new Tilemap(this->stateData.gridSize, 15, 10, this->tileTextureSheet);
 }
 
 void EditorState::initGui() {
@@ -141,15 +144,15 @@ void EditorState::initGui() {
     this->sideBar.setFillColor(sf::Color(50, 50, 50, 100));
     this->sideBar.setOutlineColor(sf::Color(200, 200, 200, 150));
     this->sideBar.setOutlineThickness(1.f);
+    this->textureSelector = new TextureSelector(0.f, 0.f, this->stateData.gridSize,
+                                                this->tileMap->getTileTextureSheet());
     this->previewTexture.setSize(sf::Vector2f(this->stateData.gridSize, this->stateData.gridSize));
     this->previewTexture.setFillColor(sf::Color(255, 255, 255, 100));
     this->previewTexture.setOutlineThickness(1.f);
     this->previewTexture.setOutlineColor(sf::Color::Red);
     this->previewTexture.setTexture(&this->tileMap->getTileTextureSheet());
-    this->previewTexture.setTextureRect(this->tileMap->getTextureRect());
-
-    this->textureSelector = new TextureSelector(0.f, 0.f, this->stateData.gridSize,
-                                                this->tileMap->getTileTextureSheet());
+    auto a = this->textureSelector->getSelected().getPosition();
+    this->previewTexture.setTextureRect(sf::IntRect(a.x, a.y, this->stateData.gridSize, this->stateData.gridSize));
 }
 
 void EditorState::updateGui() {
@@ -160,14 +163,16 @@ void EditorState::updateGui() {
     if (!this->textureSelector->isActive()) {
         this->previewTexture.setPosition(this->mousePosGrid.x * this->stateData.gridSize,
                                          this->mousePosGrid.y * this->stateData.gridSize);
-        this->previewTexture.setTextureRect(this->tileMap->getTextureRect());
+        auto tileTexturePosition = this->textureSelector->getSelected().getPosition();
+        this->previewTexture.setTextureRect(
+                sf::IntRect(tileTexturePosition.x, tileTexturePosition.y, this->stateData.gridSize,
+                            this->stateData.gridSize));
     }
 
     std::stringstream ss;
     this->cursorText.setPosition(this->mousePosView.x + 20, this->mousePosView.y - 20);
     ss << this->mousePosView.x << " x " << this->mousePosView.y << "\n"
-       << this->mousePosGrid.x << this->mousePosGrid.y << "\n"
-       << this->tileMap->getTextureRect().left << this->tileMap->getTextureRect().top << "\n";
+       << this->mousePosGrid.x << this->mousePosGrid.y << "\n";
     this->cursorText.setString(ss.str());
 }
 
