@@ -30,7 +30,7 @@ public:
 
     void setSelectedTile(const sf::Vector2u &posGrid);
 
-    void setSelectedTile();
+    void setSelectedTile(int dir_x, int dir_y);
 
     const sf::RectangleShape &getSelected() const;
 };

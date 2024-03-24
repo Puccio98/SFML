@@ -115,7 +115,16 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
         }
 
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
-            this->textureSelector->setSelectedTile();
+            this->textureSelector->setSelectedTile(1, 0);
+        }
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
+            this->textureSelector->setSelectedTile(-1, 0);
+        }
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up) {
+            this->textureSelector->setSelectedTile(0, -1);
+        }
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down) {
+            this->textureSelector->setSelectedTile(0, 1);
         }
     }
 }
