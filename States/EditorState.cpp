@@ -26,7 +26,6 @@ void EditorState::update(const float &dt) {
         this->updateMousePositions();
         this->updateGui();
         this->updateButtons();
-        std::cout << this->textureSelectorTimer.asMicroseconds() << "\n";
         if (this->clock.getElapsedTime() > this->textureSelectorTimer) {
             this->showTextureSelector = false;
         }
@@ -104,10 +103,10 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
 
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
             if (this->textureSelector->isActive()) {
-                this->textureSelector->setSelectedTile(this->textureSelector->getMousePosGrid());
+                this->textureSelector->setSelectedTile(mousePosWindow);
             } else {
                 this->tileMap->addTile(this->mousePosGrid.x, this->mousePosGrid.y, 0,
-                                       this->textureSelector->getSelected().getPosition());
+                                       this->textureSelector->getSelectedRelativePosition());
             }
         }
 
@@ -188,7 +187,7 @@ void EditorState::updateGui() {
     if (!this->textureSelector->isActive()) {
         this->previewTexture.setPosition(this->mousePosGrid.x * this->stateData.gridSize,
                                          this->mousePosGrid.y * this->stateData.gridSize);
-        auto tileTexturePosition = this->textureSelector->getSelected().getPosition();
+        auto tileTexturePosition = this->textureSelector->getSelectedRelativePosition();
         this->previewTexture.setTextureRect(
                 sf::IntRect(tileTexturePosition.x, tileTexturePosition.y, this->stateData.gridSize,
                             this->stateData.gridSize));

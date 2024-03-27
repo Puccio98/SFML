@@ -51,30 +51,41 @@ void TextureSelector::update(const sf::Vector2i mousePosWindow) {
     this->active = this->bounds.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow));
 
     if (this->active) {
-        this->mousePosGrid.x = (mousePosWindow.x -
-                                static_cast<int>(this->bounds.getPosition().x)) / static_cast<unsigned>(gridSize);
-        this->mousePosGrid.y = (mousePosWindow.y -
-                                static_cast<int>(this->bounds.getPosition().y)) / static_cast<unsigned>(gridSize);
-
-        this->selector.setPosition(mousePosGrid.x * gridSize, mousePosGrid.y * gridSize);
+        sf::Vector2i gridPosition = getGridPosition(mousePosWindow);
+        const sf::Vector2f position = sf::Vector2f((gridPosition.x * gridSize) + bounds.getPosition().x, (gridPosition.y *
+                                                                                                 gridSize) + bounds.getPosition().y) ;
+        this->selector.setPosition(position);
     }
+}
+
+sf::Vector2i TextureSelector::getGridPosition(const sf::Vector2i &absolutePosition) {
+    float relativeX = absolutePosition.x - bounds.getPosition().x;
+    float relativeY = absolutePosition.y - bounds.getPosition().y;
+
+    int gridX = static_cast<int>(relativeX / gridSize);
+    int gridY = static_cast<int>(relativeY / gridSize);
+
+    return {gridX, gridY};
 }
 
 bool TextureSelector::isActive() const {
     return active;
 }
 
-const sf::Vector2u &TextureSelector::getMousePosGrid() const {
-    return mousePosGrid;
-}
-
-void TextureSelector::setSelectedTile(const sf::Vector2u &posGrid) {
-    this->selected.setPosition(posGrid.x * gridSize, posGrid.y * gridSize);
+void TextureSelector::setSelectedTile(sf::Vector2i &mousePosWindow) {
+    sf::Vector2i gridPosition = getGridPosition(mousePosWindow);
+    const sf::Vector2f position = sf::Vector2f((gridPosition.x * gridSize) + bounds.getPosition().x, (gridPosition.y *
+                                                                                             gridSize) + bounds.getPosition().y) ;
+    this->selected.setPosition(position);
 }
 
 void TextureSelector::setSelectedTile(int dir_x, int dir_y) {
-    int originalHorizontalPosition = this->selected.getPosition().x / gridSize;
-    int originalVerticalPosition = this->selected.getPosition().y / gridSize;
+    float relativeX = this->selected.getPosition().x - bounds.getPosition().x;
+    float relativeY = this->selected.getPosition().y - bounds.getPosition().y;
+
+    int originalHorizontalPosition = static_cast<int>(relativeX / gridSize);
+    int originalVerticalPosition = static_cast<int>(relativeY / gridSize);
+
     int horizontalBound = this->bounds.getSize().x / gridSize;
     int verticalBound = this->bounds.getSize().y / gridSize;
     int nextHorizontalPosition = (originalHorizontalPosition + dir_x >= horizontalBound ||
@@ -84,10 +95,16 @@ void TextureSelector::setSelectedTile(int dir_x, int dir_y) {
                                 originalVerticalPosition + dir_y < 0) ?
                                originalVerticalPosition : (originalVerticalPosition + dir_y);
 
-    this->selected.setPosition(nextHorizontalPosition * gridSize, nextVerticalPosition * gridSize);
+
+
+    this->selected.setPosition((nextHorizontalPosition * gridSize) + this->bounds.getPosition().x, (nextVerticalPosition * gridSize) + this->bounds.getPosition().y);
 }
 
 const sf::RectangleShape &TextureSelector::getSelected() const {
     return this->selected;
+}
+
+sf::Vector2f TextureSelector::getSelectedRelativePosition() {
+    return sf::Vector2f(this->selected.getPosition().x - this->bounds.getPosition().x, this->selected.getPosition().y - this->bounds.getPosition().y);
 }
 
