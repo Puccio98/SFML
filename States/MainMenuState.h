@@ -4,7 +4,7 @@
 #include "GameState.h"
 #include "EditorState.h"
 #include "SettingsState.h"
-#include "../Resource Files/Button.h"
+#include "../ResourceFiles/Button.h"
 
 class MainMenuState : public State {
 public:

@@ -74,7 +74,6 @@ void PauseMenuState::setPause(bool pause) {
 
 void PauseMenuState::update(const float &dt) {
     State::update(dt);
-    this->updateMousePositions();
     this->updateButtons();
 }
 
@@ -107,7 +106,8 @@ void PauseMenuState::initButton() {
                                             sf::Color(120, 50, 80, 0),
                                             sf::Color(150, 50, 80, 0),
                                             sf::Color(90, 40, 60, 0));
-    this->buttons["CLOSE"] = new GUI::Button(x, basePosY + 150, width, height, this->stateData.font, "Close", 40,
+
+    this->buttons["CLOSE"] = new GUI::Button(x, basePosY + 200, width, height, this->stateData.font, "Close", 40,
                                              sf::Color(120, 50, 80, 200),
                                              sf::Color(150, 50, 80, 250),
                                              sf::Color(90, 40, 60, 50),

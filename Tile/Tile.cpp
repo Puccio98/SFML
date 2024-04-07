@@ -4,7 +4,10 @@
 
 #include "Tile.h"
 
-Tile::Tile(float x, float y, float gridSizeF, sf::Texture &texture, sf::Vector2f &tileTexturePosition) {
+Tile::Tile(float x, float y, float gridSizeF, sf::Texture &texture, sf::Vector2f &tileTexturePosition,
+           bool collision, TILE_TYPES type) {
+    this->collision = collision;
+    this->type = type;
     this->shape.setSize(sf::Vector2f(gridSizeF, gridSizeF));
     this->shape.setPosition(x, y);
     this->shape.setTexture(&texture);
@@ -23,4 +26,11 @@ void Tile::render(sf::RenderTarget &target) {
 
 void Tile::update() {
 
+}
+
+std::string Tile::getAsString() const {
+    std::stringstream ss;
+    ss << this->shape.getTextureRect().left << " " << this->shape.getTextureRect().top << " " << this->collision << " "
+       << (int) this->type;
+    return ss.str();
 }

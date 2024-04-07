@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(SFML
         main.cpp
-        Game.cpp Game.h States/State.cpp States/State.h States/GameState.cpp States/GameState.h Entities/Entity.cpp Entities/Entity.h States/MainMenuState.cpp States/MainMenuState.h "Resource Files/Button.cpp" "Resource Files/Button.h"
+        Game.cpp Game.h States/State.cpp States/State.h States/GameState.cpp States/GameState.h Entities/Entity.cpp Entities/Entity.h States/MainMenuState.cpp States/MainMenuState.h "ResourceFiles/Button.cpp" "ResourceFiles/Button.h"
         Entities/Player.cpp
         Entities/Player.h
         Entities/Components/MovementComponent.cpp
@@ -24,15 +24,16 @@ add_executable(SFML
         States/PauseMenuState.h
         States/SettingsState.cpp
         States/SettingsState.h
-        "Resource Files/DropDownList.cpp"
-        "Resource Files/DropDownList.h"
+        ResourceFiles/DropDownList.cpp
+        ResourceFiles/DropDownList.h
         Map/Tilemap.cpp
         Map/Tilemap.h
         Settings/GraphicsSettings.cpp
         Settings/GraphicsSettings.h
         States/StateData.h
-        "Resource Files/TextureSelector.cpp"
-        "Resource Files/TextureSelector.h"
+        ResourceFiles/TextureSelector.cpp
+        ResourceFiles/TextureSelector.h
+        enums/tile_types.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)
@@ -49,8 +50,9 @@ add_custom_command(
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Config $<TARGET_FILE_DIR:SFML>/Config
         COMMAND ${CMAKE_COMMAND} -E remove_directory $<TARGET_FILE_DIR:SFML>/Fonts
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Fonts $<TARGET_FILE_DIR:SFML>/Fonts
-        COMMAND ${CMAKE_COMMAND} -E remove_directory $<TARGET_FILE_DIR:SFML>/Resources
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources $<TARGET_FILE_DIR:SFML>/Resources
+        COMMAND ${CMAKE_COMMAND} -E remove_directory $<TARGET_FILE_DIR:SFML>/Resources/images
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources/images $<TARGET_FILE_DIR:SFML>/Resources/images
+        #        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources/map $<TARGET_FILE_DIR:SFML>/Resources/map
 )
 
 

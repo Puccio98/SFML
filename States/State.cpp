@@ -39,6 +39,7 @@ void State::pollEvents(const float &dt) {
 }
 
 void State::update(const float &dt) {
+    this->updateMousePositions();
     this->pollEvents(dt);
 }
 
