@@ -7,7 +7,7 @@
 
 
 #include "State.h"
-#include "../Resource Files/DropDownList.h"
+#include "../ResourceFiles/DropDownList.h"
 #include "../Settings/GraphicsSettings.h"
 
 class SettingsState : public State {

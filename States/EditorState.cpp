@@ -7,7 +7,6 @@ EditorState::EditorState(StateData &stateData) :
     State::initKeybinds("Config/menustate_keybinds.ini");
     this->initButtons();
     this->initTexts();
-    this->initTileMap();
     this->initGui();
 }
 
@@ -62,6 +61,16 @@ void EditorState::initButtons() {
                                                                sf::Color(120, 50, 80, 100),
                                                                sf::Color(150, 50, 80, 100),
                                                                sf::Color(90, 40, 60, 100));
+
+    this->buttons["SAVE_TEXTURE_MAP"] = new GUI::Button(this->stateData.window->getSize().x - 50,
+                                                        this->stateData.gridSize + 10, 50, 50,
+                                                        this->stateData.font, "SV", 30,
+                                                        sf::Color(120, 50, 80, 200),
+                                                        sf::Color(150, 50, 80, 250),
+                                                        sf::Color(90, 40, 60, 50),
+                                                        sf::Color(120, 50, 80, 100),
+                                                        sf::Color(150, 50, 80, 100),
+                                                        sf::Color(90, 40, 60, 100));
 }
 
 void EditorState::renderButtons(sf::RenderTarget *target) {
@@ -82,12 +91,20 @@ void EditorState::updateButtons() {
         this->clock.restart();
     }
 
+
+    if (this->buttons["SAVE_TEXTURE_MAP"]->isPressed()) {
+        this->buttons["SAVE_TEXTURE_MAP"]->reset();
+        this->tileMap->saveToFile("Resources/map/map.slmp");
+    }
+
     this->tileMap->update();
 }
 
 //Initializer Functions
 void EditorState::initVariables() {
     this->showTextureSelector = false;
+    this->tileTexturePath = "Resources/images/tiles/tilesheet1.png";
+    this->tileMap = new Tilemap("Resources/map/map.slmp");
 }
 
 void EditorState::handleEvent(sf::Event &event, const float &dt) {
@@ -106,7 +123,8 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
                 this->textureSelector->setSelectedTile(mousePosWindow);
             } else {
                 this->tileMap->addTile(this->mousePosGrid.x, this->mousePosGrid.y, 0,
-                                       this->textureSelector->getSelectedRelativePosition());
+                                       this->textureSelector->getSelectedRelativePosition(), false,
+                                       TILE_TYPES::DEFAULT);
             }
         }
 
@@ -148,14 +166,6 @@ void EditorState::openTextureSelector() {
  */
 bool EditorState::isQuit() const {
     return this->quit || this->pauseMenuState.isQuit();
-}
-
-void EditorState::initTileMap() {
-    if (!this->tileTextureSheet.loadFromFile("Resources/Images/Tiles/tilesheet1.png")) {
-        std::cout << "ERROR::TILEMAP::FAILED TO LOAD TILETEXTURESHEET\n";
-    }
-
-    this->tileMap = new Tilemap(this->stateData.gridSize, 15, 10, this->tileTextureSheet);
 }
 
 void EditorState::initGui() {

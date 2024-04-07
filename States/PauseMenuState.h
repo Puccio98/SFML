@@ -1,13 +1,9 @@
-//
-// Created by malte on 28/01/2024.
-//
-
 #ifndef SFML_PAUSEMENUSTATE_H
 #define SFML_PAUSEMENUSTATE_H
 
 
 #include "State.h"
-#include "../Resource Files/Button.h"
+#include "../ResourceFiles/Button.h"
 
 class PauseMenuState : public State {
 public:

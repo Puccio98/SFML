@@ -3,10 +3,10 @@
 
 #include "State.h"
 #include "PauseMenuState.h"
-#include "../Resource Files/TextureSelector.h"
-#include "../Resource Files/Button.h"
+#include "../ResourceFiles/TextureSelector.h"
+#include "../ResourceFiles/Button.h"
 #include "../Map/Tilemap.h"
-#include "../Resource Files/TextureSelector.h"
+#include "../ResourceFiles/TextureSelector.h"
 
 class EditorState : public State {
 public:
@@ -34,9 +34,8 @@ private:
     sf::Time textureSelectorTimer = sf::seconds(5);
     sf::Clock clock;
     sf::RectangleShape sideBar;
-
+    std::string tileTexturePath;
     TextureSelector *textureSelector;
-    sf::Texture tileTextureSheet;
 
     //Functions
     void initVariables();
@@ -52,8 +51,6 @@ private:
     void renderButtons(sf::RenderTarget *target);
 
     void renderGui(sf::RenderTarget *target);
-
-    void initTileMap();
 
     void initGui();
 
