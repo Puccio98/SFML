@@ -16,5 +16,5 @@ struct StateData {
     std::map<std::string, int> *supportedKeys;
     sf::Font *font;
     GraphicsSettings *graphicsSettings;
-    float gridSize = 50.f;
+    float gridSize = 100.f;
 };

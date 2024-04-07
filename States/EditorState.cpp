@@ -103,7 +103,7 @@ void EditorState::updateButtons() {
 //Initializer Functions
 void EditorState::initVariables() {
     this->showTextureSelector = false;
-    this->tileTexturePath = "Resources/images/tiles/tilesheet1.png";
+    this->tileTexturePath = "Resources/images/tiles/nuovo_tilesheet.png";
     this->tileMap = new Tilemap("Resources/map/map.slmp");
 }
 

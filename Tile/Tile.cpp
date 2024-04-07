@@ -11,8 +11,6 @@ Tile::Tile(float x, float y, float gridSizeF, sf::Texture &texture, sf::Vector2f
     this->shape.setSize(sf::Vector2f(gridSizeF, gridSizeF));
     this->shape.setPosition(x, y);
     this->shape.setTexture(&texture);
-    this->shape.setOutlineColor(sf::Color::Black);
-    this->shape.setOutlineThickness(1.f);
     this->shape.setTextureRect(sf::IntRect(tileTexturePosition.x, tileTexturePosition.y, gridSizeF, gridSizeF));
 }
 
