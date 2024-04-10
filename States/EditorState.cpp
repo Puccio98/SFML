@@ -4,7 +4,7 @@ EditorState::EditorState(StateData &stateData) :
         State(stateData),
         pauseMenuState(PauseMenuState(stateData)) {
     this->initVariables();
-    State::initKeybinds("Config/menustate_keybinds.ini");
+    State::initKeybinds("Config/editorstate_keybinds.ini");
     this->initButtons();
     this->initTexts();
     this->initGui();
@@ -71,6 +71,16 @@ void EditorState::initButtons() {
                                                         sf::Color(120, 50, 80, 100),
                                                         sf::Color(150, 50, 80, 100),
                                                         sf::Color(90, 40, 60, 100));
+
+    this->buttons["TOGGLE_COLLISIONS"] = new GUI::Button(this->stateData.window->getSize().x - 50,
+                                                         (this->stateData.gridSize + 10) * 2, 50, 50,
+                                                        this->stateData.font, "CL", 30,
+                                                        sf::Color(120, 50, 80, 200),
+                                                        sf::Color(150, 50, 80, 250),
+                                                        sf::Color(90, 40, 60, 50),
+                                                        sf::Color(120, 50, 80, 100),
+                                                        sf::Color(150, 50, 80, 100),
+                                                        sf::Color(90, 40, 60, 100));
 }
 
 void EditorState::renderButtons(sf::RenderTarget *target) {
@@ -91,7 +101,6 @@ void EditorState::updateButtons() {
         this->clock.restart();
     }
 
-
     if (this->buttons["SAVE_TEXTURE_MAP"]->isPressed()) {
         this->buttons["SAVE_TEXTURE_MAP"]->reset();
         this->tileMap->saveToFile("Resources/map/map.slmp");
@@ -105,6 +114,7 @@ void EditorState::initVariables() {
     this->showTextureSelector = false;
     this->tileTexturePath = "Resources/images/tiles/nuovo_tilesheet.png";
     this->tileMap = new Tilemap("Resources/map/map.slmp");
+    this->tileTypes.push_back(TILE_TYPES::DEFAULT);
 }
 
 void EditorState::handleEvent(sf::Event &event, const float &dt) {
@@ -123,8 +133,8 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
                 this->textureSelector->setSelectedTile(mousePosWindow);
             } else {
                 this->tileMap->addTile(this->mousePosGrid.x, this->mousePosGrid.y, 0,
-                                       this->textureSelector->getSelectedRelativePosition(), false,
-                                       TILE_TYPES::DEFAULT);
+                                       this->textureSelector->getSelectedRelativePosition(),
+                                       this->tileTypes);
             }
         }
 

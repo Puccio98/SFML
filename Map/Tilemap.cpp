@@ -35,12 +35,12 @@ void Tilemap::removeTile(const unsigned index_x, const unsigned index_y, const u
 
 void
 Tilemap::addTile(const unsigned index_x, const unsigned index_y, const unsigned index_z,
-                 sf::Vector2f tileTexturePosition, bool collision, TILE_TYPES type) {
+                 sf::Vector2f tileTexturePosition, std::vector<TILE_TYPES>& tileTypes) {
     if (index_x < this->maxSize.x && index_y < this->maxSize.y && index_z < this->layers) {
         if (this->map[index_x][index_y][index_z] == nullptr) {
             this->map[index_x][index_y][index_z] = new Tile(
                     index_x * this->gridSizeF, index_y * this->gridSizeF, this->gridSizeF, this->tileTextureSheet,
-                    tileTexturePosition, collision, type);
+                    tileTexturePosition, tileTypes);
         }
     }
 }
@@ -56,7 +56,6 @@ void Tilemap::loadFromFile(const std::string file_name) {
     if (file.fail()) {
         return;
     }
-
 
     if (file.is_open()) {
         sf::Vector2u size;
@@ -98,7 +97,10 @@ void Tilemap::loadFromFile(const std::string file_name) {
 
         // Load all Tiles
         while (file >> x >> y >> z >> textureRectX >> textureRectY >> collision >> type) {
-            this->addTile(x, y, z, sf::Vector2f(textureRectX, textureRectY), collision, static_cast<TILE_TYPES>(type));
+            //TODO: rivedere nel file la gestione dei tipi tile
+            std::vector<TILE_TYPES> tileTypes;
+            tileTypes.push_back(static_cast<TILE_TYPES>(type));
+            this->addTile(x, y, z, sf::Vector2f(textureRectX, textureRectY), tileTypes);
         }
     } else {
         std::cout << "ERROR::TILEMAP::COULD NOT LOAD FROM FILE: " << file_name << "\n";

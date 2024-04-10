@@ -24,8 +24,7 @@ public:
 
     void render(sf::RenderTarget &target);
 
-    void addTile(unsigned index_x, unsigned index_y, unsigned index_z, sf::Vector2f tileTexturePosition, bool collision,
-                 TILE_TYPES type);
+    void addTile(unsigned index_x, unsigned index_y, unsigned index_z, sf::Vector2f tileTexturePosition, std::vector<TILE_TYPES>& tileTypes);
 
     void removeTile(unsigned index_x, unsigned index_y, unsigned index_z);
 

@@ -37,6 +37,8 @@ private:
     std::string tileTexturePath;
     TextureSelector *textureSelector;
 
+    std::vector<TILE_TYPES> tileTypes;
+
     //Functions
     void initVariables();
 

@@ -12,18 +12,17 @@
 #include"SFML/Graphics.hpp"
 #include"../enums/tile_types.cpp"
 
-
 class Tile {
 private:
+    std::string getTypesAsString();
+
 protected:
     sf::RectangleShape shape;
-    TILE_TYPES type;
-    bool collision;
+    std::vector<TILE_TYPES> tileTypes;
 
 public:
     Tile(float x, float y, float gridSizeF, sf::Texture &texture, sf::Vector2f &tileTexturePosition,
-         bool collision = false,
-         TILE_TYPES type = TILE_TYPES::DEFAULT);
+         std::vector<TILE_TYPES>& tileTypes);
 
     virtual ~Tile();
 
