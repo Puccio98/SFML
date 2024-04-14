@@ -20,8 +20,7 @@ SettingsState::~SettingsState() {
 
 void SettingsState::update(const float &dt) {
     State::update(dt);
-
-    this->updateMousePositions();
+    
     this->updateButtons();
     updateDropDownLists();
 }

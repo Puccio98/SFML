@@ -6,14 +6,19 @@ State::State(StateData &stateData) : stateData(stateData) {
 
 State::~State() = default;
 
-void State::updateMousePositions() {
+void State::updateMousePositions(const sf::View &view) {
     this->mousePosScreen = sf::Mouse::getPosition();
     this->mousePosWindow = sf::Mouse::getPosition(*this->stateData.window);
+
+    this->stateData.window->setView(view);
+
     this->mousePosView = this->stateData.window->mapPixelToCoords(sf::Mouse::getPosition(*this->stateData.window));
     this->mousePosGrid = sf::Vector2u(
             static_cast<unsigned>(this->mousePosView.x) / static_cast<unsigned> (this->stateData.gridSize),
             static_cast<unsigned>(this->mousePosView.y) / static_cast<unsigned> (this->stateData.gridSize)
     );
+
+    this->stateData.window->setView(this->stateData.window->getDefaultView());
 }
 
 __attribute__((unused)) void State::debugMousePosition() const {
@@ -39,7 +44,7 @@ void State::pollEvents(const float &dt) {
 }
 
 void State::update(const float &dt) {
-    this->updateMousePositions();
+    this->updateMousePositions(this->stateData.window->getDefaultView());
     this->pollEvents(dt);
 }
 

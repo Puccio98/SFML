@@ -23,7 +23,7 @@ public:
 
     virtual void endState();
 
-    virtual void updateMousePositions();
+    void updateMousePositions(const sf::View &view);
 
     virtual void update(const float &dt);
 

@@ -36,11 +36,14 @@ private:
     sf::RectangleShape sideBar;
     std::string tileTexturePath;
     TextureSelector *textureSelector;
+    sf::View view;
 
     std::vector<TILE_TYPES> tileTypes;
 
     //Functions
     void initVariables();
+
+    void initView();
 
     void initButtons();
 
