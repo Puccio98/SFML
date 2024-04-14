@@ -18,7 +18,6 @@ GameState::~GameState() {
 void GameState::update(const float &dt) {
     if (!pauseMenuState.isPaused()) {
         State::update(dt);
-        this->updateMousePositions();
         this->updateInput(dt);
         this->player->update(dt);
     } else {

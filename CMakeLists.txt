@@ -20,6 +20,7 @@ add_executable(SFML
         Entities/Components/HitboxComponent.h
         Tile/Tile.cpp
         Tile/Tile.h
+        Tile/TileData.h
         States/PauseMenuState.cpp
         States/PauseMenuState.h
         States/SettingsState.cpp

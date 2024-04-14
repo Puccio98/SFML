@@ -1,4 +1,4 @@
 enum class TILE_TYPES {
-    DEFAULT,
-    COLLISION
+    DEFAULT = 6,
+    COLLISION = 9
 };

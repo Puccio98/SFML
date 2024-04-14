@@ -14,15 +14,15 @@
 
 class Tile {
 private:
-    std::string getTypesAsString();
+    std::string getTypesAsString() const;
 
 protected:
     sf::RectangleShape shape;
     std::vector<TILE_TYPES> tileTypes;
 
 public:
-    Tile(float x, float y, float gridSizeF, sf::Texture &texture, sf::Vector2f &tileTexturePosition,
-         std::vector<TILE_TYPES>& tileTypes);
+    Tile(float x, float y, float gridSizeF, sf::Texture &texture, const sf::Vector2f &tileTexturePosition,
+         const std::vector<TILE_TYPES> &tileTypes);
 
     virtual ~Tile();
 

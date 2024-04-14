@@ -7,7 +7,18 @@ Tilemap::Tilemap(const std::string &file_name) {
 }
 
 Tilemap::~Tilemap() {
-    this->clear();
+    for (size_t x = 0; x < this->maxSize.x; x++) {
+        for (size_t y = 0; y < this->maxSize.y; y++) {
+            for (size_t z = 0; z < this->layers; z++) {
+                delete this->map[x][y][z];
+                this->map[x][y][z] = nullptr;
+            }
+            this->map[x][y].clear();
+        }
+        this->map[x].clear();
+    }
+
+    this->map.clear();
 }
 
 void Tilemap::update() {
@@ -34,13 +45,13 @@ void Tilemap::removeTile(const unsigned index_x, const unsigned index_y, const u
 }
 
 void
-Tilemap::addTile(const unsigned index_x, const unsigned index_y, const unsigned index_z,
-                 sf::Vector2f tileTexturePosition, std::vector<TILE_TYPES>& tileTypes) {
-    if (index_x < this->maxSize.x && index_y < this->maxSize.y && index_z < this->layers) {
-        if (this->map[index_x][index_y][index_z] == nullptr) {
-            this->map[index_x][index_y][index_z] = new Tile(
-                    index_x * this->gridSizeF, index_y * this->gridSizeF, this->gridSizeF, this->tileTextureSheet,
-                    tileTexturePosition, tileTypes);
+Tilemap::addTile(const TileData &tileData) {
+    if (tileData.index_x < this->maxSize.x && tileData.index_y < this->maxSize.y && tileData.index_z < this->layers) {
+        if (this->map[tileData.index_x][tileData.index_y][tileData.index_z] == nullptr) {
+            this->map[tileData.index_x][tileData.index_y][tileData.index_z] = new Tile(
+                    tileData.index_x * this->gridSizeF, tileData.index_y * this->gridSizeF, this->gridSizeF,
+                    this->tileTextureSheet,
+                    tileData.textureRect, tileData.types);
         }
     }
 }
@@ -62,13 +73,6 @@ void Tilemap::loadFromFile(const std::string file_name) {
         unsigned gridSizeU = 0;
         unsigned layers = 0;
         std::string texturePath;
-        unsigned x = 0;
-        unsigned y = 0;
-        unsigned z = 0;
-        unsigned textureRectX = 0;
-        unsigned textureRectY = 0;
-        bool collision = false;
-        short type = 0;
 
         // Basic Map Information
         file >> size.x >> size.y >> gridSizeU >> layers >> texturePath;
@@ -96,12 +100,25 @@ void Tilemap::loadFromFile(const std::string file_name) {
         }
 
         // Load all Tiles
-        while (file >> x >> y >> z >> textureRectX >> textureRectY >> collision >> type) {
-            //TODO: rivedere nel file la gestione dei tipi tile
-            std::vector<TILE_TYPES> tileTypes;
-            tileTypes.push_back(static_cast<TILE_TYPES>(type));
-            this->addTile(x, y, z, sf::Vector2f(textureRectX, textureRectY), tileTypes);
+        std::string line;
+
+        while (getline(file, line)) {
+            TileData tileData;
+
+            if (line.empty()) {
+                continue;
+            }
+            std::istringstream iss(line);
+            float tr_x, tr_y;
+            iss >> tileData.index_x >> tileData.index_y >> tileData.index_z >> tr_x >> tr_y;
+            tileData.textureRect = sf::Vector2f(tr_x, tr_y);
+            int num;
+            while (iss >> num) {
+                tileData.types.push_back(static_cast<TILE_TYPES>(num));
+            }
+            this->addTile(tileData);
         }
+
     } else {
         std::cout << "ERROR::TILEMAP::COULD NOT LOAD FROM FILE: " << file_name << "\n";
     }
@@ -111,7 +128,7 @@ void Tilemap::loadFromFile(const std::string file_name) {
 
 void Tilemap::saveToFile(std::string file_name) {
     std::ofstream out_file;
-    out_file.open(file_name);
+    out_file.open(file_name, std::ofstream::out | std::ofstream::trunc);
 
     if (out_file.is_open()) {
         out_file << this->maxSize.x << " " << this->maxSize.y << "\n";
@@ -123,7 +140,8 @@ void Tilemap::saveToFile(std::string file_name) {
             for (size_t y = 0; y < this->maxSize.y; y++) {
                 for (size_t z = 0; z < this->layers; z++) {
                     if (this->map[x][y][z]) {
-                        out_file << x << " " << y << " " << z << " " << this->map[x][y][z]->getAsString() << " ";
+                        std::string pippo = this->map[x][y][z]->getAsString();
+                        out_file << x << " " << y << " " << z << " " << pippo << "\n";
                     }
                 }
             }
@@ -145,12 +163,8 @@ void Tilemap::clear() {
                 delete this->map[x][y][z];
                 this->map[x][y][z] = nullptr;
             }
-            this->map[x][y].clear();
         }
-        this->map[x].clear();
     }
-
-    this->map.clear();
 }
 
 

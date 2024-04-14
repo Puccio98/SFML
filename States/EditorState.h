@@ -36,11 +36,15 @@ private:
     sf::RectangleShape sideBar;
     std::string tileTexturePath;
     TextureSelector *textureSelector;
+    sf::View view;
+    float cameraSpeed;
 
     std::vector<TILE_TYPES> tileTypes;
 
     //Functions
     void initVariables();
+
+    void initView();
 
     void initButtons();
 
@@ -57,6 +61,8 @@ private:
     void initGui();
 
     void openTextureSelector();
+
+    void updateInput(const float &dt);
 };
 
 

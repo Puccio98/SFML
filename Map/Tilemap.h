@@ -2,6 +2,7 @@
 #define SFML_TILEMAP_H
 
 #include "../Tile/Tile.h"
+#include "../Tile/TileData.h"
 
 class Tilemap {
 private:
@@ -13,8 +14,6 @@ private:
     std::string texturePath;
     sf::Texture tileTextureSheet;
 
-    void clear();
-
 public:
     Tilemap(const std::string &file_name);
 
@@ -24,7 +23,7 @@ public:
 
     void render(sf::RenderTarget &target);
 
-    void addTile(unsigned index_x, unsigned index_y, unsigned index_z, sf::Vector2f tileTexturePosition, std::vector<TILE_TYPES>& tileTypes);
+    void addTile(const TileData &tileData);
 
     void removeTile(unsigned index_x, unsigned index_y, unsigned index_z);
 
@@ -33,6 +32,8 @@ public:
     void saveToFile(std::string file_name);
 
     void loadFromFile(std::string file_name);
+
+    void clear();
 };
 
 

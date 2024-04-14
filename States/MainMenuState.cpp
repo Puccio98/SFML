@@ -17,7 +17,6 @@ MainMenuState::~MainMenuState() {
 
 void MainMenuState::update(const float &dt) {
     State::update(dt);
-    this->updateMousePositions();
     this->updateButtons();
 }
 
