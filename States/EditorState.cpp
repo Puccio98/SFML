@@ -21,9 +21,9 @@ EditorState::~EditorState() {
 }
 
 void EditorState::update(const float &dt) {
-
     if (!pauseMenuState.isPaused()) {
         State::update(dt);
+        this->updateInput(dt);
         this->updateGui();
         this->updateButtons();
         if (this->clock.getElapsedTime() > this->textureSelectorTimer) {
@@ -142,6 +142,7 @@ void EditorState::initVariables() {
     this->tileMap = new Tilemap("Resources/map/map.slmp");
     this->tileTypes.push_back(TILE_TYPES::DEFAULT);
     this->tileTypes.push_back(TILE_TYPES::COLLISION);
+    this->cameraSpeed = 300.f;
 }
 
 void EditorState::initView() {
@@ -178,7 +179,6 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
                     tileData.index_z = 0;
                     tileData.textureRect = this->textureSelector->getSelectedRelativePosition();
                     tileData.types = this->tileTypes;
-
 
                     this->tileMap->addTile(tileData);
                 }
@@ -262,7 +262,8 @@ void EditorState::updateGui() {
 
     std::stringstream ss;
     this->cursorText.setPosition(this->mousePosView.x + 20, this->mousePosView.y - 20);
-    ss << this->mousePosView.x << " x " << this->mousePosView.y << "\n"
+    ss << this->mousePosWindow.x << " x " << this->mousePosWindow.y << "\n"
+       << this->mousePosView.x << " x " << this->mousePosView.y << "\n"
        << this->mousePosGrid.x << this->mousePosGrid.y << "\n";
     this->cursorText.setString(ss.str());
 }
@@ -283,4 +284,17 @@ void EditorState::initTexts() {
     this->cursorText.setCharacterSize(12);
     this->cursorText.setFillColor(sf::Color::White);
     this->cursorText.setPosition(this->mousePosView.x, this->mousePosView.y - 20);
+}
+
+void EditorState::updateInput(const float &dt) {
+    sf::Vector2f direction(0, 0);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MAP_UP"])))
+        direction.y = -1;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MAP_LEFT"])))
+        direction.x = -1;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MAP_DOWN"])))
+        direction.y = 1;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MAP_RIGHT"])))
+        direction.x = 1;
+    this->view.move((-1.f) * direction * this->cameraSpeed * dt);
 }
