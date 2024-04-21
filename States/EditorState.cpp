@@ -22,7 +22,7 @@ EditorState::~EditorState() {
 
 void EditorState::update(const float &dt) {
     if (!pauseMenuState.isPaused()) {
-        State::update(dt);
+        State::update(dt, this->view);
         this->updateInput(dt);
         this->updateGui();
         this->updateButtons();
@@ -42,9 +42,12 @@ void EditorState::render(sf::RenderTarget *target) {
     this->renderButtons(target);
     this->renderGui(target);
 
+
     if (!pauseMenuState.isPaused() && !this->textureSelector->isActive()) {
         target->draw(this->cursorText);
+        target->setView(this->view);
         target->draw(this->previewTexture);
+        target->setView(this->stateData.window->getDefaultView());
     }
 
     if (pauseMenuState.isPaused()) {
@@ -103,7 +106,7 @@ void EditorState::renderButtons(sf::RenderTarget *target) {
 void EditorState::updateButtons() {
     /*Updates all buttons in state and handles their functionality*/
     for (auto &button: this->buttons) {
-        button.second->update(this->mousePosView);
+        button.second->update(static_cast<sf::Vector2f>(this->mousePosWindow));
     }
 
     if (this->buttons["TOGGLE_TEXTURE_SELECTOR"]->isPressed()) {
@@ -161,21 +164,21 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
 
     if (!this->pauseMenuState.isPaused()) {
         // se sidebar
-        if (this->sideBar.getGlobalBounds().contains(this->mousePosView)) {
+        if (this->sideBar.getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
             for (auto &button: this->buttons) {
-                button.second->handleEvent(event, mousePosView);
+                button.second->handleEvent(event, static_cast<sf::Vector2f>(this->mousePosWindow));
             }
         }
 
         // se non è sidebar
-        if (!this->sideBar.getGlobalBounds().contains(this->mousePosView)) {
+        if (!this->sideBar.getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                 if (this->textureSelector->isActive()) {
                     this->textureSelector->setSelectedTile(mousePosWindow);
                 } else {
                     TileData tileData;
-                    tileData.index_x = this->mousePosGrid.x;
-                    tileData.index_y = this->mousePosGrid.y;
+                    tileData.index_x = this->getPosGrid(VIEW_TYPES::VIEW).x;
+                    tileData.index_y = this->getPosGrid(VIEW_TYPES::VIEW).y;
                     tileData.index_z = 0;
                     tileData.textureRect = this->textureSelector->getSelectedRelativePosition();
                     tileData.types = this->tileTypes;
@@ -188,7 +191,8 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
                 if (this->textureSelector->isActive()) {
 
                 } else {
-                    this->tileMap->removeTile(this->mousePosGrid.x, this->mousePosGrid.y, 0);
+                    this->tileMap->removeTile(this->getPosGrid(VIEW_TYPES::VIEW).x,
+                                              this->getPosGrid(VIEW_TYPES::VIEW).y, 0);
                 }
             }
 
@@ -252,19 +256,20 @@ void EditorState::updateGui() {
     }
 
     if (!this->textureSelector->isActive()) {
-        this->previewTexture.setPosition(this->mousePosGrid.x * this->stateData.gridSize,
-                                         this->mousePosGrid.y * this->stateData.gridSize);
         auto tileTexturePosition = this->textureSelector->getSelectedRelativePosition();
         this->previewTexture.setTextureRect(
                 sf::IntRect(tileTexturePosition.x, tileTexturePosition.y, this->stateData.gridSize,
                             this->stateData.gridSize));
+        this->previewTexture.setPosition(this->getPosGrid(VIEW_TYPES::VIEW).x * this->stateData.gridSize,
+                                         this->getPosGrid(VIEW_TYPES::VIEW).y * this->stateData.gridSize);
     }
 
     std::stringstream ss;
-    this->cursorText.setPosition(this->mousePosView.x + 20, this->mousePosView.y - 20);
-    ss << this->mousePosWindow.x << " x " << this->mousePosWindow.y << "\n"
-       << this->mousePosView.x << " x " << this->mousePosView.y << "\n"
-       << this->mousePosGrid.x << this->mousePosGrid.y << "\n";
+    this->cursorText.setPosition(this->mousePosWindow.x + 20, this->mousePosWindow.y - 20);
+    ss << "w:" << this->mousePosWindow.x << " x " << this->mousePosWindow.y << "\n"
+       << "v:" << this->mousePosView.x << " x " << this->mousePosView.y << "\n"
+       << "gw:" << this->getPosGrid(VIEW_TYPES::WINDOW).x << " x " << this->getPosGrid(VIEW_TYPES::WINDOW).y << "\n"
+       << "gv:" << this->getPosGrid(VIEW_TYPES::VIEW).x << " x " << this->getPosGrid(VIEW_TYPES::VIEW).y << "\n";
     this->cursorText.setString(ss.str());
 }
 
@@ -296,5 +301,5 @@ void EditorState::updateInput(const float &dt) {
         direction.y = 1;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MAP_RIGHT"])))
         direction.x = 1;
-    this->view.move((-1.f) * direction * this->cameraSpeed * dt);
+    this->view.move(direction * this->cameraSpeed * dt);
 }
