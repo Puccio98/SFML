@@ -11,13 +11,7 @@ void State::updateMousePositions(const sf::View &view) {
     this->mousePosWindow = sf::Mouse::getPosition(*this->stateData.window);
 
     this->stateData.window->setView(view);
-
     this->mousePosView = this->stateData.window->mapPixelToCoords(sf::Mouse::getPosition(*this->stateData.window));
-    this->mousePosGrid = sf::Vector2u(
-            static_cast<unsigned>(this->mousePosView.x) / static_cast<unsigned> (this->stateData.gridSize),
-            static_cast<unsigned>(this->mousePosView.y) / static_cast<unsigned> (this->stateData.gridSize)
-    );
-
     this->stateData.window->setView(this->stateData.window->getDefaultView());
 }
 
@@ -48,6 +42,11 @@ void State::update(const float &dt) {
     this->pollEvents(dt);
 }
 
+void State::update(const float &dt, const sf::View &_view) {
+    this->updateMousePositions(_view);
+    this->pollEvents(dt);
+}
+
 void State::initKeybinds(std::string keybindsFilePath) {
     std::ifstream ifs(keybindsFilePath);
 
@@ -64,6 +63,30 @@ void State::initKeybinds(std::string keybindsFilePath) {
 
 bool State::isQuit() const {
     return quit;
+}
+
+sf::Vector2i State::getPosGrid(VIEW_TYPES viewType) const {
+    switch (viewType) {
+        case VIEW_TYPES::SCREEN:
+            return {
+                    (this->mousePosScreen.x) / static_cast<int > (this->stateData.gridSize),
+                    (this->mousePosScreen.y) / static_cast<int > (this->stateData.gridSize)
+            };
+        case VIEW_TYPES::WINDOW:
+            return {
+                    (this->mousePosWindow.x) / static_cast<int > (this->stateData.gridSize),
+                    (this->mousePosWindow.y) / static_cast<int > (this->stateData.gridSize)
+            };
+        case VIEW_TYPES::VIEW: {
+            return {
+                    (static_cast<int>(this->mousePosView.x)) / static_cast<int > (this->stateData.gridSize),
+                    (static_cast<int>(this->mousePosView.y)) / static_cast<int > (this->stateData.gridSize)
+            };
+        }
+        default:
+            return {0, 0};
+    }
+
 }
 
 

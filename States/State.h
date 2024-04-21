@@ -4,6 +4,7 @@
 #include "../Entities/Player.h"
 #include "../Settings/GraphicsSettings.h"
 #include "StateData.h"
+#include "../enums/view_types.cpp"
 
 class StateData;
 
@@ -27,6 +28,8 @@ public:
 
     virtual void update(const float &dt);
 
+    virtual void update(const float &dt, const sf::View &_view);
+
     virtual void render(sf::RenderTarget *target) = 0;
 
     virtual void handleEvent(sf::Event &event, const float &dt) = 0;
@@ -41,13 +44,14 @@ protected:
     sf::Vector2i mousePosScreen;
     sf::Vector2i mousePosWindow;
     sf::Vector2f mousePosView;
-    sf::Vector2u mousePosGrid;
 
     //Resources
     std::map<std::string, sf::Texture> textures;
 
     //Functions
     virtual void initKeybinds(std::string keybindsFilePath);
+
+    sf::Vector2i getPosGrid(VIEW_TYPES viewType) const;
 };
 
 
