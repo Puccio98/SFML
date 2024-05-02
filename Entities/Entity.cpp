@@ -55,4 +55,12 @@ void Entity::createHitboxComponent(sf::Sprite &_sprite, float offset_x, float of
     this->hitboxComponent = new HitboxComponent(_sprite, offset_x, offset_y, width, height);
 }
 
+const sf::Vector2f Entity::getPosition() const {
+    return this->sprite.getPosition();
+}
+
+const sf::Rect<float> Entity::getSize() const {
+    return this->sprite.getGlobalBounds();
+}
+
 

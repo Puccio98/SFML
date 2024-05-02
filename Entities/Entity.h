@@ -34,6 +34,10 @@ public:
     //Functions
     virtual void setPosition(float x, float y);
 
+    virtual const sf::Vector2f getPosition() const;
+
+    virtual const sf::Rect<float> getSize() const;
+
     virtual void move(sf::Vector2f direction, const float &dt);
 
     virtual void update(const float &dt);

@@ -17,7 +17,6 @@ public:
 
     explicit State(StateData &stateData);
 
-
     virtual ~State();
 
     virtual bool isQuit() const;
@@ -41,9 +40,11 @@ protected:
     bool quit;
     StateData &stateData;
 
+    sf::Text mouseDebug;
     sf::Vector2i mousePosScreen;
     sf::Vector2i mousePosWindow;
     sf::Vector2f mousePosView;
+
 
     //Resources
     std::map<std::string, sf::Texture> textures;
@@ -51,7 +52,11 @@ protected:
     //Functions
     virtual void initKeybinds(std::string keybindsFilePath);
 
+    void updateMouseDebug();
+
     sf::Vector2i getPosGrid(VIEW_TYPES viewType) const;
+
+    void initMouseDebug();
 };
 
 

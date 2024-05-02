@@ -29,7 +29,6 @@ private:
     std::map<std::string, GUI::Button *> buttons;
     Tilemap *tileMap;
     sf::RectangleShape previewTexture;
-    sf::Text cursorText;
     bool showTextureSelector;
     sf::Time textureSelectorTimer = sf::seconds(5);
     sf::Clock clock;
@@ -47,8 +46,6 @@ private:
     void initView();
 
     void initButtons();
-
-    void initTexts();
 
     void updateButtons();
 

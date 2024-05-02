@@ -2,6 +2,7 @@
 
 State::State(StateData &stateData) : stateData(stateData) {
     this->quit = false;
+    this->initMouseDebug();
 }
 
 State::~State() = default;
@@ -89,5 +90,20 @@ sf::Vector2i State::getPosGrid(VIEW_TYPES viewType) const {
 
 }
 
+void State::updateMouseDebug() {
+    std::stringstream ss;
+    mouseDebug.setPosition(mousePosWindow.x + 20, mousePosWindow.y - 20);
+    ss << "w:" << mousePosWindow.x << " x " << mousePosWindow.y << "\n"
+       << "v:" << mousePosView.x << " x " << mousePosView.y << "\n"
+       << "gw:" << getPosGrid(VIEW_TYPES::WINDOW).x << " x " << getPosGrid(VIEW_TYPES::WINDOW).y << "\n"
+       << "gv:" << getPosGrid(VIEW_TYPES::VIEW).x << " x " << getPosGrid(VIEW_TYPES::VIEW).y << "\n";
+    mouseDebug.setString(ss.str());
+}
 
 
+void State::initMouseDebug() {
+    this->mouseDebug.setFont(*this->stateData.font);
+    this->mouseDebug.setCharacterSize(12);
+    this->mouseDebug.setFillColor(sf::Color::White);
+    this->mouseDebug.setPosition(this->mousePosView.x, this->mousePosView.y - 20);
+}

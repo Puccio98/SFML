@@ -7,7 +7,6 @@ EditorState::EditorState(StateData &stateData) :
     this->initView();
     State::initKeybinds("Config/editorstate_keybinds.ini");
     this->initButtons();
-    this->initTexts();
     this->initGui();
 }
 
@@ -44,7 +43,7 @@ void EditorState::render(sf::RenderTarget *target) {
 
 
     if (!pauseMenuState.isPaused() && !this->textureSelector->isActive()) {
-        target->draw(this->cursorText);
+        target->draw(this->mouseDebug);
         target->setView(this->view);
         target->draw(this->previewTexture);
         target->setView(this->stateData.window->getDefaultView());
@@ -264,13 +263,7 @@ void EditorState::updateGui() {
                                          this->getPosGrid(VIEW_TYPES::VIEW).y * this->stateData.gridSize);
     }
 
-    std::stringstream ss;
-    this->cursorText.setPosition(this->mousePosWindow.x + 20, this->mousePosWindow.y - 20);
-    ss << "w:" << this->mousePosWindow.x << " x " << this->mousePosWindow.y << "\n"
-       << "v:" << this->mousePosView.x << " x " << this->mousePosView.y << "\n"
-       << "gw:" << this->getPosGrid(VIEW_TYPES::WINDOW).x << " x " << this->getPosGrid(VIEW_TYPES::WINDOW).y << "\n"
-       << "gv:" << this->getPosGrid(VIEW_TYPES::VIEW).x << " x " << this->getPosGrid(VIEW_TYPES::VIEW).y << "\n";
-    this->cursorText.setString(ss.str());
+    this->updateMouseDebug();
 }
 
 void EditorState::renderGui(sf::RenderTarget *target) {
@@ -284,12 +277,6 @@ void EditorState::renderGui(sf::RenderTarget *target) {
     target->draw(this->sideBar);
 }
 
-void EditorState::initTexts() {
-    this->cursorText.setFont(*this->stateData.font);
-    this->cursorText.setCharacterSize(12);
-    this->cursorText.setFillColor(sf::Color::White);
-    this->cursorText.setPosition(this->mousePosView.x, this->mousePosView.y - 20);
-}
 
 void EditorState::updateInput(const float &dt) {
     sf::Vector2f direction(0, 0);

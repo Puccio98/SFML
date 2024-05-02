@@ -9,6 +9,9 @@ private:
     Player *player{};
     PauseMenuState pauseMenuState;
     Tilemap *tilemap;
+    sf::View view;
+    sf::RenderTexture renderTexture;
+    sf::Sprite renderSprite;
 
     void initTextures();
 
@@ -20,6 +23,10 @@ public:
     virtual ~GameState();
 
     //Functions
+    void initView();
+
+    void updateView(const float &dt);
+
     void updateInput(const float &dt);
 
     void update(const float &dt) override;

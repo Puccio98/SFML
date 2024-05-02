@@ -6,6 +6,7 @@ GameState::GameState(StateData &stateData)
         : State(stateData), pauseMenuState(PauseMenuState(stateData)) {
 
     State::initKeybinds("Config/gamestate_keybinds.ini");
+    this->initView();
     this->initTextures();
     this->initTilemap();
     this->initPlayer();
@@ -16,8 +17,11 @@ GameState::~GameState() {
 }
 
 void GameState::update(const float &dt) {
+    //per debug
+    this->updateMouseDebug();
     if (!pauseMenuState.isPaused()) {
-        State::update(dt);
+        State::update(dt, this->view);
+        this->updateView(dt);
         this->updateInput(dt);
         this->player->update(dt);
     } else {
@@ -29,8 +33,15 @@ void GameState::render(sf::RenderTarget *target = nullptr) {
     if (!target)
         target = this->stateData.window;
 
+    // renderizziamo mappa e giocatore tramite view, poi crea una Callbackfunction o simile per gestire cambio di view in renderizzazione
+    target->setView(this->view);
     this->tilemap->render(*target);
     this->player->render(*target);
+    target->setView(this->stateData.window->getDefaultView());
+
+    // per debug
+    target->draw(this->mouseDebug);
+
     if (pauseMenuState.isPaused()) {
         pauseMenuState.render(target);
     }
@@ -81,6 +92,21 @@ bool GameState::isQuit() const {
 
 void GameState::initTilemap() {
     this->tilemap = new Tilemap("Resources/map/map.slmp");
+}
+
+void GameState::initView() {
+    this->view.setSize(sf::Vector2f(this->stateData.graphicsSettings->resolution.width,
+                                    this->stateData.graphicsSettings->resolution.height));
+    this->view.setCenter(this->stateData.graphicsSettings->resolution.width / 2.f,
+                         this->stateData.graphicsSettings->resolution.height / 2.f);
+
+}
+
+void GameState::updateView(const float &dt) {
+    auto pos = this->player->getPosition();
+    auto size = this->player->getSize();
+    this->view.setCenter(pos.x + size.width / 2, pos.y + size.height / 2);
+
 }
 
 
