@@ -14,6 +14,11 @@ Tile::~Tile() {
 }
 
 void Tile::render(sf::RenderTarget &target) {
+    //Se collision, bordo rosso
+    if(std::find(this->tileTypes.begin(), this->tileTypes.end(), TILE_TYPES::COLLISION) != tileTypes.end()) {
+        this->shape.setOutlineColor(sf::Color(255, 0,0,150));
+        this->shape.setOutlineThickness(-2);
+    }
     target.draw(this->shape);
 }
 

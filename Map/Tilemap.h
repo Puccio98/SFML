@@ -3,6 +3,7 @@
 
 #include "../Tile/Tile.h"
 #include "../Tile/TileData.h"
+#include "../Entities/Entity.h"
 
 class Tilemap {
 private:
@@ -21,7 +22,7 @@ public:
 
     void update();
 
-    void render(sf::RenderTarget &target);
+    void render(sf::RenderTarget &target, Entity* entity = nullptr);
 
     void addTile(const TileData &tileData);
 
@@ -34,6 +35,9 @@ public:
     void loadFromFile(std::string file_name);
 
     void clear();
+
+    void checkCollision(Entity* entity);
+
 };
 
 

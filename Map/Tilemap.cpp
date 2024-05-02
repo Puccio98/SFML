@@ -1,7 +1,5 @@
 #include "Tilemap.h"
 
-#include <utility>
-
 Tilemap::Tilemap(const std::string &file_name) {
     this->loadFromFile(file_name);
 }
@@ -25,7 +23,7 @@ void Tilemap::update() {
 
 }
 
-void Tilemap::render(sf::RenderTarget &target) {
+void Tilemap::render(sf::RenderTarget &target, Entity* entity) {
     for (auto &x: this->map) {
         for (auto &y: x) {
             for (auto *z: y) {
@@ -165,6 +163,10 @@ void Tilemap::clear() {
             }
         }
     }
+}
+
+void Tilemap::checkCollision(Entity *entity) {
+
 }
 
 

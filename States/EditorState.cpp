@@ -143,7 +143,7 @@ void EditorState::initVariables() {
     this->tileTexturePath = "Resources/images/tiles/nuovo_tilesheet.png";
     this->tileMap = new Tilemap("Resources/map/map.slmp");
     this->tileTypes.push_back(TILE_TYPES::DEFAULT);
-    this->tileTypes.push_back(TILE_TYPES::COLLISION);
+
     this->cameraSpeed = 300.f;
 }
 
@@ -171,30 +171,6 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
 
         // se non è sidebar
         if (!this->sideBar.getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
-            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-                if (this->textureSelector->isActive()) {
-                    this->textureSelector->setSelectedTile(mousePosWindow);
-                } else {
-                    TileData tileData;
-                    tileData.index_x = this->getPosGrid(VIEW_TYPES::VIEW).x;
-                    tileData.index_y = this->getPosGrid(VIEW_TYPES::VIEW).y;
-                    tileData.index_z = 0;
-                    tileData.textureRect = this->textureSelector->getSelectedRelativePosition();
-                    tileData.types = this->tileTypes;
-
-                    this->tileMap->addTile(tileData);
-                }
-            }
-
-            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
-                if (this->textureSelector->isActive()) {
-
-                } else {
-                    this->tileMap->removeTile(this->getPosGrid(VIEW_TYPES::VIEW).x,
-                                              this->getPosGrid(VIEW_TYPES::VIEW).y, 0);
-                }
-            }
-
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
                 this->openTextureSelector();
                 this->textureSelector->setSelectedTile(1, 0);
@@ -289,4 +265,30 @@ void EditorState::updateInput(const float &dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MAP_RIGHT"])))
         direction.x = 1;
     this->view.move(direction * this->cameraSpeed * dt);
+
+    if (!this->sideBar.getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            if (this->textureSelector->isActive()) {
+                this->textureSelector->setSelectedTile(mousePosWindow);
+            } else {
+                TileData tileData;
+                tileData.index_x = this->getPosGrid(VIEW_TYPES::VIEW).x;
+                tileData.index_y = this->getPosGrid(VIEW_TYPES::VIEW).y;
+                tileData.index_z = 0;
+                tileData.textureRect = this->textureSelector->getSelectedRelativePosition();
+                tileData.types = this->tileTypes;
+
+                this->tileMap->addTile(tileData);
+            }
+        }
+
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+            if (this->textureSelector->isActive()) {
+
+            } else {
+                this->tileMap->removeTile(this->getPosGrid(VIEW_TYPES::VIEW).x,
+                                          this->getPosGrid(VIEW_TYPES::VIEW).y, 0);
+            }
+        }
+    }
 }
