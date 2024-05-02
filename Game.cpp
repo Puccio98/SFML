@@ -4,78 +4,56 @@
 
 //Initializer functions
 void Game::initWindow() {
-    std::ifstream ifs("Config/window.ini");
-    this->videoModes = sf::VideoMode::getFullscreenModes();
-
-    sf::VideoMode window_bounds(sf::VideoMode::getDesktopMode());
-    bool fullscreen = false;
-    std::string title = "None";
-    unsigned framerate_limit = 120;
-    bool vertical_sync_enabled = false;
-    unsigned antialiasing_level = 0;
-
-    if (ifs.is_open()) {
-        std::getline(ifs, title);
-        ifs >> window_bounds.width >> window_bounds.height;
-        ifs >> fullscreen;
-        ifs >> framerate_limit;
-        ifs >> vertical_sync_enabled;
-        ifs >> antialiasing_level;
-    }
-
-    ifs.close();
-    this->fullscreen = fullscreen;
-    windowSettings.antialiasingLevel = antialiasing_level;
-    if(this->fullscreen)
-    this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Fullscreen, windowSettings);
+    if (this->graphicsSettings->fullscreen)
+        this->window = new sf::RenderWindow(this->graphicsSettings->resolution, this->graphicsSettings->title,
+                                            sf::Style::Fullscreen, this->graphicsSettings->contextSettings);
     else
-        this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Titlebar | sf::Style::Close, windowSettings);
-    this->window->setFramerateLimit(framerate_limit);
-    this->window->setVerticalSyncEnabled(vertical_sync_enabled);
+        this->window = new sf::RenderWindow(this->graphicsSettings->resolution, this->graphicsSettings->title,
+                                            sf::Style::Titlebar | sf::Style::Close,
+                                            this->graphicsSettings->contextSettings);
+
+    this->window->setFramerateLimit(this->graphicsSettings->frameRateLimit);
+    this->window->setVerticalSyncEnabled(this->graphicsSettings->verticalSync);
+    this->window->setKeyRepeatEnabled(false);
 }
 
 //Constructors/Destructors
 Game::Game() {
     this->initVariables();
+    this->initGraphicsSettings();
     this->initWindow();
     this->initKeys();
+    this->initFonts();
+    this->stateData = new StateData(&states, this->window, &this->supportedKeys, &font, graphicsSettings);
     this->initState();
 }
 
 Game::~Game() {
     delete this->window;
+    delete this->graphicsSettings;
 
     while (!this->states.empty()) {
         delete this->states.top();
         this->states.pop();
     }
+
+    delete stateData;
 }
 
 //Functions
 void Game::update() {
-    this->updateSFMLEvents();
     if (this->states.empty()) {
-        this->endApplication();
+        Game::endApplication();
         this->window->close();
     }
 
     this->states.top()->update(this->dt);
-    if (this->states.top()->getQuit()) {
+    if (this->states.top()->isQuit()) {
         this->states.top()->endState();
 
         delete this->states.top();
         this->states.pop();
     }
-}
-
-void Game::updateSFMLEvents() {
-    sf::Event event;
-
-    //sembrerebbe essere inutile
-   /* while (this->window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed)
-            this->window->close();
-    }*/
 }
 
 void Game::render() {
@@ -101,21 +79,20 @@ void Game::updateDT() {
 }
 
 void Game::initState() {
-    this->states.push(new MainMenuState(this->window, &this->supportedKeys, &states));
+    this->states.push(new MainMenuState(*stateData));
 }
 
 void Game::endApplication() {
-    std::cout << "ending apllication!";
+    std::cout << "ending application!";
 }
 
 void Game::initKeys() {
     std::ifstream ifs("Config/supported_keys.ini");
 
-    if(ifs.is_open())
-    {
-        std::string key = "";
+    if (ifs.is_open()) {
+        std::string key;
         int key_value = 0;
-        while(ifs >> key >> key_value) {
+        while (ifs >> key >> key_value) {
             this->supportedKeys[key] = key_value;
         }
     }
@@ -125,8 +102,17 @@ void Game::initKeys() {
 
 void Game::initVariables() {
     this->window = nullptr;
+    this->graphicsSettings = nullptr;
     this->dt = 0.f;
-    this->fullscreen = false;
 }
 
+void Game::initFonts() {
+    if (!this->font.loadFromFile("../Fonts/Roboto-Black.ttf")) {
+        throw ("ERROR::GAME::COULD NOT LOAD FONT");
+    };
+}
 
+void Game::initGraphicsSettings() {
+    this->graphicsSettings = new GraphicsSettings(this->graphicsSettingsFilePath);
+    this->graphicsSettings->load();
+}

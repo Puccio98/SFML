@@ -1,22 +1,44 @@
 #ifndef SFML_GAMESTATE_H
 #define SFML_GAMESTATE_H
 
-#include "State.h"
+#include "PauseMenuState.h"
+#include "../Map/TileMap.h"
 
 class GameState : public State {
 private:
-    Player* player;
+    Player *player{};
+    PauseMenuState pauseMenuState;
+    Tilemap *tilemap;
+    sf::View view;
+    sf::RenderTexture renderTexture;
+    sf::Sprite renderSprite;
+
     void initTextures();
-    void initKeybinds() override;
-    void initPlayers();
+
+    void initPlayer();
+
 public:
-    GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
+    explicit GameState(StateData &stateData);
+
     virtual ~GameState();
 
     //Functions
-    void updateInput(const float& dt) override;
-    void update(const float& dt) override;
-    void render(sf::RenderTarget* target) override;
+    void initView();
+
+    void updateView(const float &dt);
+
+    void updateInput(const float &dt);
+
+    void update(const float &dt) override;
+
+    void render(sf::RenderTarget *target) override;
+
+    void handleEvent(sf::Event &event, const float &dt) override;
+
+    bool isQuit() const override;
+
+    void initTilemap();
+
 };
 
 #endif //SFML_GAMESTATE_H

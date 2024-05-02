@@ -2,15 +2,11 @@
 
 #include "MainMenuState.h"
 
-MainMenuState::MainMenuState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys,
-                             std::stack<State *> *states) : State(window,
-                                                                  supportedKeys, states) {
-    this->initFonts();
+MainMenuState::MainMenuState(StateData &stateData) : State(stateData) {
     this->initVariables();
-    this->initBackgorund();
-    this->initKeybinds();
+    this->initBackground();
+    State::initKeybinds("Config/menustate_keybinds.ini");
     this->initButtons();
-
 }
 
 MainMenuState::~MainMenuState() {
@@ -19,76 +15,50 @@ MainMenuState::~MainMenuState() {
     }
 }
 
-void MainMenuState::updateInput(const float &dt) {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["CLOSE"])))
-        this->endState();
-}
-
 void MainMenuState::update(const float &dt) {
-    this->updateMousePositions();
-    this->updateInput(dt);
+    State::update(dt);
     this->updateButtons();
 }
 
 void MainMenuState::render(sf::RenderTarget *target) {
     if (!target)
-        target = this->window;
+        target = this->stateData.window;
     target->draw(this->background);
     this->renderButtons(*target);
 }
 
-void MainMenuState::initKeybinds() {
-    std::ifstream ifs("Config/mainmenustate_keybinds.ini");
-
-    if (ifs.is_open()) {
-        std::string key;
-        std::string key_value;
-        while (ifs >> key >> key_value) {
-            this->keybinds[key] = this->supportedKeys->at(key_value);
-        }
-    }
-
-    ifs.close();
-}
-
-void MainMenuState::initFonts() {
-    if (!this->font.loadFromFile("../Fonts/Roboto-Black.ttf")) {
-        throw ("ERROR::MAINMENUSTATE::COULD NOT LOAD FONT");
-    };
-}
-
 void MainMenuState::initButtons() {
-    this->buttons["GAME_STATE"] = new Button(100, 100, 150, 50, &this->font, "New Game", 50,
-                                                 sf::Color(120, 50, 80, 200),
-                                                 sf::Color(150, 50, 80, 250),
-                                                 sf::Color(90, 40, 60, 50),
-                                                 sf::Color(120, 50, 80, 0),
-                                                 sf::Color(150, 50, 80, 0),
-                                                 sf::Color(90, 40, 60, 0));
+    this->buttons["GAME_STATE"] = new GUI::Button(100, 100, 150, 50, this->stateData.font, "New Game", 50,
+                                                  sf::Color(120, 50, 80, 200),
+                                                  sf::Color(150, 50, 80, 250),
+                                                  sf::Color(90, 40, 60, 50),
+                                                  sf::Color(120, 50, 80, 0),
+                                                  sf::Color(150, 50, 80, 0),
+                                                  sf::Color(90, 40, 60, 0));
 
-    this->buttons["SETTINGS"] = new Button(100, 200, 150, 50, &this->font, "Settings", 50,
-                                            sf::Color(120, 50, 80, 200),
-                                            sf::Color(150, 50, 80, 250),
-                                            sf::Color(90, 40, 60, 50),
-                                           sf::Color(120, 50, 80, 0),
-                                           sf::Color(150, 50, 80, 0),
-                                           sf::Color(90, 40, 60, 0));
+    this->buttons["SETTING_STATE"] = new GUI::Button(100, 200, 150, 50, this->stateData.font, "Settings", 50,
+                                                     sf::Color(120, 50, 80, 200),
+                                                     sf::Color(150, 50, 80, 250),
+                                                     sf::Color(90, 40, 60, 50),
+                                                     sf::Color(120, 50, 80, 0),
+                                                     sf::Color(150, 50, 80, 0),
+                                                     sf::Color(90, 40, 60, 0));
 
-    this->buttons["EDITOR_STATE"] = new Button(100, 300, 150, 50, &this->font, "Editor", 50,
-                                           sf::Color(120, 50, 80, 200),
-                                           sf::Color(150, 50, 80, 250),
-                                           sf::Color(90, 40, 60, 50),
-                                               sf::Color(120, 50, 80, 0),
-                                               sf::Color(150, 50, 80, 0),
-                                               sf::Color(90, 40, 60, 0));
+    this->buttons["EDITOR_STATE"] = new GUI::Button(100, 300, 150, 50, this->stateData.font, "Editor", 50,
+                                                    sf::Color(120, 50, 80, 200),
+                                                    sf::Color(150, 50, 80, 250),
+                                                    sf::Color(90, 40, 60, 50),
+                                                    sf::Color(120, 50, 80, 0),
+                                                    sf::Color(150, 50, 80, 0),
+                                                    sf::Color(90, 40, 60, 0));
 
-    this->buttons["CLOSE"] = new Button(100, 400, 150, 50, &this->font, "Close Game", 50,
-                                            sf::Color(120, 50, 80, 200),
-                                            sf::Color(150, 50, 80, 250),
-                                            sf::Color(90, 40, 60, 50),
-                                            sf::Color(120, 50, 80, 0),
-                                            sf::Color(150, 50, 80, 0),
-                                            sf::Color(90, 40, 60, 0));
+    this->buttons["CLOSE"] = new GUI::Button(100, 400, 150, 50, this->stateData.font, "Close Game", 50,
+                                             sf::Color(120, 50, 80, 200),
+                                             sf::Color(150, 50, 80, 250),
+                                             sf::Color(90, 40, 60, 50),
+                                             sf::Color(120, 50, 80, 0),
+                                             sf::Color(150, 50, 80, 0),
+                                             sf::Color(90, 40, 60, 0));
 }
 
 void MainMenuState::renderButtons(sf::RenderTarget &target) {
@@ -105,12 +75,28 @@ void MainMenuState::updateButtons() {
 
     //New Game
     if (this->buttons["GAME_STATE"]->isPressed()) {
-        this->states->push(new GameState(this->window, this->supportedKeys, this->states));
+        for (auto &button: this->buttons) {
+            button.second->reset();
+        }
+        this->stateData.states->push(new GameState(this->stateData));
+    }
+
+
+    //Setting State
+    if (this->buttons["SETTING_STATE"]->isPressed()) {
+        //TODO:: Spostare i bottoni in state.h e creare una funzione ResetButtons che ogni volta che apriamo un nuovo state resetta i bottoni dello stato di partenza
+        for (auto &button: this->buttons) {
+            button.second->reset();
+        }
+        this->stateData.states->push(new SettingsState(this->stateData));
     }
 
     //Editor
     if (this->buttons["EDITOR_STATE"]->isPressed()) {
-        this->states->push(new EditorState(this->window, this->supportedKeys, this->states));
+        for (auto &button: this->buttons) {
+            button.second->reset();
+        }
+        this->stateData.states->push(new EditorState(this->stateData));
     }
 
     //Exit Game
@@ -120,17 +106,28 @@ void MainMenuState::updateButtons() {
 }
 
 //Initializer Functions
-void MainMenuState::initBackgorund() {
+void MainMenuState::initBackground() {
     this->background.setSize(
-            sf::Vector2f(static_cast<float>(this->window->getSize().x),
-                         static_cast<float>(this->window->getSize().y))
+            sf::Vector2f(static_cast<float>(this->stateData.window->getSize().x),
+                         static_cast<float>(this->stateData.window->getSize().y))
     );
-    if(!this->backgroudTexture.loadFromFile("../Resources/images/background.png")){
+    if (!this->backgroundTexture.loadFromFile("../Resources/images/background.png")) {
         throw "ERROR::MAIN_MENU_STATE::FAILED_TO_LOAD_BACKGROUND_TEXTURE";
     };
-    this->background.setTexture(&this->backgroudTexture);
+    this->background.setTexture(&this->backgroundTexture);
 }
 
 void MainMenuState::initVariables() {
 
+}
+
+
+void MainMenuState::handleEvent(sf::Event &event, const float &dt) {
+    if (event.type == sf::Event::KeyPressed && event.key.code == this->keybinds["CLOSE"]) {
+        this->endState();
+    }
+
+    for (auto &button: this->buttons) {
+        button.second->handleEvent(event, mousePosView);
+    }
 }

@@ -3,25 +3,33 @@
 
 #include "States/MainMenuState.h"
 
+
 class Game {
 private:
     //Variables
     sf::RenderWindow *window;
-    sf::Event sfEvent;
-    std::vector<sf::VideoMode> videoModes;
-    bool fullscreen;
+    GraphicsSettings *graphicsSettings;
     sf::Clock dtClock;
     float dt;
 
-    std::stack<State*> states;
-    sf::ContextSettings windowSettings;
+    StateData *stateData;
+    std::string graphicsSettingsFilePath = "Config/graphics.ini";
+    std::stack<State *> states;
+    sf::Font font;
     std::map<std::string, int> supportedKeys;
 
     //Initialization
     void initVariables();
+
+    void initGraphicsSettings();
+
     void initWindow();
+
     void initState();
+
     void initKeys();
+
+    void initFonts();
 
 public:
     Game();
@@ -30,11 +38,11 @@ public:
 
     //Functions
     //Regular
-    void endApplication();
+    static void endApplication();
 
     //Update
     void updateDT();
-    void updateSFMLEvents();
+
     void update();
 
     //Render

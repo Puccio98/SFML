@@ -1,32 +1,66 @@
 #ifndef SFML_EDITORSTATE_H
 #define SFML_EDITORSTATE_H
+
 #include "State.h"
-#include "../Resource Files/Button.h"
+#include "PauseMenuState.h"
+#include "../ResourceFiles/TextureSelector.h"
+#include "../ResourceFiles/Button.h"
+#include "../Map/Tilemap.h"
+#include "../ResourceFiles/TextureSelector.h"
 
 class EditorState : public State {
 public:
-    EditorState(sf::RenderWindow *window, std::map<std::string, int> *supportedKeys, std::stack<State*>* states);
+    EditorState(StateData &stateData);
+
     virtual ~EditorState();
 
     //Functions
-    void updateInput(const float &dt) override;
     void update(const float &dt) override;
+
     void render(sf::RenderTarget *target) override;
+
+    void handleEvent(sf::Event &event, const float &dt) override;
+
+    bool isQuit() const override;
 
 private:
     //Variables
-    sf::Font font;
-    std::map<std::string, Button*> buttons;
+    PauseMenuState pauseMenuState;
+    std::map<std::string, GUI::Button *> buttons;
+    Tilemap *tileMap;
+    sf::RectangleShape previewTexture;
+    bool showTextureSelector;
+    sf::Time textureSelectorTimer = sf::seconds(5);
+    sf::Clock clock;
+    sf::RectangleShape sideBar;
+    std::string tileTexturePath;
+    TextureSelector *textureSelector;
+    sf::View view;
+    float cameraSpeed;
+
+    std::vector<TILE_TYPES> tileTypes;
 
     //Functions
     void initVariables();
-    void initFonts();
-    void initKeybinds() override;
-    void initButtons();
-    void updateButtons();
-    void renderButtons(sf::RenderTarget *target);
-};
 
+    void initView();
+
+    void initButtons();
+
+    void updateButtons();
+
+    void updateGui();
+
+    void renderButtons(sf::RenderTarget *target);
+
+    void renderGui(sf::RenderTarget *target);
+
+    void initGui();
+
+    void openTextureSelector();
+
+    void updateInput(const float &dt);
+};
 
 
 #endif //SFML_EDITORSTATE_H

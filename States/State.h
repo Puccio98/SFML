@@ -2,40 +2,63 @@
 #define SFML_STATE_H
 
 #include "../Entities/Player.h"
+#include "../Settings/GraphicsSettings.h"
+#include "StateData.h"
+#include "../enums/view_types.cpp"
+
+class StateData;
 
 class State {
 private:
-    void debugMousePosition();
+    __attribute__((unused)) void debugMousePosition() const;
+
+
+public:
+
+    explicit State(StateData &stateData);
+
+    virtual ~State();
+
+    virtual bool isQuit() const;
+
+    virtual void endState();
+
+    void updateMousePositions(const sf::View &view);
+
+    virtual void update(const float &dt);
+
+    virtual void update(const float &dt, const sf::View &_view);
+
+    virtual void render(sf::RenderTarget *target) = 0;
+
+    virtual void handleEvent(sf::Event &event, const float &dt) = 0;
+
+    void pollEvents(const float &dt);
 
 protected:
-    std::stack<State*>* states;
-    sf::RenderWindow* window;
-    bool quit;
-    std::map<std::string, int>* supportedKeys;
     std::map<std::string, int> keybinds;
+    bool quit;
+    StateData &stateData;
 
+    sf::Text mouseDebug;
     sf::Vector2i mousePosScreen;
     sf::Vector2i mousePosWindow;
     sf::Vector2f mousePosView;
+
 
     //Resources
     std::map<std::string, sf::Texture> textures;
 
     //Functions
-    virtual void initKeybinds() = 0;
+    virtual void initKeybinds(std::string keybindsFilePath);
 
-public:
-    State(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states);
+    void updateMouseDebug();
 
-    virtual ~State();
+    sf::Vector2i getPosGrid(VIEW_TYPES viewType) const;
 
-    const bool& getQuit() const;
-
-    virtual void endState();
-    virtual void updateMousePositions();
-    virtual void updateInput(const float& dt) = 0;
-    virtual void update(const float& dt) = 0;
-    virtual void render(sf::RenderTarget* target) = 0;
+    void initMouseDebug();
 };
 
+
 #endif //SFML_STATE_H
+
