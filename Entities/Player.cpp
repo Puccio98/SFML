@@ -24,7 +24,11 @@ void Player::initVariables() {
 }
 
 void Player::update(const float &dt) {
-    this->movementComponent->update(dt);
+    MovementData next = this->movementComponent->nextMovementData(dt);
+    // if next is allowed
+    if (true) {
+        this->movementComponent->update(next);
+    }
 
     if (this->movementComponent->getState(MOVEMENT_STATES::IDLE))
         this->animationComponent->play("IDLE", dt);

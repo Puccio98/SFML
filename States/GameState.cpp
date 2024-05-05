@@ -1,5 +1,3 @@
-
-
 #include "GameState.h"
 
 GameState::GameState(StateData &stateData)
@@ -24,6 +22,7 @@ void GameState::update(const float &dt) {
         this->updateView(dt);
         this->updateInput(dt);
         this->player->update(dt);
+        std::cout << "posizione: " << this->player->getMovementComponent()->md.position.x << "/n";
     } else {
         pauseMenuState.update(dt);
     }
@@ -105,8 +104,8 @@ void GameState::initView() {
 void GameState::updateView(const float &dt) {
     auto pos = this->player->getPosition();
     auto size = this->player->getSize();
-    this->view.setCenter(pos.x + size.width / 2, pos.y + size.height / 2);
-
+    //floor serve perchè setCenter sarebbe meglio passargli degli interi per non sminchiare il render
+    this->view.setCenter(std::floor(pos.x + size.width / 2), std::floor(pos.y + size.height / 2));
 }
 
 

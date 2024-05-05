@@ -255,16 +255,7 @@ void EditorState::renderGui(sf::RenderTarget *target) {
 
 
 void EditorState::updateInput(const float &dt) {
-    sf::Vector2f direction(0, 0);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MAP_UP"])))
-        direction.y = -1;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MAP_LEFT"])))
-        direction.x = -1;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MAP_DOWN"])))
-        direction.y = 1;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MAP_RIGHT"])))
-        direction.x = 1;
-    this->view.move(direction * this->cameraSpeed * dt);
+    this->updateView(dt);
 
     if (!this->sideBar.getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -291,4 +282,17 @@ void EditorState::updateInput(const float &dt) {
             }
         }
     }
+}
+
+void EditorState::updateView(const float &dt) {
+    sf::Vector2f direction(0, 0);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds["MAP_UP"])))
+        direction.y = -1;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds["MAP_LEFT"])))
+        direction.x = -1;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds["MAP_DOWN"])))
+        direction.y = 1;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds["MAP_RIGHT"])))
+        direction.x = 1;
+    view.move(direction * cameraSpeed * dt);
 }

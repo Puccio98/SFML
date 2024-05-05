@@ -60,6 +60,8 @@ private:
     void openTextureSelector();
 
     void updateInput(const float &dt);
+
+    void updateView(const float &dt);
 };
 
 

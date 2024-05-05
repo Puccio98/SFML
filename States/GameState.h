@@ -3,6 +3,7 @@
 
 #include "PauseMenuState.h"
 #include "../Map/TileMap.h"
+#include <cmath>
 
 class GameState : public State {
 private:

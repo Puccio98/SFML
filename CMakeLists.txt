@@ -35,6 +35,7 @@ add_executable(SFML
         ResourceFiles/TextureSelector.cpp
         ResourceFiles/TextureSelector.h
         enums/tile_types.cpp
+        Entities/Components/MovementData.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

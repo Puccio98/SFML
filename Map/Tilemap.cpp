@@ -5,8 +5,8 @@ Tilemap::Tilemap(const std::string &file_name) {
 }
 
 Tilemap::~Tilemap() {
-    for (size_t x = 0; x < this->maxSize.x; x++) {
-        for (size_t y = 0; y < this->maxSize.y; y++) {
+    for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
+        for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
             for (size_t z = 0; z < this->layers; z++) {
                 delete this->map[x][y][z];
                 this->map[x][y][z] = nullptr;
@@ -23,7 +23,7 @@ void Tilemap::update() {
 
 }
 
-void Tilemap::render(sf::RenderTarget &target, Entity* entity) {
+void Tilemap::render(sf::RenderTarget &target, Entity *entity) {
     for (auto &x: this->map) {
         for (auto &y: x) {
             for (auto *z: y) {
@@ -36,7 +36,7 @@ void Tilemap::render(sf::RenderTarget &target, Entity* entity) {
 }
 
 void Tilemap::removeTile(const unsigned index_x, const unsigned index_y, const unsigned index_z) {
-    if (index_x < this->maxSize.x && index_y < this->maxSize.y && index_z < this->layers) {
+    if (index_x < this->maxSizeGrid.x && index_y < this->maxSizeGrid.y && index_z < this->layers) {
         delete this->map[index_x][index_y][index_z];
         this->map[index_x][index_y][index_z] = nullptr;
     }
@@ -44,7 +44,8 @@ void Tilemap::removeTile(const unsigned index_x, const unsigned index_y, const u
 
 void
 Tilemap::addTile(const TileData &tileData) {
-    if (tileData.index_x < this->maxSize.x && tileData.index_y < this->maxSize.y && tileData.index_z < this->layers) {
+    if (tileData.index_x < this->maxSizeGrid.x && tileData.index_y < this->maxSizeGrid.y &&
+        tileData.index_z < this->layers) {
         if (this->map[tileData.index_x][tileData.index_y][tileData.index_z] == nullptr) {
             this->map[tileData.index_x][tileData.index_y][tileData.index_z] = new Tile(
                     tileData.index_x * this->gridSizeF, tileData.index_y * this->gridSizeF, this->gridSizeF,
@@ -77,8 +78,10 @@ void Tilemap::loadFromFile(const std::string file_name) {
 
         this->gridSizeF = static_cast<float> (gridSizeU);
         this->gridSizeU = gridSizeU;
-        this->maxSize.x = size.x;
-        this->maxSize.y = size.y;
+        this->maxSizeGrid.x = size.x;
+        this->maxSizeGrid.y = size.y;
+        this->maxSizeWorld.x = static_cast<float>(size.x * gridSizeU);
+        this->maxSizeWorld.y = static_cast<float>(size.y * gridSizeU);
         this->layers = layers;
         this->texturePath = texturePath;
 
@@ -88,10 +91,10 @@ void Tilemap::loadFromFile(const std::string file_name) {
             std::cout << "ERROR::TILEMAP::FAILED TO LOAD TILETEXTURESHEET::FILENAME:" << this->texturePath << "\n";
         }
 
-        this->map.resize(this->maxSize.x);
-        for (int x = 0; x < this->maxSize.x; x++) {
-            this->map[x].resize(this->maxSize.y);
-            for (int y = 0; y < maxSize.y; y++) {
+        this->map.resize(this->maxSizeGrid.x);
+        for (int x = 0; x < this->maxSizeGrid.x; x++) {
+            this->map[x].resize(this->maxSizeGrid.y);
+            for (int y = 0; y < maxSizeGrid.y; y++) {
                 //mappa vuota
                 this->map[x][y].resize(this->layers, nullptr);
             }
@@ -129,13 +132,13 @@ void Tilemap::saveToFile(std::string file_name) {
     out_file.open(file_name, std::ofstream::out | std::ofstream::trunc);
 
     if (out_file.is_open()) {
-        out_file << this->maxSize.x << " " << this->maxSize.y << "\n";
+        out_file << this->maxSizeGrid.x << " " << this->maxSizeGrid.y << "\n";
         out_file << this->gridSizeU << "\n";
         out_file << this->layers << "\n";
         out_file << this->texturePath << "\n";
 
-        for (size_t x = 0; x < this->maxSize.x; x++) {
-            for (size_t y = 0; y < this->maxSize.y; y++) {
+        for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
+            for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
                 for (size_t z = 0; z < this->layers; z++) {
                     if (this->map[x][y][z]) {
                         std::string pippo = this->map[x][y][z]->getAsString();
@@ -155,8 +158,8 @@ void Tilemap::clear() {
     if (this->map.empty()) {
         return;
     }
-    for (size_t x = 0; x < this->maxSize.x; x++) {
-        for (size_t y = 0; y < this->maxSize.y; y++) {
+    for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
+        for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
             for (size_t z = 0; z < this->layers; z++) {
                 delete this->map[x][y][z];
                 this->map[x][y][z] = nullptr;
@@ -166,6 +169,11 @@ void Tilemap::clear() {
 }
 
 void Tilemap::checkCollision(Entity *entity) {
+    this->checkOutOfBounds(entity);
+
+}
+
+void Tilemap::checkOutOfBounds(Entity *entity) {
 
 }
 

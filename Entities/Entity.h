@@ -31,6 +31,8 @@ public:
 
     void createHitboxComponent(sf::Sprite &_sprite, float offset_x, float offset_y, float width, float height);
 
+    MovementComponent *getMovementComponent() const;
+
     //Functions
     virtual void setPosition(float x, float y);
 

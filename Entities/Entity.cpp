@@ -63,4 +63,8 @@ const sf::Rect<float> Entity::getSize() const {
     return this->sprite.getGlobalBounds();
 }
 
+MovementComponent *Entity::getMovementComponent() const {
+    return movementComponent;
+}
+
 
