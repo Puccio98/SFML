@@ -3,6 +3,7 @@
 
 #include "PauseMenuState.h"
 #include "../Map/TileMap.h"
+#include <cmath>
 
 class GameState : public State {
 private:
@@ -28,6 +29,8 @@ public:
     void updateView(const float &dt);
 
     void updateInput(const float &dt);
+
+    void updateEntity(const float &dt, Entity &entity);
 
     void update(const float &dt) override;
 

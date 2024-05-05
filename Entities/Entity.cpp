@@ -10,14 +10,10 @@ Entity::~Entity() {
     delete this->animationComponent;
 }
 
-void Entity::move(sf::Vector2f direction, const float &dt) {
+void Entity::setDirection(sf::Vector2f direction, const float &dt) {
     if (this->movementComponent) {
-        this->movementComponent->setDirection(direction); //Sets velocity, rename function
+        this->movementComponent->setDirection(direction);
     }
-}
-
-void Entity::update(const float &dt) {
-
 }
 
 void Entity::render(sf::RenderTarget &target) {
@@ -61,6 +57,18 @@ const sf::Vector2f Entity::getPosition() const {
 
 const sf::Rect<float> Entity::getSize() const {
     return this->sprite.getGlobalBounds();
+}
+
+MovementComponent *Entity::getMovementComponent() const {
+    return movementComponent;
+}
+
+void Entity::update(const MovementData &md, const float &dt) {
+
+}
+
+void Entity::update(const float &dt) {
+
 }
 
 

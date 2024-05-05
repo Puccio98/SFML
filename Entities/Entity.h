@@ -5,7 +5,6 @@
 #include "Components/MovementComponent.h"
 #include "Components/AnimationComponent.h"
 
-
 class Entity {
 
 private:
@@ -31,6 +30,8 @@ public:
 
     void createHitboxComponent(sf::Sprite &_sprite, float offset_x, float offset_y, float width, float height);
 
+    MovementComponent *getMovementComponent() const;
+
     //Functions
     virtual void setPosition(float x, float y);
 
@@ -38,9 +39,11 @@ public:
 
     virtual const sf::Rect<float> getSize() const;
 
-    virtual void move(sf::Vector2f direction, const float &dt);
+    virtual void setDirection(sf::Vector2f direction, const float &dt);
 
     virtual void update(const float &dt);
+
+    virtual void update(const MovementData &md, const float &dt);
 
     virtual void render(sf::RenderTarget &target);
 };

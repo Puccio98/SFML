@@ -10,19 +10,20 @@ private:
     unsigned gridSizeU;
     float gridSizeF;
     unsigned layers;
-    sf::Vector2u maxSize;
+    sf::Vector2u maxSizeGrid;
+    sf::Vector2f maxSizeWorld;
     std::vector<std::vector<std::vector<Tile *>>> map;
     std::string texturePath;
     sf::Texture tileTextureSheet;
 
 public:
-    Tilemap(const std::string &file_name);
+    explicit Tilemap(const std::string &file_name);
 
     virtual ~Tilemap();
 
     void update();
 
-    void render(sf::RenderTarget &target, Entity* entity = nullptr);
+    void render(sf::RenderTarget &target, Entity *entity = nullptr);
 
     void addTile(const TileData &tileData);
 
@@ -36,8 +37,9 @@ public:
 
     void clear();
 
-    void checkCollision(Entity* entity);
+    std::tuple<bool, bool> checkCollision(const MovementData &next) const;
 
+    std::tuple<bool, bool> checkOutOfBounds(const MovementData &next) const;
 };
 
 

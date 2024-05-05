@@ -2,103 +2,141 @@
 #include <cmath>
 
 MovementComponent::MovementComponent(sf::Sprite &sprite, float maxVelocity, float acceleration, float deceleration)
-        : sprite(sprite), maxVelocity(maxVelocity), acceleration(acceleration), deceleration(deceleration) {
+        : sprite(sprite), md(maxVelocity, acceleration, deceleration) {
 }
 
 MovementComponent::~MovementComponent() = default;
 
 //Functions
-void MovementComponent::update(const float &dt) {
-    // Create acceleration vector
-    sf::Vector2f accelerationV = direction.x != 0 && direction.y != 0 ? sf::Vector2f(
-            this->direction * float(this->acceleration / std::sqrt(2))) : sf::Vector2f(
-            this->direction * this->acceleration);
-
-    // Apply acceleration on current velocity
-    this->velocity += (accelerationV) * dt;
-
-    // Handle terrain friction
-    this->handleFriction(dt);
-
-    // Check maximum speed
-    this->checkVelocity();
+void MovementComponent::update(const MovementData &next) {
+    this->md = next;
 
     // Move player by delta position
-    this->sprite.move(this->velocity * dt);
+    this->sprite.setPosition(this->md.position);
 }
 
 /**
  * Check that velocity doesn't exceed max speed
  */
-void MovementComponent::checkVelocity() {
-    double vx = std::abs(velocity.x);
-    double vy = std::abs(velocity.y);
-    double maxComponentVelocity = (maxVelocity / std::sqrt(2));
+void MovementComponent::checkVelocity(MovementData &_md) {
+    double vx = std::abs(_md.velocity.x);
+    double vy = std::abs(_md.velocity.y);
+    double maxComponentVelocity = (_md.maxVelocity / std::sqrt(2));
 
-    if (std::pow(vx, 2) + std::pow(vy, 2) > std::pow(maxVelocity, 2)) {
+    if (std::pow(vx, 2) + std::pow(vy, 2) > std::pow(_md.maxVelocity, 2)) {
         if (vx > maxComponentVelocity && vy > maxComponentVelocity) {
             vx = maxComponentVelocity;
             vy = maxComponentVelocity;
         } else if (vx <= vy) {
-            vy = maxVelocity - vx <= 0 ? std::sqrt(maxVelocity) :
-                 std::sqrt(std::pow(maxVelocity, 2) - std::pow(vx, 2));
+            vy = _md.maxVelocity - vx <= 0 ? std::sqrt(_md.maxVelocity) :
+                 std::sqrt(std::pow(_md.maxVelocity, 2) - std::pow(vx, 2));
         } else {
-            vx = maxVelocity - vy <= 0 ? std::sqrt(maxVelocity) :
-                 std::sqrt(std::pow(maxVelocity, 2) - std::pow(vy, 2));
+            vx = _md.maxVelocity - vy <= 0 ? std::sqrt(_md.maxVelocity) :
+                 std::sqrt(std::pow(_md.maxVelocity, 2) - std::pow(vy, 2));
         }
     }
 
-    velocity.x = float(vx * direction.x);
-    velocity.y = float(vy * direction.y);
+    _md.velocity.x = float(vx * _md.direction.x);
+    _md.velocity.y = float(vy * _md.direction.y);
 }
 
-void MovementComponent::handleFriction(const float &dt) {// Handle player friction
-    float deceleration_dt = deceleration * dt;
-    if (velocity.x != 0) {
-        float velocity_friction = (-1.f * (velocity.x / std::abs(velocity.x))) * deceleration_dt;
-        velocity.x = std::abs(velocity_friction) > std::abs(velocity.x) ? 0 : velocity.x + velocity_friction;
+void MovementComponent::handleFriction(MovementData &_md, const float &dt) {// Handle player friction
+    float deceleration_dt = _md.deceleration * dt;
+    if (_md.velocity.x != 0) {
+        float velocity_friction = (-1.f * (_md.velocity.x / std::abs(_md.velocity.x))) * deceleration_dt;
+        _md.velocity.x =
+                std::abs(velocity_friction) > std::abs(_md.velocity.x) ? 0 : _md.velocity.x + velocity_friction;
     }
-    if (velocity.y != 0) {
-        float velocity_friction = (-1.f * (velocity.y / std::abs(velocity.y))) * deceleration_dt;
-        velocity.y = std::abs(velocity_friction) > std::abs(velocity.y) ? 0 : velocity.y + velocity_friction;
+    if (_md.velocity.y != 0) {
+        float velocity_friction = (-1.f * (_md.velocity.y / std::abs(_md.velocity.y))) * deceleration_dt;
+        _md.velocity.y =
+                std::abs(velocity_friction) > std::abs(_md.velocity.y) ? 0 : _md.velocity.y + velocity_friction;
     }
 }
 
 void MovementComponent::setDirection(sf::Vector2f _direction) {
-    this->direction = _direction;
+    this->md.direction = _direction;
 }
 
 const sf::Vector2f &MovementComponent::getVelocity() const {
-    return this->velocity;
+    return this->md.velocity;
 }
 
 bool MovementComponent::getState(const MOVEMENT_STATES state) const {
     switch (state) {
         case MOVEMENT_STATES::IDLE:
-            return (this->velocity.x == 0.f && this->velocity.y == 0.f);
+            return (this->md.velocity.x == 0.f && this->md.velocity.y == 0.f);
         case MOVEMENT_STATES::MOVING:
-            return (this->velocity.x != 0.f || this->velocity.y != 0.f);
+            return (this->md.velocity.x != 0.f || this->md.velocity.y != 0.f);
         case MOVEMENT_STATES::MOVING_LEFT:
-            return (this->velocity.x < 0.f);
+            return (this->md.velocity.x < 0.f);
         case MOVEMENT_STATES::MOVING_RIGHT:
-            return (this->velocity.x > 0.f);
+            return (this->md.velocity.x > 0.f);
         case MOVEMENT_STATES::MOVING_UP:
-            return (this->velocity.y > 0.f);
+            return (this->md.velocity.y > 0.f);
         case MOVEMENT_STATES::MOVING_DOWN:
-            return (this->velocity.y < 0.f);
+            return (this->md.velocity.y < 0.f);
     }
     return false;
 }
 
 float MovementComponent::getMaxVelocity() const {
-    return maxVelocity;
+    return this->md.maxVelocity;
 }
 
 __attribute__((unused)) void MovementComponent::debugVelocity() const {
-    std::cout << "vx: " << velocity.x << "\n";
-    std::cout << "vy: " << velocity.y << "\n";
+    std::cout << "vx: " << this->md.velocity.x << "\n";
+    std::cout << "vy: " << this->md.velocity.y << "\n";
 }
 
 float MovementComponent::getVelocityMagnitude() const {
-    return float(std::sqrt(std::pow(velocity.x, 2) + std::pow(velocity.y, 2)));
+    return float(std::sqrt(std::pow(this->md.velocity.x, 2) + std::pow(this->md.velocity.y, 2)));
 }
+
+/**
+ * Ricava le informazioni su posizione, velocita e accelerazione per il movimento del prossimo frame
+ * @param dt
+ * @return
+ */
+MovementData MovementComponent::nextMovementData(const float &dt,
+                                                 std::tuple<bool, bool> forbidden_directions) const {
+    //Create Movement data clone
+    MovementData next(this->md);
+
+    if (std::get<0>(forbidden_directions)) {
+        next.direction.x = 0;
+    }
+    if (std::get<1>(forbidden_directions)) {
+        next.direction.y = 0;
+    }
+    return processNextMovementData(dt, next);
+}
+
+MovementData
+MovementComponent::processNextMovementData(const float &dt, MovementData next) {
+    // Create acceleration vector
+    sf::Vector2f accelerationV = next.direction.x != 0 && next.direction.y != 0 ? sf::Vector2f(
+            next.direction * float(next.acceleration / std::sqrt(2))) : sf::Vector2f(
+            next.direction * next.acceleration);
+
+    // Apply acceleration on current velocity
+    next.velocity += (accelerationV) * dt;
+
+    // Handle terrain friction
+    handleFriction(next, dt);
+
+    // Check maximum speed
+    checkVelocity(next);
+
+    // Setta la posizione calcolate tutti i vettori del movimento
+    next.position = next.position + (next.velocity * dt);
+
+    return next;
+}
+
+MovementData MovementComponent::nextMovementData(const float &dt) const {
+    //Create Movement data clone
+    MovementData next(this->md);
+    return processNextMovementData(dt, next);
+}
+

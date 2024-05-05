@@ -1,5 +1,3 @@
-
-
 #include "GameState.h"
 
 GameState::GameState(StateData &stateData)
@@ -23,7 +21,8 @@ void GameState::update(const float &dt) {
         State::update(dt, this->view);
         this->updateView(dt);
         this->updateInput(dt);
-        this->player->update(dt);
+        this->updateEntity(dt, *this->player);
+        std::cout << "posizione: " << this->player->getMovementComponent()->md.position.x << "/n";
     } else {
         pauseMenuState.update(dt);
     }
@@ -58,7 +57,8 @@ void GameState::updateInput(const float &dt) {
         direction.y = 1;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MOVE_RIGHT"])))
         direction.x = 1;
-    this->player->move(direction, dt);
+
+    this->player->setDirection(direction, dt);
 }
 
 void GameState::initTextures() {
@@ -68,7 +68,7 @@ void GameState::initTextures() {
 }
 
 void GameState::initPlayer() {
-    this->player = new Player(0, 0, this->textures["PLAYER_SHEET"]);
+    this->player = new Player(0, 0, this->textures["PLAYER_SHEET"], *this->tilemap);
 }
 
 void GameState::handleEvent(sf::Event &event, const float &dt) {
@@ -105,8 +105,21 @@ void GameState::initView() {
 void GameState::updateView(const float &dt) {
     auto pos = this->player->getPosition();
     auto size = this->player->getSize();
-    this->view.setCenter(pos.x + size.width / 2, pos.y + size.height / 2);
+    //floor serve perchè setCenter sarebbe meglio passargli degli interi per non sminchiare il render
+    this->view.setCenter(std::floor(pos.x + size.width / 2), std::floor(pos.y + size.height / 2));
+}
 
+void GameState::updateEntity(const float &dt, Entity &entity) {
+    // Ask entity next Movement Data
+    MovementData next = entity.getMovementComponent()->nextMovementData(dt);
+    // Ask map  if entity is allowed in next position
+    std::tuple<bool, bool> forbidden_directions = this->tilemap->checkCollision(next);
+    // If not, calculate next allowed position
+    if (std::get<0>(forbidden_directions) || std::get<1>(forbidden_directions)) {
+        next = entity.getMovementComponent()->nextMovementData(dt, forbidden_directions);
+    }
+    // Update the entity movement data to the correct ones
+    entity.update(next, dt);
 }
 
 
