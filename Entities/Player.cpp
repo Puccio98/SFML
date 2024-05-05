@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(float x, float y, sf::Texture &texture_sheet) {
+Player::Player(float x, float y, sf::Texture &texture_sheet, Tilemap &map) : map(map) {
     this->initVariables();
     this->setPosition(x, y);
 
@@ -23,12 +23,20 @@ void Player::initVariables() {
 
 }
 
+
 void Player::update(const float &dt) {
+    // forse dovrebbe essre gamestate a controllare che l entity possa muoversi nella mappa, se puo muoversi gli passa il next altrimenti modifica il next in modo che non
+    // lo faccia muovere nelle direzioni proibite
+    // gamestate fa:
+    // 1) chiede a Entity nextMovementData
+    // 2) Chiede a mappa se next valido tramite forbidden_directions
+    // 3.A) Se Valido entity.update(next)
+    // 3.B) Se non Valido chiede a Entity nextMovementData passandogli le forbidden_directions/forbidden_position -> poi update(next_corrette)
     MovementData next = this->movementComponent->nextMovementData(dt);
-    // if next is allowed
-    if (true) {
-        this->movementComponent->update(next);
-    }
+    std::tuple<bool, bool> forbidden_directions = this->map.checkCollision(next);
+    next.position.x = std::get<0>(forbidden_directions) ? this->movementComponent->md.position.x : next.position.x;
+    next.position.y = std::get<1>(forbidden_directions) ? this->movementComponent->md.position.y : next.position.y;
+    this->movementComponent->update(next);
 
     if (this->movementComponent->getState(MOVEMENT_STATES::IDLE))
         this->animationComponent->play("IDLE", dt);

@@ -121,3 +121,4 @@ MovementData MovementComponent::nextMovementData(const float &dt) {
 
     return next;
 }
+

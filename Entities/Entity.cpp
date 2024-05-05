@@ -10,9 +10,9 @@ Entity::~Entity() {
     delete this->animationComponent;
 }
 
-void Entity::move(sf::Vector2f direction, const float &dt) {
+void Entity::setDirection(sf::Vector2f direction, const float &dt) {
     if (this->movementComponent) {
-        this->movementComponent->setDirection(direction); //Sets velocity, rename function
+        this->movementComponent->setDirection(direction);
     }
 }
 

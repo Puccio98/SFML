@@ -17,7 +17,7 @@ private:
     sf::Texture tileTextureSheet;
 
 public:
-    Tilemap(const std::string &file_name);
+    explicit Tilemap(const std::string &file_name);
 
     virtual ~Tilemap();
 
@@ -37,9 +37,9 @@ public:
 
     void clear();
 
-    void checkCollision(Entity *entity);
+    std::tuple<bool, bool> checkCollision(const MovementData &next) const;
 
-    void checkOutOfBounds(Entity *entity);
+    std::tuple<bool, bool> checkOutOfBounds(const MovementData &next) const;
 };
 
 

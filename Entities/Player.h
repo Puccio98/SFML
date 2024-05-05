@@ -2,16 +2,19 @@
 #define SFML_PLAYER_H
 
 #include "Entity.h"
+#include "../Map/Tilemap.h"
 
 class Player : public Entity {
 private:
     //Variables
+    Tilemap &map;
+
 
     //Initializer Functions
     void initVariables();
 
 public:
-    Player(float x, float y, sf::Texture &texture_sheet);
+    Player(float x, float y, sf::Texture &texture_sheet, Tilemap &map);
 
     virtual ~Player();
 

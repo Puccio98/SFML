@@ -53,6 +53,7 @@ public:
     static void checkVelocity(MovementData &_md);
 
     MovementData nextMovementData(const float &dt);
+
 };
 
 

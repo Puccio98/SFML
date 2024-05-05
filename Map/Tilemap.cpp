@@ -168,13 +168,14 @@ void Tilemap::clear() {
     }
 }
 
-void Tilemap::checkCollision(Entity *entity) {
-    this->checkOutOfBounds(entity);
-
+std::tuple<bool, bool> Tilemap::checkCollision(const MovementData &next) const {
+    return this->checkOutOfBounds(next);
 }
 
-void Tilemap::checkOutOfBounds(Entity *entity) {
-
+std::tuple<bool, bool> Tilemap::checkOutOfBounds(const MovementData &next) const {
+    bool dir_x = next.position.x < 0 || next.position.x > this->maxSizeWorld.x;
+    bool dir_y = next.position.y < 0 || next.position.y > this->maxSizeWorld.y;
+    return std::make_tuple(dir_x, dir_y);
 }
 
 

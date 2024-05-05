@@ -5,7 +5,6 @@
 #include "Components/MovementComponent.h"
 #include "Components/AnimationComponent.h"
 
-
 class Entity {
 
 private:
@@ -40,7 +39,7 @@ public:
 
     virtual const sf::Rect<float> getSize() const;
 
-    virtual void move(sf::Vector2f direction, const float &dt);
+    virtual void setDirection(sf::Vector2f direction, const float &dt);
 
     virtual void update(const float &dt);
 

@@ -57,7 +57,8 @@ void GameState::updateInput(const float &dt) {
         direction.y = 1;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds["MOVE_RIGHT"])))
         direction.x = 1;
-    this->player->move(direction, dt);
+
+    this->player->setDirection(direction, dt);
 }
 
 void GameState::initTextures() {
@@ -67,7 +68,7 @@ void GameState::initTextures() {
 }
 
 void GameState::initPlayer() {
-    this->player = new Player(0, 0, this->textures["PLAYER_SHEET"]);
+    this->player = new Player(0, 0, this->textures["PLAYER_SHEET"], *this->tilemap);
 }
 
 void GameState::handleEvent(sf::Event &event, const float &dt) {
