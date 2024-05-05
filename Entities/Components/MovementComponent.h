@@ -52,8 +52,11 @@ public:
 
     static void checkVelocity(MovementData &_md);
 
-    MovementData nextMovementData(const float &dt);
+    MovementData nextMovementData(const float &dt) const;
 
+    MovementData nextMovementData(const float &dt, std::tuple<bool, bool> forbidden_directions) const;
+
+    static MovementData processNextMovementData(const float &dt, MovementData next);
 };
 
 

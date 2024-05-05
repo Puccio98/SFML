@@ -21,7 +21,11 @@ public:
     //Functions
     void update(const float &dt) override;
 
+    void update(const MovementData &next, const float &dt) override;
+
     void attack(const float &dt);
+
+    void updateAnimation(const float &dt);
 };
 
 

@@ -16,10 +16,6 @@ void Entity::setDirection(sf::Vector2f direction, const float &dt) {
     }
 }
 
-void Entity::update(const float &dt) {
-
-}
-
 void Entity::render(sf::RenderTarget &target) {
     target.draw(this->sprite);
     if (this->hitboxComponent)
@@ -65,6 +61,14 @@ const sf::Rect<float> Entity::getSize() const {
 
 MovementComponent *Entity::getMovementComponent() const {
     return movementComponent;
+}
+
+void Entity::update(const MovementData &md, const float &dt) {
+
+}
+
+void Entity::update(const float &dt) {
+
 }
 
 

@@ -98,10 +98,22 @@ float MovementComponent::getVelocityMagnitude() const {
  * @param dt
  * @return
  */
-MovementData MovementComponent::nextMovementData(const float &dt) {
+MovementData MovementComponent::nextMovementData(const float &dt,
+                                                 std::tuple<bool, bool> forbidden_directions) const {
     //Create Movement data clone
     MovementData next(this->md);
 
+    if (std::get<0>(forbidden_directions)) {
+        next.direction.x = 0;
+    }
+    if (std::get<1>(forbidden_directions)) {
+        next.direction.y = 0;
+    }
+    return processNextMovementData(dt, next);
+}
+
+MovementData
+MovementComponent::processNextMovementData(const float &dt, MovementData next) {
     // Create acceleration vector
     sf::Vector2f accelerationV = next.direction.x != 0 && next.direction.y != 0 ? sf::Vector2f(
             next.direction * float(next.acceleration / std::sqrt(2))) : sf::Vector2f(
@@ -120,5 +132,11 @@ MovementData MovementComponent::nextMovementData(const float &dt) {
     next.position = next.position + (next.velocity * dt);
 
     return next;
+}
+
+MovementData MovementComponent::nextMovementData(const float &dt) const {
+    //Create Movement data clone
+    MovementData next(this->md);
+    return processNextMovementData(dt, next);
 }
 

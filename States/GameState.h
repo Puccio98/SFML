@@ -30,6 +30,8 @@ public:
 
     void updateInput(const float &dt);
 
+    void updateEntity(const float &dt, Entity &entity);
+
     void update(const float &dt) override;
 
     void render(sf::RenderTarget *target) override;

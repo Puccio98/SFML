@@ -21,7 +21,7 @@ void GameState::update(const float &dt) {
         State::update(dt, this->view);
         this->updateView(dt);
         this->updateInput(dt);
-        this->player->update(dt);
+        this->updateEntity(dt, *this->player);
         std::cout << "posizione: " << this->player->getMovementComponent()->md.position.x << "/n";
     } else {
         pauseMenuState.update(dt);
@@ -107,6 +107,19 @@ void GameState::updateView(const float &dt) {
     auto size = this->player->getSize();
     //floor serve perchè setCenter sarebbe meglio passargli degli interi per non sminchiare il render
     this->view.setCenter(std::floor(pos.x + size.width / 2), std::floor(pos.y + size.height / 2));
+}
+
+void GameState::updateEntity(const float &dt, Entity &entity) {
+    // Ask entity next Movement Data
+    MovementData next = entity.getMovementComponent()->nextMovementData(dt);
+    // Ask map  if entity is allowed in next position
+    std::tuple<bool, bool> forbidden_directions = this->tilemap->checkCollision(next);
+    // If not, calculate next allowed position
+    if (std::get<0>(forbidden_directions) || std::get<1>(forbidden_directions)) {
+        next = entity.getMovementComponent()->nextMovementData(dt, forbidden_directions);
+    }
+    // Update the entity movement data to the correct ones
+    entity.update(next, dt);
 }
 
 

@@ -43,6 +43,8 @@ public:
 
     virtual void update(const float &dt);
 
+    virtual void update(const MovementData &md, const float &dt);
+
     virtual void render(sf::RenderTarget &target);
 };
 
