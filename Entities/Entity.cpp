@@ -71,4 +71,8 @@ void Entity::update(const float &dt) {
 
 }
 
+HitboxComponent *Entity::getHitboxComponent() const {
+    return hitboxComponent;
+}
+
 

@@ -21,8 +21,6 @@
 class MovementComponent {
 private:
     sf::Sprite &sprite;
-
-
     __attribute__((unused)) void debugVelocity() const;
     //Initializer FUnctions
 

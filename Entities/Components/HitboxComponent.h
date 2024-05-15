@@ -23,9 +23,16 @@ public:
     HitboxComponent(sf::Sprite& sprite, float offset_x, float offset_y, float width, float height);
     virtual ~HitboxComponent();
 
+    //Accessors
+    sf::Vector2f& getPosition() const;
+
+    //Modifiers
+    void setPosition(const sf::Vector2f& position);
+
     //Function
     bool checkIntersect(const sf::FloatRect& frect);
 
+    sf::Vector2f computePosition(sf::Vector2f spritePosition) const;
     void update();
     void render(sf::RenderTarget &target);
 };

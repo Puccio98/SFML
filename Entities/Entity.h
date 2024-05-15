@@ -21,6 +21,9 @@ public:
 
     virtual ~Entity();
 
+    //Accessors
+    HitboxComponent *getHitboxComponent() const;
+
     //Compoent Functons
     void setTexture(sf::Texture &texture);
 

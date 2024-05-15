@@ -111,15 +111,17 @@ void GameState::updateView(const float &dt) {
 
 void GameState::updateEntity(const float &dt, Entity &entity) {
     // Ask entity next Movement Data
-    MovementData next = entity.getMovementComponent()->nextMovementData(dt);
-    // Ask map  if entity is allowed in next position
-    std::tuple<bool, bool> forbidden_directions = this->tilemap->checkCollision(next);
+    MovementData sprite_next_md = entity.getMovementComponent()->nextMovementData(dt);
+    sf::Vector2f nextHitboxPosition = entity.getHitboxComponent()->computePosition(sprite_next_md.position);
+
+    // Ask map if entity is allowed in next position
+    std::tuple<bool, bool> forbidden_directions = this->tilemap->checkCollision(nextHitboxPosition);
     // If not, calculate next allowed position
     if (std::get<0>(forbidden_directions) || std::get<1>(forbidden_directions)) {
-        next = entity.getMovementComponent()->nextMovementData(dt, forbidden_directions);
+        sprite_next_md = entity.getMovementComponent()->nextMovementData(dt, forbidden_directions);
     }
     // Update the entity movement data to the correct ones
-    entity.update(next, dt);
+    entity.update(sprite_next_md, dt);
 }
 
 

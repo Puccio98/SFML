@@ -42,7 +42,7 @@ Game::~Game() {
 
 //Functions
 void Game::update() {
-    if (this->states.empty()) {
+    if (this->states.empty() && this->window->hasFocus()) {
         Game::endApplication();
         this->window->close();
     }

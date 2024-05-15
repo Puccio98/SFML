@@ -168,13 +168,13 @@ void Tilemap::clear() {
     }
 }
 
-std::tuple<bool, bool> Tilemap::checkCollision(const MovementData &next) const {
-    return this->checkOutOfBounds(next);
+std::tuple<bool, bool> Tilemap::checkCollision(const sf::Vector2f &position) const {
+    return this->checkOutOfBounds(position);
 }
 
-std::tuple<bool, bool> Tilemap::checkOutOfBounds(const MovementData &next) const {
-    bool dir_x = next.position.x < 0 || next.position.x > this->maxSizeWorld.x;
-    bool dir_y = next.position.y < 0 || next.position.y > this->maxSizeWorld.y;
+std::tuple<bool, bool> Tilemap::checkOutOfBounds(const sf::Vector2f &position) const {
+    bool dir_x = position.x < 0 || position.x > this->maxSizeWorld.x;
+    bool dir_y = position.y < 0 || position.y > this->maxSizeWorld.y;
     return std::make_tuple(dir_x, dir_y);
 }
 
