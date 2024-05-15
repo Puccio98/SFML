@@ -173,8 +173,10 @@ std::tuple<bool, bool> Tilemap::checkCollision(const sf::RectangleShape &rectang
 }
 
 std::tuple<bool, bool> Tilemap::checkOutOfBounds(const sf::RectangleShape &rectangleShape) const {
-    bool dir_x = rectangleShape.getGlobalBounds().left < 0 || rectangleShape.getGlobalBounds().left + rectangleShape.getSize().x > this->maxSizeWorld.x;
-    bool dir_y = rectangleShape.getGlobalBounds().top < 0 || rectangleShape.getGlobalBounds().top + rectangleShape.getSize().y > this->maxSizeWorld.y;
+    sf::FloatRect rect = rectangleShape.getGlobalBounds();
+
+    bool dir_x = rect.left < 0 || rect.left + rect.width > this->maxSizeWorld.x;
+    bool dir_y = rect.top < 0 || rect.top + rect.height > this->maxSizeWorld.y;
     return std::make_tuple(dir_x, dir_y);
 }
 
