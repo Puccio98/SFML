@@ -111,6 +111,7 @@ void GameState::updateView(const float &dt) {
 
 void GameState::updateEntity(const float &dt, Entity &entity) {
     // Ask entity next Movement Data
+    ///ATTENZIONE: potrebbe essere che in futuro ci siano entity che non hanno Movement o HitboxComponent, in tal caso, qui va cambiato
     MovementData sprite_next_md = entity.getMovementComponent()->nextMovementData(dt);
     sf::RectangleShape nextRectangleShape = entity.getHitboxComponent()->computeNextRectangleShape(sprite_next_md.position);
 
@@ -123,5 +124,3 @@ void GameState::updateEntity(const float &dt, Entity &entity) {
     // Update the entity movement data to the correct ones
     entity.update(sprite_next_md, dt);
 }
-
-
