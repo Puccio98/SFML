@@ -112,10 +112,10 @@ void GameState::updateView(const float &dt) {
 void GameState::updateEntity(const float &dt, Entity &entity) {
     // Ask entity next Movement Data
     MovementData sprite_next_md = entity.getMovementComponent()->nextMovementData(dt);
-    sf::Vector2f nextHitboxPosition = entity.getHitboxComponent()->computePosition(sprite_next_md.position);
+    sf::RectangleShape nextRectangleShape = entity.getHitboxComponent()->computeNextRectangleShape(sprite_next_md.position);
 
     // Ask map if entity is allowed in next position
-    std::tuple<bool, bool> forbidden_directions = this->tilemap->checkCollision(nextHitboxPosition);
+    std::tuple<bool, bool> forbidden_directions = this->tilemap->checkCollision(nextRectangleShape);
     // If not, calculate next allowed position
     if (std::get<0>(forbidden_directions) || std::get<1>(forbidden_directions)) {
         sprite_next_md = entity.getMovementComponent()->nextMovementData(dt, forbidden_directions);

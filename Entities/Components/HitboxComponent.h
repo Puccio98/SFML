@@ -33,6 +33,7 @@ public:
     bool checkIntersect(const sf::FloatRect& frect);
 
     sf::Vector2f computePosition(sf::Vector2f spritePosition) const;
+    sf::RectangleShape computeNextRectangleShape(sf::Vector2f spritePosition) const;
     void update();
     void render(sf::RenderTarget &target);
 };

@@ -54,7 +54,7 @@ public:
 
     MovementData nextMovementData(const float &dt, std::tuple<bool, bool> forbidden_directions) const;
 
-    static MovementData processNextMovementData(const float &dt, MovementData next);
+    static MovementData computeNextMovementData(const float &dt, MovementData next);
 };
 
 

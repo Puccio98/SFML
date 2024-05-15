@@ -37,9 +37,9 @@ public:
 
     void clear();
 
-    std::tuple<bool, bool> checkCollision(const sf::Vector2f &position) const;
+    std::tuple<bool, bool> checkCollision(const sf::RectangleShape &rectangleShape) const;
 
-    std::tuple<bool, bool> checkOutOfBounds(const sf::Vector2f &position) const;
+    std::tuple<bool, bool> checkOutOfBounds(const sf::RectangleShape &rectangleShape) const;
 };
 
 
