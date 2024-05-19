@@ -261,21 +261,25 @@ sf::Vector2i Tilemap::getGridPosition(const sf::Vector2f &absolutePosition) cons
 }
 
 std::tuple<sf::Vector2i, sf::Vector2i>
-Tilemap::abba(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape, int dir) const {
+Tilemap::getCollisionBounds(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape,
+                            int dir) const {
     // dir 0 == horizontal, dir 1 == vertical
 
     sf::FloatRect currentRect = currentShape.getGlobalBounds();
     sf::FloatRect nextRect = nextShape.getGlobalBounds();
-    sf::Vector2f starting_point;// = sf::Vector2f(nextRect.left, nextRect.top);
-    sf::Vector2f ending_point;// = sf::Vector2f(nextRect.left + nextRect.width, nextRect.top + nextRect.height);
-    if (dir == 0) {
+    sf::Vector2f starting_point;
+    sf::Vector2f ending_point;
+
+    if (dir == 0) { // horizontal
         starting_point = sf::Vector2f(nextRect.left, currentRect.top);
         ending_point = sf::Vector2f(nextRect.left + nextRect.width, currentRect.top + currentRect.height);
-    } else {
+    } else { // vertical
         starting_point = sf::Vector2f(currentRect.left, nextRect.top);
         ending_point = sf::Vector2f(currentRect.left + currentRect.width, nextRect.top + nextRect.height);
     }
+
     sf::Vector2i starting_tile = getGridPosition(starting_point);
     sf::Vector2i ending_tile = getGridPosition(ending_point);
+
     return std::make_tuple(starting_tile, ending_tile);
 }

@@ -48,7 +48,7 @@ public:
     sf::Vector2i getGridPosition(const sf::Vector2f &absolutePosition) const;
 
     std::tuple<sf::Vector2i, sf::Vector2i>
-    abba(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape, int dir) const;
+    getCollisionBounds(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape, int dir) const;
 
     std::tuple<bool, bool>
     getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const;
