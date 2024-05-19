@@ -104,7 +104,7 @@ float MovementComponent::getVelocityMagnitude() const {
  */
 MovementData MovementComponent::nextMovementData(const float &dt,
                                                  std::tuple<bool, bool> forbidden_directions) const {
-    //Create Movement data clone
+    // Create Movement data clone
     MovementData next(this->md);
 
     if (std::get<0>(forbidden_directions)) {
