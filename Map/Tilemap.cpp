@@ -168,8 +168,14 @@ void Tilemap::clear() {
     }
 }
 
-std::tuple<bool, bool> Tilemap::checkCollision(const sf::RectangleShape &rectangleShape) const {
-    return this->checkOutOfBounds(rectangleShape);
+std::tuple<bool, bool>
+Tilemap::checkCollision(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const {
+    std::tuple<bool, bool> collided = this->checkOutOfBounds(nextShape);
+    if (std::get<0>(collided) || std::get<1>(collided)) {
+        return collided;
+    }
+
+    return checkTileCollision(currentShape, nextShape);
 }
 
 std::tuple<bool, bool> Tilemap::checkOutOfBounds(const sf::RectangleShape &rectangleShape) const {
@@ -180,5 +186,96 @@ std::tuple<bool, bool> Tilemap::checkOutOfBounds(const sf::RectangleShape &recta
     return std::make_tuple(dir_x, dir_y);
 }
 
+std::tuple<bool, bool>
+Tilemap::checkTileCollision(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const {
 
 
+    std::tuple<bool, bool> forbidden_directions = getForbiddenDirections(currentShape, nextShape);
+
+    if (!std::get<0>(forbidden_directions) && !std::get<1>(forbidden_directions)) {
+        forbidden_directions = getForbiddenDirections(nextShape, nextShape);
+    }
+
+    return forbidden_directions;
+}
+
+std::tuple<bool, bool>
+Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const {
+    std::tuple<bool, bool> forbidden_directions = std::make_tuple(false, false);
+
+    auto tiles = abba(currentShape, nextShape, 1);
+    auto starting_tile = std::get<0>(tiles);
+    auto ending_tile = std::get<1>(tiles);
+
+    // check top direction
+    for (int x = starting_tile.x; x <= ending_tile.x; ++x) {
+        Tile *tile = map[x][starting_tile.y][0];
+        if (tile != nullptr) {
+            if (tile->isOfType(TILE_TYPES::COLLISION)) {
+                forbidden_directions = std::make_tuple(std::get<0>(forbidden_directions), true);
+            }
+        }
+    }
+
+    // check down direction
+    for (int x = starting_tile.x; x <= ending_tile.x; ++x) {
+        Tile *tile = map[x][ending_tile.y][0];
+        if (tile != nullptr) {
+            if (tile->isOfType(TILE_TYPES::COLLISION)) {
+                forbidden_directions = std::make_tuple(std::get<0>(forbidden_directions), true);
+            }
+        }
+    }
+
+    tiles = abba(currentShape, nextShape, 0);
+    starting_tile = std::get<0>(tiles);
+    ending_tile = std::get<1>(tiles);
+    // check left direction
+    for (int y = starting_tile.y; y <= ending_tile.y; ++y) {
+        Tile *tile = map[starting_tile.x][y][0];
+        if (tile != nullptr) {
+            if (tile->isOfType(TILE_TYPES::COLLISION)) {
+                forbidden_directions = std::make_tuple(true, std::get<1>(forbidden_directions));
+            }
+        }
+    }
+
+    // check right direction
+    for (int y = starting_tile.y; y <= ending_tile.y; ++y) {
+        Tile *tile = map[ending_tile.x][y][0];
+        if (tile != nullptr) {
+            if (tile->isOfType(TILE_TYPES::COLLISION)) {
+                forbidden_directions = std::make_tuple(true, std::get<1>(forbidden_directions));
+            }
+        }
+    }
+    return forbidden_directions;
+}
+
+
+sf::Vector2i Tilemap::getGridPosition(const sf::Vector2f &absolutePosition) const {
+    int gridX = static_cast<int>(absolutePosition.x / this->gridSizeU);
+    int gridY = static_cast<int>(absolutePosition.y / this->gridSizeU);
+
+    return {gridX, gridY};
+}
+
+std::tuple<sf::Vector2i, sf::Vector2i>
+Tilemap::abba(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape, int dir) const {
+    // dir 0 == horizontal, dir 1 == vertical
+
+    sf::FloatRect currentRect = currentShape.getGlobalBounds();
+    sf::FloatRect nextRect = nextShape.getGlobalBounds();
+    sf::Vector2f starting_point;// = sf::Vector2f(nextRect.left, nextRect.top);
+    sf::Vector2f ending_point;// = sf::Vector2f(nextRect.left + nextRect.width, nextRect.top + nextRect.height);
+    if (dir == 0) {
+        starting_point = sf::Vector2f(nextRect.left, currentRect.top);
+        ending_point = sf::Vector2f(nextRect.left + nextRect.width, currentRect.top + currentRect.height);
+    } else {
+        starting_point = sf::Vector2f(currentRect.left, nextRect.top);
+        ending_point = sf::Vector2f(currentRect.left + currentRect.width, nextRect.top + nextRect.height);
+    }
+    sf::Vector2i starting_tile = getGridPosition(starting_point);
+    sf::Vector2i ending_tile = getGridPosition(ending_point);
+    return std::make_tuple(starting_tile, ending_tile);
+}

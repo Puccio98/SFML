@@ -29,7 +29,7 @@ sf::Vector2f &HitboxComponent::getPosition() const {
     return const_cast<sf::Vector2f &>(this->hitbox.getPosition());
 }
 
-void HitboxComponent::setPosition(const sf::Vector2f& position) {
+void HitboxComponent::setPosition(const sf::Vector2f &position) {
     this->hitbox.setPosition(position);
     this->sprite.setPosition(position.x - this->offsetX, position.y - this->offsetY);
 }
@@ -41,10 +41,10 @@ void HitboxComponent::setPosition(const sf::Vector2f& position) {
  */
 sf::Vector2f HitboxComponent::computePosition(sf::Vector2f spritePosition) const {
     return {spritePosition.x + this->offsetX,
-                        spritePosition.y + this->offsetY};
+            spritePosition.y + this->offsetY};
 }
 
-sf::RectangleShape HitboxComponent::computeNextRectangleShape(sf::Vector2f spritePosition) const {
+sf::RectangleShape HitboxComponent::getHitboxRectangleShapeFromPosition(sf::Vector2f spritePosition) const {
     sf::RectangleShape abba = sf::RectangleShape(this->hitbox.getSize());
     abba.setPosition(this->computePosition(spritePosition));
     return abba;

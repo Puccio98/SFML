@@ -2,7 +2,7 @@
 
 Player::Player(float x, float y, sf::Texture &texture_sheet, Tilemap &map) : map(map) {
     this->initVariables();
-    this->setPosition(x, y);
+    Player::setPosition(x, y);
 
     this->createHitboxComponent(this->sprite, 92.f, 70.f, 75.f, 106.f);
     this->createMovementComponent(300.f, 1500.f, 600.f);

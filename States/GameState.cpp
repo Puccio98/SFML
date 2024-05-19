@@ -22,7 +22,6 @@ void GameState::update(const float &dt) {
         this->updateView(dt);
         this->updateInput(dt);
         this->updateEntity(dt, *this->player);
-        std::cout << "posizione: " << this->player->getMovementComponent()->md.position.x << "/n";
     } else {
         pauseMenuState.update(dt);
     }
@@ -68,7 +67,7 @@ void GameState::initTextures() {
 }
 
 void GameState::initPlayer() {
-    this->player = new Player(0, 0, this->textures["PLAYER_SHEET"], *this->tilemap);
+    this->player = new Player(380, 340, this->textures["PLAYER_SHEET"], *this->tilemap);
 }
 
 void GameState::handleEvent(sf::Event &event, const float &dt) {
@@ -113,10 +112,14 @@ void GameState::updateEntity(const float &dt, Entity &entity) {
     // Ask entity next Movement Data
     ///ATTENZIONE: potrebbe essere che in futuro ci siano entity che non hanno Movement o HitboxComponent, in tal caso, qui va cambiato
     MovementData sprite_next_md = entity.getMovementComponent()->nextMovementData(dt);
-    sf::RectangleShape nextRectangleShape = entity.getHitboxComponent()->computeNextRectangleShape(sprite_next_md.position);
+    sf::RectangleShape currentRectangleShape = entity.getHitboxComponent()->getHitboxRectangleShapeFromPosition(
+            entity.getMovementComponent()->md.position);
+    sf::RectangleShape nextRectangleShape = entity.getHitboxComponent()->getHitboxRectangleShapeFromPosition(
+            sprite_next_md.position);
 
-    // Ask map if entity is allowed in next position
-    std::tuple<bool, bool> forbidden_directions = this->tilemap->checkCollision(nextRectangleShape);
+    // Ask map if entity is allowed in next position relative to current position
+    std::tuple<bool, bool> forbidden_directions = this->tilemap->checkCollision(currentRectangleShape,
+                                                                                nextRectangleShape);
     // If not, calculate next allowed position
     if (std::get<0>(forbidden_directions) || std::get<1>(forbidden_directions)) {
         sprite_next_md = entity.getMovementComponent()->nextMovementData(dt, forbidden_directions);
