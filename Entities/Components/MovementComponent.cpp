@@ -131,7 +131,6 @@ MovementComponent::computeNextMovementData(const float &dt, MovementData next) {
     // Apply acceleration on current velocity
     next.velocity = next.velocity + ((accelerationV) * dt);
 
-    std::cout << "v.x " << next.velocity.x << "\n";
     // Handle terrain friction
     handleFriction(next, dt);
 
