@@ -31,6 +31,8 @@ public:
     void render(sf::RenderTarget &target);
 
     std::string getAsString() const;
+
+    bool isOfType(TILE_TYPES type);
 };
 
 #endif //SFML_TILE_H

@@ -6,11 +6,12 @@
 
 struct MovementData {
 
-    MovementData(float maxVelocity, float acceleration, float deceleration) : maxVelocity(maxVelocity),
-                                                                              acceleration(acceleration),
-                                                                              deceleration(deceleration) {
+    MovementData(float maxVelocity, float acceleration, float deceleration, sf::Vector2f position) :
+            maxVelocity(maxVelocity),
+            acceleration(acceleration),
+            deceleration(deceleration),
+            position(position) {
         this->direction = sf::Vector2f(0.f, 0.f);
-        this->position = sf::Vector2f(0.f, 0.f);
         this->velocity = sf::Vector2f(0.f, 0.f);
     }
 

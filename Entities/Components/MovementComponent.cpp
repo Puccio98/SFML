@@ -2,7 +2,7 @@
 #include <cmath>
 
 MovementComponent::MovementComponent(sf::Sprite &sprite, float maxVelocity, float acceleration, float deceleration)
-        : sprite(sprite), md(maxVelocity, acceleration, deceleration) {
+        : sprite(sprite), md(maxVelocity, acceleration, deceleration, sprite.getPosition()) {
 }
 
 MovementComponent::~MovementComponent() = default;
@@ -36,8 +36,12 @@ void MovementComponent::checkVelocity(MovementData &_md) {
         }
     }
 
-    _md.velocity.x = float(vx * _md.direction.x);
-    _md.velocity.y = float(vy * _md.direction.y);
+    if (_md.velocity.x != 0) {
+        _md.velocity.x = float(vx * (_md.velocity.x / std::abs(_md.velocity.x)));
+    }
+    if (_md.velocity.y != 0) {
+        _md.velocity.y = float(vy * ((_md.velocity.y / std::abs(_md.velocity.y))));
+    }
 }
 
 void MovementComponent::handleFriction(MovementData &_md, const float &dt) {// Handle player friction
@@ -105,9 +109,14 @@ MovementData MovementComponent::nextMovementData(const float &dt,
 
     if (std::get<0>(forbidden_directions)) {
         next.direction.x = 0;
+        // Se non puoi muoverti in quella direzione azzera la velocità per evitare che il tempo di decelerazione ti faccia andare dove non puoi
+        next.velocity.x = 0;
     }
+
     if (std::get<1>(forbidden_directions)) {
         next.direction.y = 0;
+        // Se non puoi muoverti in quella direzione azzera la velocità per evitare che il tempo di decelerazione ti faccia andare dove non puoi
+        next.velocity.y = 0;
     }
     return computeNextMovementData(dt, next);
 }
@@ -115,13 +124,14 @@ MovementData MovementComponent::nextMovementData(const float &dt,
 MovementData
 MovementComponent::computeNextMovementData(const float &dt, MovementData next) {
     // Create acceleration vector
-    sf::Vector2f accelerationV = next.direction.x != 0 && next.direction.y != 0 ? sf::Vector2f(
-            next.direction * float(next.acceleration / std::sqrt(2))) : sf::Vector2f(
-            next.direction * next.acceleration);
+    sf::Vector2f accelerationV = next.direction.x != 0 && next.direction.y != 0 ?
+                                 sf::Vector2f(next.direction * float(next.acceleration / std::sqrt(2))) :
+                                 sf::Vector2f(next.direction * next.acceleration);
 
     // Apply acceleration on current velocity
-    next.velocity += (accelerationV) * dt;
+    next.velocity = next.velocity + ((accelerationV) * dt);
 
+    std::cout << "v.x " << next.velocity.x << "\n";
     // Handle terrain friction
     handleFriction(next, dt);
 

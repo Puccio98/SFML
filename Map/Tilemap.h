@@ -37,9 +37,21 @@ public:
 
     void clear();
 
-    std::tuple<bool, bool> checkCollision(const sf::RectangleShape &rectangleShape) const;
+    std::tuple<bool, bool>
+    checkCollision(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const;
 
     std::tuple<bool, bool> checkOutOfBounds(const sf::RectangleShape &rectangleShape) const;
+
+    std::tuple<bool, bool>
+    checkTileCollision(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const;
+
+    sf::Vector2i getGridPosition(const sf::Vector2f &absolutePosition) const;
+
+    std::tuple<sf::Vector2i, sf::Vector2i>
+    getCollisionBounds(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape, int dir) const;
+
+    std::tuple<bool, bool>
+    getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const;
 };
 
 

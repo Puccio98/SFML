@@ -15,8 +15,8 @@ Tile::~Tile() {
 
 void Tile::render(sf::RenderTarget &target) {
     //Se collision, bordo rosso
-    if(std::find(this->tileTypes.begin(), this->tileTypes.end(), TILE_TYPES::COLLISION) != tileTypes.end()) {
-        this->shape.setOutlineColor(sf::Color(255, 0,0,150));
+    if (this->isOfType(TILE_TYPES::COLLISION)) {
+        this->shape.setOutlineColor(sf::Color(255, 0, 0, 150));
         this->shape.setOutlineThickness(-2);
     }
     target.draw(this->shape);
@@ -40,4 +40,8 @@ std::string Tile::getTypesAsString() const {
     }
 
     return s;
+}
+
+bool Tile::isOfType(TILE_TYPES type) {
+    return std::find(this->tileTypes.begin(), this->tileTypes.end(), type) != tileTypes.end();
 }
