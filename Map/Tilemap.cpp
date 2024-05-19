@@ -203,7 +203,7 @@ std::tuple<bool, bool>
 Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const {
     std::tuple<bool, bool> forbidden_directions = std::make_tuple(false, false);
 
-    auto tiles = abba(currentShape, nextShape, 1);
+    auto tiles = getCollisionBounds(currentShape, nextShape, 1);
     auto starting_tile = std::get<0>(tiles);
     auto ending_tile = std::get<1>(tiles);
 
@@ -227,7 +227,7 @@ Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf
         }
     }
 
-    tiles = abba(currentShape, nextShape, 0);
+    tiles = getCollisionBounds(currentShape, nextShape, 0);
     starting_tile = std::get<0>(tiles);
     ending_tile = std::get<1>(tiles);
     // check left direction
