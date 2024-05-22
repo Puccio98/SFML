@@ -124,9 +124,7 @@ MovementData MovementComponent::nextMovementData(const float &dt,
 MovementData
 MovementComponent::computeNextMovementData(const float &dt, MovementData next) {
     // Create acceleration vector
-    sf::Vector2f accelerationV = next.direction.x != 0 && next.direction.y != 0 ?
-                                 sf::Vector2f(next.direction * float(next.acceleration / std::sqrt(2))) :
-                                 sf::Vector2f(next.direction * next.acceleration);
+    sf::Vector2f accelerationV = sf::Vector2f(next.direction * next.acceleration);
 
     // Apply acceleration on current velocity
     next.velocity = next.velocity + ((accelerationV) * dt);
