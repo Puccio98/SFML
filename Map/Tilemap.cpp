@@ -203,52 +203,46 @@ std::tuple<bool, bool>
 Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const {
     std::tuple<bool, bool> forbidden_directions = std::make_tuple(false, false);
 
-    auto tiles = getCollisionBounds(currentShape, nextShape, 1);
-    auto starting_tile = std::get<0>(tiles);
-    auto ending_tile = std::get<1>(tiles);
-
-    // check top direction
-    for (int x = starting_tile.x; x <= ending_tile.x; ++x) {
-        Tile *tile = map[x][starting_tile.y][0];
-        if (tile != nullptr) {
-            if (tile->isOfType(TILE_TYPES::COLLISION)) {
-                forbidden_directions = std::make_tuple(std::get<0>(forbidden_directions), true);
+    auto checkDirection = [&](int startX, int endX, int startY, int endY, bool isVertical) {
+        for (int x = startX; x <= endX; ++x) {
+            for (int y = startY; y <= endY; ++y) {
+                Tile *tile = map[x][y][0];
+                if (tile != nullptr && tile->isOfType(TILE_TYPES::COLLISION)) {
+                    if (isVertical) {
+                        forbidden_directions = std::make_tuple(std::get<0>(forbidden_directions), true);
+                    } else {
+                        forbidden_directions = std::make_tuple(true, std::get<1>(forbidden_directions));
+                    }
+                    return;
+                }
             }
         }
+    };
+
+
+    sf::FloatRect currentRect = currentShape.getGlobalBounds();
+    sf::FloatRect nextRect = nextShape.getGlobalBounds();
+
+    // Check top & bottom
+    float diff_y = nextRect.top - currentRect.top;
+    if (diff_y != 0) {
+        auto tiles = getCollisionBounds(currentShape, nextShape, 1);
+        auto starting_tile = std::get<0>(tiles);
+        auto ending_tile = std::get<1>(tiles);
+        int startY = (diff_y > 0) ? ending_tile.y : starting_tile.y;
+        checkDirection(starting_tile.x, ending_tile.x, startY, startY, true);
     }
 
-    // check down direction
-    for (int x = starting_tile.x; x <= ending_tile.x; ++x) {
-        Tile *tile = map[x][ending_tile.y][0];
-        if (tile != nullptr) {
-            if (tile->isOfType(TILE_TYPES::COLLISION)) {
-                forbidden_directions = std::make_tuple(std::get<0>(forbidden_directions), true);
-            }
-        }
+    // Check right & left
+    float diff_x = nextRect.left - currentRect.left;
+    if (diff_x != 0) {
+        auto tiles = getCollisionBounds(currentShape, nextShape, 0);
+        auto starting_tile = std::get<0>(tiles);
+        auto ending_tile = std::get<1>(tiles);
+        int startX = (diff_x > 0) ? ending_tile.x : starting_tile.x;
+        checkDirection(startX, startX, starting_tile.y, ending_tile.y, false);
     }
 
-    tiles = getCollisionBounds(currentShape, nextShape, 0);
-    starting_tile = std::get<0>(tiles);
-    ending_tile = std::get<1>(tiles);
-    // check left direction
-    for (int y = starting_tile.y; y <= ending_tile.y; ++y) {
-        Tile *tile = map[starting_tile.x][y][0];
-        if (tile != nullptr) {
-            if (tile->isOfType(TILE_TYPES::COLLISION)) {
-                forbidden_directions = std::make_tuple(true, std::get<1>(forbidden_directions));
-            }
-        }
-    }
-
-    // check right direction
-    for (int y = starting_tile.y; y <= ending_tile.y; ++y) {
-        Tile *tile = map[ending_tile.x][y][0];
-        if (tile != nullptr) {
-            if (tile->isOfType(TILE_TYPES::COLLISION)) {
-                forbidden_directions = std::make_tuple(true, std::get<1>(forbidden_directions));
-            }
-        }
-    }
     return forbidden_directions;
 }
 

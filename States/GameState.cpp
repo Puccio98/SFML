@@ -112,10 +112,10 @@ void GameState::updateEntity(const float &dt, Entity &entity) {
     // Ask entity next Movement Data
     ///ATTENZIONE: potrebbe essere che in futuro ci siano entity che non hanno Movement o HitboxComponent, in tal caso, qui va cambiato
     MovementData sprite_next_md = entity.getMovementComponent()->nextMovementData(dt);
-    sf::RectangleShape currentRectangleShape = entity.getHitboxComponent()->getHitboxRectangleShapeFromPosition(
-            entity.getMovementComponent()->md.position);
     sf::RectangleShape nextRectangleShape = entity.getHitboxComponent()->getHitboxRectangleShapeFromPosition(
             sprite_next_md.position);
+    sf::RectangleShape currentRectangleShape = entity.getHitboxComponent()->getHitboxRectangleShapeFromPosition(
+            entity.getMovementComponent()->md.position);
 
     // Ask map if entity is allowed in next position relative to current position
     std::tuple<bool, bool> forbidden_directions = this->tilemap->checkCollision(currentRectangleShape,
