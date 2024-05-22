@@ -42,17 +42,21 @@ Game::~Game() {
 
 //Functions
 void Game::update() {
-    if (this->states.empty() && this->window->hasFocus()) {
+    if (this->states.empty()) {
         Game::endApplication();
         this->window->close();
     }
 
-    this->states.top()->update(this->dt);
-    if (this->states.top()->isQuit()) {
-        this->states.top()->endState();
+    if (this->window->hasFocus()) {
+        this->states.top()->update(this->dt);
+        if (this->states.top()->isQuit()) {
+            this->states.top()->endState();
 
-        delete this->states.top();
-        this->states.pop();
+            delete this->states.top();
+            this->states.pop();
+        }
+    } else {
+        this->states.top()->pollEvents(dt);
     }
 }
 
