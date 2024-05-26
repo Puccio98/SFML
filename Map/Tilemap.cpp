@@ -7,9 +7,9 @@ Tilemap::Tilemap(const std::string &file_name) {
 Tilemap::~Tilemap() {
     for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
         for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
-            for (size_t z = 0; z < this->layers; z++) {
-                delete this->map[x][y][z];
-                this->map[x][y][z] = nullptr;
+            while (this->map[x][y].size()!= 0) {
+                delete this->map[x][y].at(this->map[x][y].size() - 1);
+                this->map[x][y].pop_back();
             }
             this->map[x][y].clear();
         }
@@ -35,23 +35,22 @@ void Tilemap::render(sf::RenderTarget &target, Entity *entity) {
     }
 }
 
-void Tilemap::removeTile(const unsigned index_x, const unsigned index_y, const unsigned index_z) {
-    if (index_x < this->maxSizeGrid.x && index_y < this->maxSizeGrid.y && index_z < this->layers) {
-        delete this->map[index_x][index_y][index_z];
-        this->map[index_x][index_y][index_z] = nullptr;
+void Tilemap::removeTile(const unsigned index_x, const unsigned index_y) {
+    if (index_x < this->maxSizeGrid.x && index_y < this->maxSizeGrid.y && this->map[index_x][index_y].size() != 0) {
+        int size = this->map[index_x][index_y].size();
+
+        delete this->map[index_x][index_y].at(this->map[index_x][index_y].size() -1);
+        this->map[index_x][index_y].pop_back();
     }
 }
 
-void
-Tilemap::addTile(const TileData &tileData) {
-    if (tileData.index_x < this->maxSizeGrid.x && tileData.index_y < this->maxSizeGrid.y &&
-        tileData.index_z < this->layers) {
-        if (this->map[tileData.index_x][tileData.index_y][tileData.index_z] == nullptr) {
-            this->map[tileData.index_x][tileData.index_y][tileData.index_z] = new Tile(
-                    tileData.index_x * this->gridSizeF, tileData.index_y * this->gridSizeF, this->gridSizeF,
-                    this->tileTextureSheet,
-                    tileData.texturePositions, tileData.types);
-        }
+void Tilemap::addTile(const TileData &tileData) {
+    if (tileData.index_x < this->maxSizeGrid.x && tileData.index_y < this->maxSizeGrid.y //&& tileData.index_z < this->layers
+     ) {
+        this->map[tileData.index_x][tileData.index_y].push_back(new Tile(
+                tileData.index_x * this->gridSizeF, tileData.index_y * this->gridSizeF, this->gridSizeF,
+                this->tileTextureSheet,
+                tileData.texturePositions, tileData.types));
     }
 }
 
@@ -132,7 +131,8 @@ void Tilemap::loadFromFile(const std::string file_name) {
             this->map[x].resize(this->maxSizeGrid.y);
             for (unsigned y = 0; y < this->maxSizeGrid.y; y++) {
                 // Initialize empty map
-                this->map[x][y].resize(this->layers, nullptr);
+                this->map[x][y] = std::vector<Tile*>();
+                //this->map[x][y].resize(this->layers, nullptr);
             }
         }
 
@@ -198,10 +198,8 @@ void Tilemap::saveToFile(std::string file_name) {
 
         for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
             for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
-                for (size_t z = 0; z < this->layers; z++) {
-                    if (this->map[x][y][z]) {
-                        out_file << this->map[x][y][z]->getAsString(x, y, z) << "\n";
-                    }
+                for (size_t z = 0; z < this->map[x][y].size(); z++) {
+                    out_file << this->map[x][y][z]->getAsString(x, y, z) << "\n";
                 }
             }
         }
@@ -218,9 +216,9 @@ void Tilemap::clear() {
     }
     for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
         for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
-            for (size_t z = 0; z < this->layers; z++) {
-                delete this->map[x][y][z];
-                this->map[x][y][z] = nullptr;
+            while (this->map[x][y].size()!= 0) {
+                delete this->map[x][y].at(this->map[x][y].size() - 1);
+                this->map[x][y].pop_back();
             }
         }
     }

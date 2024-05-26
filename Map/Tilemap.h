@@ -27,7 +27,7 @@ public:
 
     void addTile(const TileData &tileData);
 
-    void removeTile(unsigned index_x, unsigned index_y, unsigned index_z);
+    void removeTile(unsigned index_x, unsigned index_y);
 
     const sf::Texture &getTileTextureSheet() const;
 

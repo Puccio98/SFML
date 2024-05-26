@@ -278,7 +278,7 @@ void EditorState::updateInput(const float &dt) {
 
             } else {
                 this->tileMap->removeTile(this->getPosGrid(VIEW_TYPES::VIEW).x,
-                                          this->getPosGrid(VIEW_TYPES::VIEW).y, 0);
+                                          this->getPosGrid(VIEW_TYPES::VIEW).y);
             }
         }
     }
