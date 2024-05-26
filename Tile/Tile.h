@@ -18,15 +18,15 @@ private:
 
     std::string getSpritesAsString() const;
 
-    void initShapes();
+    void initShapes(float x, float y, float gridSizeF, sf::Texture &textureSheet, const std::vector<sf::Vector2f> &texturePositions);
 
 protected:
-    std::vector<sf::RectangleShape> shapes;
+    std::vector<sf::RectangleShape> sprites;
 
     std::vector<TILE_TYPES> tileTypes;
 public:
 
-    Tile(float x, float y, float gridSizeF, sf::Texture &texture, const sf::Vector2f &tileTexturePosition,
+    Tile(float x, float y, float gridSizeF, sf::Texture &texture, const std::vector<sf::Vector2f> &texturePositions,
          const std::vector<TILE_TYPES> &tileTypes);
 
     virtual ~Tile();

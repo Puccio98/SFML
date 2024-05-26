@@ -265,8 +265,8 @@ void EditorState::updateInput(const float &dt) {
                 TileData tileData;
                 tileData.index_x = this->getPosGrid(VIEW_TYPES::VIEW).x;
                 tileData.index_y = this->getPosGrid(VIEW_TYPES::VIEW).y;
-                tileData.index_z = 0;
-                tileData.texturePosition = this->textureSelector->getSelectedRelativePosition();
+                tileData.index_z = 0; //TODO: prendi la z
+                tileData.texturePositions.push_back(this->textureSelector->getSelectedRelativePosition());
                 tileData.types = this->tileTypes;
 
                 this->tileMap->addTile(tileData);

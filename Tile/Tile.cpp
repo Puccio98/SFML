@@ -1,9 +1,9 @@
 #include "Tile.h"
 
-Tile::Tile(float x, float y, float gridSizeF, sf::Texture &texture, const sf::Vector2f &tileTexturePosition,
+Tile::Tile(float x, float y, float gridSizeF, sf::Texture &texture, const std::vector<sf::Vector2f> &texturePositions,
            const std::vector<TILE_TYPES> &tileTypes) {
     this->tileTypes.insert(this->tileTypes.end(), tileTypes.begin(), tileTypes.end());
-    this->initShapes();
+    this->initShapes(x, y, gridSizeF, texture, texturePositions);
 }
 
 Tile::~Tile() {
@@ -12,11 +12,13 @@ Tile::~Tile() {
 
 void Tile::render(sf::RenderTarget &target) {
     //Se collision, bordo rosso
-    if (this->isOfType(TILE_TYPES::COLLISION)) {
-        this->shapes.setOutlineColor(sf::Color(255, 0, 0, 150));
-        this->shapes.setOutlineThickness(-2);
+    for (sf::RectangleShape sprite : this->sprites) {
+        if (this->isOfType(TILE_TYPES::COLLISION)) {
+            sprite.setOutlineColor(sf::Color(255, 0, 0, 150));
+            sprite.setOutlineThickness(-2);
+        }
+        target.draw(sprite);
     }
-    target.draw(this->shapes);
 }
 
 void Tile::update() {
@@ -46,16 +48,23 @@ bool Tile::isOfType(TILE_TYPES type) {
 
 std::string Tile::getSpritesAsString() const {
     std::string s;
-    return s.append(
-            std::to_string(this->shapes.getTextureRect().left) + " " + std::to_string(this->shapes.getTextureRect().top));
+
+    for (const sf::RectangleShape &sprite: this->sprites) {
+        s.append(
+                std::to_string(sprite.getTextureRect().left) + " " + std::to_string(sprite.getTextureRect().top)
+        );
+    }
+    return s;
 }
 
-void Tile::initShapes() {
-    sf::RectangleShape texture;
-    texture.setSize(sf::Vector2f(gridSizeF, gridSizeF));
-    texture.setPosition(x, y);
-    texture.setTexture(&texture);
-    texture.setTextureRect(sf::IntRect(tileTexturePosition.x, tileTexturePosition.y, gridSizeF, gridSizeF));
-    this->shapes.push_back()
-
+void Tile::initShapes(float x, float y, float gridSizeF, sf::Texture &textureSheet,
+                      const std::vector<sf::Vector2f> &texturePositions) {
+    for (sf::Vector2f texturePosition: texturePositions) {
+        sf::RectangleShape texture;
+        texture.setSize(sf::Vector2f(gridSizeF, gridSizeF));
+        texture.setPosition(x, y);
+        texture.setTexture(&textureSheet);
+        texture.setTextureRect(sf::IntRect(texturePosition.x, texturePosition.y, gridSizeF, gridSizeF));
+        this->sprites.push_back(texture);
+    }
 }

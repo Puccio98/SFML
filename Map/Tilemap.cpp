@@ -50,7 +50,7 @@ Tilemap::addTile(const TileData &tileData) {
             this->map[tileData.index_x][tileData.index_y][tileData.index_z] = new Tile(
                     tileData.index_x * this->gridSizeF, tileData.index_y * this->gridSizeF, this->gridSizeF,
                     this->tileTextureSheet,
-                    tileData.texturePosition, tileData.types);
+                    tileData.texturePositions, tileData.types);
         }
     }
 }
@@ -159,14 +159,26 @@ void Tilemap::loadTile(const std::string &line) {
     std::string label;
     iss >> label >> tileData.index_x >> tileData.index_y >> tileData.index_z;
 
-    // Parse the texture position (t_p x y)
-    iss >> label >> tileData.texturePosition.x >> tileData.texturePosition.y;
+    // Parse the texture position (t_p x y), until "t_t" is reached
+    iss >> label; // t_p
+    std::string x;
+
+    while (iss >> x) {
+        std::string y;
+        if (x == "t_t") {
+            break;
+        }
+        iss >> y;
+        if (y == "t_t") {
+            break;
+        }
+        tileData.texturePositions.emplace_back(std::stof(x), std::stof(y));
+    }
 
     // Parse the tile types (t_t ...)
-    iss >> label;
-    int num;
-    while (iss >> num) {
-        tileData.types.push_back(static_cast<TILE_TYPES>(num));
+    int intType;
+    while (iss >> intType) {
+        tileData.types.push_back(static_cast<TILE_TYPES>(intType));
     }
 
     addTile(tileData);
