@@ -26,10 +26,11 @@ void Tile::update() {
 
 }
 
-std::string Tile::getAsString() const {
+std::string Tile::getAsString(unsigned x, unsigned y, unsigned z) const {
     std::stringstream ss;
-    ss << this->shape.getTextureRect().left << " " << this->shape.getTextureRect().top << " "
-       << this->getTypesAsString();
+    ss << "p " << x << " " << y << " " << z
+       << " t_p " << this->getSpritesAsString()
+       << " t_t " << this->getTypesAsString();
     return ss.str();
 }
 
@@ -44,4 +45,10 @@ std::string Tile::getTypesAsString() const {
 
 bool Tile::isOfType(TILE_TYPES type) {
     return std::find(this->tileTypes.begin(), this->tileTypes.end(), type) != tileTypes.end();
+}
+
+std::string Tile::getSpritesAsString() const {
+    std::string s;
+    return s.append(
+            std::to_string(this->shape.getTextureRect().left) + " " + std::to_string(this->shape.getTextureRect().top));
 }

@@ -52,6 +52,10 @@ public:
 
     std::tuple<bool, bool>
     getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const;
+
+    std::vector<Tile *> *getTileLayers(int x, int y);
+
+    void loadTile(const std::string &line);
 };
 
 

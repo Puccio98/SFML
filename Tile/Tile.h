@@ -16,11 +16,14 @@ class Tile {
 private:
     std::string getTypesAsString() const;
 
+    std::string getSpritesAsString() const;
+
 protected:
     sf::RectangleShape shape;
-    std::vector<TILE_TYPES> tileTypes;
 
+    std::vector<TILE_TYPES> tileTypes;
 public:
+
     Tile(float x, float y, float gridSizeF, sf::Texture &texture, const sf::Vector2f &tileTexturePosition,
          const std::vector<TILE_TYPES> &tileTypes);
 
@@ -30,7 +33,7 @@ public:
 
     void render(sf::RenderTarget &target);
 
-    std::string getAsString() const;
+    std::string getAsString(unsigned x, unsigned y, unsigned z) const;
 
     bool isOfType(TILE_TYPES type);
 };

@@ -2,7 +2,10 @@
 
 struct TileData {
     int index_x, index_y, index_z;
-    sf::Vector2f textureRect;
+    /**
+     * Definisce la posizione della texture nello sheet, quindi determina la texture da applicare
+     */
+    sf::Vector2f texturePosition;
     std::vector<TILE_TYPES> types;
 };
 
