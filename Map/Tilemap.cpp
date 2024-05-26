@@ -217,11 +217,8 @@ void Tilemap::clear() {
 std::tuple<bool, bool>
 Tilemap::checkCollision(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const {
     std::tuple<bool, bool> collided = this->checkOutOfBounds(nextShape);
-    if (std::get<0>(collided) || std::get<1>(collided)) {
-        return collided;
-    }
 
-    return checkTileCollision(currentShape, nextShape);
+    return checkTileCollision(currentShape, nextShape, collided);
 }
 
 std::tuple<bool, bool> Tilemap::checkOutOfBounds(const sf::RectangleShape &rectangleShape) const {
@@ -229,25 +226,28 @@ std::tuple<bool, bool> Tilemap::checkOutOfBounds(const sf::RectangleShape &recta
 
     bool dir_x = rect.left < 0 || rect.left + rect.width > this->maxSizeWorld.x;
     bool dir_y = rect.top < 0 || rect.top + rect.height > this->maxSizeWorld.y;
+
     return std::make_tuple(dir_x, dir_y);
 }
 
 std::tuple<bool, bool>
-Tilemap::checkTileCollision(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const {
+Tilemap::checkTileCollision(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape,
+                            const std::tuple<bool, bool> &collided) const {
 
 
-    std::tuple<bool, bool> forbidden_directions = getForbiddenDirections(currentShape, nextShape);
+    std::tuple<bool, bool> forbidden_directions = getForbiddenDirections(currentShape, nextShape, collided);
 
     if (!std::get<0>(forbidden_directions) && !std::get<1>(forbidden_directions)) {
-        forbidden_directions = getForbiddenDirections(nextShape, nextShape);
+        forbidden_directions = getForbiddenDirections(nextShape, nextShape, collided);
     }
 
     return forbidden_directions;
 }
 
 std::tuple<bool, bool>
-Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const {
-    std::tuple<bool, bool> forbidden_directions = std::make_tuple(false, false);
+Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape,
+                                const std::tuple<bool, bool> &collided) const {
+    std::tuple<bool, bool> forbidden_directions = collided;
 
     auto checkDirection = [&](int startX, int endX, int startY, int endY, bool isVertical) {
         for (int x = startX; x <= endX; ++x) {
@@ -271,7 +271,7 @@ Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf
 
     // Check top & bottom
     float diff_y = nextRect.top - currentRect.top;
-    if (diff_y != 0) {
+    if (diff_y != 0 && !std::get<1>(forbidden_directions)) {
         auto tiles = getCollisionBounds(currentShape, nextShape, 1);
         auto starting_tile = std::get<0>(tiles);
         auto ending_tile = std::get<1>(tiles);
@@ -281,7 +281,7 @@ Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf
 
     // Check right & left
     float diff_x = nextRect.left - currentRect.left;
-    if (diff_x != 0) {
+    if (diff_x != 0 && !std::get<0>(forbidden_directions)) {
         auto tiles = getCollisionBounds(currentShape, nextShape, 0);
         auto starting_tile = std::get<0>(tiles);
         auto ending_tile = std::get<1>(tiles);

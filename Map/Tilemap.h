@@ -43,7 +43,8 @@ public:
     std::tuple<bool, bool> checkOutOfBounds(const sf::RectangleShape &rectangleShape) const;
 
     std::tuple<bool, bool>
-    checkTileCollision(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const;
+    checkTileCollision(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape,
+                       const std::tuple<bool, bool> &collided) const;
 
     sf::Vector2i getGridPosition(const sf::Vector2f &absolutePosition) const;
 
@@ -51,7 +52,8 @@ public:
     getCollisionBounds(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape, int dir) const;
 
     std::tuple<bool, bool>
-    getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const;
+    getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape,
+                           const std::tuple<bool, bool> &collided) const;
 
     std::vector<Tile *> *getTileLayers(int x, int y);
 
