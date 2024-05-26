@@ -18,8 +18,10 @@ private:
 
     std::string getSpritesAsString() const;
 
+    void initShapes();
+
 protected:
-    sf::RectangleShape shape;
+    std::vector<sf::RectangleShape> shapes;
 
     std::vector<TILE_TYPES> tileTypes;
 public:

@@ -3,10 +3,7 @@
 Tile::Tile(float x, float y, float gridSizeF, sf::Texture &texture, const sf::Vector2f &tileTexturePosition,
            const std::vector<TILE_TYPES> &tileTypes) {
     this->tileTypes.insert(this->tileTypes.end(), tileTypes.begin(), tileTypes.end());
-    this->shape.setSize(sf::Vector2f(gridSizeF, gridSizeF));
-    this->shape.setPosition(x, y);
-    this->shape.setTexture(&texture);
-    this->shape.setTextureRect(sf::IntRect(tileTexturePosition.x, tileTexturePosition.y, gridSizeF, gridSizeF));
+    this->initShapes();
 }
 
 Tile::~Tile() {
@@ -16,10 +13,10 @@ Tile::~Tile() {
 void Tile::render(sf::RenderTarget &target) {
     //Se collision, bordo rosso
     if (this->isOfType(TILE_TYPES::COLLISION)) {
-        this->shape.setOutlineColor(sf::Color(255, 0, 0, 150));
-        this->shape.setOutlineThickness(-2);
+        this->shapes.setOutlineColor(sf::Color(255, 0, 0, 150));
+        this->shapes.setOutlineThickness(-2);
     }
-    target.draw(this->shape);
+    target.draw(this->shapes);
 }
 
 void Tile::update() {
@@ -50,5 +47,15 @@ bool Tile::isOfType(TILE_TYPES type) {
 std::string Tile::getSpritesAsString() const {
     std::string s;
     return s.append(
-            std::to_string(this->shape.getTextureRect().left) + " " + std::to_string(this->shape.getTextureRect().top));
+            std::to_string(this->shapes.getTextureRect().left) + " " + std::to_string(this->shapes.getTextureRect().top));
+}
+
+void Tile::initShapes() {
+    sf::RectangleShape texture;
+    texture.setSize(sf::Vector2f(gridSizeF, gridSizeF));
+    texture.setPosition(x, y);
+    texture.setTexture(&texture);
+    texture.setTextureRect(sf::IntRect(tileTexturePosition.x, tileTexturePosition.y, gridSizeF, gridSizeF));
+    this->shapes.push_back()
+
 }
