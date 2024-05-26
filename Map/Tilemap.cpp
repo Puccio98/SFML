@@ -50,7 +50,7 @@ Tilemap::addTile(const TileData &tileData) {
             this->map[tileData.index_x][tileData.index_y][tileData.index_z] = new Tile(
                     tileData.index_x * this->gridSizeF, tileData.index_y * this->gridSizeF, this->gridSizeF,
                     this->tileTextureSheet,
-                    tileData.textureRect, tileData.types);
+                    tileData.texturePosition, tileData.types);
         }
     }
 }
@@ -59,31 +59,67 @@ const sf::Texture &Tilemap::getTileTextureSheet() const {
     return tileTextureSheet;
 }
 
+
 void Tilemap::loadFromFile(const std::string file_name) {
     std::ifstream file;
     file.open(file_name);
 
     if (file.fail()) {
+        std::cout << "ERROR::TILEMAP::COULD NOT LOAD FROM FILE: " << file_name << "\n";
         return;
     }
 
     if (file.is_open()) {
-        sf::Vector2u size;
-        unsigned gridSizeU = 0;
-        unsigned layers = 0;
-        std::string texturePath;
+        // Skip the first row of the legend
+        std::string _legenda;
+        std::getline(file, _legenda);
 
-        // Basic Map Information
-        file >> size.x >> size.y >> gridSizeU >> layers >> texturePath;
+        sf::Vector2u _size;
+        unsigned _gridSizeU = 0;
+        unsigned _layers = 0;
+        std::string _texturePath;
 
-        this->gridSizeF = static_cast<float> (gridSizeU);
-        this->gridSizeU = gridSizeU;
-        this->maxSizeGrid.x = size.x;
-        this->maxSizeGrid.y = size.y;
-        this->maxSizeWorld.x = static_cast<float>(size.x * gridSizeU);
-        this->maxSizeWorld.y = static_cast<float>(size.y * gridSizeU);
-        this->layers = layers;
-        this->texturePath = texturePath;
+        // Read max_size_grid
+        std::string line;
+        std::getline(file, line);
+        {
+            std::istringstream iss(line);
+            std::string label;
+            iss >> label >> _size.x >> _size.y;
+        }
+
+        // Read grid_size
+        std::getline(file, line);
+        {
+            std::istringstream iss(line);
+            std::string label;
+            iss >> label >> _gridSizeU;
+        }
+
+        // Read max_layers
+        std::getline(file, line);
+        {
+            std::istringstream iss(line);
+            std::string label;
+            iss >> label >> _layers;
+        }
+
+        // Read texture_path
+        std::getline(file, line);
+        {
+            std::istringstream iss(line);
+            std::string label;
+            iss >> label >> _texturePath;
+        }
+
+        this->gridSizeF = static_cast<float>(_gridSizeU);
+        this->gridSizeU = _gridSizeU;
+        this->maxSizeGrid.x = _size.x;
+        this->maxSizeGrid.y = _size.y;
+        this->maxSizeWorld.x = static_cast<float>(_size.x * _gridSizeU);
+        this->maxSizeWorld.y = static_cast<float>(_size.y * _gridSizeU);
+        this->layers = _layers;
+        this->texturePath = _texturePath;
 
         this->clear();
 
@@ -92,34 +128,22 @@ void Tilemap::loadFromFile(const std::string file_name) {
         }
 
         this->map.resize(this->maxSizeGrid.x);
-        for (int x = 0; x < this->maxSizeGrid.x; x++) {
+        for (unsigned x = 0; x < this->maxSizeGrid.x; x++) {
             this->map[x].resize(this->maxSizeGrid.y);
-            for (int y = 0; y < maxSizeGrid.y; y++) {
-                //mappa vuota
+            for (unsigned y = 0; y < this->maxSizeGrid.y; y++) {
+                // Initialize empty map
                 this->map[x][y].resize(this->layers, nullptr);
             }
         }
 
         // Load all Tiles
-        std::string line;
-
-        while (getline(file, line)) {
-            TileData tileData;
-
+        while (std::getline(file, line)) {
             if (line.empty()) {
                 continue;
             }
-            std::istringstream iss(line);
-            float tr_x, tr_y;
-            iss >> tileData.index_x >> tileData.index_y >> tileData.index_z >> tr_x >> tr_y;
-            tileData.textureRect = sf::Vector2f(tr_x, tr_y);
-            int num;
-            while (iss >> num) {
-                tileData.types.push_back(static_cast<TILE_TYPES>(num));
-            }
-            this->addTile(tileData);
-        }
 
+            this->loadTile(line);
+        }
     } else {
         std::cout << "ERROR::TILEMAP::COULD NOT LOAD FROM FILE: " << file_name << "\n";
     }
@@ -127,22 +151,44 @@ void Tilemap::loadFromFile(const std::string file_name) {
     file.close();
 }
 
+void Tilemap::loadTile(const std::string &line) {
+    TileData tileData;
+    std::istringstream iss(line);
+
+    // Parse the tile position (p x y z)
+    std::string label;
+    iss >> label >> tileData.index_x >> tileData.index_y >> tileData.index_z;
+
+    // Parse the texture position (t_p x y)
+    iss >> label >> tileData.texturePosition.x >> tileData.texturePosition.y;
+
+    // Parse the tile types (t_t ...)
+    iss >> label;
+    int num;
+    while (iss >> num) {
+        tileData.types.push_back(static_cast<TILE_TYPES>(num));
+    }
+
+    addTile(tileData);
+}
+
 void Tilemap::saveToFile(std::string file_name) {
     std::ofstream out_file;
     out_file.open(file_name, std::ofstream::out | std::ofstream::trunc);
 
     if (out_file.is_open()) {
-        out_file << this->maxSizeGrid.x << " " << this->maxSizeGrid.y << "\n";
-        out_file << this->gridSizeU << "\n";
-        out_file << this->layers << "\n";
-        out_file << this->texturePath << "\n";
+        out_file
+                << "Legenda: p == position(x,y,z), t_p == vettore di texture position(x,y), t_t == vettore di tipi di tile \n";
+        out_file << "max_size_grid " << this->maxSizeGrid.x << " " << this->maxSizeGrid.y << "\n";
+        out_file << "grid_size " << this->gridSizeU << "\n";
+        out_file << "max_layers " << this->layers << "\n";
+        out_file << "texture_path " << this->texturePath << "\n";
 
         for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
             for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
                 for (size_t z = 0; z < this->layers; z++) {
                     if (this->map[x][y][z]) {
-                        std::string pippo = this->map[x][y][z]->getAsString();
-                        out_file << x << " " << y << " " << z << " " << pippo << "\n";
+                        out_file << this->map[x][y][z]->getAsString(x, y, z) << "\n";
                     }
                 }
             }
@@ -171,11 +217,8 @@ void Tilemap::clear() {
 std::tuple<bool, bool>
 Tilemap::checkCollision(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const {
     std::tuple<bool, bool> collided = this->checkOutOfBounds(nextShape);
-    if (std::get<0>(collided) || std::get<1>(collided)) {
-        return collided;
-    }
 
-    return checkTileCollision(currentShape, nextShape);
+    return checkTileCollision(currentShape, nextShape, collided);
 }
 
 std::tuple<bool, bool> Tilemap::checkOutOfBounds(const sf::RectangleShape &rectangleShape) const {
@@ -183,25 +226,28 @@ std::tuple<bool, bool> Tilemap::checkOutOfBounds(const sf::RectangleShape &recta
 
     bool dir_x = rect.left < 0 || rect.left + rect.width > this->maxSizeWorld.x;
     bool dir_y = rect.top < 0 || rect.top + rect.height > this->maxSizeWorld.y;
+
     return std::make_tuple(dir_x, dir_y);
 }
 
 std::tuple<bool, bool>
-Tilemap::checkTileCollision(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const {
+Tilemap::checkTileCollision(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape,
+                            const std::tuple<bool, bool> &collided) const {
 
 
-    std::tuple<bool, bool> forbidden_directions = getForbiddenDirections(currentShape, nextShape);
+    std::tuple<bool, bool> forbidden_directions = getForbiddenDirections(currentShape, nextShape, collided);
 
     if (!std::get<0>(forbidden_directions) && !std::get<1>(forbidden_directions)) {
-        forbidden_directions = getForbiddenDirections(nextShape, nextShape);
+        forbidden_directions = getForbiddenDirections(nextShape, nextShape, collided);
     }
 
     return forbidden_directions;
 }
 
 std::tuple<bool, bool>
-Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape) const {
-    std::tuple<bool, bool> forbidden_directions = std::make_tuple(false, false);
+Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape,
+                                const std::tuple<bool, bool> &collided) const {
+    std::tuple<bool, bool> forbidden_directions = collided;
 
     auto checkDirection = [&](int startX, int endX, int startY, int endY, bool isVertical) {
         for (int x = startX; x <= endX; ++x) {
@@ -225,7 +271,7 @@ Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf
 
     // Check top & bottom
     float diff_y = nextRect.top - currentRect.top;
-    if (diff_y != 0) {
+    if (diff_y != 0 && !std::get<1>(forbidden_directions)) {
         auto tiles = getCollisionBounds(currentShape, nextShape, 1);
         auto starting_tile = std::get<0>(tiles);
         auto ending_tile = std::get<1>(tiles);
@@ -235,7 +281,7 @@ Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf
 
     // Check right & left
     float diff_x = nextRect.left - currentRect.left;
-    if (diff_x != 0) {
+    if (diff_x != 0 && !std::get<0>(forbidden_directions)) {
         auto tiles = getCollisionBounds(currentShape, nextShape, 0);
         auto starting_tile = std::get<0>(tiles);
         auto ending_tile = std::get<1>(tiles);
@@ -276,4 +322,16 @@ Tilemap::getCollisionBounds(const sf::RectangleShape &currentShape, const sf::Re
     sf::Vector2i ending_tile = getGridPosition(ending_point);
 
     return std::make_tuple(starting_tile, ending_tile);
+}
+
+std::vector<Tile *> *Tilemap::getTileLayers(int x, int y) {
+    if (x >= this->map.size()) {
+        return nullptr;
+    }
+
+    if (y >= this->map[x].size()) {
+        return nullptr;
+    }
+
+    return &this->map[x][y];
 }
