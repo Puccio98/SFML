@@ -34,10 +34,15 @@ namespace GUI {
         sf::Color textActiveColor;
 
     public:
-        Button(float x, float y, float width, float height, sf::Font *font, std::string text,
+        Button(float x, float y, float width, float height, sf::Font *font, const std::string &text,
                unsigned int character_size,
                sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color, sf::Color idle_color,
-               sf::Color hover_color, sf::Color active_color, short unsigned id = 0);
+               sf::Color hover_color, sf::Color active_color, short unsigned id);
+
+        Button(float x, float y, float width, float height, sf::Font *font, const std::string &text,
+               unsigned int character_size,
+               sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color, sf::Color idle_color,
+               sf::Color hover_color, sf::Color active_color);
 
         virtual ~Button();
 

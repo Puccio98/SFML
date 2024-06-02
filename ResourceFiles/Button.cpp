@@ -1,6 +1,8 @@
 #include "Button.h"
 
-GUI::Button::Button(float x, float y, float width, float height, sf::Font *font, std::string text,
+#include <utility>
+
+GUI::Button::Button(float x, float y, float width, float height, sf::Font *font, const std::string &text,
                     unsigned character_size,
                     sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
                     sf::Color idle_color,
@@ -32,6 +34,17 @@ GUI::Button::Button(float x, float y, float width, float height, sf::Font *font,
 
     this->shape.setFillColor((idle_color));
 }
+
+// Costruttore senza ID
+GUI::Button::Button(float x, float y, float width, float height, sf::Font *font, const std::string &text,
+                    unsigned int character_size,
+                    sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color,
+                    sf::Color idle_color,
+                    sf::Color hover_color, sf::Color active_color)
+        : Button(x, y, width, height, font, text, character_size, text_idle_color, text_hover_color, text_active_color,
+                 idle_color, hover_color, active_color, 0) {
+}
+
 
 GUI::Button::~Button() {
 
