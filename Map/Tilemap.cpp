@@ -1,13 +1,13 @@
 #include "Tilemap.h"
 
-Tilemap::Tilemap(const std::string &file_name) {
+Tilemap::Tilemap(const std::string &file_name, sf::Font &font) : font(font) {
     this->loadFromFile(file_name);
 }
 
 Tilemap::~Tilemap() {
     for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
         for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
-            while (this->map[x][y].size()!= 0) {
+            while (this->map[x][y].size() != 0) {
                 delete this->map[x][y].at(this->map[x][y].size() - 1);
                 this->map[x][y].pop_back();
             }
@@ -39,20 +39,35 @@ void Tilemap::removeTile(const unsigned index_x, const unsigned index_y) {
     if (index_x < this->maxSizeGrid.x && index_y < this->maxSizeGrid.y && this->map[index_x][index_y].size() != 0) {
         int size = this->map[index_x][index_y].size();
 
-        delete this->map[index_x][index_y].at(this->map[index_x][index_y].size() -1);
+        delete this->map[index_x][index_y].at(this->map[index_x][index_y].size() - 1);
         this->map[index_x][index_y].pop_back();
     }
 }
 
 void Tilemap::addTile(const TileData &tileData) {
-    if (tileData.index_x < this->maxSizeGrid.x && tileData.index_y < this->maxSizeGrid.y //&& tileData.index_z < this->layers
-     ) {
+    if (tileData.index_x < this->maxSizeGrid.x &&
+        tileData.index_y < this->maxSizeGrid.y //&& tileData.index_z < this->layers
+            ) {
         this->map[tileData.index_x][tileData.index_y].push_back(new Tile(
-                tileData.index_x * this->gridSizeF, tileData.index_y * this->gridSizeF, this->gridSizeF,
+                tileData,
                 this->tileTextureSheet,
-                tileData.texturePositions, tileData.types));
+                tileData.texturePositions, tileData.types,
+                this->font));
     }
 }
+
+void Tilemap::addSprite(const TileData &tileData) {
+    if (tileData.index_x < this->maxSizeGrid.x &&
+        tileData.index_y < this->maxSizeGrid.y //&& tileData.index_z < this->layers
+            ) {
+
+    }
+}
+
+void Tilemap::removeSprite(const TileData &tileData) {
+
+}
+
 
 const sf::Texture &Tilemap::getTileTextureSheet() const {
     return tileTextureSheet;
@@ -131,7 +146,7 @@ void Tilemap::loadFromFile(const std::string file_name) {
             this->map[x].resize(this->maxSizeGrid.y);
             for (unsigned y = 0; y < this->maxSizeGrid.y; y++) {
                 // Initialize empty map
-                this->map[x][y] = std::vector<Tile*>();
+                this->map[x][y] = std::vector<Tile *>();
                 //this->map[x][y].resize(this->layers, nullptr);
             }
         }
@@ -153,6 +168,8 @@ void Tilemap::loadFromFile(const std::string file_name) {
 
 void Tilemap::loadTile(const std::string &line) {
     TileData tileData;
+    tileData.gridSize = this->gridSizeF;
+
     std::istringstream iss(line);
 
     // Parse the tile position (p x y z)
@@ -216,7 +233,7 @@ void Tilemap::clear() {
     }
     for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
         for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
-            while (this->map[x][y].size()!= 0) {
+            while (this->map[x][y].size() != 0) {
                 delete this->map[x][y].at(this->map[x][y].size() - 1);
                 this->map[x][y].pop_back();
             }
@@ -257,19 +274,24 @@ Tilemap::checkTileCollision(const sf::RectangleShape &currentShape, const sf::Re
 std::tuple<bool, bool>
 Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape,
                                 const std::tuple<bool, bool> &collided) const {
+    // per ora gestiamo solamente il piano terra.
+    int layer = 0;
     std::tuple<bool, bool> forbidden_directions = collided;
 
     auto checkDirection = [&](int startX, int endX, int startY, int endY, bool isVertical) {
         for (int x = startX; x <= endX; ++x) {
             for (int y = startY; y <= endY; ++y) {
-                Tile *tile = map[x][y][0];
-                if (tile != nullptr && tile->isOfType(TILE_TYPES::COLLISION)) {
-                    if (isVertical) {
-                        forbidden_directions = std::make_tuple(std::get<0>(forbidden_directions), true);
-                    } else {
-                        forbidden_directions = std::make_tuple(true, std::get<1>(forbidden_directions));
+                auto tileLayers = map[x][y];
+                if (tileLayers.size() > layer) {
+                    Tile *tile = map[x][y][layer];
+                    if (tile != nullptr && tile->isOfType(TILE_TYPES::COLLISION)) {
+                        if (isVertical) {
+                            forbidden_directions = std::make_tuple(std::get<0>(forbidden_directions), true);
+                        } else {
+                            forbidden_directions = std::make_tuple(true, std::get<1>(forbidden_directions));
+                        }
+                        return;
                     }
-                    return;
                 }
             }
         }
@@ -344,4 +366,8 @@ std::vector<Tile *> *Tilemap::getTileLayers(int x, int y) {
     }
 
     return &this->map[x][y];
+}
+
+const std::vector<std::vector<std::vector<Tile *>>> &Tilemap::getMap() const {
+    return map;
 }

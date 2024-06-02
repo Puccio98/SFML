@@ -2,7 +2,6 @@
 #define SFML_TILEMAP_H
 
 #include "../Tile/Tile.h"
-#include "../Tile/TileData.h"
 #include "../Entities/Entity.h"
 
 class Tilemap {
@@ -15,15 +14,22 @@ private:
     std::vector<std::vector<std::vector<Tile *>>> map;
     std::string texturePath;
     sf::Texture tileTextureSheet;
+    sf::Font font;
 
 public:
-    explicit Tilemap(const std::string &file_name);
+    explicit Tilemap(const std::string &file_name, sf::Font &font);
 
     virtual ~Tilemap();
 
     void update();
 
+    const std::vector<std::vector<std::vector<Tile *>>> &getMap() const;
+
     void render(sf::RenderTarget &target, Entity *entity = nullptr);
+
+    void addSprite(const TileData &tileData);
+
+    void removeSprite(const TileData &tileData);
 
     void addTile(const TileData &tileData);
 

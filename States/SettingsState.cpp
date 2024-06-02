@@ -1,4 +1,5 @@
 #include "SettingsState.h"
+#include "../ResourceFiles/PushButton.h"
 
 SettingsState::SettingsState(StateData &stateData) : State(stateData) {
     this->initVariables();
@@ -20,7 +21,7 @@ SettingsState::~SettingsState() {
 
 void SettingsState::update(const float &dt) {
     State::update(dt);
-    
+
     this->updateButtons();
     updateDropDownLists();
 }
@@ -79,22 +80,11 @@ void SettingsState::renderButtons(sf::RenderTarget &target) {
 }
 
 void SettingsState::initButtons() {
-    this->buttons["BACK"] = new GUI::Button(100, 400, 150, 50, this->stateData.font, "Back", 50,
-                                            sf::Color(120, 50, 80, 200),
-                                            sf::Color(150, 50, 80, 250),
-                                            sf::Color(90, 40, 60, 50),
-                                            sf::Color(120, 50, 80, 0),
-                                            sf::Color(150, 50, 80, 0),
-                                            sf::Color(90, 40, 60, 0));
+    this->buttons["BACK"] = new GUI::PushButton(100, 400, 150, 50, this->stateData.font, "Back", 50,
+                                                CssColor::ClassicText(), CssColor::ClassicButton());
 
-    this->buttons["APPLY"] = new GUI::Button(300, 400, 150, 50, this->stateData.font, "Apply", 50,
-                                             sf::Color(120, 50, 80, 200),
-                                             sf::Color(150, 50, 80, 250),
-                                             sf::Color(90, 40, 60, 50),
-                                             sf::Color(120, 50, 80, 0),
-                                             sf::Color(150, 50, 80, 0),
-                                             sf::Color(90, 40, 60, 0));
-
+    this->buttons["APPLY"] = new GUI::PushButton(300, 400, 150, 50, this->stateData.font, "Apply", 50,
+                                                 CssColor::ClassicText(), CssColor::ClassicButton());
 }
 
 void SettingsState::updateButtons() {

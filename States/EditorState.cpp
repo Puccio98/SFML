@@ -1,4 +1,5 @@
 #include "EditorState.h"
+#include "../ResourceFiles/PushButton.h"
 
 EditorState::EditorState(StateData &stateData) :
         State(stateData),
@@ -41,7 +42,6 @@ void EditorState::render(sf::RenderTarget *target) {
     this->renderButtons(target);
     this->renderGui(target);
 
-
     if (!pauseMenuState.isPaused() && !this->textureSelector->isActive()) {
         target->draw(this->mouseDebug);
         target->setView(this->view);
@@ -56,44 +56,39 @@ void EditorState::render(sf::RenderTarget *target) {
 
 
 void EditorState::initButtons() {
-    this->buttons["TOGGLE_TEXTURE_SELECTOR"] = new GUI::Button(this->stateData.window->getSize().x - 50, 0, 50, 50,
-                                                               this->stateData.font, "TS", 30,
-                                                               sf::Color(120, 50, 80, 200),
-                                                               sf::Color(150, 50, 80, 250),
-                                                               sf::Color(90, 40, 60, 50),
-                                                               sf::Color(120, 50, 80, 100),
-                                                               sf::Color(150, 50, 80, 100),
-                                                               sf::Color(90, 40, 60, 100));
+    CssColor textColor = CssColor(sf::Color(120, 50, 80, 200),
+                                  sf::Color(150, 50, 80, 250),
+                                  sf::Color(90, 40, 60, 50));
 
-    this->buttons["SAVE_TEXTURE_MAP"] = new GUI::Button(this->stateData.window->getSize().x - 50,
-                                                        this->stateData.gridSize + 10, 50, 50,
-                                                        this->stateData.font, "SV", 30,
-                                                        sf::Color(120, 50, 80, 200),
-                                                        sf::Color(150, 50, 80, 250),
-                                                        sf::Color(90, 40, 60, 50),
-                                                        sf::Color(120, 50, 80, 100),
-                                                        sf::Color(150, 50, 80, 100),
-                                                        sf::Color(90, 40, 60, 100));
+    CssColor buttonColor = CssColor(
+            sf::Color(120, 50, 80, 100),
+            sf::Color(150, 50, 80, 100),
+            sf::Color(90, 40, 60, 100));
 
-    this->buttons["TOGGLE_COLLISIONS"] = new GUI::Button(this->stateData.window->getSize().x - 50,
-                                                         (this->stateData.gridSize + 10) * 2, 50, 50,
-                                                         this->stateData.font, "COL", 30,
-                                                         sf::Color(120, 50, 80, 200),
-                                                         sf::Color(150, 50, 80, 250),
-                                                         sf::Color(90, 40, 60, 50),
-                                                         sf::Color(120, 50, 80, 100),
-                                                         sf::Color(150, 50, 80, 100),
-                                                         sf::Color(90, 40, 60, 100));
+    this->buttons["TOGGLE_TEXTURE_SELECTOR"] = new GUI::PushButton(this->stateData.window->getSize().x - 50, 0, 50, 50,
+                                                                   this->stateData.font, "TS", 30,
+                                                                   textColor, buttonColor);
 
-    this->buttons["CLEAR_MAP"] = new GUI::Button(this->stateData.window->getSize().x - 50,
-                                                 (this->stateData.gridSize + 10) * 3, 50, 50,
-                                                 this->stateData.font, "R", 30,
-                                                 sf::Color(120, 50, 80, 200),
-                                                 sf::Color(150, 50, 80, 250),
-                                                 sf::Color(90, 40, 60, 50),
-                                                 sf::Color(120, 50, 80, 100),
-                                                 sf::Color(150, 50, 80, 100),
-                                                 sf::Color(90, 40, 60, 100));
+    this->buttons["TOGGLE_ADD_TILES"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
+                                                            (this->stateData.gridSize + 10),
+                                                            50, 50,
+                                                            this->stateData.font, "T", 30,
+                                                            textColor, buttonColor);
+
+    this->buttons["SAVE_TEXTURE_MAP"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
+                                                            (this->stateData.gridSize + 10) * 2, 50, 50,
+                                                            this->stateData.font, "SV", 30,
+                                                            textColor, buttonColor);
+
+    this->buttons["TOGGLE_COLLISIONS"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
+                                                             (this->stateData.gridSize + 10) * 3, 50, 50,
+                                                             this->stateData.font, "COL", 30,
+                                                             textColor, buttonColor);
+
+    this->buttons["CLEAR_MAP"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
+                                                     (this->stateData.gridSize + 10) * 4, 50, 50,
+                                                     this->stateData.font, "R", 30,
+                                                     textColor, buttonColor);
 }
 
 void EditorState::renderButtons(sf::RenderTarget *target) {
@@ -112,6 +107,10 @@ void EditorState::updateButtons() {
         this->buttons["TOGGLE_TEXTURE_SELECTOR"]->reset();
         this->showTextureSelector = !this->showTextureSelector;
         this->clock.restart();
+    }
+
+    if (this->buttons["TOGGLE_ADD_TILES"]->isPressed()) {
+        this->buttons["TOGGLE_ADD_TILES"]->reset();
     }
 
     if (this->buttons["SAVE_TEXTURE_MAP"]->isPressed()) {
@@ -141,7 +140,7 @@ void EditorState::updateButtons() {
 void EditorState::initVariables() {
     this->showTextureSelector = false;
     this->tileTexturePath = "Resources/images/tiles/nuovo_tilesheet.png";
-    this->tileMap = new Tilemap("Resources/map/map.slmp");
+    this->tileMap = new Tilemap("Resources/map/map.slmp", *this->stateData.font);
     this->tileTypes.push_back(TILE_TYPES::DEFAULT);
 
     this->cameraSpeed = 300.f;
@@ -186,6 +185,10 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down) {
                 this->openTextureSelector();
                 this->textureSelector->setSelectedTile(0, 1);
+            }
+
+            if (event.type == sf::Event::MouseButtonPressed) {
+                this->setAllToFalse();
             }
         }
     }
@@ -263,13 +266,17 @@ void EditorState::updateInput(const float &dt) {
                 this->textureSelector->setSelectedTile(mousePosWindow);
             } else {
                 TileData tileData;
+                tileData.gridSize = this->stateData.gridSize;
                 tileData.index_x = this->getPosGrid(VIEW_TYPES::VIEW).x;
                 tileData.index_y = this->getPosGrid(VIEW_TYPES::VIEW).y;
-                tileData.index_z = 0; //TODO: prendi la z
-                tileData.texturePositions.push_back(this->textureSelector->getSelectedRelativePosition());
+                tileData.index_z = this->tileMap->getMap()[tileData.index_x][tileData.index_y].size();
+                //tileData.texturePositions.push_back(this->textureSelector->getSelectedRelativePosition());
                 tileData.types = this->tileTypes;
 
-                this->tileMap->addTile(tileData);
+                if (!this->positionMap[{tileData.index_x, tileData.index_y}]) {
+                    this->tileMap->addTile(tileData);
+                }
+                this->positionMap[{tileData.index_x, tileData.index_y}] = true;
             }
         }
 
@@ -277,8 +284,13 @@ void EditorState::updateInput(const float &dt) {
             if (this->textureSelector->isActive()) {
 
             } else {
-                this->tileMap->removeTile(this->getPosGrid(VIEW_TYPES::VIEW).x,
-                                          this->getPosGrid(VIEW_TYPES::VIEW).y);
+                int grid_x = this->getPosGrid(VIEW_TYPES::VIEW).x;
+                int grid_y = this->getPosGrid(VIEW_TYPES::VIEW).y;
+                if (!this->positionMap[{grid_x, grid_y}]) {
+                    this->tileMap->removeTile(grid_x,
+                                              grid_y);
+                }
+                this->positionMap[{grid_x, grid_y}] = true;
             }
         }
     }
