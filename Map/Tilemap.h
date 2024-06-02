@@ -2,7 +2,6 @@
 #define SFML_TILEMAP_H
 
 #include "../Tile/Tile.h"
-#include "../Tile/TileData.h"
 #include "../Entities/Entity.h"
 
 class Tilemap {
@@ -24,7 +23,13 @@ public:
 
     void update();
 
+    const std::vector<std::vector<std::vector<Tile *>>> &getMap() const;
+
     void render(sf::RenderTarget &target, Entity *entity = nullptr);
+
+    void addSprite(const TileData &tileData);
+
+    void removeSprite(const TileData &tileData);
 
     void addTile(const TileData &tileData);
 

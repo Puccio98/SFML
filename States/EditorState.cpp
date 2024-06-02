@@ -267,9 +267,10 @@ void EditorState::updateInput(const float &dt) {
                 this->textureSelector->setSelectedTile(mousePosWindow);
             } else {
                 TileData tileData;
+                tileData.gridSize = this->stateData.gridSize;
                 tileData.index_x = this->getPosGrid(VIEW_TYPES::VIEW).x;
                 tileData.index_y = this->getPosGrid(VIEW_TYPES::VIEW).y;
-                tileData.index_z = 0; //TODO: prendi la z
+                tileData.index_z = this->tileMap->getMap()[tileData.index_x][tileData.index_y].size();
                 tileData.texturePositions.push_back(this->textureSelector->getSelectedRelativePosition());
                 tileData.types = this->tileTypes;
 

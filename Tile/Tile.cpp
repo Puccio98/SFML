@@ -1,10 +1,12 @@
 #include "Tile.h"
 
-Tile::Tile(float x, float y, float gridSizeF, sf::Texture &texture, const std::vector<sf::Vector2f> &texturePositions,
-           const std::vector<TILE_TYPES> &tileTypes, int layer, sf::Font &font) : layer(layer) {
-    this->initLayerText(x, y, font);
+Tile::Tile(const TileData &tileData, sf::Texture &texture,
+           const std::vector<sf::Vector2f> &texturePositions,
+           const std::vector<TILE_TYPES> &tileTypes, sf::Font &font) : layer(tileData.index_z) {
+    this->initLayerText(tileData.index_x * tileData.gridSize, tileData.index_y * tileData.gridSize, font);
     this->tileTypes.insert(this->tileTypes.end(), tileTypes.begin(), tileTypes.end());
-    this->initShapes(x, y, gridSizeF, texture, texturePositions);
+    this->initShapes(tileData.index_x * tileData.gridSize, tileData.index_y * tileData.gridSize, tileData.gridSize,
+                     texture, texturePositions);
 }
 
 Tile::~Tile() {
@@ -79,7 +81,6 @@ void Tile::initShapes(float x, float y, float gridSizeF, sf::Texture &textureShe
 }
 
 void Tile::initLayerText(float x, float y, sf::Font &font) {
-    std::cout << x << " " << y << "\n ";
     this->layerText.setFont(font);
     this->layerText.setString(std::to_string(this->layer));
     this->layerText.setFillColor(sf::Color::White);

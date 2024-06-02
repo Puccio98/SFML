@@ -11,6 +11,7 @@
 #include"SFML/Window.hpp"
 #include"SFML/Graphics.hpp"
 #include"../enums/tile_types.cpp"
+#include "TileData.h"
 
 class Tile {
 private:
@@ -30,8 +31,11 @@ protected:
     std::vector<TILE_TYPES> tileTypes;
 public:
 
-    Tile(float x, float y, float gridSizeF, sf::Texture &texture, const std::vector<sf::Vector2f> &texturePositions,
-         const std::vector<TILE_TYPES> &tileTypes, int layer, sf::Font &font);
+    Tile(const TileData &tileData, sf::Texture &texture,
+         const std::vector<sf::Vector2f> &texturePositions,
+         const std::vector<TILE_TYPES> &tileTypes, sf::Font &font);
+
+    Tile();
 
     virtual ~Tile();
 

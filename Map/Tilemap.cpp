@@ -49,12 +49,25 @@ void Tilemap::addTile(const TileData &tileData) {
         tileData.index_y < this->maxSizeGrid.y //&& tileData.index_z < this->layers
             ) {
         this->map[tileData.index_x][tileData.index_y].push_back(new Tile(
-                tileData.index_x * this->gridSizeF, tileData.index_y * this->gridSizeF, this->gridSizeF,
+                tileData,
                 this->tileTextureSheet,
-                tileData.texturePositions, tileData.types, this->map[tileData.index_x][tileData.index_y].size(),
+                tileData.texturePositions, tileData.types,
                 this->font));
     }
 }
+
+void Tilemap::addSprite(const TileData &tileData) {
+    if (tileData.index_x < this->maxSizeGrid.x &&
+        tileData.index_y < this->maxSizeGrid.y //&& tileData.index_z < this->layers
+            ) {
+
+    }
+}
+
+void Tilemap::removeSprite(const TileData &tileData) {
+
+}
+
 
 const sf::Texture &Tilemap::getTileTextureSheet() const {
     return tileTextureSheet;
@@ -155,6 +168,8 @@ void Tilemap::loadFromFile(const std::string file_name) {
 
 void Tilemap::loadTile(const std::string &line) {
     TileData tileData;
+    tileData.gridSize = this->gridSizeF;
+
     std::istringstream iss(line);
 
     // Parse the tile position (p x y z)
@@ -351,4 +366,8 @@ std::vector<Tile *> *Tilemap::getTileLayers(int x, int y) {
     }
 
     return &this->map[x][y];
+}
+
+const std::vector<std::vector<std::vector<Tile *>>> &Tilemap::getMap() const {
+    return map;
 }

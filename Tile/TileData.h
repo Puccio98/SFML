@@ -2,6 +2,7 @@
 
 struct TileData {
     int index_x, index_y, index_z;
+    float gridSize;
     /**
      * Definisce le posizioni della texture nello sheet, quindi determina la texture da applicare
      */
