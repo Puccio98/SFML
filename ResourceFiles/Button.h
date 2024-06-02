@@ -10,6 +10,7 @@
 #include<ctime>
 #include<cstdlib>
 #include<sstream>
+#include "CssColor.h"
 
 enum button_states {
     BTN_IDLE = 0, BTN_HOVER, BTN_ACTIVE
@@ -24,25 +25,15 @@ namespace GUI {
         short unsigned buttonState;
         sf::Text text;
         sf::RectangleShape shape;
-        //TODO:: Creare struct per gestire triplette di colori e aggiungere outlineColor.
-        sf::Color idleColor;
-        sf::Color hoverColor;
-        sf::Color activeColor;
-
-        sf::Color textIdleColor;
-        sf::Color textHoverColor;
-        sf::Color textActiveColor;
-
+        CssColor textColor;
+        CssColor buttonColor;
     public:
         Button(float x, float y, float width, float height, sf::Font *font, const std::string &text,
-               unsigned int character_size,
-               sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color, sf::Color idle_color,
-               sf::Color hover_color, sf::Color active_color, short unsigned id);
+               unsigned int character_size, const CssColor &text_color, const CssColor &button_color,
+               short unsigned id);
 
         Button(float x, float y, float width, float height, sf::Font *font, const std::string &text,
-               unsigned int character_size,
-               sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color, sf::Color idle_color,
-               sf::Color hover_color, sf::Color active_color);
+               unsigned int character_size, const CssColor &text_color, const CssColor &button_color);
 
         virtual ~Button();
 

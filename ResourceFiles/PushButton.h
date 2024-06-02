@@ -7,9 +7,11 @@ namespace GUI {
     class PushButton : public GUI::Button {
     public:
         PushButton(float x, float y, float width, float height, sf::Font *font, const std::string &text,
-                   unsigned int characterSize, const sf::Color &textIdleColor, const sf::Color &textHoverColor,
-                   const sf::Color &textActiveColor, const sf::Color &idleColor, const sf::Color &hoverColor,
-                   const sf::Color &activeColor, unsigned short id = 0);
+                   unsigned int characterSize, const CssColor &text_color, const CssColor &button_color,
+                   unsigned short id);
+
+        PushButton(float x, float y, float width, float height, sf::Font *font, const std::string &text,
+                   unsigned int characterSize, const CssColor &text_color, const CssColor &button_color);
 
         ~PushButton() override;
 

@@ -29,37 +29,25 @@ void MainMenuState::render(sf::RenderTarget *target) {
 }
 
 void MainMenuState::initButtons() {
+    CssColor textColor = CssColor(sf::Color(120, 50, 80, 200),
+                                  sf::Color(150, 50, 80, 250),
+                                  sf::Color(90, 40, 60, 50));
+
+    CssColor buttonColor = CssColor(sf::Color(120, 50, 80, 0),
+                                    sf::Color(150, 50, 80, 0),
+                                    sf::Color(90, 40, 60, 0));
+
     this->buttons["GAME_STATE"] = new GUI::PushButton(100, 100, 150, 50, this->stateData.font, "New Game", 50,
-                                                      sf::Color(120, 50, 80, 200),
-                                                      sf::Color(150, 50, 80, 250),
-                                                      sf::Color(90, 40, 60, 50),
-                                                      sf::Color(120, 50, 80, 0),
-                                                      sf::Color(150, 50, 80, 0),
-                                                      sf::Color(90, 40, 60, 0));
+                                                      textColor, buttonColor);
 
     this->buttons["SETTING_STATE"] = new GUI::PushButton(100, 200, 150, 50, this->stateData.font, "Settings", 50,
-                                                         sf::Color(120, 50, 80, 200),
-                                                         sf::Color(150, 50, 80, 250),
-                                                         sf::Color(90, 40, 60, 50),
-                                                         sf::Color(120, 50, 80, 0),
-                                                         sf::Color(150, 50, 80, 0),
-                                                         sf::Color(90, 40, 60, 0));
+                                                         textColor, buttonColor);
 
     this->buttons["EDITOR_STATE"] = new GUI::PushButton(100, 300, 150, 50, this->stateData.font, "Editor", 50,
-                                                        sf::Color(120, 50, 80, 200),
-                                                        sf::Color(150, 50, 80, 250),
-                                                        sf::Color(90, 40, 60, 50),
-                                                        sf::Color(120, 50, 80, 0),
-                                                        sf::Color(150, 50, 80, 0),
-                                                        sf::Color(90, 40, 60, 0));
+                                                        textColor, buttonColor);
 
     this->buttons["CLOSE"] = new GUI::PushButton(100, 400, 150, 50, this->stateData.font, "Close Game", 50,
-                                                 sf::Color(120, 50, 80, 200),
-                                                 sf::Color(150, 50, 80, 250),
-                                                 sf::Color(90, 40, 60, 50),
-                                                 sf::Color(120, 50, 80, 0),
-                                                 sf::Color(150, 50, 80, 0),
-                                                 sf::Color(90, 40, 60, 0));
+                                                 textColor, buttonColor);
 }
 
 void MainMenuState::renderButtons(sf::RenderTarget &target) {

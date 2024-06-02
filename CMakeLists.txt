@@ -38,6 +38,7 @@ add_executable(SFML
         Entities/Components/MovementData.h
         ResourceFiles/PushButton.cpp
         ResourceFiles/PushButton.h
+        ResourceFiles/CssColor.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

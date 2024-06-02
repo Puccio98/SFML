@@ -98,22 +98,18 @@ void PauseMenuState::initButton() {
     float height = 50.f;
     float x = this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f;
     float basePosY = this->container.getPosition().y;
+    CssColor textColor = CssColor(sf::Color(120, 50, 80, 200),
+                                  sf::Color(150, 50, 80, 250),
+                                  sf::Color(90, 40, 60, 50));
+
+    CssColor buttonColor = CssColor(sf::Color(120, 50, 80, 0),
+                                    sf::Color(150, 50, 80, 0),
+                                    sf::Color(90, 40, 60, 0));
+
 
     this->buttons["GAME"] = new GUI::PushButton(x, basePosY + 100, width, height, this->stateData.font,
-                                                "Return to Game",
-                                                40,
-                                                sf::Color(120, 50, 80, 200),
-                                                sf::Color(150, 50, 80, 250),
-                                                sf::Color(90, 40, 60, 50),
-                                                sf::Color(120, 50, 80, 0),
-                                                sf::Color(150, 50, 80, 0),
-                                                sf::Color(90, 40, 60, 0));
+                                                "Return to Game", 40, textColor, buttonColor);
 
     this->buttons["CLOSE"] = new GUI::PushButton(x, basePosY + 200, width, height, this->stateData.font, "Close", 40,
-                                                 sf::Color(120, 50, 80, 200),
-                                                 sf::Color(150, 50, 80, 250),
-                                                 sf::Color(90, 40, 60, 50),
-                                                 sf::Color(120, 50, 80, 0),
-                                                 sf::Color(150, 50, 80, 0),
-                                                 sf::Color(90, 40, 60, 0));
+                                                 textColor, buttonColor);
 }
