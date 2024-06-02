@@ -42,38 +42,6 @@ void GUI::Button::render(sf::RenderTarget &target) {
     target.draw(this->text);
 }
 
-void GUI::Button::update(const sf::Vector2f mousePos) {
-    this->buttonState = BTN_IDLE;
-
-    // Hover
-    if (this->shape.getGlobalBounds().contains(mousePos)) {
-        this->buttonState = BTN_HOVER;
-
-        // Pressed
-        if (this->locked) {
-            this->buttonState = BTN_ACTIVE;
-        }
-    }
-
-    switch (this->buttonState) {
-        case BTN_IDLE:
-            this->shape.setFillColor(this->idleColor);
-            this->text.setFillColor(this->textIdleColor);
-            break;
-        case BTN_HOVER:
-            this->shape.setFillColor(this->hoverColor);
-            this->text.setFillColor(this->textHoverColor);
-            break;
-        case BTN_ACTIVE:
-            this->shape.setFillColor(this->activeColor);
-            this->text.setFillColor(this->textActiveColor);
-            break;
-        default:
-            this->shape.setFillColor(sf::Color::Red);
-            this->text.setFillColor(sf::Color::White);
-    }
-}
-
 bool GUI::Button::isPressed() const {
     return this->buttonState == BTN_ACTIVE;
 }
@@ -84,20 +52,6 @@ std::string GUI::Button::getText() const {
 
 void GUI::Button::setText(const std::string text) {
     this->text.setString(text);
-}
-
-void GUI::Button::handleEvent(sf::Event &event, const sf::Vector2f mousePos) {
-    if (this->shape.getGlobalBounds().contains(mousePos) &&
-        event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-        this->locked = true;
-        return;
-    }
-
-    this->locked = false;
-}
-
-void GUI::Button::reset() {
-    this->locked = false;
 }
 
 unsigned short GUI::Button::getId() const {

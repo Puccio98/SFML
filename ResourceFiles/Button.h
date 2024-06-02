@@ -18,21 +18,20 @@ namespace GUI {
     class Button {
     private:
         short unsigned id;
-        short unsigned buttonState;
-        sf::RectangleShape shape;
         sf::Font *font;
+
+    protected:
+        short unsigned buttonState;
         sf::Text text;
-
-        sf::Color textIdleColor;
-        sf::Color textHoverColor;
-        sf::Color textActiveColor;
-
+        sf::RectangleShape shape;
         //TODO:: Creare struct per gestire triplette di colori e aggiungere outlineColor.
         sf::Color idleColor;
         sf::Color hoverColor;
         sf::Color activeColor;
 
-        bool locked = false;
+        sf::Color textIdleColor;
+        sf::Color textHoverColor;
+        sf::Color textActiveColor;
 
     public:
         Button(float x, float y, float width, float height, sf::Font *font, std::string text,
@@ -43,21 +42,21 @@ namespace GUI {
         virtual ~Button();
 
         //Functions
-        void update(sf::Vector2f mousePos);
+        virtual void update(sf::Vector2f mousePos) = 0;
 
         void render(sf::RenderTarget &target);
 
         //Modifiers
-        void setText(const std::string text);
+        void setText(std::string text);
 
         //Accessors
         bool isPressed() const;
 
         std::string getText() const;
 
-        void handleEvent(sf::Event &event, const sf::Vector2f mousePos);
+        virtual void handleEvent(sf::Event &event, sf::Vector2f mousePos) = 0;
 
-        void reset();
+        virtual void reset() = 0;
 
         unsigned short getId() const;
     };
