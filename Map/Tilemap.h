@@ -15,9 +15,10 @@ private:
     std::vector<std::vector<std::vector<Tile *>>> map;
     std::string texturePath;
     sf::Texture tileTextureSheet;
+    sf::Font font;
 
 public:
-    explicit Tilemap(const std::string &file_name);
+    explicit Tilemap(const std::string &file_name, sf::Font &font);
 
     virtual ~Tilemap();
 

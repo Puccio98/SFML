@@ -18,7 +18,11 @@ private:
 
     std::string getSpritesAsString() const;
 
-    void initShapes(float x, float y, float gridSizeF, sf::Texture &textureSheet, const std::vector<sf::Vector2f> &texturePositions);
+    void initShapes(float x, float y, float gridSizeF, sf::Texture &textureSheet,
+                    const std::vector<sf::Vector2f> &texturePositions);
+
+    int layer;
+    sf::Text layerText;
 
 protected:
     std::vector<sf::RectangleShape> sprites;
@@ -27,7 +31,7 @@ protected:
 public:
 
     Tile(float x, float y, float gridSizeF, sf::Texture &texture, const std::vector<sf::Vector2f> &texturePositions,
-         const std::vector<TILE_TYPES> &tileTypes);
+         const std::vector<TILE_TYPES> &tileTypes, int layer, sf::Font &font);
 
     virtual ~Tile();
 
@@ -38,6 +42,8 @@ public:
     std::string getAsString(unsigned x, unsigned y, unsigned z) const;
 
     bool isOfType(TILE_TYPES type);
+
+    void initLayerText(float x, float y, sf::Font &font);
 };
 
 #endif //SFML_TILE_H

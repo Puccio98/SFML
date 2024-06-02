@@ -1,6 +1,6 @@
 #include "Tilemap.h"
 
-Tilemap::Tilemap(const std::string &file_name) {
+Tilemap::Tilemap(const std::string &file_name, sf::Font &font) : font(font) {
     this->loadFromFile(file_name);
 }
 
@@ -51,7 +51,8 @@ void Tilemap::addTile(const TileData &tileData) {
         this->map[tileData.index_x][tileData.index_y].push_back(new Tile(
                 tileData.index_x * this->gridSizeF, tileData.index_y * this->gridSizeF, this->gridSizeF,
                 this->tileTextureSheet,
-                tileData.texturePositions, tileData.types));
+                tileData.texturePositions, tileData.types, this->map[tileData.index_x][tileData.index_y].size(),
+                this->font));
     }
 }
 

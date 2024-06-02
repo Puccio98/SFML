@@ -90,7 +90,7 @@ bool GameState::isQuit() const {
 }
 
 void GameState::initTilemap() {
-    this->tilemap = new Tilemap("Resources/map/map.slmp");
+    this->tilemap = new Tilemap("Resources/map/map.slmp", *this->stateData.font);
 }
 
 void GameState::initView() {

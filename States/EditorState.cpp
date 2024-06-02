@@ -141,7 +141,7 @@ void EditorState::updateButtons() {
 void EditorState::initVariables() {
     this->showTextureSelector = false;
     this->tileTexturePath = "Resources/images/tiles/nuovo_tilesheet.png";
-    this->tileMap = new Tilemap("Resources/map/map.slmp");
+    this->tileMap = new Tilemap("Resources/map/map.slmp", *this->stateData.font);
     this->tileTypes.push_back(TILE_TYPES::DEFAULT);
 
     this->cameraSpeed = 300.f;
@@ -186,6 +186,10 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down) {
                 this->openTextureSelector();
                 this->textureSelector->setSelectedTile(0, 1);
+            }
+
+            if (event.type == sf::Event::MouseButtonPressed) {
+                this->setAllToFalse();
             }
         }
     }
@@ -269,7 +273,10 @@ void EditorState::updateInput(const float &dt) {
                 tileData.texturePositions.push_back(this->textureSelector->getSelectedRelativePosition());
                 tileData.types = this->tileTypes;
 
-                this->tileMap->addTile(tileData);
+                if (!this->positionMap[{tileData.index_x, tileData.index_y}]) {
+                    this->tileMap->addTile(tileData);
+                }
+                this->positionMap[{tileData.index_x, tileData.index_y}] = true;
             }
         }
 
@@ -277,8 +284,13 @@ void EditorState::updateInput(const float &dt) {
             if (this->textureSelector->isActive()) {
 
             } else {
-                this->tileMap->removeTile(this->getPosGrid(VIEW_TYPES::VIEW).x,
-                                          this->getPosGrid(VIEW_TYPES::VIEW).y);
+                int grid_x = this->getPosGrid(VIEW_TYPES::VIEW).x;
+                int grid_y = this->getPosGrid(VIEW_TYPES::VIEW).y;
+                if (!this->positionMap[{grid_x, grid_y}]) {
+                    this->tileMap->removeTile(grid_x,
+                                              grid_y);
+                }
+                this->positionMap[{grid_x, grid_y}] = true;
             }
         }
     }
