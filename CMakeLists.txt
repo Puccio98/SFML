@@ -35,6 +35,12 @@ add_executable(SFML
         ResourceFiles/TextureSelector.cpp
         ResourceFiles/TextureSelector.h
         enums/tile_types.cpp
+        Entities/Components/MovementData.h
+        ResourceFiles/PushButton.cpp
+        ResourceFiles/PushButton.h
+        ResourceFiles/CssColor.h
+        ResourceFiles/SwitchButton.cpp
+        ResourceFiles/SwitchButton.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

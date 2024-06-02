@@ -10,6 +10,7 @@
 #include<ctime>
 #include<cstdlib>
 #include<sstream>
+#include "CssColor.h"
 
 enum button_states {
     BTN_IDLE = 0, BTN_HOVER, BTN_ACTIVE
@@ -18,46 +19,40 @@ namespace GUI {
     class Button {
     private:
         short unsigned id;
-        short unsigned buttonState;
-        sf::RectangleShape shape;
         sf::Font *font;
+
+    protected:
+        short unsigned buttonState;
         sf::Text text;
-
-        sf::Color textIdleColor;
-        sf::Color textHoverColor;
-        sf::Color textActiveColor;
-
-        //TODO:: Creare struct per gestire triplette di colori e aggiungere outlineColor.
-        sf::Color idleColor;
-        sf::Color hoverColor;
-        sf::Color activeColor;
-
-        bool locked = false;
-
+        sf::RectangleShape shape;
+        CssColor textColor;
+        CssColor buttonColor;
     public:
-        Button(float x, float y, float width, float height, sf::Font *font, std::string text,
-               unsigned int character_size,
-               sf::Color text_idle_color, sf::Color text_hover_color, sf::Color text_active_color, sf::Color idle_color,
-               sf::Color hover_color, sf::Color active_color, short unsigned id = 0);
+        Button(float x, float y, float width, float height, sf::Font *font, const std::string &text,
+               unsigned int character_size, const CssColor &text_color, const CssColor &button_color,
+               short unsigned id);
+
+        Button(float x, float y, float width, float height, sf::Font *font, const std::string &text,
+               unsigned int character_size, const CssColor &text_color, const CssColor &button_color);
 
         virtual ~Button();
 
         //Functions
-        void update(sf::Vector2f mousePos);
+        virtual void update(sf::Vector2f mousePos) = 0;
 
         void render(sf::RenderTarget &target);
 
         //Modifiers
-        void setText(const std::string text);
+        void setText(std::string text);
 
         //Accessors
         bool isPressed() const;
 
         std::string getText() const;
 
-        void handleEvent(sf::Event &event, const sf::Vector2f mousePos);
+        virtual void handleEvent(sf::Event &event, sf::Vector2f mousePos) = 0;
 
-        void reset();
+        virtual void reset();
 
         unsigned short getId() const;
     };

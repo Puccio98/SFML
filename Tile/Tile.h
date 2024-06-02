@@ -11,18 +11,30 @@
 #include"SFML/Window.hpp"
 #include"SFML/Graphics.hpp"
 #include"../enums/tile_types.cpp"
+#include "TileData.h"
 
 class Tile {
 private:
     std::string getTypesAsString() const;
 
-protected:
-    sf::RectangleShape shape;
-    std::vector<TILE_TYPES> tileTypes;
+    std::string getSpritesAsString() const;
 
+    void initShapes(float x, float y, float gridSizeF, sf::Texture &textureSheet,
+                    const std::vector<sf::Vector2f> &texturePositions);
+
+    int layer;
+    sf::Text layerText;
+
+protected:
+    std::vector<sf::RectangleShape> sprites;
+    sf::RectangleShape defaultSprite;
+
+    std::vector<TILE_TYPES> tileTypes;
 public:
-    Tile(float x, float y, float gridSizeF, sf::Texture &texture, const sf::Vector2f &tileTexturePosition,
-         const std::vector<TILE_TYPES> &tileTypes);
+
+    Tile(const TileData &tileData, sf::Texture &texture,
+         const std::vector<sf::Vector2f> &texturePositions,
+         const std::vector<TILE_TYPES> &tileTypes, sf::Font &font);
 
     virtual ~Tile();
 
@@ -30,7 +42,15 @@ public:
 
     void render(sf::RenderTarget &target);
 
-    std::string getAsString() const;
+    std::string getAsString(unsigned x, unsigned y, unsigned z) const;
+
+    bool isOfType(TILE_TYPES type);
+
+    void initLayerText(float x, float y, sf::Font &font);
+
+    sf::Color setGreyColor(int value, int minIntensity);
+
+    int mapToRange(int value, int minVal, int maxVal);
 };
 
 #endif //SFML_TILE_H

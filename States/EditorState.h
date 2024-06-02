@@ -40,6 +40,19 @@ private:
 
     std::vector<TILE_TYPES> tileTypes;
 
+    // Define a simple Point struct to hold x and y coordinates
+    struct Point {
+        int x, y;
+
+        // Custom comparison operator for std::map to work correctly
+        bool operator<(const Point &other) const {
+            return std::tie(x, y) < std::tie(other.x, other.y);
+        }
+    };
+
+// Define the map
+    std::map<Point, bool> positionMap;
+
     //Functions
     void initVariables();
 
@@ -60,6 +73,14 @@ private:
     void openTextureSelector();
 
     void updateInput(const float &dt);
+
+    void updateView(const float &dt);
+
+    void setAllToFalse() {
+        for (auto &pair: positionMap) {
+            pair.second = false;
+        }
+    }
 };
 
 

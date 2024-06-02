@@ -1,4 +1,5 @@
 #include "DropDownList.h"
+#include "PushButton.h"
 
 GUI::DropDownList::DropDownList(float x, float y, float width, float height, sf::Font &font,
                                 std::vector<std::string> &options,
@@ -7,23 +8,13 @@ GUI::DropDownList::DropDownList(float x, float y, float width, float height, sf:
     this->selectedElementId = default_index;
     unsigned nrOfElements = options.size();
 
-    this->activeElement = new GUI::Button(x, y, width, height, &this->font, options[default_index], 12,
-                                          sf::Color(120, 50, 80, 200),
-                                          sf::Color(150, 50, 80, 250),
-                                          sf::Color(90, 40, 60, 50),
-                                          sf::Color(120, 50, 80, 0),
-                                          sf::Color(150, 50, 80, 0),
-                                          sf::Color(90, 40, 60, 0));
+    this->activeElement = new GUI::PushButton(x, y, width, height, &this->font, options[default_index], 12,
+                                              CssColor::ClassicText(), CssColor::ClassicButton());
 
     for (size_t i = 0; i < nrOfElements; i++) {
         this->buttons.push_back(
-                new GUI::Button(x, y + (height * ((float) i + 1)), width, height, &this->font, options[i], 12,
-                                sf::Color(120, 50, 80, 200),
-                                sf::Color(150, 50, 80, 250),
-                                sf::Color(90, 40, 60, 50),
-                                sf::Color(120, 50, 80, 0),
-                                sf::Color(150, 50, 80, 0),
-                                sf::Color(90, 40, 60, 0), i));
+                new GUI::PushButton(x, y + (height * ((float) i + 1)), width, height, &this->font, options[i], 12,
+                                    CssColor::ClassicText(), CssColor::ClassicButton(), i));
     }
 }
 

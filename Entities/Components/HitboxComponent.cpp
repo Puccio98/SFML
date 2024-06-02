@@ -11,19 +11,41 @@ HitboxComponent::HitboxComponent(sf::Sprite &sprite, float offset_x, float offse
     this->hitbox.setOutlineThickness(1.f);
 }
 
-HitboxComponent::~HitboxComponent() {
-
-}
+HitboxComponent::~HitboxComponent() = default;
 
 void HitboxComponent::render(sf::RenderTarget &target) {
     target.draw(this->hitbox);
 }
 
 void HitboxComponent::update() {
-    this->hitbox.setPosition(this->sprite.getPosition().x + this->offsetX,
-                             this->sprite.getPosition().y + this->offsetY);
+    this->hitbox.setPosition(computePosition(this->sprite.getPosition()));
 }
 
 bool HitboxComponent::checkIntersect(const sf::FloatRect &frect) {
     return this->hitbox.getGlobalBounds().intersects(frect);
+}
+
+sf::Vector2f &HitboxComponent::getPosition() const {
+    return const_cast<sf::Vector2f &>(this->hitbox.getPosition());
+}
+
+void HitboxComponent::setPosition(const sf::Vector2f &position) {
+    this->hitbox.setPosition(position);
+    this->sprite.setPosition(position.x - this->offsetX, position.y - this->offsetY);
+}
+
+/**
+ * A partire da una posizione (di uno sprite), calcola la posizione della relativa hitbox.
+ * @param spritePosition
+ * @return
+ */
+sf::Vector2f HitboxComponent::computePosition(sf::Vector2f spritePosition) const {
+    return {spritePosition.x + this->offsetX,
+            spritePosition.y + this->offsetY};
+}
+
+sf::RectangleShape HitboxComponent::getHitboxRectangleShapeFromPosition(sf::Vector2f spritePosition) const {
+    sf::RectangleShape abba = sf::RectangleShape(this->hitbox.getSize());
+    abba.setPosition(this->computePosition(spritePosition));
+    return abba;
 }
