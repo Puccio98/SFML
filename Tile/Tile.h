@@ -27,6 +27,7 @@ private:
 
 protected:
     std::vector<sf::RectangleShape> sprites;
+    sf::RectangleShape defaultSprite;
 
     std::vector<TILE_TYPES> tileTypes;
 public:
@@ -34,8 +35,6 @@ public:
     Tile(const TileData &tileData, sf::Texture &texture,
          const std::vector<sf::Vector2f> &texturePositions,
          const std::vector<TILE_TYPES> &tileTypes, sf::Font &font);
-
-    Tile();
 
     virtual ~Tile();
 
@@ -48,6 +47,10 @@ public:
     bool isOfType(TILE_TYPES type);
 
     void initLayerText(float x, float y, sf::Font &font);
+
+    sf::Color setGreyColor(int value, int minIntensity);
+
+    int mapToRange(int value, int minVal, int maxVal);
 };
 
 #endif //SFML_TILE_H

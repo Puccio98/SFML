@@ -14,10 +14,15 @@ Tile::~Tile() {
 }
 
 void Tile::render(sf::RenderTarget &target) {
-    //Se collision, bordo rosso
+    if (sprites.empty()) {
+        target.draw(defaultSprite);
+        target.draw(this->layerText);
+    }
+
     for (std::size_t i = 0; i < this->sprites.size(); ++i) {
         sf::RectangleShape &sprite = this->sprites[i];
 
+        //Se collision, bordo rosso
         if (this->isOfType(TILE_TYPES::COLLISION)) {
             sprite.setOutlineColor(sf::Color(255, 0, 0, 150));
             sprite.setOutlineThickness(-2);
@@ -70,6 +75,12 @@ std::string Tile::getSpritesAsString() const {
 
 void Tile::initShapes(float x, float y, float gridSizeF, sf::Texture &textureSheet,
                       const std::vector<sf::Vector2f> &texturePositions) {
+    if (texturePositions.empty()) {
+        defaultSprite.setSize(sf::Vector2f(gridSizeF, gridSizeF));
+        defaultSprite.setPosition(x, y);
+        defaultSprite.setFillColor(this->setGreyColor(layer, 30.f));
+    }
+
     for (sf::Vector2f texturePosition: texturePositions) {
         sf::RectangleShape texture;
         texture.setSize(sf::Vector2f(gridSizeF, gridSizeF));
@@ -88,4 +99,21 @@ void Tile::initLayerText(float x, float y, sf::Font &font) {
     this->layerText.setOutlineColor(sf::Color::Black);
     this->layerText.setOutlineThickness(-1.f);
     this->layerText.setPosition(x + 2, y + 2);
+}
+
+// Function to set the fill color of a sprite based on an integer value
+sf::Color Tile::setGreyColor(int value, int minIntensity) {
+    // Map the value to the range [0, 10]
+    int greyLevel = mapToRange(value, 0, 10);
+
+    // Convert the grey level to a range between 0 and 255
+    int intensity = static_cast<int>((greyLevel / 10.0) * (255 - minIntensity)) + minIntensity;
+
+    // Set the fill color
+    return sf::Color(intensity, intensity, intensity);
+}
+
+
+int Tile::mapToRange(int value, int minVal, int maxVal) {
+    return std::min(std::max(value, minVal), maxVal);
 }
