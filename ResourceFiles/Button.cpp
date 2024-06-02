@@ -55,3 +55,7 @@ void GUI::Button::setText(const std::string text) {
 unsigned short GUI::Button::getId() const {
     return id;
 }
+
+void GUI::Button::reset() {
+
+}

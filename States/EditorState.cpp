@@ -1,5 +1,6 @@
 #include "EditorState.h"
 #include "../ResourceFiles/PushButton.h"
+#include "../ResourceFiles/SwitchButton.h"
 
 EditorState::EditorState(StateData &stateData) :
         State(stateData),
@@ -56,39 +57,30 @@ void EditorState::render(sf::RenderTarget *target) {
 
 
 void EditorState::initButtons() {
-    CssColor textColor = CssColor(sf::Color(120, 50, 80, 200),
-                                  sf::Color(150, 50, 80, 250),
-                                  sf::Color(90, 40, 60, 50));
-
-    CssColor buttonColor = CssColor(
-            sf::Color(120, 50, 80, 100),
-            sf::Color(150, 50, 80, 100),
-            sf::Color(90, 40, 60, 100));
-
     this->buttons["TOGGLE_TEXTURE_SELECTOR"] = new GUI::PushButton(this->stateData.window->getSize().x - 50, 0, 50, 50,
                                                                    this->stateData.font, "TS", 30,
-                                                                   textColor, buttonColor);
+                                                                   CssColor::ClassicText(), CssColor::ClassicButton());
 
-    this->buttons["TOGGLE_ADD_TILES"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
-                                                            (this->stateData.gridSize + 10),
-                                                            50, 50,
-                                                            this->stateData.font, "T", 30,
-                                                            textColor, buttonColor);
+    this->buttons["TOGGLE_ADD_TILES"] = new GUI::SwitchButton(this->stateData.window->getSize().x - 50,
+                                                              (this->stateData.gridSize + 10),
+                                                              50, 50,
+                                                              this->stateData.font, "T", 30,
+                                                              CssColor::ClassicText(), CssColor::ClassicButton());
 
     this->buttons["SAVE_TEXTURE_MAP"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
                                                             (this->stateData.gridSize + 10) * 2, 50, 50,
                                                             this->stateData.font, "SV", 30,
-                                                            textColor, buttonColor);
+                                                            CssColor::ClassicText(), CssColor::ClassicButton());
 
-    this->buttons["TOGGLE_COLLISIONS"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
-                                                             (this->stateData.gridSize + 10) * 3, 50, 50,
-                                                             this->stateData.font, "COL", 30,
-                                                             textColor, buttonColor);
+    this->buttons["TOGGLE_COLLISIONS"] = new GUI::SwitchButton(this->stateData.window->getSize().x - 50,
+                                                               (this->stateData.gridSize + 10) * 3, 50, 50,
+                                                               this->stateData.font, "COL", 30,
+                                                               CssColor::ClassicText(), CssColor::ClassicButton());
 
     this->buttons["CLEAR_MAP"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
                                                      (this->stateData.gridSize + 10) * 4, 50, 50,
                                                      this->stateData.font, "R", 30,
-                                                     textColor, buttonColor);
+                                                     CssColor::ClassicText(), CssColor::ClassicButton());
 }
 
 void EditorState::renderButtons(sf::RenderTarget *target) {
