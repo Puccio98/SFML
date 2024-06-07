@@ -51,7 +51,6 @@ void Tilemap::addTile(const TileData &tileData) {
         this->map[tileData.index_x][tileData.index_y].push_back(new Tile(
                 tileData,
                 this->tileTextureSheet,
-                tileData.texturePositions, tileData.types,
                 this->font));
     }
 }

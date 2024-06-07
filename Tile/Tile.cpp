@@ -1,11 +1,10 @@
 #include "Tile.h"
 
 Tile::Tile(const TileData &tileData, sf::Texture &texture,
-           const std::vector<sf::Vector2f> &texturePositions,
-           const std::vector<TILE_TYPES> &tileTypes, sf::Font &font) : tiledata(tileData) {
+           sf::Font &font) : tiledata(tileData) {
     this->initLayerText(font);
     this->tileTypes.insert(this->tileTypes.end(), tileTypes.begin(), tileTypes.end());
-    this->initShapes(texture, texturePositions);
+    this->initShapes(texture);
 }
 
 Tile::~Tile() {
@@ -66,16 +65,15 @@ std::string Tile::getSpritesAsString() const {
     return s;
 }
 
-void Tile::initShapes(sf::Texture &textureSheet,
-                      const std::vector<sf::Vector2f> &texturePositions) {
-    if (texturePositions.empty()) {
+void Tile::initShapes(sf::Texture &textureSheet) {
+    if (tiledata.texturePositions.empty()) {
         defaultSprite.setSize(sf::Vector2f(this->tiledata.gridSize, this->tiledata.gridSize));
         defaultSprite.setPosition(get_x(), get_y());
         defaultSprite.setFillColor(this->setGreyColor(this->tiledata.index_z, 30.f));
        this->setCollisionOutline(defaultSprite);
     }
 
-    for (sf::Vector2f texturePosition: texturePositions) {
+    for (sf::Vector2f texturePosition: tiledata.texturePositions) {
         addTexture(textureSheet, texturePosition);
     }
 }

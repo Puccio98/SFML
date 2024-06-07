@@ -19,8 +19,7 @@ private:
 
     std::string getSpritesAsString() const;
 
-    void initShapes(sf::Texture &textureSheet,
-                    const std::vector<sf::Vector2f> &texturePositions);
+    void initShapes(sf::Texture &textureSheet);
 
     const TileData tiledata;
     sf::Text layerText;
@@ -35,9 +34,7 @@ protected:
     std::vector<TILE_TYPES> tileTypes;
 public:
 
-    Tile(const TileData &tileData, sf::Texture &texture,
-         const std::vector<sf::Vector2f> &texturePositions,
-         const std::vector<TILE_TYPES> &tileTypes, sf::Font &font);
+    Tile(const TileData &tileData, sf::Texture &texture, sf::Font &font);
 
     virtual ~Tile();
 
