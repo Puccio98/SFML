@@ -52,7 +52,7 @@ namespace GUI {
 
         virtual void handleEvent(sf::Event &event, sf::Vector2f mousePos) = 0;
 
-        virtual void reset() = 0;
+        virtual void reset();
 
         unsigned short getId() const;
     };

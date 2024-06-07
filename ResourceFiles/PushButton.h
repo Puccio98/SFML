@@ -23,7 +23,6 @@ namespace GUI {
 
     private:
         bool locked = false;
-
     };
 }
 

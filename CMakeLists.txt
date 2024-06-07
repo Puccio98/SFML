@@ -39,6 +39,8 @@ add_executable(SFML
         ResourceFiles/PushButton.cpp
         ResourceFiles/PushButton.h
         ResourceFiles/CssColor.h
+        ResourceFiles/SwitchButton.cpp
+        ResourceFiles/SwitchButton.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)
