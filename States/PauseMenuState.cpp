@@ -83,11 +83,11 @@ void PauseMenuState::updateButtons() {
         button.second->update(mousePosView);
     }
 
-    if (this->buttons["GAME"]->isPressed()) {
+    if (this->buttons["GAME"]->isClicked()) {
         this->setPause(false);
     }
 
-    if (this->buttons["CLOSE"]->isPressed()) {
+    if (this->buttons["CLOSE"]->isClicked()) {
         this->setPause(false);
         this->quit = true;
     }

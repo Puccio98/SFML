@@ -17,12 +17,7 @@ namespace GUI {
 
         void update(sf::Vector2f mousePos) override;
 
-        void handleEvent(sf::Event &event, sf::Vector2f mousePos) override;
-
-        void reset() override;
-
     private:
-        bool locked = false;
     };
 }
 

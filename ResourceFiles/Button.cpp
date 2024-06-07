@@ -40,8 +40,8 @@ void GUI::Button::render(sf::RenderTarget &target) {
     target.draw(this->text);
 }
 
-bool GUI::Button::isPressed() const {
-    return this->buttonState == BTN_ACTIVE;
+bool GUI::Button::isClicked() const {
+    return this->locked;
 }
 
 std::string GUI::Button::getText() const {
@@ -57,5 +57,17 @@ unsigned short GUI::Button::getId() const {
 }
 
 void GUI::Button::reset() {
+    this->locked = false;
+}
+
+void GUI::Button::handleEvent(sf::Event &event, sf::Vector2f mousePos) {
+    if (this->shape.getGlobalBounds().contains(mousePos) &&
+        event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+        this->locked = true;
+    } else {
+        this->locked = false;
+    }
+   /* this->locked = this->shape.getGlobalBounds().contains(mousePos) &&
+                   event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left;*/
 
 }

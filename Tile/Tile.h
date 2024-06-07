@@ -56,6 +56,8 @@ public:
     int mapToRange(int value, int minVal, int maxVal);
 
     void addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition);
+
+    void setCollisionOutline(sf::RectangleShape &texture);
 };
 
 #endif //SFML_TILE_H

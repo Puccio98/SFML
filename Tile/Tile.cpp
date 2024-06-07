@@ -21,12 +21,6 @@ void Tile::render(sf::RenderTarget &target) {
     for (std::size_t i = 0; i < this->sprites.size(); ++i) {
         sf::RectangleShape &sprite = this->sprites[i];
 
-        //Se collision, bordo rosso
-        if (this->isOfType(TILE_TYPES::COLLISION)) {
-            sprite.setOutlineColor(sf::Color(255, 0, 0, 150));
-            sprite.setOutlineThickness(-2);
-        }
-
         target.draw(sprite);
 
         if (i == this->sprites.size() - 1) {
@@ -78,6 +72,7 @@ void Tile::initShapes(sf::Texture &textureSheet,
         defaultSprite.setSize(sf::Vector2f(this->tiledata.gridSize, this->tiledata.gridSize));
         defaultSprite.setPosition(get_x(), get_y());
         defaultSprite.setFillColor(this->setGreyColor(this->tiledata.index_z, 30.f));
+       this->setCollisionOutline(defaultSprite);
     }
 
     for (sf::Vector2f texturePosition: texturePositions) {
@@ -92,7 +87,17 @@ Tile::addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition)
     texture.setPosition(get_x(), get_y());
     texture.setTexture(&textureSheet);
     texture.setTextureRect(sf::IntRect(texturePosition.x, texturePosition.y, this->tiledata.gridSize, this->tiledata.gridSize));
+
+    setCollisionOutline(texture);
+
     sprites.push_back(texture);
+}
+
+void Tile::setCollisionOutline(sf::RectangleShape &texture) {
+    if (isOfType(TILE_TYPES::COLLISION)) {
+        texture.setOutlineColor(sf::Color(255, 0, 0, 150));
+        texture.setOutlineThickness(-2);
+    }
 }
 
 void Tile::initLayerText(sf::Font &font) {

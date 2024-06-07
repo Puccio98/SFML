@@ -21,11 +21,11 @@ namespace GUI {
 
         ~SwitchButton() override;
 
+        bool isActive() const;
+
         void update(sf::Vector2f mousePos) override;
 
         void handleEvent(sf::Event &event, sf::Vector2f mousePos) override;
-
-        bool isActive() const;
 
     private:
         bool active = false;

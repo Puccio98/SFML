@@ -56,7 +56,7 @@ void MainMenuState::updateButtons() {
     }
 
     //New Game
-    if (this->buttons["GAME_STATE"]->isPressed()) {
+    if (this->buttons["GAME_STATE"]->isClicked()) {
         for (auto &button: this->buttons) {
             button.second->reset();
         }
@@ -65,7 +65,7 @@ void MainMenuState::updateButtons() {
 
 
     //Setting State
-    if (this->buttons["SETTING_STATE"]->isPressed()) {
+    if (this->buttons["SETTING_STATE"]->isClicked()) {
         //TODO:: Spostare i bottoni in state.h e creare una funzione ResetButtons che ogni volta che apriamo un nuovo state resetta i bottoni dello stato di partenza
         for (auto &button: this->buttons) {
             button.second->reset();
@@ -74,7 +74,7 @@ void MainMenuState::updateButtons() {
     }
 
     //Editor
-    if (this->buttons["EDITOR_STATE"]->isPressed()) {
+    if (this->buttons["EDITOR_STATE"]->isClicked()) {
         for (auto &button: this->buttons) {
             button.second->reset();
         }
@@ -82,7 +82,7 @@ void MainMenuState::updateButtons() {
     }
 
     //Exit Game
-    if (this->buttons["CLOSE"]->isPressed()) {
+    if (this->buttons["CLOSE"]->isClicked()) {
         this->quit = true;
     }
 }

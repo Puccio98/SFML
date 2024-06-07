@@ -92,11 +92,11 @@ void SettingsState::updateButtons() {
         button.second->update(mousePosView);
     }
 
-    if (this->buttons["BACK"]->isPressed()) {
+    if (this->buttons["BACK"]->isClicked()) {
         this->endState();
     }
 
-    if (this->buttons["APPLY"]->isPressed()) {
+    if (this->buttons["APPLY"]->isClicked()) {
         //TODO: ogni volta che faccio una selezione, active element dovrebbe essere sostituito con un nuovo bottone piuttosto che modificargli il testo.
         //Non c'è più bisogno di usare selectedElementId, possiamo usare activeElement.id
         short activeElementId = this->dropDownList["RESOLUTION"]->getSelectedElementId();
