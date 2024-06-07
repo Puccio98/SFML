@@ -1,9 +1,10 @@
 #include "Tile.h"
 
-Tile::Tile(const TileData &tileData, sf::Texture &texture,
-           sf::Font &font) : tiledata(tileData) {
+#include <utility>
+
+Tile::Tile(TileData tileData, sf::Texture &texture,
+           sf::Font &font) : tiledata(std::move(tileData)) {
     this->initLayerText(font);
-    this->tileTypes.insert(this->tileTypes.end(), tileTypes.begin(), tileTypes.end());
     this->initShapes(texture);
 }
 
@@ -43,7 +44,7 @@ std::string Tile::getAsString(unsigned x, unsigned y, unsigned z) const {
 
 std::string Tile::getTypesAsString() const {
     std::string s;
-    for (TILE_TYPES i: tileTypes) {
+    for (TILE_TYPES i: tiledata.types) {
         s.append(std::to_string(static_cast<int>(i)) + " ");
     }
 
@@ -51,7 +52,7 @@ std::string Tile::getTypesAsString() const {
 }
 
 bool Tile::isOfType(TILE_TYPES type) {
-    return std::find(this->tileTypes.begin(), this->tileTypes.end(), type) != tileTypes.end();
+    return std::find(this->tiledata.types.begin(), this->tiledata.types.end(), type) != tiledata.types.end();
 }
 
 std::string Tile::getSpritesAsString() const {
@@ -59,7 +60,7 @@ std::string Tile::getSpritesAsString() const {
 
     for (const sf::RectangleShape &sprite: this->sprites) {
         s.append(
-                std::to_string(sprite.getTextureRect().left) + " " + std::to_string(sprite.getTextureRect().top)
+                std::to_string(sprite.getTextureRect().left) + " " + std::to_string(sprite.getTextureRect().top) + " "
         );
     }
     return s;
@@ -70,7 +71,7 @@ void Tile::initShapes(sf::Texture &textureSheet) {
         defaultSprite.setSize(sf::Vector2f(this->tiledata.gridSize, this->tiledata.gridSize));
         defaultSprite.setPosition(get_x(), get_y());
         defaultSprite.setFillColor(this->setGreyColor(this->tiledata.index_z, 30.f));
-       this->setCollisionOutline(defaultSprite);
+        this->setCollisionOutline(defaultSprite);
     }
 
     for (sf::Vector2f texturePosition: tiledata.texturePositions) {
@@ -80,11 +81,25 @@ void Tile::initShapes(sf::Texture &textureSheet) {
 
 void
 Tile::addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition) {
+    sf::IntRect textureRect = sf::IntRect(texturePosition.x, texturePosition.y, this->tiledata.gridSize,
+                                          this->tiledata.gridSize);
+    if (!sprites.empty()) {
+        // Controllo che non stia inserendo la stessa texture di prima
+        if (sprites[sprites.size() - 1].getTextureRect() == textureRect) {
+            return;
+        }
+
+        // Rimuovo eventuale sprite di default
+        if (sprites.size() == 1 && sprites[0].getFillColor() == defaultSprite.getFillColor()) {
+            this->sprites.erase(this->sprites.begin() + 0); // Cancella prima sprite
+        }
+    }
+
     sf::RectangleShape texture;
     texture.setSize(sf::Vector2f(this->tiledata.gridSize, this->tiledata.gridSize));
     texture.setPosition(get_x(), get_y());
     texture.setTexture(&textureSheet);
-    texture.setTextureRect(sf::IntRect(texturePosition.x, texturePosition.y, this->tiledata.gridSize, this->tiledata.gridSize));
+    texture.setTextureRect(textureRect);
 
     setCollisionOutline(texture);
 
