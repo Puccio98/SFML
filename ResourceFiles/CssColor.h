@@ -14,15 +14,15 @@ struct CssColor {
     sf::Color active;
 
     static CssColor ClassicButton() {
-        return {sf::Color(120, 50, 80, 0),
-                sf::Color(150, 50, 80, 0),
-                sf::Color(90, 40, 60, 0)};
+        return {sf::Color(3, 4, 94, 255),
+                sf::Color(0, 119, 182, 255),
+                sf::Color(0, 180, 216, 255)};
     }
 
     static CssColor ClassicText() {
-        return {sf::Color(120, 50, 80, 200),
-                sf::Color(150, 50, 80, 250),
-                sf::Color(90, 40, 60, 50)};
+        return {sf::Color(0, 180, 216, 255),
+                sf::Color(144, 224, 239, 255),
+                sf::Color(202, 240, 248, 255)};
     }
 };
 
