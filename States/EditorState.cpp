@@ -57,11 +57,11 @@ void EditorState::render(sf::RenderTarget *target) {
 
 
 void EditorState::initButtons() {
-    this->buttons["TOGGLE_TEXTURE_SELECTOR"] = new GUI::PushButton(this->stateData.window->getSize().x - 50, 0, 50, 50,
+    this->buttons["OPEN_TEXTURE_SELECTOR"] = new GUI::PushButton(this->stateData.window->getSize().x - 50, 0, 50, 50,
                                                                    this->stateData.font, "TS", 30,
                                                                    CssColor::ClassicText(), CssColor::ClassicButton());
 
-    this->buttons["TOGGLE_ADD_TILES"] = new GUI::SwitchButton(this->stateData.window->getSize().x - 50,
+    this->buttons["TOGGLE_TILES"] = new GUI::SwitchButton(this->stateData.window->getSize().x - 50,
                                                               (this->stateData.gridSize + 10),
                                                               50, 50,
                                                               this->stateData.font, "T", 30,
@@ -95,14 +95,14 @@ void EditorState::updateButtons() {
         button.second->update(static_cast<sf::Vector2f>(this->mousePosWindow));
     }
 
-    if (this->buttons["TOGGLE_TEXTURE_SELECTOR"]->isPressed()) {
-        this->buttons["TOGGLE_TEXTURE_SELECTOR"]->reset();
+    if (this->buttons["OPEN_TEXTURE_SELECTOR"]->isPressed()) {
+        this->buttons["OPEN_TEXTURE_SELECTOR"]->reset();
         this->showTextureSelector = !this->showTextureSelector;
         this->clock.restart();
     }
 
-    if (this->buttons["TOGGLE_ADD_TILES"]->isPressed()) {
-        this->buttons["TOGGLE_ADD_TILES"]->reset();
+    if (this->buttons["TOGGLE_TILES"]->isPressed()) {
+        this->buttons["TOGGLE_TILES"]->reset();
     }
 
     if (this->buttons["SAVE_TEXTURE_MAP"]->isPressed()) {
@@ -257,18 +257,12 @@ void EditorState::updateInput(const float &dt) {
             if (this->textureSelector->isActive()) {
                 this->textureSelector->setSelectedTile(mousePosWindow);
             } else {
-                TileData tileData;
-                tileData.gridSize = this->stateData.gridSize;
-                tileData.index_x = this->getPosGrid(VIEW_TYPES::VIEW).x;
-                tileData.index_y = this->getPosGrid(VIEW_TYPES::VIEW).y;
-                tileData.index_z = this->tileMap->getMap()[tileData.index_x][tileData.index_y].size();
-                //tileData.texturePositions.push_back(this->textureSelector->getSelectedRelativePosition());
-                tileData.types = this->tileTypes;
-
-                if (!this->positionMap[{tileData.index_x, tileData.index_y}]) {
-                    this->tileMap->addTile(tileData);
+                GUI::SwitchButton* switchBtn = dynamic_cast<GUI::SwitchButton*>(this->buttons["TOGGLE_TILES"]);
+                if (switchBtn && switchBtn->isActive()) {
+                    addTile();
+                } else {
+                    addTexture();
                 }
-                this->positionMap[{tileData.index_x, tileData.index_y}] = true;
             }
         }
 
@@ -286,6 +280,27 @@ void EditorState::updateInput(const float &dt) {
             }
         }
     }
+}
+
+void EditorState::addTile() {
+    TileData tileData;
+    tileData.gridSize = stateData.gridSize;
+    tileData.index_x = getPosGrid(VIEW_TYPES::VIEW).x;
+    tileData.index_y = getPosGrid(VIEW_TYPES::VIEW).y;
+    tileData.index_z = tileMap->getMap()[tileData.index_x][tileData.index_y].size();
+    //tileData.texturePositions.push_back(this->textureSelector->getSelectedRelativePosition());
+    tileData.types = tileTypes;
+
+    if (!positionMap[{tileData.index_x, tileData.index_y}]) {
+        tileMap->addTile(tileData);
+    }
+    positionMap[{tileData.index_x, tileData.index_y}] = true;
+}
+
+void EditorState::addTexture() {
+    int index_x = getPosGrid(VIEW_TYPES::VIEW).x;
+    int index_y = getPosGrid(VIEW_TYPES::VIEW).y;
+    this->tileMap->addTexture(index_x, index_y, this->textureSelector->getSelectedRelativePosition());
 }
 
 void EditorState::updateView(const float &dt) {

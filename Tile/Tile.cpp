@@ -2,11 +2,10 @@
 
 Tile::Tile(const TileData &tileData, sf::Texture &texture,
            const std::vector<sf::Vector2f> &texturePositions,
-           const std::vector<TILE_TYPES> &tileTypes, sf::Font &font) : layer(tileData.index_z) {
-    this->initLayerText(tileData.index_x * tileData.gridSize, tileData.index_y * tileData.gridSize, font);
+           const std::vector<TILE_TYPES> &tileTypes, sf::Font &font) : tiledata(tileData) {
+    this->initLayerText(font);
     this->tileTypes.insert(this->tileTypes.end(), tileTypes.begin(), tileTypes.end());
-    this->initShapes(tileData.index_x * tileData.gridSize, tileData.index_y * tileData.gridSize, tileData.gridSize,
-                     texture, texturePositions);
+    this->initShapes(texture, texturePositions);
 }
 
 Tile::~Tile() {
@@ -73,32 +72,37 @@ std::string Tile::getSpritesAsString() const {
     return s;
 }
 
-void Tile::initShapes(float x, float y, float gridSizeF, sf::Texture &textureSheet,
+void Tile::initShapes(sf::Texture &textureSheet,
                       const std::vector<sf::Vector2f> &texturePositions) {
     if (texturePositions.empty()) {
-        defaultSprite.setSize(sf::Vector2f(gridSizeF, gridSizeF));
-        defaultSprite.setPosition(x, y);
-        defaultSprite.setFillColor(this->setGreyColor(layer, 30.f));
+        defaultSprite.setSize(sf::Vector2f(this->tiledata.gridSize, this->tiledata.gridSize));
+        defaultSprite.setPosition(get_x(), get_y());
+        defaultSprite.setFillColor(this->setGreyColor(this->tiledata.index_z, 30.f));
     }
 
     for (sf::Vector2f texturePosition: texturePositions) {
-        sf::RectangleShape texture;
-        texture.setSize(sf::Vector2f(gridSizeF, gridSizeF));
-        texture.setPosition(x, y);
-        texture.setTexture(&textureSheet);
-        texture.setTextureRect(sf::IntRect(texturePosition.x, texturePosition.y, gridSizeF, gridSizeF));
-        this->sprites.push_back(texture);
+        addTexture(textureSheet, texturePosition);
     }
 }
 
-void Tile::initLayerText(float x, float y, sf::Font &font) {
+void
+Tile::addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition) {
+    sf::RectangleShape texture;
+    texture.setSize(sf::Vector2f(this->tiledata.gridSize, this->tiledata.gridSize));
+    texture.setPosition(get_x(), get_y());
+    texture.setTexture(&textureSheet);
+    texture.setTextureRect(sf::IntRect(texturePosition.x, texturePosition.y, this->tiledata.gridSize, this->tiledata.gridSize));
+    sprites.push_back(texture);
+}
+
+void Tile::initLayerText(sf::Font &font) {
     this->layerText.setFont(font);
-    this->layerText.setString(std::to_string(this->layer));
+    this->layerText.setString(std::to_string(this->tiledata.index_z));
     this->layerText.setFillColor(sf::Color::White);
     this->layerText.setCharacterSize(14);
     this->layerText.setOutlineColor(sf::Color::Black);
     this->layerText.setOutlineThickness(-1.f);
-    this->layerText.setPosition(x + 2, y + 2);
+    this->layerText.setPosition(get_x() + 2, get_y() + 2);
 }
 
 // Function to set the fill color of a sprite based on an integer value
@@ -116,4 +120,12 @@ sf::Color Tile::setGreyColor(int value, int minIntensity) {
 
 int Tile::mapToRange(int value, int minVal, int maxVal) {
     return std::min(std::max(value, minVal), maxVal);
+}
+
+float Tile::get_x() {
+    return tiledata.index_x * tiledata.gridSize;
+}
+
+float Tile::get_y() {
+    return tiledata.index_y * tiledata.gridSize;
 }

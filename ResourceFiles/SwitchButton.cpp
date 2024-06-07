@@ -56,3 +56,7 @@ void GUI::SwitchButton::handleEvent(sf::Event &event, sf::Vector2f mousePos) {
         this->active = !this->active;
     }
 }
+
+bool GUI::SwitchButton::isActive() const {
+    return active;
+}

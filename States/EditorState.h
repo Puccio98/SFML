@@ -81,6 +81,9 @@ private:
             pair.second = false;
         }
     }
+
+    void addTile();
+    void addTexture();
 };
 
 

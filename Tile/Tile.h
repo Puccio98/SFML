@@ -19,11 +19,14 @@ private:
 
     std::string getSpritesAsString() const;
 
-    void initShapes(float x, float y, float gridSizeF, sf::Texture &textureSheet,
+    void initShapes(sf::Texture &textureSheet,
                     const std::vector<sf::Vector2f> &texturePositions);
 
-    int layer;
+    const TileData tiledata;
     sf::Text layerText;
+
+    float get_x();
+    float get_y();
 
 protected:
     std::vector<sf::RectangleShape> sprites;
@@ -46,11 +49,13 @@ public:
 
     bool isOfType(TILE_TYPES type);
 
-    void initLayerText(float x, float y, sf::Font &font);
+    void initLayerText(sf::Font &font);
 
     sf::Color setGreyColor(int value, int minIntensity);
 
     int mapToRange(int value, int minVal, int maxVal);
+
+    void addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition);
 };
 
 #endif //SFML_TILE_H

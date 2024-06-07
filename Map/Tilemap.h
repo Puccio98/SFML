@@ -27,11 +27,9 @@ public:
 
     void render(sf::RenderTarget &target, Entity *entity = nullptr);
 
-    void addSprite(const TileData &tileData);
-
-    void removeSprite(const TileData &tileData);
-
     void addTile(const TileData &tileData);
+
+    void addTexture(int index_x, int index_y, const sf::Vector2f &texturePosition);
 
     void removeTile(unsigned index_x, unsigned index_y);
 

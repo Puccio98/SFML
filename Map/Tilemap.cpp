@@ -56,19 +56,6 @@ void Tilemap::addTile(const TileData &tileData) {
     }
 }
 
-void Tilemap::addSprite(const TileData &tileData) {
-    if (tileData.index_x < this->maxSizeGrid.x &&
-        tileData.index_y < this->maxSizeGrid.y //&& tileData.index_z < this->layers
-            ) {
-
-    }
-}
-
-void Tilemap::removeSprite(const TileData &tileData) {
-
-}
-
-
 const sf::Texture &Tilemap::getTileTextureSheet() const {
     return tileTextureSheet;
 }
@@ -370,4 +357,15 @@ std::vector<Tile *> *Tilemap::getTileLayers(int x, int y) {
 
 const std::vector<std::vector<std::vector<Tile *>>> &Tilemap::getMap() const {
     return map;
+}
+
+void Tilemap::addTexture(int index_x, int index_y, const sf::Vector2f &texturePosition) {
+    if (index_x < this->map.size() &&
+        index_y < this->map[index_x].size() &&
+        !this->map[index_x][index_y].empty() &&
+        this->map[index_x][index_y][this->map[index_x][index_y].size() - 1] != nullptr) {
+
+        this->map[index_x][index_y][this->map[index_x][index_y].size() - 1]->addTexture(this->tileTextureSheet,
+                                                                                        texturePosition);
+    }
 }
