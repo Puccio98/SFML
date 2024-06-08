@@ -25,16 +25,16 @@ private:
     sf::Text layerText;
 
     float get_x();
+
     float get_y();
 
 protected:
     std::vector<sf::RectangleShape> sprites;
     sf::RectangleShape defaultSprite;
 
-    std::vector<TILE_TYPES> tileTypes;
 public:
 
-    Tile(const TileData &tileData, sf::Texture &texture, sf::Font &font);
+    Tile(TileData tileData, sf::Texture &texture, sf::Font &font);
 
     virtual ~Tile();
 

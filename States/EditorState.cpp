@@ -58,14 +58,14 @@ void EditorState::render(sf::RenderTarget *target) {
 
 void EditorState::initButtons() {
     this->buttons["OPEN_TEXTURE_SELECTOR"] = new GUI::PushButton(this->stateData.window->getSize().x - 50, 0, 50, 50,
-                                                                   this->stateData.font, "TS", 30,
-                                                                   CssColor::ClassicText(), CssColor::ClassicButton());
+                                                                 this->stateData.font, "TS", 30,
+                                                                 CssColor::ClassicText(), CssColor::ClassicButton());
 
     this->buttons["TOGGLE_TILES"] = new GUI::SwitchButton(this->stateData.window->getSize().x - 50,
-                                                              (this->stateData.gridSize + 10),
-                                                              50, 50,
-                                                              this->stateData.font, "T", 30,
-                                                              CssColor::ClassicText(), CssColor::ClassicButton());
+                                                          (this->stateData.gridSize + 10),
+                                                          50, 50,
+                                                          this->stateData.font, "T", 30,
+                                                          CssColor::ClassicText(), CssColor::ClassicButton());
 
     this->buttons["SAVE_TEXTURE_MAP"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
                                                             (this->stateData.gridSize + 10) * 2, 50, 50,
@@ -257,7 +257,7 @@ void EditorState::updateInput(const float &dt) {
             if (this->textureSelector->isActive()) {
                 this->textureSelector->setSelectedTile(mousePosWindow);
             } else {
-                GUI::SwitchButton* switchBtn = dynamic_cast<GUI::SwitchButton*>(this->buttons["TOGGLE_TILES"]);
+                GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->buttons["TOGGLE_TILES"]);
                 if (switchBtn && switchBtn->isActive()) {
                     addTile();
                 } else {
@@ -288,8 +288,7 @@ void EditorState::addTile() {
     tileData.index_x = getPosGrid(VIEW_TYPES::VIEW).x;
     tileData.index_y = getPosGrid(VIEW_TYPES::VIEW).y;
     tileData.index_z = tileMap->getMap()[tileData.index_x][tileData.index_y].size();
-    //tileData.texturePositions.push_back(this->textureSelector->getSelectedRelativePosition());
-    tileData.types = tileTypes;
+    tileData.types = tileTypes; // Copia contenuto del vettore :D
 
     if (!positionMap[{tileData.index_x, tileData.index_y}]) {
         tileMap->addTile(tileData);
