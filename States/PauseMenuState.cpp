@@ -64,13 +64,6 @@ bool PauseMenuState::isPaused() const {
 
 void PauseMenuState::setPause(bool pause) {
     this->paused = pause;
-
-    //Se esce da menu di pausa resetta bottoni
-    if (!pause) {
-        for (auto &button: this->buttons) {
-            button.second->reset();
-        }
-    }
 }
 
 void PauseMenuState::update(const float &dt) {

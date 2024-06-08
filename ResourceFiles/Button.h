@@ -27,7 +27,7 @@ namespace GUI {
         sf::RectangleShape shape;
         CssColor textColor;
         CssColor buttonColor;
-        bool locked = false;
+        bool clicked = false;
 
     public:
         Button(float x, float y, float width, float height, sf::Font *font, const std::string &text,
@@ -48,13 +48,11 @@ namespace GUI {
         void setText(std::string text);
 
         //Accessors
-        bool isClicked() const;
+        bool isClicked();
 
         std::string getText() const;
 
         virtual void handleEvent(sf::Event &event, sf::Vector2f mousePos);
-
-        void reset();
 
         unsigned short getId() const;
     };
