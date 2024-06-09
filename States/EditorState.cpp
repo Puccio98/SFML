@@ -96,22 +96,18 @@ void EditorState::updateButtons() {
     }
 
     if (this->buttons["OPEN_TEXTURE_SELECTOR"]->isClicked()) {
-        this->buttons["OPEN_TEXTURE_SELECTOR"]->reset();
         this->showTextureSelector = !this->showTextureSelector;
         this->clock.restart();
     }
 
     if (this->buttons["TOGGLE_TILES"]->isClicked()) {
-        this->buttons["TOGGLE_TILES"]->reset();
     }
 
     if (this->buttons["SAVE_TEXTURE_MAP"]->isClicked()) {
-        this->buttons["SAVE_TEXTURE_MAP"]->reset();
         this->tileMap->saveToFile("Resources/map/map.slmp");
     }
 
     if (this->buttons["TOGGLE_COLLISIONS"]->isClicked()) {
-        this->buttons["TOGGLE_COLLISIONS"]->reset();
         auto i = std::find(this->tileTypes.begin(), this->tileTypes.end(), TILE_TYPES::COLLISION);
         if (i != this->tileTypes.end()) {
             this->tileTypes.erase(i);
@@ -121,7 +117,6 @@ void EditorState::updateButtons() {
     }
 
     if (this->buttons["CLEAR_MAP"]->isClicked()) {
-        this->buttons["CLEAR_MAP"]->reset();
         this->tileMap->clear();
     }
 
