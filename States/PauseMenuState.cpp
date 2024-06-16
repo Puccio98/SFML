@@ -1,5 +1,5 @@
 #include "PauseMenuState.h"
-#include "../ResourceFiles/PushButton.h"
+#include "../Gui/PushButton.h"
 
 void PauseMenuState::render(sf::RenderTarget *target) {
     target->draw(this->container);

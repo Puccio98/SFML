@@ -1,6 +1,6 @@
 #include "EditorState.h"
-#include "../ResourceFiles/PushButton.h"
-#include "../ResourceFiles/SwitchButton.h"
+#include "../Gui/PushButton.h"
+#include "../Gui/SwitchButton.h"
 
 EditorState::EditorState(StateData &stateData) :
         State(stateData),

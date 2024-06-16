@@ -4,7 +4,7 @@
 
 GUI::Button::Button(float x, float y, float width, float height, sf::Font *font, const std::string &text,
                     unsigned int character_size, const CssColor &text_color, const CssColor &button_color,
-                    short unsigned id) : id(id), buttonColor(button_color), textColor(text_color) {
+                    short unsigned id) : id(id), textColor(text_color), buttonColor(button_color) {
     this->buttonState = BTN_IDLE;
     this->shape.setPosition(sf::Vector2f(x, y));
     this->shape.setSize(sf::Vector2f(width, height));

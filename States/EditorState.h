@@ -3,10 +3,10 @@
 
 #include "State.h"
 #include "PauseMenuState.h"
-#include "../ResourceFiles/TextureSelector.h"
-#include "../ResourceFiles/Button.h"
+#include "../Gui/TextureSelector.h"
+#include "../Gui/Button.h"
 #include "../Map/Tilemap.h"
-#include "../ResourceFiles/TextureSelector.h"
+#include "../Gui/TextureSelector.h"
 
 class EditorState : public State {
 public:
@@ -83,6 +83,7 @@ private:
     }
 
     void addTile();
+
     void addTexture();
 };
 

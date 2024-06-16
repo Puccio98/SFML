@@ -1,5 +1,5 @@
 #include "SettingsState.h"
-#include "../ResourceFiles/PushButton.h"
+#include "../Gui/PushButton.h"
 
 SettingsState::SettingsState(StateData &stateData) : State(stateData) {
     this->initVariables();

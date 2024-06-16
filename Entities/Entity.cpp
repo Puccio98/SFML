@@ -8,6 +8,7 @@ Entity::~Entity() {
     delete this->hitboxComponent;
     delete this->movementComponent;
     delete this->animationComponent;
+    delete this->attributeComponent;
 }
 
 void Entity::setDirection(sf::Vector2f direction, const float &dt) {
@@ -37,6 +38,7 @@ void Entity::initVariables() {
     this->hitboxComponent = nullptr;
     this->movementComponent = nullptr;
     this->animationComponent = nullptr;
+    this->attributeComponent = nullptr;
 }
 
 void Entity::createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration) {
@@ -77,6 +79,14 @@ HitboxComponent *Entity::getHitboxComponent() const {
 
 unsigned int Entity::getLayer() const {
     return layerIndex;
+}
+
+void Entity::createAttributeComponent() {
+    this->attributeComponent = new AttributeComponent();
+}
+
+AttributeComponent *Entity::getAttributeComponent() const {
+    return attributeComponent;
 }
 
 

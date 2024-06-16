@@ -3,7 +3,7 @@
 
 
 #include "State.h"
-#include "../ResourceFiles/Button.h"
+#include "../Gui/Button.h"
 
 class PauseMenuState : public State {
 public:

@@ -4,11 +4,10 @@
 #include "Entity.h"
 #include "../Map/Tilemap.h"
 
-class Player : public Entity {
+class Player final : public Entity {
 private:
     //Variables
     Tilemap &map;
-
 
     //Initializer Functions
     void initVariables();
@@ -16,7 +15,7 @@ private:
 public:
     Player(float x, float y, sf::Texture &texture_sheet, Tilemap &map);
 
-    virtual ~Player();
+    ~Player() final;
 
     //Functions
     void update(const float &dt) override;
@@ -26,6 +25,10 @@ public:
     void attack(const float &dt);
 
     void updateAnimation(const float &dt);
+
+    float getCurrentHp();
+
+    float getMaxHp();
 };
 
 

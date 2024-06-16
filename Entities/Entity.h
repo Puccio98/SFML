@@ -4,6 +4,7 @@
 #include "Components/HitboxComponent.h"
 #include "Components/MovementComponent.h"
 #include "Components/AnimationComponent.h"
+#include "Components/AttributeComponent.h"
 
 class Entity {
 
@@ -17,6 +18,7 @@ protected:
     HitboxComponent *hitboxComponent{};
     MovementComponent *movementComponent{};
     AnimationComponent *animationComponent{};
+    AttributeComponent *attributeComponent{};
 public:
     Entity();
 
@@ -36,6 +38,8 @@ public:
 
     void createHitboxComponent(sf::Sprite &_sprite, float offset_x, float offset_y, float width, float height);
 
+    void createAttributeComponent();
+
     MovementComponent *getMovementComponent() const;
 
     //Functions
@@ -52,6 +56,8 @@ public:
     virtual void update(const MovementData &md, const float &dt);
 
     virtual void render(sf::RenderTarget &target);
+
+    AttributeComponent *getAttributeComponent() const;
 };
 
 #endif //SFML_ENTITY_H
