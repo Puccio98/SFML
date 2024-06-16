@@ -52,8 +52,9 @@ void TextureSelector::update(const sf::Vector2i mousePosWindow) {
 
     if (this->active) {
         sf::Vector2i gridPosition = getGridPosition(mousePosWindow);
-        const sf::Vector2f position = sf::Vector2f((gridPosition.x * gridSize) + bounds.getPosition().x, (gridPosition.y *
-                                                                                                 gridSize) + bounds.getPosition().y) ;
+        const sf::Vector2f position = sf::Vector2f((gridPosition.x * gridSize) + bounds.getPosition().x,
+                                                   (gridPosition.y *
+                                                    gridSize) + bounds.getPosition().y);
         this->selector.setPosition(position);
     }
 }
@@ -75,7 +76,8 @@ bool TextureSelector::isActive() const {
 void TextureSelector::setSelectedTile(sf::Vector2i &mousePosWindow) {
     sf::Vector2i gridPosition = getGridPosition(mousePosWindow);
     const sf::Vector2f position = sf::Vector2f((gridPosition.x * gridSize) + bounds.getPosition().x, (gridPosition.y *
-                                                                                             gridSize) + bounds.getPosition().y) ;
+                                                                                                      gridSize) +
+                                                                                                     bounds.getPosition().y);
     this->selected.setPosition(position);
 }
 
@@ -96,8 +98,8 @@ void TextureSelector::setSelectedTile(int dir_x, int dir_y) {
                                originalVerticalPosition : (originalVerticalPosition + dir_y);
 
 
-
-    this->selected.setPosition((nextHorizontalPosition * gridSize) + this->bounds.getPosition().x, (nextVerticalPosition * gridSize) + this->bounds.getPosition().y);
+    this->selected.setPosition((nextHorizontalPosition * gridSize) + this->bounds.getPosition().x,
+                               (nextVerticalPosition * gridSize) + this->bounds.getPosition().y);
 }
 
 const sf::RectangleShape &TextureSelector::getSelected() const {
@@ -105,6 +107,7 @@ const sf::RectangleShape &TextureSelector::getSelected() const {
 }
 
 sf::Vector2f TextureSelector::getSelectedRelativePosition() {
-    return sf::Vector2f(this->selected.getPosition().x - this->bounds.getPosition().x, this->selected.getPosition().y - this->bounds.getPosition().y);
+    return sf::Vector2f(this->selected.getPosition().x - this->bounds.getPosition().x,
+                        this->selected.getPosition().y - this->bounds.getPosition().y);
 }
 

@@ -8,10 +8,12 @@ GameState::GameState(StateData &stateData)
     this->initTextures();
     this->initTilemap();
     this->initPlayer();
+    this->initPlayerGUI(this->player);
 }
 
 GameState::~GameState() {
     delete this->player;
+    delete this->playerGUI;
 }
 
 void GameState::update(const float &dt) {
@@ -22,6 +24,7 @@ void GameState::update(const float &dt) {
         this->updateView(dt);
         this->updateInput(dt);
         this->updateEntity(dt, *this->player);
+        this->playerGUI->update(dt);
     } else {
         pauseMenuState.update(dt);
     }
@@ -31,11 +34,18 @@ void GameState::render(sf::RenderTarget *target = nullptr) {
     if (!target)
         target = this->stateData.window;
 
-    // renderizziamo mappa e giocatore tramite view, poi crea una Callbackfunction o simile per gestire cambio di view in renderizzazione
+    // renderizziamo mappa e giocatore tramite view, poi crea una Callback function o simile per gestire cambio di view in renderizzazione
     target->setView(this->view);
-    this->tilemap->render(*target);
-    this->player->render(*target);
+    for (int layerIndex = 0; layerIndex <= this->tilemap->getMaxLayerIndex(); layerIndex++) {
+        this->tilemap->render(*target, this->player, layerIndex);
+        if (layerIndex == this->player->getLayer()) {
+            this->player->render(*target);
+        }
+    }
+
     target->setView(this->stateData.window->getDefaultView());
+    // view standard
+    this->playerGUI->render(*target);
 
     // per debug
     target->draw(this->mouseDebug);
@@ -126,4 +136,8 @@ void GameState::updateEntity(const float &dt, Entity &entity) {
     }
     // Update the entity movement data to the correct ones
     entity.update(sprite_next_md, dt);
+}
+
+void GameState::initPlayerGUI(Player *_player) {
+    this->playerGUI = new GUI::PlayerGUI(_player);
 }

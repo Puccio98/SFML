@@ -23,22 +23,62 @@ void Tilemap::update() {
 
 }
 
-void Tilemap::render(sf::RenderTarget &target, Entity *entity) {
-    for (auto &x: this->map) {
-        for (auto &y: x) {
-            for (auto *z: y) {
-                if (z != nullptr) {
-                    z->render(target);
-                }
+void Tilemap::render(sf::RenderTarget &target, Entity *entity, unsigned layerIndex) {
+    sf::Vector2f position = entity->getHitboxComponent()->getPosition();
+    float entityGridPosition_x = position.x / this->gridSizeF;
+    float entityGridPosition_y = position.y / this->gridSizeF;
+
+    sf::Vector2f viewSize = target.getView().getSize();
+    float halfSize_x = viewSize.x / 2.f;
+    float halfSize_y = viewSize.y / 2.f;
+
+    auto calculateStartTile = [this](float entityGridPosition, float halfSize) -> int {
+        int startTile = entityGridPosition - (halfSize / this->gridSizeU);
+        return startTile <= 0 ? 0 : startTile;
+    };
+
+    auto calculateEndTile = [this](float entityGridPosition, float halfSize, float entitySize) -> int {
+        int endTile = entityGridPosition + entitySize + (halfSize / this->gridSizeU);
+        return endTile <= 0 ? 0 : endTile;
+    };
+
+    int startTile_x = calculateStartTile(entityGridPosition_x, halfSize_x);
+    int endTile_x = calculateEndTile(entityGridPosition_x, halfSize_x, entity->getSize().width);
+
+    int startTile_y = calculateStartTile(entityGridPosition_y, halfSize_y);
+    int endTile_y = calculateEndTile(entityGridPosition_y, halfSize_y, entity->getSize().height);
+
+
+    for (int i = startTile_x; i <= endTile_x && i < this->map.size(); ++i) {
+        for (int j = startTile_y; j <= endTile_y && j < this->map[i].size(); ++j) {
+            size_t layers = map[i][j].size();
+            if (layers > layerIndex) {
+                Tile *z = this->map[i][j][layerIndex];
+                z->render(target);
             }
+        }
+    }
+}
+
+void Tilemap::renderTileLayer(int i, int j, sf::RenderTarget &target) {
+    for (auto z: this->map[i][j]) {
+        if (z != nullptr) {
+            z->render(target);
+        }
+    }
+};
+
+
+void Tilemap::render(sf::RenderTarget &target) {
+    for (int i = 0; i < this->map.size(); ++i) {
+        for (int j = 0; j < this->map[i].size(); ++j) {
+            this->renderTileLayer(i, j, target);
         }
     }
 }
 
 void Tilemap::removeTile(const unsigned index_x, const unsigned index_y) {
     if (index_x < this->maxSizeGrid.x && index_y < this->maxSizeGrid.y && this->map[index_x][index_y].size() != 0) {
-        int size = this->map[index_x][index_y].size();
-
         delete this->map[index_x][index_y].at(this->map[index_x][index_y].size() - 1);
         this->map[index_x][index_y].pop_back();
     }
@@ -46,7 +86,7 @@ void Tilemap::removeTile(const unsigned index_x, const unsigned index_y) {
 
 void Tilemap::addTile(const TileData &tileData) {
     if (tileData.index_x < this->maxSizeGrid.x &&
-        tileData.index_y < this->maxSizeGrid.y //&& tileData.index_z < this->layers
+        tileData.index_y < this->maxSizeGrid.y //&& tileData.index_z < this->maxLayerIndex
             ) {
         this->map[tileData.index_x][tileData.index_y].push_back(new Tile(
                 tileData,
@@ -96,7 +136,7 @@ void Tilemap::loadFromFile(const std::string file_name) {
             iss >> label >> _gridSizeU;
         }
 
-        // Read max_layers
+        // Read max_layer_index
         std::getline(file, line);
         {
             std::istringstream iss(line);
@@ -118,7 +158,7 @@ void Tilemap::loadFromFile(const std::string file_name) {
         this->maxSizeGrid.y = _size.y;
         this->maxSizeWorld.x = static_cast<float>(_size.x * _gridSizeU);
         this->maxSizeWorld.y = static_cast<float>(_size.y * _gridSizeU);
-        this->layers = _layers;
+        this->maxLayerIndex = _layers;
         this->texturePath = _texturePath;
 
         this->clear();
@@ -133,7 +173,7 @@ void Tilemap::loadFromFile(const std::string file_name) {
             for (unsigned y = 0; y < this->maxSizeGrid.y; y++) {
                 // Initialize empty map
                 this->map[x][y] = std::vector<Tile *>();
-                //this->map[x][y].resize(this->layers, nullptr);
+                //this->map[x][y].resize(this->maxLayerIndex, nullptr);
             }
         }
 
@@ -188,6 +228,8 @@ void Tilemap::loadTile(const std::string &line) {
 }
 
 void Tilemap::saveToFile(std::string file_name) {
+    this->setMaxLayer();
+
     std::ofstream out_file;
     out_file.open(file_name, std::ofstream::out | std::ofstream::trunc);
 
@@ -196,7 +238,7 @@ void Tilemap::saveToFile(std::string file_name) {
                 << "Legenda: p == position(x,y,z), t_p == vettore di texture position(x,y), t_t == vettore di tipi di tile \n";
         out_file << "max_size_grid " << this->maxSizeGrid.x << " " << this->maxSizeGrid.y << "\n";
         out_file << "grid_size " << this->gridSizeU << "\n";
-        out_file << "max_layers " << this->layers << "\n";
+        out_file << "max_layer_index " << this->maxLayerIndex << "\n";
         out_file << "texture_path " << this->texturePath << "\n";
 
         for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
@@ -367,4 +409,27 @@ void Tilemap::addTexture(int index_x, int index_y, const sf::Vector2f &texturePo
         this->map[index_x][index_y][this->map[index_x][index_y].size() - 1]->addTexture(this->tileTextureSheet,
                                                                                         texturePosition);
     }
+}
+
+void Tilemap::setMaxLayer() {
+    size_t layerIndex = 0;
+
+    if (this->map.empty()) {
+        this->maxLayerIndex = layerIndex;
+        return;
+    }
+    for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
+        for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
+            if (this->map[x][y].size() > 1) {
+                size_t layerIndexZ = this->map[x][y].size() - 1;
+                layerIndex = layerIndex < layerIndexZ ? layerIndexZ : layerIndex;
+            }
+        }
+    }
+
+    this->maxLayerIndex = layerIndex;
+}
+
+unsigned int Tilemap::getMaxLayerIndex() const {
+    return maxLayerIndex;
 }

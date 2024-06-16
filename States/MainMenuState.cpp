@@ -1,7 +1,7 @@
 
 
 #include "MainMenuState.h"
-#include "../ResourceFiles/PushButton.h"
+#include "../Gui/PushButton.h"
 
 MainMenuState::MainMenuState(StateData &stateData) : State(stateData) {
     this->initVariables();
