@@ -75,4 +75,8 @@ HitboxComponent *Entity::getHitboxComponent() const {
     return hitboxComponent;
 }
 
+unsigned int Entity::getLayer() const {
+    return layerIndex;
+}
+
 

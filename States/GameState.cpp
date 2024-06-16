@@ -33,8 +33,13 @@ void GameState::render(sf::RenderTarget *target = nullptr) {
 
     // renderizziamo mappa e giocatore tramite view, poi crea una Callbackfunction o simile per gestire cambio di view in renderizzazione
     target->setView(this->view);
-    this->tilemap->render(*target, this->player);
-    this->player->render(*target);
+    for (int layerIndex = 0; layerIndex <= this->tilemap->getMaxLayerIndex(); layerIndex++) {
+        this->tilemap->render(*target, this->player, layerIndex);
+        if (layerIndex == this->player->getLayer()) {
+            this->player->render(*target);
+        }
+    }
+
     target->setView(this->stateData.window->getDefaultView());
 
     // per debug

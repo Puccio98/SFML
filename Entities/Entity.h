@@ -13,11 +13,14 @@ private:
 protected:
     sf::Sprite sprite;
 
+    unsigned layerIndex = 0;
     HitboxComponent *hitboxComponent{};
     MovementComponent *movementComponent{};
     AnimationComponent *animationComponent{};
 public:
     Entity();
+
+    unsigned int getLayer() const;
 
     virtual ~Entity();
 

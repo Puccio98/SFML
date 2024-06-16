@@ -8,13 +8,15 @@ class Tilemap {
 private:
     unsigned gridSizeU;
     float gridSizeF;
-    unsigned layers;
+    unsigned maxLayerIndex;
     sf::Vector2u maxSizeGrid;
     sf::Vector2f maxSizeWorld;
     std::vector<std::vector<std::vector<Tile *>>> map;
     std::string texturePath;
     sf::Texture tileTextureSheet;
     sf::Font font;
+
+    void setMaxLayer();
 
 public:
     explicit Tilemap(const std::string &file_name, sf::Font &font);
@@ -25,7 +27,9 @@ public:
 
     const std::vector<std::vector<std::vector<Tile *>>> &getMap() const;
 
-    void render(sf::RenderTarget &target, Entity *entity);
+    unsigned int getMaxLayerIndex() const;
+
+    void render(sf::RenderTarget &target, Entity *entity, unsigned layerIndex);
 
     void render(sf::RenderTarget &target);
 
