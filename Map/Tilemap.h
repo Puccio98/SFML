@@ -25,7 +25,9 @@ public:
 
     const std::vector<std::vector<std::vector<Tile *>>> &getMap() const;
 
-    void render(sf::RenderTarget &target, Entity *entity = nullptr);
+    void render(sf::RenderTarget &target, Entity *entity);
+
+    void render(sf::RenderTarget &target);
 
     void addTile(const TileData &tileData);
 
@@ -59,9 +61,11 @@ public:
     getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape,
                            const std::tuple<bool, bool> &collided) const;
 
-    std::vector<Tile *> *getTileLayers(int x, int y);
+    void renderTileLayer(int i, int j, sf::RenderTarget &target);
 
     void loadTile(const std::string &line);
+
+    std::vector<Tile *> *getTileLayers(int x, int y);
 };
 
 

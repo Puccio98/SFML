@@ -45,7 +45,7 @@ sf::Vector2f HitboxComponent::computePosition(sf::Vector2f spritePosition) const
 }
 
 sf::RectangleShape HitboxComponent::getHitboxRectangleShapeFromPosition(sf::Vector2f spritePosition) const {
-    sf::RectangleShape abba = sf::RectangleShape(this->hitbox.getSize());
-    abba.setPosition(this->computePosition(spritePosition));
-    return abba;
+    sf::RectangleShape rectangleShape = sf::RectangleShape(this->hitbox.getSize());
+    rectangleShape.setPosition(this->computePosition(spritePosition));
+    return rectangleShape;
 }
