@@ -27,6 +27,7 @@ namespace GUI {
 
         void init(const ProgressBarData &progressBarData);
 
+        void initContainer(int containerIndex, const ProgressBarData &progressBarData);
         void updateContainer(int containerIndex, const ProgressBarData &progressBarData);
     };
 }
