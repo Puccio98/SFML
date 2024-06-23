@@ -29,23 +29,22 @@ void MainMenuState::render(sf::RenderTarget *target) {
 }
 
 void MainMenuState::initButtons() {
+    auto createButton = [&](const std::string &key, const std::string &label, int yMultiplier) {
+        float x = this->p2px(5);
+        float y = this->p2py(5 + (12 * yMultiplier));
+        float width = this->p2px(15);
+        float height = this->p2py(7);
 
-    this->buttons["GAME_STATE"] = new GUI::PushButton(this->p2px(5), this->p2py(5), this->p2px(15), this->p2py(7),
-                                                      this->stateData.font, "New Game", 25,
-                                                      CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["SETTING_STATE"] = new GUI::PushButton(this->p2px(5), this->p2py(17), this->p2px(15), this->p2py(7),
-                                                         this->stateData.font, "Settings", 25,
-                                                         CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["EDITOR_STATE"] = new GUI::PushButton(this->p2px(5), this->p2py(29), this->p2px(15), this->p2py(7),
-                                                        this->stateData.font, "Editor", 25,
-                                                        CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["CLOSE"] = new GUI::PushButton(this->p2px(5), this->p2py(41), this->p2px(15), this->p2py(7),
-                                                 this->stateData.font, "Close Game", 25,
+        this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label, this->charSize(),
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
+    };
+
+    createButton("GAME_STATE", "New Game", 0);
+    createButton("SETTING_STATE", "Settings", 1);
+    createButton("EDITOR_STATE", "Editor", 2);
+    createButton("CLOSE", "Close Game", 3);
 }
+
 
 void MainMenuState::renderButtons(sf::RenderTarget &target) {
     for (auto &button: this->buttons) {

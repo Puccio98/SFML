@@ -35,9 +35,11 @@ public:
 
     void pollEvents(const float &dt);
 
-    float p2px(float percentage);
+    float p2px(float percentage) const;
 
-    float p2py(float percentage);
+    float p2py(float percentage) const;
+
+    unsigned charSize() const;
 
 protected:
     std::map<std::string, int> keybinds;

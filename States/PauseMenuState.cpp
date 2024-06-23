@@ -92,11 +92,12 @@ void PauseMenuState::initButton() {
     float x = this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f;
     float basePosY = this->container.getPosition().y;
 
-    this->buttons["GAME"] = new GUI::PushButton(x, basePosY + this->p2py(20), width, height, this->stateData.font,
-                                                "Return to Game", 25, CssColor::ClassicText(),
-                                                CssColor::ClassicButton());
-
-    this->buttons["CLOSE"] = new GUI::PushButton(x, basePosY + this->p2py(32), width, height, this->stateData.font,
-                                                 "Close", 25,
+    auto createButton = [&](const std::string &key, const std::string &label, int yMultiplier) {
+        float y = basePosY + this->p2py(20 + (12 * yMultiplier));
+        this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label, this->charSize(),
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
+    };
+
+    createButton("GAME", "Return to Game", 0);
+    createButton("CLOSE", "Close", 1);
 }

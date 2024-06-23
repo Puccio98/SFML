@@ -81,11 +81,11 @@ void SettingsState::renderButtons(sf::RenderTarget &target) {
 
 void SettingsState::initButtons() {
     this->buttons["BACK"] = new GUI::PushButton(this->p2px(5), this->p2py(70), this->p2px(15), this->p2py(7),
-                                                this->stateData.font, "Back", 25,
+                                                this->stateData.font, "Back", this->charSize(),
                                                 CssColor::ClassicText(), CssColor::ClassicButton());
 
     this->buttons["APPLY"] = new GUI::PushButton(this->p2px(25), this->p2py(70), this->p2px(15), this->p2py(7),
-                                                 this->stateData.font, "Apply", 25,
+                                                 this->stateData.font, "Apply", this->charSize(),
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
 }
 

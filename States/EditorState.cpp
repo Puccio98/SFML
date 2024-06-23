@@ -65,10 +65,11 @@ void EditorState::initButtons() {
         float height = this->p2px(4);
 
         if (isSwitch) {
-            this->buttons[key] = new GUI::SwitchButton(x, y, width, height, this->stateData.font, label, 20,
+            this->buttons[key] = new GUI::SwitchButton(x, y, width, height, this->stateData.font, label,
+                                                       this->charSize(),
                                                        CssColor::ClassicText(), CssColor::ClassicButton());
         } else {
-            this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label, 20,
+            this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label, this->charSize(),
                                                      CssColor::ClassicText(), CssColor::ClassicButton());
         }
     };
