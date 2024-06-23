@@ -1,5 +1,6 @@
 #include "PauseMenuState.h"
 #include "../Gui/PushButton.h"
+#include "../Gui/Utils.h"
 
 void PauseMenuState::render(sf::RenderTarget *target) {
     target->draw(this->container);
@@ -87,15 +88,19 @@ void PauseMenuState::updateButtons() {
 }
 
 void PauseMenuState::initButton() {
-    float width = 250.f;
-    float height = 50.f;
+    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
+    float width = GUI::Utils::p2px(15, vm);
+    float height = GUI::Utils::p2py(7, vm);
     float x = this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f;
     float basePosY = this->container.getPosition().y;
 
-    this->buttons["GAME"] = new GUI::PushButton(x, basePosY + 100, width, height, this->stateData.font,
-                                                "Return to Game", 40, CssColor::ClassicText(),
-                                                CssColor::ClassicButton());
-
-    this->buttons["CLOSE"] = new GUI::PushButton(x, basePosY + 200, width, height, this->stateData.font, "Close", 40,
+    auto createButton = [&](const std::string &key, const std::string &label, int yMultiplier) {
+        float y = basePosY + GUI::Utils::p2py(20 + (12 * yMultiplier), vm);
+        this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label,
+                                                 GUI::Utils::charSize(vm),
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
+    };
+
+    createButton("GAME", "Return to Game", 0);
+    createButton("CLOSE", "Close", 1);
 }

@@ -1,6 +1,9 @@
 #include "Tilemap.h"
 
-Tilemap::Tilemap(const std::string &file_name, sf::Font &font) : font(font) {
+Tilemap::Tilemap(const std::string &file_name, sf::Font &font) : Tilemap(file_name, font, false) {
+}
+
+Tilemap::Tilemap(const std::string &file_name, sf::Font &font, bool hud) : font(font), hud(hud) {
     this->loadFromFile(file_name);
 }
 
@@ -84,6 +87,7 @@ void Tilemap::removeTile(const unsigned index_x, const unsigned index_y) {
     }
 }
 
+
 void Tilemap::addTile(const TileData &tileData) {
     if (tileData.index_x < this->maxSizeGrid.x &&
         tileData.index_y < this->maxSizeGrid.y //&& tileData.index_z < this->maxLayerIndex
@@ -91,9 +95,11 @@ void Tilemap::addTile(const TileData &tileData) {
         this->map[tileData.index_x][tileData.index_y].push_back(new Tile(
                 tileData,
                 this->tileTextureSheet,
-                this->font));
+                this->font,
+                this->hud));
     }
 }
+
 
 const sf::Texture &Tilemap::getTileTextureSheet() const {
     return tileTextureSheet;
@@ -433,3 +439,4 @@ void Tilemap::setMaxLayer() {
 unsigned int Tilemap::getMaxLayerIndex() const {
     return maxLayerIndex;
 }
+
