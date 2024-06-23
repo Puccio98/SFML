@@ -156,7 +156,7 @@ void SettingsState::initOptionsText() {
     const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
     this->optionsText.setFont(*this->stateData.font);
     this->optionsText.setPosition(GUI::Utils::p2px(5, vm), GUI::Utils::p2py(5, vm));
-    this->optionsText.setCharacterSize(30.f);
+    this->optionsText.setCharacterSize(GUI::Utils::charSize(vm));
     this->optionsText.setFillColor(sf::Color(0, 0, 0, 255));
     this->optionsText.setString("Resolution \n\nFullscreen \n\nVsync \n\nAntialiasing");
 }

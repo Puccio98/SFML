@@ -15,7 +15,7 @@ namespace GUI {
 
         static float p2py(const float percentage, const sf::VideoMode &vm);
 
-        static unsigned int charSize(const sf::VideoMode &vm);
+        static unsigned int charSize(const sf::VideoMode &vm, const float multiplier = 1.f);
     };
 }
 

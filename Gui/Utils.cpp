@@ -9,6 +9,6 @@ float GUI::Utils::p2py(const float percentage, const sf::VideoMode &vm) {
     return std::floor(vm.height * (percentage / 100.f));
 }
 
-unsigned GUI::Utils::charSize(const sf::VideoMode &vm) {
-    return (vm.width + vm.height) / 85;
+unsigned GUI::Utils::charSize(const sf::VideoMode &vm, const float multiplier) {
+    return ((vm.width + vm.height) / 85 * multiplier);
 }

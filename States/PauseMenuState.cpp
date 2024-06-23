@@ -45,7 +45,7 @@ void PauseMenuState::initMenuText() {
     menuText.setFont(*stateData.font);
     menuText.setFillColor(sf::Color(200, 200, 200, 200));
     menuText.setString("Paused");
-    menuText.setCharacterSize(40);
+    menuText.setCharacterSize(GUI::Utils::charSize(stateData.graphicsSettings->resolution, 3));
     menuText.setPosition(
             container.getPosition().x + container.getSize().x / 2.f -
             menuText.getGlobalBounds().width / 2.f,
