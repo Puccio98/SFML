@@ -109,9 +109,9 @@ void State::initMouseDebug() {
 }
 
 float State::p2px(const float percentage) {
-    return static_cast<float >( this->stateData.graphicsSettings->resolution.width) * (percentage / 100.f);
+    return std::floor(static_cast<float >( this->stateData.graphicsSettings->resolution.width) * (percentage / 100.f));
 }
 
 float State::p2py(const float percentage) {
-    return static_cast<float >(this->stateData.graphicsSettings->resolution.height ) * (percentage / 100.f);
+    return std::floor(static_cast<float >(this->stateData.graphicsSettings->resolution.height ) * (percentage / 100.f));
 }
