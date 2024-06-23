@@ -127,7 +127,7 @@ void EditorState::updateButtons() {
 void EditorState::initVariables() {
     this->showTextureSelector = false;
     this->tileTexturePath = "Resources/images/tiles/nuovo_tilesheet.png";
-    this->tileMap = new Tilemap("Resources/map/map.slmp", *this->stateData.font);
+    this->tileMap = new Tilemap("Resources/map/map.slmp", *this->stateData.font, true);
     this->tileTypes.push_back(TILE_TYPES::DEFAULT);
 
     this->cameraSpeed = 300.f;

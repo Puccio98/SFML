@@ -15,10 +15,13 @@ private:
     std::string texturePath;
     sf::Texture tileTextureSheet;
     sf::Font font;
+    bool hud;
 
     void setMaxLayer();
 
 public:
+    explicit Tilemap(const std::string &file_name, sf::Font &font, bool hud);
+
     explicit Tilemap(const std::string &file_name, sf::Font &font);
 
     virtual ~Tilemap();

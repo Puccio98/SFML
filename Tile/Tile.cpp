@@ -3,10 +3,13 @@
 #include <utility>
 
 Tile::Tile(TileData tileData, sf::Texture &texture,
-           sf::Font &font) : tiledata(std::move(tileData)) {
+           sf::Font &font, bool hud) : tiledata(std::move(tileData)), hud(hud) {
     this->initLayerText(font);
     this->initShapes(texture);
 }
+
+Tile::Tile(TileData tileData, sf::Texture &texture,
+           sf::Font &font) : Tile(tileData, texture, font, false) {}
 
 Tile::~Tile() {
 
@@ -15,19 +18,15 @@ Tile::~Tile() {
 void Tile::render(sf::RenderTarget &target) {
     if (sprites.empty()) {
         target.draw(defaultSprite);
+    }
+
+    for (const auto &sprite: this->sprites) {
+        target.draw(sprite);
+    }
+
+    if (this->hud) {
         target.draw(this->layerText);
     }
-
-    for (std::size_t i = 0; i < this->sprites.size(); ++i) {
-        sf::RectangleShape &sprite = this->sprites[i];
-
-        target.draw(sprite);
-
-        if (i == this->sprites.size() - 1) {
-            target.draw(this->layerText);
-        }
-    }
-
 }
 
 void Tile::update() {
@@ -71,7 +70,9 @@ void Tile::initShapes(sf::Texture &textureSheet) {
         defaultSprite.setSize(sf::Vector2f(this->tiledata.gridSize, this->tiledata.gridSize));
         defaultSprite.setPosition(get_x(), get_y());
         defaultSprite.setFillColor(this->setGreyColor(this->tiledata.index_z, 30.f));
-        this->setCollisionOutline(defaultSprite);
+        if (hud) {
+            this->setCollisionOutline(defaultSprite);
+        }
     }
 
     for (sf::Vector2f texturePosition: tiledata.texturePositions) {
@@ -88,11 +89,6 @@ Tile::addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition)
         if (sprites[sprites.size() - 1].getTextureRect() == textureRect) {
             return;
         }
-
-        // Rimuovo eventuale sprite di default
-        if (sprites.size() == 1 && sprites[0].getFillColor() == defaultSprite.getFillColor()) {
-            this->sprites.erase(this->sprites.begin() + 0); // Cancella prima sprite
-        }
     }
 
     sf::RectangleShape texture;
@@ -101,7 +97,9 @@ Tile::addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition)
     texture.setTexture(&textureSheet);
     texture.setTextureRect(textureRect);
 
-    setCollisionOutline(texture);
+    if (hud) {
+        this->setCollisionOutline(texture);
+    }
 
     sprites.push_back(texture);
 }
@@ -147,3 +145,4 @@ float Tile::get_x() {
 float Tile::get_y() {
     return tiledata.index_y * tiledata.gridSize;
 }
+

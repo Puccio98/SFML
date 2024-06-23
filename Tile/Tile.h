@@ -10,7 +10,6 @@
 #include"SFML/System.hpp"
 #include"SFML/Window.hpp"
 #include"SFML/Graphics.hpp"
-#include"../enums/tile_types.cpp"
 #include "TileData.h"
 
 class Tile {
@@ -28,11 +27,15 @@ private:
 
     float get_y();
 
+    bool hud = false;
+
 protected:
     std::vector<sf::RectangleShape> sprites;
     sf::RectangleShape defaultSprite;
 
 public:
+
+    Tile(TileData tileData, sf::Texture &texture, sf::Font &font, bool hud);
 
     Tile(TileData tileData, sf::Texture &texture, sf::Font &font);
 
@@ -41,6 +44,8 @@ public:
     void update();
 
     void render(sf::RenderTarget &target);
+
+    void render(sf::RenderTarget &target, bool hud);
 
     std::string getAsString(unsigned x, unsigned y, unsigned z) const;
 
