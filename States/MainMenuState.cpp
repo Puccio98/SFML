@@ -2,6 +2,7 @@
 
 #include "MainMenuState.h"
 #include "../Gui/PushButton.h"
+#include "../Gui/Utils.h"
 
 MainMenuState::MainMenuState(StateData &stateData) : State(stateData) {
     this->initVariables();
@@ -29,23 +30,24 @@ void MainMenuState::render(sf::RenderTarget *target) {
 }
 
 void MainMenuState::initButtons() {
+    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
+    auto createButton = [&](const std::string &key, const std::string &label, int yMultiplier) {
+        float x = GUI::Utils::p2px(5, vm);
+        float y = GUI::Utils::p2py(5 + (12 * yMultiplier), vm);
+        float width = GUI::Utils::p2px(15, vm);
+        float height = GUI::Utils::p2py(7, vm);
 
-    this->buttons["GAME_STATE"] = new GUI::PushButton(this->p2px(5), this->p2py(5), this->p2px(15), this->p2py(7),
-                                                      this->stateData.font, "New Game", 25,
-                                                      CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["SETTING_STATE"] = new GUI::PushButton(this->p2px(5), this->p2py(17), this->p2px(15), this->p2py(7),
-                                                         this->stateData.font, "Settings", 25,
-                                                         CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["EDITOR_STATE"] = new GUI::PushButton(this->p2px(5), this->p2py(29), this->p2px(15), this->p2py(7),
-                                                        this->stateData.font, "Editor", 25,
-                                                        CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["CLOSE"] = new GUI::PushButton(this->p2px(5), this->p2py(41), this->p2px(15), this->p2py(7),
-                                                 this->stateData.font, "Close Game", 25,
+        this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label,
+                                                 GUI::Utils::charSize(vm),
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
+    };
+
+    createButton("GAME_STATE", "New Game", 0);
+    createButton("SETTING_STATE", "Settings", 1);
+    createButton("EDITOR_STATE", "Editor", 2);
+    createButton("CLOSE", "Close Game", 3);
 }
+
 
 void MainMenuState::renderButtons(sf::RenderTarget &target) {
     for (auto &button: this->buttons) {

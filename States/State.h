@@ -35,10 +35,6 @@ public:
 
     void pollEvents(const float &dt);
 
-    float p2px(float percentage);
-
-    float p2py(float percentage);
-
 protected:
     std::map<std::string, int> keybinds;
     bool quit;

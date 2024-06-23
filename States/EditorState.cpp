@@ -1,6 +1,7 @@
 #include "EditorState.h"
 #include "../Gui/PushButton.h"
 #include "../Gui/SwitchButton.h"
+#include "../Gui/Utils.h"
 
 EditorState::EditorState(StateData &stateData) :
         State(stateData),
@@ -57,18 +58,21 @@ void EditorState::render(sf::RenderTarget *target) {
 
 
 void EditorState::initButtons() {
+    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
     auto createButton = [&](const std::string &key, const std::string &label, int positionMultiplier,
                             bool isSwitch = false) {
-        float x = this->stateData.window->getSize().x - this->p2px(4);
-        float y = (this->p2px(4) * positionMultiplier);
-        float width = this->p2px(4);
-        float height = this->p2px(4);
+        float x = this->stateData.window->getSize().x - GUI::Utils::p2px(4, vm);
+        float y = (GUI::Utils::p2px(4, vm) * positionMultiplier);
+        float width = GUI::Utils::p2px(4, vm);
+        float height = GUI::Utils::p2px(4, vm);
 
         if (isSwitch) {
-            this->buttons[key] = new GUI::SwitchButton(x, y, width, height, this->stateData.font, label, 20,
+            this->buttons[key] = new GUI::SwitchButton(x, y, width, height, this->stateData.font, label,
+                                                       GUI::Utils::charSize(vm),
                                                        CssColor::ClassicText(), CssColor::ClassicButton());
         } else {
-            this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label, 20,
+            this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label,
+                                                     GUI::Utils::charSize(vm),
                                                      CssColor::ClassicText(), CssColor::ClassicButton());
         }
     };
@@ -192,10 +196,10 @@ bool EditorState::isQuit() const {
 }
 
 void EditorState::initGui() {
-    auto resolution = this->stateData.graphicsSettings->resolution;
+    auto vm = this->stateData.graphicsSettings->resolution;
     //TODO:: analogo della dropdown, deve essere un componente
-    this->sideBar.setPosition(static_cast<float>(resolution.width) - this->p2px(4), 0);
-    this->sideBar.setSize(sf::Vector2f(this->p2px(4), this->p2py(100)));
+    this->sideBar.setPosition(static_cast<float>(vm.width) - GUI::Utils::p2px(4, vm), 0);
+    this->sideBar.setSize(sf::Vector2f(GUI::Utils::p2px(4, vm), GUI::Utils::p2py(100, vm)));
     this->sideBar.setFillColor(sf::Color(50, 50, 50, 100));
     this->sideBar.setOutlineColor(sf::Color(200, 200, 200, 150));
     this->sideBar.setOutlineThickness(1.f);
