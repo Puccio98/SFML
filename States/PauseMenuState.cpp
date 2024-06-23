@@ -87,15 +87,16 @@ void PauseMenuState::updateButtons() {
 }
 
 void PauseMenuState::initButton() {
-    float width = 250.f;
-    float height = 50.f;
+    float width = this->p2px(15);
+    float height = this->p2py(7);
     float x = this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f;
     float basePosY = this->container.getPosition().y;
 
-    this->buttons["GAME"] = new GUI::PushButton(x, basePosY + 100, width, height, this->stateData.font,
-                                                "Return to Game", 40, CssColor::ClassicText(),
+    this->buttons["GAME"] = new GUI::PushButton(x, basePosY + this->p2py(20), width, height, this->stateData.font,
+                                                "Return to Game", 25, CssColor::ClassicText(),
                                                 CssColor::ClassicButton());
 
-    this->buttons["CLOSE"] = new GUI::PushButton(x, basePosY + 200, width, height, this->stateData.font, "Close", 40,
+    this->buttons["CLOSE"] = new GUI::PushButton(x, basePosY + this->p2py(32), width, height, this->stateData.font,
+                                                 "Close", 25,
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
 }

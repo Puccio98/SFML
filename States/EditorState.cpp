@@ -40,10 +40,10 @@ void EditorState::render(sf::RenderTarget *target) {
         target = this->stateData.window;
     }
 
-    this->renderButtons(target);
     this->renderGui(target);
 
-    if (!pauseMenuState.isPaused() && !this->textureSelector->isActive()) {
+    if (!pauseMenuState.isPaused() && !this->textureSelector->isActive() &&
+        !this->sideBar.getGlobalBounds().contains(this->mousePosWindow.x, this->mousePosWindow.y)) {
         target->draw(this->mouseDebug);
         target->setView(this->view);
         target->draw(this->previewTexture);
@@ -57,30 +57,27 @@ void EditorState::render(sf::RenderTarget *target) {
 
 
 void EditorState::initButtons() {
-    this->buttons["OPEN_TEXTURE_SELECTOR"] = new GUI::PushButton(this->stateData.window->getSize().x - 50, 0, 50, 50,
-                                                                 this->stateData.font, "TS", 30,
-                                                                 CssColor::ClassicText(), CssColor::ClassicButton());
+    auto createButton = [&](const std::string &key, const std::string &label, int positionMultiplier,
+                            bool isSwitch = false) {
+        float x = this->stateData.window->getSize().x - this->p2px(4);
+        float y = (this->p2px(4) * positionMultiplier);
+        float width = this->p2px(4);
+        float height = this->p2px(4);
 
-    this->buttons["TOGGLE_TILES"] = new GUI::SwitchButton(this->stateData.window->getSize().x - 50,
-                                                          (this->stateData.gridSize + 10),
-                                                          50, 50,
-                                                          this->stateData.font, "T", 30,
-                                                          CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["SAVE_TEXTURE_MAP"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
-                                                            (this->stateData.gridSize + 10) * 2, 50, 50,
-                                                            this->stateData.font, "SV", 30,
-                                                            CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["TOGGLE_COLLISIONS"] = new GUI::SwitchButton(this->stateData.window->getSize().x - 50,
-                                                               (this->stateData.gridSize + 10) * 3, 50, 50,
-                                                               this->stateData.font, "COL", 30,
-                                                               CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["CLEAR_MAP"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
-                                                     (this->stateData.gridSize + 10) * 4, 50, 50,
-                                                     this->stateData.font, "R", 30,
+        if (isSwitch) {
+            this->buttons[key] = new GUI::SwitchButton(x, y, width, height, this->stateData.font, label, 20,
+                                                       CssColor::ClassicText(), CssColor::ClassicButton());
+        } else {
+            this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label, 20,
                                                      CssColor::ClassicText(), CssColor::ClassicButton());
+        }
+    };
+
+    createButton("OPEN_TEXTURE_SELECTOR", "TS", 0);
+    createButton("TOGGLE_TILES", "T", 1, true);
+    createButton("SAVE_TEXTURE_MAP", "SV", 2);
+    createButton("TOGGLE_COLLISIONS", "COL", 3, true);
+    createButton("CLEAR_MAP", "R", 4);
 }
 
 void EditorState::renderButtons(sf::RenderTarget *target) {
@@ -197,8 +194,8 @@ bool EditorState::isQuit() const {
 void EditorState::initGui() {
     auto resolution = this->stateData.graphicsSettings->resolution;
     //TODO:: analogo della dropdown, deve essere un componente
-    this->sideBar.setPosition(static_cast<float>(resolution.width) - 50, 0);
-    this->sideBar.setSize(sf::Vector2f(50.f, static_cast<float>(resolution.height)));
+    this->sideBar.setPosition(static_cast<float>(resolution.width) - this->p2px(4), 0);
+    this->sideBar.setSize(sf::Vector2f(this->p2px(4), this->p2py(100)));
     this->sideBar.setFillColor(sf::Color(50, 50, 50, 100));
     this->sideBar.setOutlineColor(sf::Color(200, 200, 200, 150));
     this->sideBar.setOutlineThickness(1.f);
@@ -240,7 +237,9 @@ void EditorState::renderGui(sf::RenderTarget *target) {
     if (this->showTextureSelector) {
         this->textureSelector->render(*target);
     }
+
     target->draw(this->sideBar);
+    this->renderButtons(target);
 }
 
 

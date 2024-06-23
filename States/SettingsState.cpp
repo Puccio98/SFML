@@ -80,10 +80,12 @@ void SettingsState::renderButtons(sf::RenderTarget &target) {
 }
 
 void SettingsState::initButtons() {
-    this->buttons["BACK"] = new GUI::PushButton(100, 400, 150, 50, this->stateData.font, "Back", 50,
+    this->buttons["BACK"] = new GUI::PushButton(this->p2px(5), this->p2py(70), this->p2px(15), this->p2py(7),
+                                                this->stateData.font, "Back", 25,
                                                 CssColor::ClassicText(), CssColor::ClassicButton());
 
-    this->buttons["APPLY"] = new GUI::PushButton(300, 400, 150, 50, this->stateData.font, "Apply", 50,
+    this->buttons["APPLY"] = new GUI::PushButton(this->p2px(25), this->p2py(70), this->p2px(15), this->p2py(7),
+                                                 this->stateData.font, "Apply", 25,
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
 }
 
@@ -136,13 +138,15 @@ void SettingsState::initDropDownLists() {
             index = i;
         }
     }
-    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(300, 100, 200, 50, *this->stateData.font, videomodes_str,
+    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(this->p2px(20), this->p2py(5), this->p2px(10),
+                                                             this->p2py(5),
+                                                             *this->stateData.font, videomodes_str,
                                                              index);
 }
 
 void SettingsState::initOptionsText() {
     this->optionsText.setFont(*this->stateData.font);
-    this->optionsText.setPosition(sf::Vector2f(50.f, 100.f));
+    this->optionsText.setPosition(this->p2px(5), this->p2py(5));
     this->optionsText.setCharacterSize(30.f);
     this->optionsText.setFillColor(sf::Color(0, 0, 0, 255));
     this->optionsText.setString("Resolution \n\nFullscreen \n\nVsync \n\nAntialiasing");

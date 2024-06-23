@@ -30,16 +30,20 @@ void MainMenuState::render(sf::RenderTarget *target) {
 
 void MainMenuState::initButtons() {
 
-    this->buttons["GAME_STATE"] = new GUI::PushButton(100, 100, 150, 50, this->stateData.font, "New Game", 50,
+    this->buttons["GAME_STATE"] = new GUI::PushButton(this->p2px(5), this->p2py(5), this->p2px(15), this->p2py(7),
+                                                      this->stateData.font, "New Game", 25,
                                                       CssColor::ClassicText(), CssColor::ClassicButton());
 
-    this->buttons["SETTING_STATE"] = new GUI::PushButton(100, 200, 150, 50, this->stateData.font, "Settings", 50,
+    this->buttons["SETTING_STATE"] = new GUI::PushButton(this->p2px(5), this->p2py(17), this->p2px(15), this->p2py(7),
+                                                         this->stateData.font, "Settings", 25,
                                                          CssColor::ClassicText(), CssColor::ClassicButton());
 
-    this->buttons["EDITOR_STATE"] = new GUI::PushButton(100, 300, 150, 50, this->stateData.font, "Editor", 50,
+    this->buttons["EDITOR_STATE"] = new GUI::PushButton(this->p2px(5), this->p2py(29), this->p2px(15), this->p2py(7),
+                                                        this->stateData.font, "Editor", 25,
                                                         CssColor::ClassicText(), CssColor::ClassicButton());
 
-    this->buttons["CLOSE"] = new GUI::PushButton(100, 400, 150, 50, this->stateData.font, "Close Game", 50,
+    this->buttons["CLOSE"] = new GUI::PushButton(this->p2px(5), this->p2py(41), this->p2px(15), this->p2py(7),
+                                                 this->stateData.font, "Close Game", 25,
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
 }
 
