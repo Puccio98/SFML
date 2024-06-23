@@ -2,7 +2,7 @@
 #define SFML_PLAYERGUI_H
 
 #include "../Entities/Player.h"
-#include "ProgressBar.h"
+#include "HealthBar.h"
 
 namespace GUI {
 
@@ -12,7 +12,7 @@ namespace GUI {
         Player *player;
         sf::Font font;
 
-        GUI::ProgressBar *hpBar;
+        GUI::HealthBar *hpBar;
 
         void initFont();
 

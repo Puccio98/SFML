@@ -48,6 +48,8 @@ add_executable(SFML
         Gui/ProgressBar.cpp
         Gui/ProgressBar.h
         Gui/Structs/ProgressBarData.h
+        Gui/HealthBar.cpp
+        Gui/HealthBar.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

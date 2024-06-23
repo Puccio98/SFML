@@ -1,7 +1,6 @@
 #ifndef SFML_PROGRESSBAR_H
 #define SFML_PROGRESSBAR_H
 
-
 #include <SFML/Graphics.hpp>
 #include "Structs/ProgressBarData.h"
 
