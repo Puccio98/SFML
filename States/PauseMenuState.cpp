@@ -29,7 +29,7 @@ PauseMenuState::PauseMenuState(StateData &stateData)
     // *(new State::StateData(nullptr, stateData.window, stateData.supportedKeys, stateData.font))
     State::initKeybinds("Config/menustate_keybinds.ini");
     this->initContainer(stateData.window);
-    this->initMouseDebug();
+    this->initMenuText();
     this->initButton();
 }
 
@@ -41,7 +41,7 @@ void PauseMenuState::initContainer(const sf::RenderWindow *window) {
             sf::Vector2f(container.getGlobalBounds().width / 2.f, container.getGlobalBounds().height / 2.f));
 }
 
-void PauseMenuState::initMouseDebug() {
+void PauseMenuState::initMenuText() {
     menuText.setFont(*stateData.font);
     menuText.setFillColor(sf::Color(200, 200, 200, 200));
     menuText.setString("Paused");
