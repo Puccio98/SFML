@@ -3,7 +3,7 @@
 GUI::PlayerGUI::PlayerGUI(Player *player) : player(player) {
     this->initFont();
     ProgressBarData data(sf::Vector2f(30.f, 20.f), this->player->getMaxHp(), this->player->getCurrentHp());
-    this->hpBar = new GUI::ProgressBar(this->font, data);
+    this->hpBar = new GUI::HealthBar(data);
 }
 
 GUI::PlayerGUI::~PlayerGUI() {
