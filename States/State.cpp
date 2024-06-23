@@ -107,3 +107,11 @@ void State::initMouseDebug() {
     this->mouseDebug.setFillColor(sf::Color::White);
     this->mouseDebug.setPosition(this->mousePosView.x, this->mousePosView.y - 20);
 }
+
+float State::p2px(const float percentage) {
+    return static_cast<float >( this->stateData.graphicsSettings->resolution.width) * (percentage / 100.f);
+}
+
+float State::p2py(const float percentage) {
+    return static_cast<float >(this->stateData.graphicsSettings->resolution.height ) * (percentage / 100.f);
+}
