@@ -196,7 +196,7 @@ bool EditorState::isQuit() const {
 }
 
 void EditorState::initGui() {
-    auto vm = this->stateData.graphicsSettings->resolution;
+    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
     //TODO:: analogo della dropdown, deve essere un componente
     this->sideBar.setPosition(static_cast<float>(vm.width) - GUI::Utils::p2px(4, vm), 0);
     this->sideBar.setSize(sf::Vector2f(GUI::Utils::p2px(4, vm), GUI::Utils::p2py(100, vm)));
