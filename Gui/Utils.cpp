@@ -10,5 +10,5 @@ float GUI::Utils::p2py(const float percentage, const sf::VideoMode &vm) {
 }
 
 unsigned GUI::Utils::charSize(const sf::VideoMode &vm) {
-    return static_cast<unsigned>((vm.width + vm.height) / 85);
+    return (vm.width + vm.height) / 85;
 }
