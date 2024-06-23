@@ -4,7 +4,7 @@
 
 GUI::Button::Button(float x, float y, float width, float height, sf::Font *font, const std::string &text,
                     unsigned int character_size, const CssColor &text_color, const CssColor &button_color,
-                    short unsigned id) : id(id), buttonColor(button_color), textColor(text_color) {
+                    short unsigned id) : id(id), textColor(text_color), buttonColor(button_color) {
     this->buttonState = BTN_IDLE;
     this->shape.setPosition(sf::Vector2f(x, y));
     this->shape.setSize(sf::Vector2f(width, height));
@@ -40,8 +40,10 @@ void GUI::Button::render(sf::RenderTarget &target) {
     target.draw(this->text);
 }
 
-bool GUI::Button::isPressed() const {
-    return this->buttonState == BTN_ACTIVE;
+bool GUI::Button::isClicked() {
+    bool _isClicked = this->clicked;
+    this->clicked = false;
+    return _isClicked;
 }
 
 std::string GUI::Button::getText() const {
@@ -56,6 +58,14 @@ unsigned short GUI::Button::getId() const {
     return id;
 }
 
-void GUI::Button::reset() {
+void GUI::Button::handleEvent(sf::Event &event, sf::Vector2f mousePos) {
+    if (this->shape.getGlobalBounds().contains(mousePos) &&
+        event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+        this->clicked = true;
+    } else {
+        this->clicked = false;
+    }
+    /* this->clicked = this->shape.getGlobalBounds().contains(mousePos) &&
+                    event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left;*/
 
 }

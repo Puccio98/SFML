@@ -8,15 +8,20 @@ class Tilemap {
 private:
     unsigned gridSizeU;
     float gridSizeF;
-    unsigned layers;
+    unsigned maxLayerIndex;
     sf::Vector2u maxSizeGrid;
     sf::Vector2f maxSizeWorld;
     std::vector<std::vector<std::vector<Tile *>>> map;
     std::string texturePath;
     sf::Texture tileTextureSheet;
     sf::Font font;
+    bool hud;
+
+    void setMaxLayer();
 
 public:
+    explicit Tilemap(const std::string &file_name, sf::Font &font, bool hud);
+
     explicit Tilemap(const std::string &file_name, sf::Font &font);
 
     virtual ~Tilemap();
@@ -25,13 +30,15 @@ public:
 
     const std::vector<std::vector<std::vector<Tile *>>> &getMap() const;
 
-    void render(sf::RenderTarget &target, Entity *entity = nullptr);
+    unsigned int getMaxLayerIndex() const;
 
-    void addSprite(const TileData &tileData);
+    void render(sf::RenderTarget &target, Entity *entity, unsigned layerIndex);
 
-    void removeSprite(const TileData &tileData);
+    void render(sf::RenderTarget &target);
 
     void addTile(const TileData &tileData);
+
+    void addTexture(int index_x, int index_y, const sf::Vector2f &texturePosition);
 
     void removeTile(unsigned index_x, unsigned index_y);
 
@@ -61,9 +68,11 @@ public:
     getForbiddenDirections(const sf::RectangleShape &currentShape, const sf::RectangleShape &nextShape,
                            const std::tuple<bool, bool> &collided) const;
 
-    std::vector<Tile *> *getTileLayers(int x, int y);
+    void renderTileLayer(int i, int j, sf::RenderTarget &target);
 
     void loadTile(const std::string &line);
+
+    std::vector<Tile *> *getTileLayers(int x, int y);
 };
 
 

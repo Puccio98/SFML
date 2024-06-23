@@ -1,7 +1,8 @@
 
 
 #include "MainMenuState.h"
-#include "../ResourceFiles/PushButton.h"
+#include "../Gui/PushButton.h"
+#include "../Gui/Utils.h"
 
 MainMenuState::MainMenuState(StateData &stateData) : State(stateData) {
     this->initVariables();
@@ -29,19 +30,24 @@ void MainMenuState::render(sf::RenderTarget *target) {
 }
 
 void MainMenuState::initButtons() {
+    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
+    auto createButton = [&](const std::string &key, const std::string &label, int yMultiplier) {
+        float x = GUI::Utils::p2px(5, vm);
+        float y = GUI::Utils::p2py(5 + (12 * yMultiplier), vm);
+        float width = GUI::Utils::p2px(15, vm);
+        float height = GUI::Utils::p2py(7, vm);
 
-    this->buttons["GAME_STATE"] = new GUI::PushButton(100, 100, 150, 50, this->stateData.font, "New Game", 50,
-                                                      CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["SETTING_STATE"] = new GUI::PushButton(100, 200, 150, 50, this->stateData.font, "Settings", 50,
-                                                         CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["EDITOR_STATE"] = new GUI::PushButton(100, 300, 150, 50, this->stateData.font, "Editor", 50,
-                                                        CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["CLOSE"] = new GUI::PushButton(100, 400, 150, 50, this->stateData.font, "Close Game", 50,
+        this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label,
+                                                 GUI::Utils::charSize(vm),
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
+    };
+
+    createButton("GAME_STATE", "New Game", 0);
+    createButton("SETTING_STATE", "Settings", 1);
+    createButton("EDITOR_STATE", "Editor", 2);
+    createButton("CLOSE", "Close Game", 3);
 }
+
 
 void MainMenuState::renderButtons(sf::RenderTarget &target) {
     for (auto &button: this->buttons) {
@@ -56,33 +62,23 @@ void MainMenuState::updateButtons() {
     }
 
     //New Game
-    if (this->buttons["GAME_STATE"]->isPressed()) {
-        for (auto &button: this->buttons) {
-            button.second->reset();
-        }
+    if (this->buttons["GAME_STATE"]->isClicked()) {
         this->stateData.states->push(new GameState(this->stateData));
     }
 
 
     //Setting State
-    if (this->buttons["SETTING_STATE"]->isPressed()) {
-        //TODO:: Spostare i bottoni in state.h e creare una funzione ResetButtons che ogni volta che apriamo un nuovo state resetta i bottoni dello stato di partenza
-        for (auto &button: this->buttons) {
-            button.second->reset();
-        }
+    if (this->buttons["SETTING_STATE"]->isClicked()) {
         this->stateData.states->push(new SettingsState(this->stateData));
     }
 
     //Editor
-    if (this->buttons["EDITOR_STATE"]->isPressed()) {
-        for (auto &button: this->buttons) {
-            button.second->reset();
-        }
+    if (this->buttons["EDITOR_STATE"]->isClicked()) {
         this->stateData.states->push(new EditorState(this->stateData));
     }
 
     //Exit Game
-    if (this->buttons["CLOSE"]->isPressed()) {
+    if (this->buttons["CLOSE"]->isClicked()) {
         this->quit = true;
     }
 }

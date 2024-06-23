@@ -1,6 +1,7 @@
 #include "EditorState.h"
-#include "../ResourceFiles/PushButton.h"
-#include "../ResourceFiles/SwitchButton.h"
+#include "../Gui/PushButton.h"
+#include "../Gui/SwitchButton.h"
+#include "../Gui/Utils.h"
 
 EditorState::EditorState(StateData &stateData) :
         State(stateData),
@@ -40,10 +41,10 @@ void EditorState::render(sf::RenderTarget *target) {
         target = this->stateData.window;
     }
 
-    this->renderButtons(target);
     this->renderGui(target);
 
-    if (!pauseMenuState.isPaused() && !this->textureSelector->isActive()) {
+    if (!pauseMenuState.isPaused() && !this->textureSelector->isActive() &&
+        !this->sideBar.getGlobalBounds().contains(this->mousePosWindow.x, this->mousePosWindow.y)) {
         target->draw(this->mouseDebug);
         target->setView(this->view);
         target->draw(this->previewTexture);
@@ -57,30 +58,30 @@ void EditorState::render(sf::RenderTarget *target) {
 
 
 void EditorState::initButtons() {
-    this->buttons["TOGGLE_TEXTURE_SELECTOR"] = new GUI::PushButton(this->stateData.window->getSize().x - 50, 0, 50, 50,
-                                                                   this->stateData.font, "TS", 30,
-                                                                   CssColor::ClassicText(), CssColor::ClassicButton());
+    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
+    auto createButton = [&](const std::string &key, const std::string &label, int positionMultiplier,
+                            bool isSwitch = false) {
+        float x = this->stateData.window->getSize().x - GUI::Utils::p2px(4, vm);
+        float y = (GUI::Utils::p2px(4, vm) * positionMultiplier);
+        float width = GUI::Utils::p2px(4, vm);
+        float height = GUI::Utils::p2px(4, vm);
 
-    this->buttons["TOGGLE_ADD_TILES"] = new GUI::SwitchButton(this->stateData.window->getSize().x - 50,
-                                                              (this->stateData.gridSize + 10),
-                                                              50, 50,
-                                                              this->stateData.font, "T", 30,
-                                                              CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["SAVE_TEXTURE_MAP"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
-                                                            (this->stateData.gridSize + 10) * 2, 50, 50,
-                                                            this->stateData.font, "SV", 30,
-                                                            CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["TOGGLE_COLLISIONS"] = new GUI::SwitchButton(this->stateData.window->getSize().x - 50,
-                                                               (this->stateData.gridSize + 10) * 3, 50, 50,
-                                                               this->stateData.font, "COL", 30,
-                                                               CssColor::ClassicText(), CssColor::ClassicButton());
-
-    this->buttons["CLEAR_MAP"] = new GUI::PushButton(this->stateData.window->getSize().x - 50,
-                                                     (this->stateData.gridSize + 10) * 4, 50, 50,
-                                                     this->stateData.font, "R", 30,
+        if (isSwitch) {
+            this->buttons[key] = new GUI::SwitchButton(x, y, width, height, this->stateData.font, label,
+                                                       GUI::Utils::charSize(vm),
+                                                       CssColor::ClassicText(), CssColor::ClassicButton());
+        } else {
+            this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label,
+                                                     GUI::Utils::charSize(vm),
                                                      CssColor::ClassicText(), CssColor::ClassicButton());
+        }
+    };
+
+    createButton("OPEN_TEXTURE_SELECTOR", "TS", 0);
+    createButton("TOGGLE_TILES", "T", 1, true);
+    createButton("SAVE_TEXTURE_MAP", "SV", 2);
+    createButton("TOGGLE_COLLISIONS", "COL", 3, true);
+    createButton("CLEAR_MAP", "R", 4);
 }
 
 void EditorState::renderButtons(sf::RenderTarget *target) {
@@ -95,23 +96,19 @@ void EditorState::updateButtons() {
         button.second->update(static_cast<sf::Vector2f>(this->mousePosWindow));
     }
 
-    if (this->buttons["TOGGLE_TEXTURE_SELECTOR"]->isPressed()) {
-        this->buttons["TOGGLE_TEXTURE_SELECTOR"]->reset();
+    if (this->buttons["OPEN_TEXTURE_SELECTOR"]->isClicked()) {
         this->showTextureSelector = !this->showTextureSelector;
         this->clock.restart();
     }
 
-    if (this->buttons["TOGGLE_ADD_TILES"]->isPressed()) {
-        this->buttons["TOGGLE_ADD_TILES"]->reset();
+    if (this->buttons["TOGGLE_TILES"]->isClicked()) {
     }
 
-    if (this->buttons["SAVE_TEXTURE_MAP"]->isPressed()) {
-        this->buttons["SAVE_TEXTURE_MAP"]->reset();
+    if (this->buttons["SAVE_TEXTURE_MAP"]->isClicked()) {
         this->tileMap->saveToFile("Resources/map/map.slmp");
     }
 
-    if (this->buttons["TOGGLE_COLLISIONS"]->isPressed()) {
-        this->buttons["TOGGLE_COLLISIONS"]->reset();
+    if (this->buttons["TOGGLE_COLLISIONS"]->isClicked()) {
         auto i = std::find(this->tileTypes.begin(), this->tileTypes.end(), TILE_TYPES::COLLISION);
         if (i != this->tileTypes.end()) {
             this->tileTypes.erase(i);
@@ -120,8 +117,7 @@ void EditorState::updateButtons() {
         }
     }
 
-    if (this->buttons["CLEAR_MAP"]->isPressed()) {
-        this->buttons["CLEAR_MAP"]->reset();
+    if (this->buttons["CLEAR_MAP"]->isClicked()) {
         this->tileMap->clear();
     }
 
@@ -132,7 +128,7 @@ void EditorState::updateButtons() {
 void EditorState::initVariables() {
     this->showTextureSelector = false;
     this->tileTexturePath = "Resources/images/tiles/nuovo_tilesheet.png";
-    this->tileMap = new Tilemap("Resources/map/map.slmp", *this->stateData.font);
+    this->tileMap = new Tilemap("Resources/map/map.slmp", *this->stateData.font, true);
     this->tileTypes.push_back(TILE_TYPES::DEFAULT);
 
     this->cameraSpeed = 300.f;
@@ -200,10 +196,10 @@ bool EditorState::isQuit() const {
 }
 
 void EditorState::initGui() {
-    auto resolution = this->stateData.graphicsSettings->resolution;
+    auto vm = this->stateData.graphicsSettings->resolution;
     //TODO:: analogo della dropdown, deve essere un componente
-    this->sideBar.setPosition(static_cast<float>(resolution.width) - 50, 0);
-    this->sideBar.setSize(sf::Vector2f(50.f, static_cast<float>(resolution.height)));
+    this->sideBar.setPosition(static_cast<float>(vm.width) - GUI::Utils::p2px(4, vm), 0);
+    this->sideBar.setSize(sf::Vector2f(GUI::Utils::p2px(4, vm), GUI::Utils::p2py(100, vm)));
     this->sideBar.setFillColor(sf::Color(50, 50, 50, 100));
     this->sideBar.setOutlineColor(sf::Color(200, 200, 200, 150));
     this->sideBar.setOutlineThickness(1.f);
@@ -245,7 +241,9 @@ void EditorState::renderGui(sf::RenderTarget *target) {
     if (this->showTextureSelector) {
         this->textureSelector->render(*target);
     }
+
     target->draw(this->sideBar);
+    this->renderButtons(target);
 }
 
 
@@ -257,18 +255,12 @@ void EditorState::updateInput(const float &dt) {
             if (this->textureSelector->isActive()) {
                 this->textureSelector->setSelectedTile(mousePosWindow);
             } else {
-                TileData tileData;
-                tileData.gridSize = this->stateData.gridSize;
-                tileData.index_x = this->getPosGrid(VIEW_TYPES::VIEW).x;
-                tileData.index_y = this->getPosGrid(VIEW_TYPES::VIEW).y;
-                tileData.index_z = this->tileMap->getMap()[tileData.index_x][tileData.index_y].size();
-                //tileData.texturePositions.push_back(this->textureSelector->getSelectedRelativePosition());
-                tileData.types = this->tileTypes;
-
-                if (!this->positionMap[{tileData.index_x, tileData.index_y}]) {
-                    this->tileMap->addTile(tileData);
+                GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->buttons["TOGGLE_TILES"]);
+                if (switchBtn && switchBtn->isActive()) {
+                    addTile();
+                } else {
+                    addTexture();
                 }
-                this->positionMap[{tileData.index_x, tileData.index_y}] = true;
             }
         }
 
@@ -286,6 +278,26 @@ void EditorState::updateInput(const float &dt) {
             }
         }
     }
+}
+
+void EditorState::addTile() {
+    TileData tileData;
+    tileData.gridSize = stateData.gridSize;
+    tileData.index_x = getPosGrid(VIEW_TYPES::VIEW).x;
+    tileData.index_y = getPosGrid(VIEW_TYPES::VIEW).y;
+    tileData.index_z = tileMap->getMap()[tileData.index_x][tileData.index_y].size();
+    tileData.types = tileTypes; // Copia contenuto del vettore :D
+
+    if (!positionMap[{tileData.index_x, tileData.index_y}]) {
+        tileMap->addTile(tileData);
+    }
+    positionMap[{tileData.index_x, tileData.index_y}] = true;
+}
+
+void EditorState::addTexture() {
+    int index_x = getPosGrid(VIEW_TYPES::VIEW).x;
+    int index_y = getPosGrid(VIEW_TYPES::VIEW).y;
+    this->tileMap->addTexture(index_x, index_y, this->textureSelector->getSelectedRelativePosition());
 }
 
 void EditorState::updateView(const float &dt) {

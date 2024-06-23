@@ -34,7 +34,7 @@ void GUI::DropDownList::update(const sf::Vector2f &mousePos) {
         for (auto &button: this->buttons) {
             button->update(mousePos);
 
-            if (button->isPressed()) {
+            if (button->isClicked()) {
                 this->selectedElementId = button->getId();
                 this->activeElement->setText(button->getText());
                 this->showList = false;
@@ -56,7 +56,7 @@ void GUI::DropDownList::handleEvent(sf::Event &event, const sf::Vector2f mousePo
         }
     }
     this->activeElement->handleEvent(event, mousePos);
-    if (this->activeElement->isPressed()) {
+    if (this->activeElement->isClicked()) {
         this->showList = !this->showList;
     }
 }

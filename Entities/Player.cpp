@@ -7,6 +7,7 @@ Player::Player(float x, float y, sf::Texture &texture_sheet, Tilemap &map) : map
     this->createHitboxComponent(this->sprite, 92.f, 70.f, 75.f, 106.f);
     this->createMovementComponent(300.f, 3800.f, 1800.f);
     this->createAnimationComponent(texture_sheet);
+    this->createAttributeComponent();
 
     this->animationComponent->addAnimation("IDLE", 2.f, 0, 0, 13, 0, 192, 192);
     this->animationComponent->addAnimation("WALK", 2.f, 0, 1, 11, 1, 192, 192);
@@ -59,4 +60,12 @@ void Player::updateAnimation(const float &dt) {
 
 void Player::attack(const float &dt) {
     this->animationComponent->play("ATTACK", dt);
+}
+
+float Player::getCurrentHp() {
+    return this->getAttributeComponent()->getHp();
+}
+
+float Player::getMaxHp() {
+    return this->getAttributeComponent()->getHpMax();
 }

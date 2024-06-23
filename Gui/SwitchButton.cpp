@@ -51,8 +51,13 @@ void GUI::SwitchButton::update(sf::Vector2f mousePos) {
 }
 
 void GUI::SwitchButton::handleEvent(sf::Event &event, sf::Vector2f mousePos) {
+    GUI::Button::handleEvent(event, mousePos);
     if (this->shape.getGlobalBounds().contains(mousePos) &&
         event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
         this->active = !this->active;
     }
+}
+
+bool GUI::SwitchButton::isActive() const {
+    return active;
 }

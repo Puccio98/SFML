@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(SFML
         main.cpp
-        Game.cpp Game.h States/State.cpp States/State.h States/GameState.cpp States/GameState.h Entities/Entity.cpp Entities/Entity.h States/MainMenuState.cpp States/MainMenuState.h "ResourceFiles/Button.cpp" "ResourceFiles/Button.h"
+        Game.cpp Game.h States/State.cpp States/State.h States/GameState.cpp States/GameState.h Entities/Entity.cpp Entities/Entity.h States/MainMenuState.cpp States/MainMenuState.h "Gui/Button.cpp" "Gui/Button.h"
         Entities/Player.cpp
         Entities/Player.h
         Entities/Components/MovementComponent.cpp
@@ -25,22 +25,31 @@ add_executable(SFML
         States/PauseMenuState.h
         States/SettingsState.cpp
         States/SettingsState.h
-        ResourceFiles/DropDownList.cpp
-        ResourceFiles/DropDownList.h
+        Gui/DropDownList.cpp
+        Gui/DropDownList.h
         Map/Tilemap.cpp
         Map/Tilemap.h
         Settings/GraphicsSettings.cpp
         Settings/GraphicsSettings.h
         States/StateData.h
-        ResourceFiles/TextureSelector.cpp
-        ResourceFiles/TextureSelector.h
+        Gui/TextureSelector.cpp
+        Gui/TextureSelector.h
         enums/tile_types.cpp
         Entities/Components/MovementData.h
-        ResourceFiles/PushButton.cpp
-        ResourceFiles/PushButton.h
-        ResourceFiles/CssColor.h
-        ResourceFiles/SwitchButton.cpp
-        ResourceFiles/SwitchButton.h
+        Gui/PushButton.cpp
+        Gui/PushButton.h
+        Gui/CssColor.h
+        Gui/SwitchButton.cpp
+        Gui/SwitchButton.h
+        Entities/Components/AttributeComponent.cpp
+        Entities/Components/AttributeComponent.h
+        Gui/PlayerGUI.cpp
+        Gui/PlayerGUI.h
+        Gui/ProgressBar.cpp
+        Gui/ProgressBar.h
+        Gui/Structs/ProgressBarData.h
+        Gui/Utils.h
+        Gui/Utils.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

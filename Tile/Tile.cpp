@@ -1,13 +1,15 @@
 #include "Tile.h"
 
-Tile::Tile(const TileData &tileData, sf::Texture &texture,
-           const std::vector<sf::Vector2f> &texturePositions,
-           const std::vector<TILE_TYPES> &tileTypes, sf::Font &font) : layer(tileData.index_z) {
-    this->initLayerText(tileData.index_x * tileData.gridSize, tileData.index_y * tileData.gridSize, font);
-    this->tileTypes.insert(this->tileTypes.end(), tileTypes.begin(), tileTypes.end());
-    this->initShapes(tileData.index_x * tileData.gridSize, tileData.index_y * tileData.gridSize, tileData.gridSize,
-                     texture, texturePositions);
+#include <utility>
+
+Tile::Tile(TileData tileData, sf::Texture &texture,
+           sf::Font &font, bool hud) : tiledata(std::move(tileData)), hud(hud) {
+    this->initLayerText(font);
+    this->initShapes(texture);
 }
+
+Tile::Tile(TileData tileData, sf::Texture &texture,
+           sf::Font &font) : Tile(tileData, texture, font, false) {}
 
 Tile::~Tile() {
 
@@ -16,25 +18,15 @@ Tile::~Tile() {
 void Tile::render(sf::RenderTarget &target) {
     if (sprites.empty()) {
         target.draw(defaultSprite);
+    }
+
+    for (const auto &sprite: this->sprites) {
+        target.draw(sprite);
+    }
+
+    if (this->hud) {
         target.draw(this->layerText);
     }
-
-    for (std::size_t i = 0; i < this->sprites.size(); ++i) {
-        sf::RectangleShape &sprite = this->sprites[i];
-
-        //Se collision, bordo rosso
-        if (this->isOfType(TILE_TYPES::COLLISION)) {
-            sprite.setOutlineColor(sf::Color(255, 0, 0, 150));
-            sprite.setOutlineThickness(-2);
-        }
-
-        target.draw(sprite);
-
-        if (i == this->sprites.size() - 1) {
-            target.draw(this->layerText);
-        }
-    }
-
 }
 
 void Tile::update() {
@@ -51,7 +43,7 @@ std::string Tile::getAsString(unsigned x, unsigned y, unsigned z) const {
 
 std::string Tile::getTypesAsString() const {
     std::string s;
-    for (TILE_TYPES i: tileTypes) {
+    for (TILE_TYPES i: tiledata.types) {
         s.append(std::to_string(static_cast<int>(i)) + " ");
     }
 
@@ -59,7 +51,7 @@ std::string Tile::getTypesAsString() const {
 }
 
 bool Tile::isOfType(TILE_TYPES type) {
-    return std::find(this->tileTypes.begin(), this->tileTypes.end(), type) != tileTypes.end();
+    return std::find(this->tiledata.types.begin(), this->tiledata.types.end(), type) != tiledata.types.end();
 }
 
 std::string Tile::getSpritesAsString() const {
@@ -67,38 +59,66 @@ std::string Tile::getSpritesAsString() const {
 
     for (const sf::RectangleShape &sprite: this->sprites) {
         s.append(
-                std::to_string(sprite.getTextureRect().left) + " " + std::to_string(sprite.getTextureRect().top)
+                std::to_string(sprite.getTextureRect().left) + " " + std::to_string(sprite.getTextureRect().top) + " "
         );
     }
     return s;
 }
 
-void Tile::initShapes(float x, float y, float gridSizeF, sf::Texture &textureSheet,
-                      const std::vector<sf::Vector2f> &texturePositions) {
-    if (texturePositions.empty()) {
-        defaultSprite.setSize(sf::Vector2f(gridSizeF, gridSizeF));
-        defaultSprite.setPosition(x, y);
-        defaultSprite.setFillColor(this->setGreyColor(layer, 30.f));
+void Tile::initShapes(sf::Texture &textureSheet) {
+    if (tiledata.texturePositions.empty()) {
+        defaultSprite.setSize(sf::Vector2f(this->tiledata.gridSize, this->tiledata.gridSize));
+        defaultSprite.setPosition(get_x(), get_y());
+        defaultSprite.setFillColor(this->setGreyColor(this->tiledata.index_z, 30.f));
+        if (hud) {
+            this->setCollisionOutline(defaultSprite);
+        }
     }
 
-    for (sf::Vector2f texturePosition: texturePositions) {
-        sf::RectangleShape texture;
-        texture.setSize(sf::Vector2f(gridSizeF, gridSizeF));
-        texture.setPosition(x, y);
-        texture.setTexture(&textureSheet);
-        texture.setTextureRect(sf::IntRect(texturePosition.x, texturePosition.y, gridSizeF, gridSizeF));
-        this->sprites.push_back(texture);
+    for (sf::Vector2f texturePosition: tiledata.texturePositions) {
+        addTexture(textureSheet, texturePosition);
     }
 }
 
-void Tile::initLayerText(float x, float y, sf::Font &font) {
+void
+Tile::addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition) {
+    sf::IntRect textureRect = sf::IntRect(texturePosition.x, texturePosition.y, this->tiledata.gridSize,
+                                          this->tiledata.gridSize);
+    if (!sprites.empty()) {
+        // Controllo che non stia inserendo la stessa texture di prima
+        if (sprites[sprites.size() - 1].getTextureRect() == textureRect) {
+            return;
+        }
+    }
+
+    sf::RectangleShape texture;
+    texture.setSize(sf::Vector2f(this->tiledata.gridSize, this->tiledata.gridSize));
+    texture.setPosition(get_x(), get_y());
+    texture.setTexture(&textureSheet);
+    texture.setTextureRect(textureRect);
+
+    if (hud) {
+        this->setCollisionOutline(texture);
+    }
+
+    sprites.push_back(texture);
+}
+
+void Tile::setCollisionOutline(sf::RectangleShape &texture) {
+    if (isOfType(TILE_TYPES::COLLISION)) {
+        texture.setOutlineColor(sf::Color(255, 0, 0, 150));
+        texture.setOutlineThickness(-2);
+    }
+}
+
+void Tile::initLayerText(sf::Font &font) {
     this->layerText.setFont(font);
-    this->layerText.setString(std::to_string(this->layer));
+    this->layerText.setString(std::to_string(this->tiledata.index_z));
     this->layerText.setFillColor(sf::Color::White);
     this->layerText.setCharacterSize(14);
     this->layerText.setOutlineColor(sf::Color::Black);
     this->layerText.setOutlineThickness(-1.f);
-    this->layerText.setPosition(x + 2, y + 2);
+    this->layerText.setPosition(get_x() + 2, get_y() + 2);
 }
 
 // Function to set the fill color of a sprite based on an integer value
@@ -117,3 +137,12 @@ sf::Color Tile::setGreyColor(int value, int minIntensity) {
 int Tile::mapToRange(int value, int minVal, int maxVal) {
     return std::min(std::max(value, minVal), maxVal);
 }
+
+float Tile::get_x() {
+    return tiledata.index_x * tiledata.gridSize;
+}
+
+float Tile::get_y() {
+    return tiledata.index_y * tiledata.gridSize;
+}
+

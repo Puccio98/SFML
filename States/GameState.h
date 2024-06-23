@@ -2,7 +2,8 @@
 #define SFML_GAMESTATE_H
 
 #include "PauseMenuState.h"
-#include "../Map/TileMap.h"
+#include "../Map/Tilemap.h"
+#include "../Gui/PlayerGUI.h"
 #include <cmath>
 
 class GameState : public State {
@@ -13,10 +14,13 @@ private:
     sf::View view;
     sf::RenderTexture renderTexture;
     sf::Sprite renderSprite;
+    GUI::PlayerGUI *playerGUI;
 
     void initTextures();
 
     void initPlayer();
+
+    void initPlayerGUI(Player *_player);
 
 public:
     explicit GameState(StateData &stateData);

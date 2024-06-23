@@ -1,5 +1,6 @@
 #include "SettingsState.h"
-#include "../ResourceFiles/PushButton.h"
+#include "../Gui/PushButton.h"
+#include "../Gui/Utils.h"
 
 SettingsState::SettingsState(StateData &stateData) : State(stateData) {
     this->initVariables();
@@ -80,10 +81,16 @@ void SettingsState::renderButtons(sf::RenderTarget &target) {
 }
 
 void SettingsState::initButtons() {
-    this->buttons["BACK"] = new GUI::PushButton(100, 400, 150, 50, this->stateData.font, "Back", 50,
+    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
+    this->buttons["BACK"] = new GUI::PushButton(GUI::Utils::p2px(5, vm), GUI::Utils::p2py(70, vm),
+                                                GUI::Utils::p2px(15, vm),
+                                                GUI::Utils::p2py(7, vm),
+                                                this->stateData.font, "Back", GUI::Utils::charSize(vm),
                                                 CssColor::ClassicText(), CssColor::ClassicButton());
 
-    this->buttons["APPLY"] = new GUI::PushButton(300, 400, 150, 50, this->stateData.font, "Apply", 50,
+    this->buttons["APPLY"] = new GUI::PushButton(GUI::Utils::p2px(25, vm), GUI::Utils::p2py(70, vm),
+                                                 GUI::Utils::p2px(15, vm), GUI::Utils::p2py(7, vm),
+                                                 this->stateData.font, "Apply", GUI::Utils::charSize(vm),
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
 }
 
@@ -92,11 +99,11 @@ void SettingsState::updateButtons() {
         button.second->update(mousePosView);
     }
 
-    if (this->buttons["BACK"]->isPressed()) {
+    if (this->buttons["BACK"]->isClicked()) {
         this->endState();
     }
 
-    if (this->buttons["APPLY"]->isPressed()) {
+    if (this->buttons["APPLY"]->isClicked()) {
         //TODO: ogni volta che faccio una selezione, active element dovrebbe essere sostituito con un nuovo bottone piuttosto che modificargli il testo.
         //Non c'è più bisogno di usare selectedElementId, possiamo usare activeElement.id
         short activeElementId = this->dropDownList["RESOLUTION"]->getSelectedElementId();
@@ -122,6 +129,8 @@ void SettingsState::updateButtons() {
 }
 
 void SettingsState::initDropDownLists() {
+    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
+
     std::vector<std::string> videomodes_str;
     videomodes_str.reserve(this->videoModes.size());
     for (auto &i: this->videoModes) {
@@ -136,13 +145,17 @@ void SettingsState::initDropDownLists() {
             index = i;
         }
     }
-    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(300, 100, 200, 50, *this->stateData.font, videomodes_str,
+    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(GUI::Utils::p2px(20, vm), GUI::Utils::p2py(5, vm),
+                                                             GUI::Utils::p2px(10, vm),
+                                                             GUI::Utils::p2py(5, vm),
+                                                             *this->stateData.font, videomodes_str,
                                                              index);
 }
 
 void SettingsState::initOptionsText() {
+    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
     this->optionsText.setFont(*this->stateData.font);
-    this->optionsText.setPosition(sf::Vector2f(50.f, 100.f));
+    this->optionsText.setPosition(GUI::Utils::p2px(5, vm), GUI::Utils::p2py(5, vm));
     this->optionsText.setCharacterSize(30.f);
     this->optionsText.setFillColor(sf::Color(0, 0, 0, 255));
     this->optionsText.setString("Resolution \n\nFullscreen \n\nVsync \n\nAntialiasing");
