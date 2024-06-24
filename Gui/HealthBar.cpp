@@ -6,7 +6,7 @@ GUI::HealthBar::HealthBar(const ProgressBarData &progressBarData) {
 
 void GUI::HealthBar::update(const ProgressBarData &progressBarData) {
     for (int i = 0; i < this->hpContainers.size(); i++) {
-        updateContainer(i, progressBarData);
+        this->updateContainer(i, progressBarData);
     }
 }
 
@@ -30,14 +30,13 @@ void GUI::HealthBar::init(const ProgressBarData &progressBarData) {
     }
 
     for (int i = 0; i < this->hpContainers.size(); i++) {
-        initContainer(i, progressBarData);
+        this->initContainer(i, progressBarData);
     }
 
     this->update(progressBarData);
 }
 
 void GUI::HealthBar::initContainer(int containerIndex, const ProgressBarData &progressBarData) {
-    bool isFullHeart = containerIndex < progressBarData.currentValue;
     bool isEven = containerIndex % 2;
     bool heartPattern = containerIndex / 2 % 2; // piccola modifica grafica per non fare tutti i cuori sullo stesso piano
     int scaleFactor = 2;
@@ -47,7 +46,7 @@ void GUI::HealthBar::initContainer(int containerIndex, const ProgressBarData &pr
 
     sf::RectangleShape rectangle(sf::Vector2f(this->width, this->height));
 
-    rectangle.setTexture(isFullHeart? &fullHeartTexture : &emptyHeartTexture);
+    rectangle.setTexture(&fullHeartTexture);
     sf::IntRect textureRect = rectangle.getTextureRect();
 
     rectangle.setPosition(x_pos, y_pos);
@@ -64,7 +63,8 @@ void GUI::HealthBar::initContainer(int containerIndex, const ProgressBarData &pr
 }
 
 void GUI::HealthBar::updateContainer(int containerIndex, const ProgressBarData &progressBarData) {
-
+    bool isFullHeart = containerIndex < progressBarData.currentValue;
+    this->hpContainers[containerIndex].setTexture(isFullHeart? &fullHeartTexture : &emptyHeartTexture);
 }
 
 GUI::HealthBar::~HealthBar()  = default;
