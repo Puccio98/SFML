@@ -61,7 +61,7 @@ void EditorState::initButtons() {
     const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
     auto createButton = [&](const std::string &key, const std::string &label, int positionMultiplier,
                             bool isSwitch = false) {
-        float x = this->stateData.window->getSize().x - GUI::Utils::p2px(4, vm);
+        float x = vm.width - GUI::Utils::p2px(4, vm);
         float y = (GUI::Utils::p2px(4, vm) * positionMultiplier);
         float width = GUI::Utils::p2px(4, vm);
         float height = GUI::Utils::p2px(4, vm);
