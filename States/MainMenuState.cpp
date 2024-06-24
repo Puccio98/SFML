@@ -86,8 +86,8 @@ void MainMenuState::updateButtons() {
 //Initializer Functions
 void MainMenuState::initBackground() {
     this->background.setSize(
-            sf::Vector2f(static_cast<float>(this->stateData.window->getSize().x),
-                         static_cast<float>(this->stateData.window->getSize().y))
+            sf::Vector2f(static_cast<float>(this->stateData.graphicsSettings->resolution.width),
+                         static_cast<float>(this->stateData.graphicsSettings->resolution.height))
     );
     if (!this->backgroundTexture.loadFromFile("../Resources/images/background.png")) {
         throw "ERROR::MAIN_MENU_STATE::FAILED_TO_LOAD_BACKGROUND_TEXTURE";
