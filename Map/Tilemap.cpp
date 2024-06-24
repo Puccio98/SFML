@@ -360,10 +360,8 @@ Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf
 
 
 sf::Vector2i Tilemap::getGridPosition(const sf::Vector2f &absolutePosition) const {
-    int gridX = static_cast<int>(absolutePosition.x / this->gridSizeU);
-    int gridY = static_cast<int>(absolutePosition.y / this->gridSizeU);
-
-    return {gridX, gridY};
+    return {static_cast<int>(absolutePosition.x / this->gridSizeU),
+            static_cast<int>(absolutePosition.y / this->gridSizeU)};
 }
 
 std::tuple<sf::Vector2i, sf::Vector2i>
