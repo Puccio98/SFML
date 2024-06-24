@@ -139,5 +139,5 @@ void GameState::updateEntity(const float &dt, Entity &entity) {
 }
 
 void GameState::initPlayerGUI(Player *_player) {
-    this->playerGUI = new GUI::PlayerGUI(_player);
+    this->playerGUI = new GUI::PlayerGUI(_player, this->stateData.graphicsSettings->resolution);
 }
