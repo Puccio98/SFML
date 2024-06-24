@@ -58,7 +58,7 @@ void EditorState::render(sf::RenderTarget *target) {
 
 
 void EditorState::initButtons() {
-    const sf::VideoMode vm = this->stateData.getCurrentVideoMode();
+    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
     auto createButton = [&](const std::string &key, const std::string &label, int positionMultiplier,
                             bool isSwitch = false) {
         float x = vm.width - GUI::Utils::p2px(4, vm);
@@ -135,9 +135,8 @@ void EditorState::initVariables() {
 }
 
 void EditorState::initView() {
-    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
-    this->view.setSize(sf::Vector2f(vm.width,
-                                    vm.height));
+    const sf::VideoMode vm = this->stateData.getCurrentVideoMode();
+    this->view.setSize(sf::Vector2f(vm.width, vm.height));
     this->view.setCenter(vm.width / 2.f, vm.height / 2.f);
 }
 
