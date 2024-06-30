@@ -3,7 +3,7 @@
 State::State(StateData &stateData) : stateData(stateData) {
     this->quit = false;
     this->initMouseDebug();
-    this->abba = this->stateData.getDefaultVideoMode();
+    this->dvm = this->stateData.getDefaultVideoMode();
 }
 
 State::~State() = default;
@@ -105,9 +105,9 @@ sf::Vector2i State::getPosGrid(VIEW_TYPES viewType, sf::View view) const {
             };
         case VIEW_TYPES::VIEW: {
             return {
-                    (static_cast<int>(this->mousePosView.x + (view.getCenter().x - this->abba.width / 2))) /
+                    (static_cast<int>(this->mousePosView.x + (view.getCenter().x - this->dvm.width / 2))) /
                     static_cast<int > (this->stateData.gridSize),
-                    (static_cast<int>(this->mousePosView.y + (view.getCenter().y - this->abba.height / 2))) /
+                    (static_cast<int>(this->mousePosView.y + (view.getCenter().y - this->dvm.height / 2))) /
                     static_cast<int > (this->stateData.gridSize)
             };
         }

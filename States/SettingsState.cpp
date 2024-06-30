@@ -81,15 +81,15 @@ void SettingsState::renderButtons(sf::RenderTarget &target) {
 }
 
 void SettingsState::initButtons() {
-    this->buttons["BACK"] = new GUI::PushButton(GUI::Utils::p2px(5, this->abba), GUI::Utils::p2py(70, this->abba),
-                                                GUI::Utils::p2px(15, this->abba),
-                                                GUI::Utils::p2py(7, this->abba),
-                                                this->stateData.font, "Back", GUI::Utils::charSize(this->abba),
+    this->buttons["BACK"] = new GUI::PushButton(GUI::Utils::p2px(5, this->dvm), GUI::Utils::p2py(70, this->dvm),
+                                                GUI::Utils::p2px(15, this->dvm),
+                                                GUI::Utils::p2py(7, this->dvm),
+                                                this->stateData.font, "Back", GUI::Utils::charSize(this->dvm),
                                                 CssColor::ClassicText(), CssColor::ClassicButton());
 
-    this->buttons["APPLY"] = new GUI::PushButton(GUI::Utils::p2px(25, this->abba), GUI::Utils::p2py(70, this->abba),
-                                                 GUI::Utils::p2px(15, this->abba), GUI::Utils::p2py(7, this->abba),
-                                                 this->stateData.font, "Apply", GUI::Utils::charSize(this->abba),
+    this->buttons["APPLY"] = new GUI::PushButton(GUI::Utils::p2px(25, this->dvm), GUI::Utils::p2py(70, this->dvm),
+                                                 GUI::Utils::p2px(15, this->dvm), GUI::Utils::p2py(7, this->dvm),
+                                                 this->stateData.font, "Apply", GUI::Utils::charSize(this->dvm),
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
 }
 
@@ -140,18 +140,18 @@ void SettingsState::initDropDownLists() {
             index = i;
         }
     }
-    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(GUI::Utils::p2px(20, this->abba),
-                                                             GUI::Utils::p2py(5, this->abba),
-                                                             GUI::Utils::p2px(10, this->abba),
-                                                             GUI::Utils::p2py(5, this->abba),
+    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(GUI::Utils::p2px(20, this->dvm),
+                                                             GUI::Utils::p2py(5, this->dvm),
+                                                             GUI::Utils::p2px(10, this->dvm),
+                                                             GUI::Utils::p2py(5, this->dvm),
                                                              *this->stateData.font, videomodes_str,
                                                              index);
 }
 
 void SettingsState::initOptionsText() {
     this->optionsText.setFont(*this->stateData.font);
-    this->optionsText.setPosition(GUI::Utils::p2px(5, this->abba), GUI::Utils::p2py(5, this->abba));
-    this->optionsText.setCharacterSize(GUI::Utils::charSize(this->abba));
+    this->optionsText.setPosition(GUI::Utils::p2px(5, this->dvm), GUI::Utils::p2py(5, this->dvm));
+    this->optionsText.setCharacterSize(GUI::Utils::charSize(this->dvm));
     this->optionsText.setFillColor(sf::Color(0, 0, 0, 255));
     this->optionsText.setString("Resolution \n\nFullscreen \n\nVsync \n\nAntialiasing");
 }

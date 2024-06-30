@@ -30,15 +30,14 @@ void MainMenuState::render(sf::RenderTarget *target) {
 }
 
 void MainMenuState::initButtons() {
-    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
     auto createButton = [&](const std::string &key, const std::string &label, int yMultiplier) {
-        float x = GUI::Utils::p2px(5, vm);
-        float y = GUI::Utils::p2py(5 + (12 * yMultiplier), vm);
-        float width = GUI::Utils::p2px(15, vm);
-        float height = GUI::Utils::p2py(7, vm);
+        float x = GUI::Utils::p2px(5, this->dvm);
+        float y = GUI::Utils::p2py(5 + (12 * yMultiplier), this->dvm);
+        float width = GUI::Utils::p2px(15, this->dvm);
+        float height = GUI::Utils::p2py(7, this->dvm);
 
         this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label,
-                                                 GUI::Utils::charSize(vm),
+                                                 GUI::Utils::charSize(this->dvm),
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
     };
 

@@ -7,7 +7,7 @@ EditorState::EditorState(StateData &stateData) :
         State(stateData),
         pauseMenuState(PauseMenuState(stateData)) {
     this->initButtonsKeyLabel();
-    this->sideBar = new GUI::Sidebar(this->abba, *stateData.font, this->buttonsKeyLabel);
+    this->sideBar = new GUI::Sidebar(this->dvm, *stateData.font, this->buttonsKeyLabel);
 
     this->initVariables();
     this->initView();
@@ -107,8 +107,8 @@ void EditorState::initVariables() {
 }
 
 void EditorState::initView() {
-    this->view.setSize(sf::Vector2f(this->abba.width, this->abba.height));
-    this->view.setCenter(this->abba.width / 2.f, this->abba.height / 2.f);
+    this->view.setSize(sf::Vector2f(this->dvm.width, this->dvm.height));
+    this->view.setCenter(this->dvm.width / 2.f, this->dvm.height / 2.f);
 }
 
 void EditorState::handleEvent(sf::Event &event, const float &dt) {
@@ -164,7 +164,7 @@ bool EditorState::isQuit() const {
 
 void EditorState::initGui() {
     this->textureSelector = new TextureSelector(
-            this->abba.width - this->tileMap->getTileTextureSheet().getSize().x -
+            this->dvm.width - this->tileMap->getTileTextureSheet().getSize().x -
             this->sideBar->getSize().x, 0.f, this->stateData.gridSize,
             this->tileMap->getTileTextureSheet());
     this->previewTexture.setSize(sf::Vector2f(this->stateData.gridSize, this->stateData.gridSize));

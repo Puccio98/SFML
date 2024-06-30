@@ -34,10 +34,10 @@ PauseMenuState::PauseMenuState(StateData &stateData)
 }
 
 void PauseMenuState::initContainer() {
-    container.setSize(sf::Vector2f(this->abba.width / 2.f, this->abba.height / 2.f));
+    container.setSize(sf::Vector2f(this->dvm.width / 2.f, this->dvm.height / 2.f));
     container.setFillColor(sf::Color(40, 40, 80, 200));
     container.setPosition(
-            sf::Vector2f(this->abba.width / 2.f, this->abba.height / 2.f) -
+            sf::Vector2f(this->dvm.width / 2.f, this->dvm.height / 2.f) -
             sf::Vector2f(container.getGlobalBounds().width / 2.f, container.getGlobalBounds().height / 2.f));
 }
 
@@ -45,7 +45,7 @@ void PauseMenuState::initMenuText() {
     menuText.setFont(*stateData.font);
     menuText.setFillColor(sf::Color(200, 200, 200, 200));
     menuText.setString("Paused");
-    menuText.setCharacterSize(GUI::Utils::charSize(this->abba, 3));
+    menuText.setCharacterSize(GUI::Utils::charSize(this->dvm, 3));
     menuText.setPosition(
             container.getPosition().x + container.getSize().x / 2.f -
             menuText.getGlobalBounds().width / 2.f,
@@ -88,15 +88,15 @@ void PauseMenuState::updateButtons() {
 }
 
 void PauseMenuState::initButton() {
-    float width = GUI::Utils::p2px(15, this->abba);
-    float height = GUI::Utils::p2py(7, this->abba);
+    float width = GUI::Utils::p2px(15, this->dvm);
+    float height = GUI::Utils::p2py(7, this->dvm);
     float x = this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f;
     float basePosY = this->container.getPosition().y;
 
     auto createButton = [&](const std::string &key, const std::string &label, int yMultiplier) {
-        float y = basePosY + GUI::Utils::p2py(20 + (12 * yMultiplier), this->abba);
+        float y = basePosY + GUI::Utils::p2py(20 + (12 * yMultiplier), this->dvm);
         this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label,
-                                                 GUI::Utils::charSize(this->abba),
+                                                 GUI::Utils::charSize(this->dvm),
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
     };
 

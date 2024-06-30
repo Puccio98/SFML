@@ -77,7 +77,7 @@ void GameState::initTextures() {
 }
 
 void GameState::initPlayer() {
-    this->player = new Player(this->abba.width / 2 - 100, this->abba.height / 2 - 100, this->textures["PLAYER_SHEET"],
+    this->player = new Player(this->dvm.width / 2 - 100, this->dvm.height / 2 - 100, this->textures["PLAYER_SHEET"],
                               *this->tilemap);
 }
 
@@ -105,10 +105,10 @@ void GameState::initTilemap() {
 }
 
 void GameState::initView() {
-    this->view.setSize(sf::Vector2f(this->abba.width,
-                                    this->abba.height));
-    this->view.setCenter(this->abba.width / 2.f,
-                         this->abba.height / 2.f);
+    this->view.setSize(sf::Vector2f(this->dvm.width,
+                                    this->dvm.height));
+    this->view.setCenter(this->dvm.width / 2.f,
+                         this->dvm.height / 2.f);
 
 }
 
