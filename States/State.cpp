@@ -3,6 +3,7 @@
 State::State(StateData &stateData) : stateData(stateData) {
     this->quit = false;
     this->initMouseDebug();
+    this->abba = this->stateData.getDefaultVideoMode();
 }
 
 State::~State() = default;

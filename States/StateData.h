@@ -22,4 +22,9 @@ struct StateData {
         return {static_cast<unsigned int>(this->window->getView().getSize().x),
                 static_cast<unsigned int>(this->window->getView().getSize().y)};
     }
+
+    sf::VideoMode getDefaultVideoMode() {
+        return {static_cast<unsigned int>(this->window->getDefaultView().getSize().x),
+                static_cast<unsigned int>(this->window->getDefaultView().getSize().y)};
+    }
 };

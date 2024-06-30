@@ -81,16 +81,15 @@ void SettingsState::renderButtons(sf::RenderTarget &target) {
 }
 
 void SettingsState::initButtons() {
-    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
-    this->buttons["BACK"] = new GUI::PushButton(GUI::Utils::p2px(5, vm), GUI::Utils::p2py(70, vm),
-                                                GUI::Utils::p2px(15, vm),
-                                                GUI::Utils::p2py(7, vm),
-                                                this->stateData.font, "Back", GUI::Utils::charSize(vm),
+    this->buttons["BACK"] = new GUI::PushButton(GUI::Utils::p2px(5, this->abba), GUI::Utils::p2py(70, this->abba),
+                                                GUI::Utils::p2px(15, this->abba),
+                                                GUI::Utils::p2py(7, this->abba),
+                                                this->stateData.font, "Back", GUI::Utils::charSize(this->abba),
                                                 CssColor::ClassicText(), CssColor::ClassicButton());
 
-    this->buttons["APPLY"] = new GUI::PushButton(GUI::Utils::p2px(25, vm), GUI::Utils::p2py(70, vm),
-                                                 GUI::Utils::p2px(15, vm), GUI::Utils::p2py(7, vm),
-                                                 this->stateData.font, "Apply", GUI::Utils::charSize(vm),
+    this->buttons["APPLY"] = new GUI::PushButton(GUI::Utils::p2px(25, this->abba), GUI::Utils::p2py(70, this->abba),
+                                                 GUI::Utils::p2px(15, this->abba), GUI::Utils::p2py(7, this->abba),
+                                                 this->stateData.font, "Apply", GUI::Utils::charSize(this->abba),
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
 }
 
@@ -109,10 +108,8 @@ void SettingsState::updateButtons() {
         short activeElementId = this->dropDownList["RESOLUTION"]->getSelectedElementId();
 
         // Recupera view originale, setta la dimensione della finestra e gli applica la view originale
-        sf::View view = this->stateData.window->getView();
         this->stateData.window->setSize(
                 sf::Vector2u(this->videoModes[activeElementId].width, this->videoModes[activeElementId].height));
-        this->stateData.window->setView(view);
 
         auto desktop = sf::VideoMode::getDesktopMode();
         this->stateData.window->setPosition(sf::Vector2i(desktop.width / 2 - this->stateData.window->getSize().x / 2,
@@ -129,8 +126,6 @@ void SettingsState::updateButtons() {
 }
 
 void SettingsState::initDropDownLists() {
-    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
-
     std::vector<std::string> videomodes_str;
     videomodes_str.reserve(this->videoModes.size());
     for (auto &i: this->videoModes) {
@@ -145,18 +140,18 @@ void SettingsState::initDropDownLists() {
             index = i;
         }
     }
-    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(GUI::Utils::p2px(20, vm), GUI::Utils::p2py(5, vm),
-                                                             GUI::Utils::p2px(10, vm),
-                                                             GUI::Utils::p2py(5, vm),
+    this->dropDownList["RESOLUTION"] = new GUI::DropDownList(GUI::Utils::p2px(20, this->abba),
+                                                             GUI::Utils::p2py(5, this->abba),
+                                                             GUI::Utils::p2px(10, this->abba),
+                                                             GUI::Utils::p2py(5, this->abba),
                                                              *this->stateData.font, videomodes_str,
                                                              index);
 }
 
 void SettingsState::initOptionsText() {
-    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
     this->optionsText.setFont(*this->stateData.font);
-    this->optionsText.setPosition(GUI::Utils::p2px(5, vm), GUI::Utils::p2py(5, vm));
-    this->optionsText.setCharacterSize(GUI::Utils::charSize(vm));
+    this->optionsText.setPosition(GUI::Utils::p2px(5, this->abba), GUI::Utils::p2py(5, this->abba));
+    this->optionsText.setCharacterSize(GUI::Utils::charSize(this->abba));
     this->optionsText.setFillColor(sf::Color(0, 0, 0, 255));
     this->optionsText.setString("Resolution \n\nFullscreen \n\nVsync \n\nAntialiasing");
 }
