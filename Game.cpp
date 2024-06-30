@@ -5,12 +5,22 @@
 //Initializer functions
 void Game::initWindow() {
     if (this->graphicsSettings->fullscreen)
-        this->window = new sf::RenderWindow(this->graphicsSettings->resolution, this->graphicsSettings->title,
+        this->window = new sf::RenderWindow(this->graphicsSettings->defaultResolution, this->graphicsSettings->title,
                                             sf::Style::Fullscreen, this->graphicsSettings->contextSettings);
     else
-        this->window = new sf::RenderWindow(this->graphicsSettings->resolution, this->graphicsSettings->title,
+        this->window = new sf::RenderWindow(this->graphicsSettings->defaultResolution, this->graphicsSettings->title,
                                             sf::Style::Titlebar | sf::Style::Close,
                                             this->graphicsSettings->contextSettings);
+
+
+    // Setta la dimensione della finestra e centra la finestra in base a quella scelta dall'utente
+    this->window->setSize(
+            sf::Vector2u(this->graphicsSettings->resolution.width, this->graphicsSettings->resolution.height));
+
+    auto desktop = sf::VideoMode::getDesktopMode();
+    this->window->setPosition(sf::Vector2i(desktop.width / 2 - this->window->getSize().x / 2,
+                                           desktop.height / 2 - this->window->getSize().y / 2));
+
 
     this->window->setFramerateLimit(this->graphicsSettings->frameRateLimit);
     this->window->setVerticalSyncEnabled(this->graphicsSettings->verticalSync);

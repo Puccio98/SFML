@@ -107,7 +107,7 @@ void SettingsState::updateButtons() {
         //Non c'è più bisogno di usare selectedElementId, possiamo usare activeElement.id
         short activeElementId = this->dropDownList["RESOLUTION"]->getSelectedElementId();
 
-        // Recupera view originale, setta la dimensione della finestra e gli applica la view originale
+        // Setta la dimensione della finestra e centra la finestra
         this->stateData.window->setSize(
                 sf::Vector2u(this->videoModes[activeElementId].width, this->videoModes[activeElementId].height));
 
