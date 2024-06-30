@@ -52,6 +52,9 @@ add_executable(SFML
         Gui/HealthBar.h
         Gui/Utils.h
         Gui/Utils.cpp
+        Gui/Sidebar.cpp
+        Gui/Sidebar.h
+        Gui/Structs/SidebarButton.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

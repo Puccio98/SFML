@@ -7,6 +7,7 @@
 #include "../Gui/Button.h"
 #include "../Map/Tilemap.h"
 #include "../Gui/TextureSelector.h"
+#include "../Gui/Sidebar.h"
 
 class EditorState : public State {
 public:
@@ -26,17 +27,17 @@ public:
 private:
     //Variables
     PauseMenuState pauseMenuState;
-    std::map<std::string, GUI::Button *> buttons;
     Tilemap *tileMap;
     sf::RectangleShape previewTexture;
     bool showTextureSelector;
     sf::Time textureSelectorTimer = sf::seconds(5);
     sf::Clock clock;
-    sf::RectangleShape sideBar;
+    GUI::Sidebar *sideBar;
     std::string tileTexturePath;
     TextureSelector *textureSelector;
     sf::View view;
     float cameraSpeed;
+    std::vector<SidebarButton> buttonsKeyLabel;
 
     std::vector<TILE_TYPES> tileTypes;
 
@@ -58,13 +59,11 @@ private:
 
     void initView();
 
-    void initButtons();
+    void initButtonsKeyLabel();
 
-    void updateButtons();
+    void updateSidebar(float dt);
 
     void updateGui();
-
-    void renderButtons(sf::RenderTarget *target);
 
     void renderGui(sf::RenderTarget *target);
 

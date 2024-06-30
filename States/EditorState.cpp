@@ -6,18 +6,18 @@
 EditorState::EditorState(StateData &stateData) :
         State(stateData),
         pauseMenuState(PauseMenuState(stateData)) {
+    this->initButtonsKeyLabel();
+    this->sideBar = new GUI::Sidebar(stateData.graphicsSettings->resolution, *stateData.font, this->buttonsKeyLabel);
+
     this->initVariables();
     this->initView();
     State::initKeybinds("Config/editorstate_keybinds.ini");
-    this->initButtons();
+
     this->initGui();
 }
 
 EditorState::~EditorState() {
-    for (auto &button: this->buttons) {
-        delete button.second;
-    }
-
+    delete this->sideBar;
     delete this->tileMap;
     delete this->textureSelector;
 }
@@ -27,7 +27,7 @@ void EditorState::update(const float &dt) {
         State::update(dt, this->view);
         this->updateInput(dt);
         this->updateGui();
-        this->updateButtons();
+        this->updateSidebar(dt);
         if (this->clock.getElapsedTime() > this->textureSelectorTimer) {
             this->showTextureSelector = false;
         }
@@ -44,7 +44,7 @@ void EditorState::render(sf::RenderTarget *target) {
     this->renderGui(target);
 
     if (!pauseMenuState.isPaused() && !this->textureSelector->isActive() &&
-        !this->sideBar.getGlobalBounds().contains(this->mousePosWindow.x, this->mousePosWindow.y)) {
+        !this->sideBar->getGlobalBounds().contains(this->mousePosWindow.x, this->mousePosWindow.y)) {
         target->draw(this->mouseDebug);
         target->setView(this->view);
         target->draw(this->previewTexture);
@@ -57,58 +57,30 @@ void EditorState::render(sf::RenderTarget *target) {
 }
 
 
-void EditorState::initButtons() {
-    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
-    auto createButton = [&](const std::string &key, const std::string &label, int positionMultiplier,
-                            bool isSwitch = false) {
-        float x = vm.width - GUI::Utils::p2px(4, vm);
-        float y = (GUI::Utils::p2px(4, vm) * positionMultiplier);
-        float width = GUI::Utils::p2px(4, vm);
-        float height = GUI::Utils::p2px(4, vm);
-
-        if (isSwitch) {
-            this->buttons[key] = new GUI::SwitchButton(x, y, width, height, this->stateData.font, label,
-                                                       GUI::Utils::charSize(vm),
-                                                       CssColor::ClassicText(), CssColor::ClassicButton());
-        } else {
-            this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label,
-                                                     GUI::Utils::charSize(vm),
-                                                     CssColor::ClassicText(), CssColor::ClassicButton());
-        }
-    };
-
-    createButton("OPEN_TEXTURE_SELECTOR", "TS", 0);
-    createButton("TOGGLE_TILES", "T", 1, true);
-    createButton("SAVE_TEXTURE_MAP", "SV", 2);
-    createButton("TOGGLE_COLLISIONS", "COL", 3, true);
-    createButton("CLEAR_MAP", "R", 4);
+void EditorState::initButtonsKeyLabel() {
+    this->buttonsKeyLabel.emplace_back("OPEN_TEXTURE_SELECTOR", "TS", false);
+    this->buttonsKeyLabel.emplace_back("TOGGLE_TILES", "T", true);
+    this->buttonsKeyLabel.emplace_back("SAVE_TEXTURE_MAP", "SV", false);
+    this->buttonsKeyLabel.emplace_back("TOGGLE_COLLISIONS", "COL", true);
+    this->buttonsKeyLabel.emplace_back("CLEAR_MAP", "R", false);
 }
 
-void EditorState::renderButtons(sf::RenderTarget *target) {
-    for (auto &button: this->buttons) {
-        button.second->render(*target);
-    }
-}
+void EditorState::updateSidebar(float dt) {
+    this->sideBar->update(dt, this->mousePosWindow);
 
-void EditorState::updateButtons() {
-    /*Updates all buttons in state and handles their functionality*/
-    for (auto &button: this->buttons) {
-        button.second->update(static_cast<sf::Vector2f>(this->mousePosWindow));
-    }
-
-    if (this->buttons["OPEN_TEXTURE_SELECTOR"]->isClicked()) {
+    if (this->sideBar->isButtonClicked("OPEN_TEXTURE_SELECTOR")) {
         this->showTextureSelector = !this->showTextureSelector;
         this->clock.restart();
     }
 
-    if (this->buttons["TOGGLE_TILES"]->isClicked()) {
+    if (this->sideBar->isButtonClicked("TOGGLE_TILES")) {
     }
 
-    if (this->buttons["SAVE_TEXTURE_MAP"]->isClicked()) {
+    if (this->sideBar->isButtonClicked("SAVE_TEXTURE_MAP")) {
         this->tileMap->saveToFile("Resources/map/map.slmp");
     }
 
-    if (this->buttons["TOGGLE_COLLISIONS"]->isClicked()) {
+    if (this->sideBar->isButtonClicked("TOGGLE_COLLISIONS")) {
         auto i = std::find(this->tileTypes.begin(), this->tileTypes.end(), TILE_TYPES::COLLISION);
         if (i != this->tileTypes.end()) {
             this->tileTypes.erase(i);
@@ -117,11 +89,9 @@ void EditorState::updateButtons() {
         }
     }
 
-    if (this->buttons["CLEAR_MAP"]->isClicked()) {
+    if (this->sideBar->isButtonClicked("CLEAR_MAP")) {
         this->tileMap->clear();
     }
-
-    this->tileMap->update();
 }
 
 //Initializer Functions
@@ -148,14 +118,12 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
 
     if (!this->pauseMenuState.isPaused()) {
         // se sidebar
-        if (this->sideBar.getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
-            for (auto &button: this->buttons) {
-                button.second->handleEvent(event, static_cast<sf::Vector2f>(this->mousePosWindow));
-            }
+        if (this->sideBar->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
+            this->sideBar->handleEvent(event, dt, this->mousePosWindow);
         }
 
         // se non è sidebar
-        if (!this->sideBar.getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
+        if (!this->sideBar->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
                 this->openTextureSelector();
                 this->textureSelector->setSelectedTile(1, 0);
@@ -195,15 +163,9 @@ bool EditorState::isQuit() const {
 
 void EditorState::initGui() {
     const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
-    //TODO:: analogo della dropdown, deve essere un componente
-    this->sideBar.setPosition(static_cast<float>(vm.width) - GUI::Utils::p2px(4, vm), 0);
-    this->sideBar.setSize(sf::Vector2f(GUI::Utils::p2px(4, vm), GUI::Utils::p2py(100, vm)));
-    this->sideBar.setFillColor(sf::Color(50, 50, 50, 100));
-    this->sideBar.setOutlineColor(sf::Color(200, 200, 200, 150));
-    this->sideBar.setOutlineThickness(1.f);
     this->textureSelector = new TextureSelector(
             this->stateData.window->getSize().x - this->tileMap->getTileTextureSheet().getSize().x -
-            this->sideBar.getSize().x, 0.f, this->stateData.gridSize,
+            this->sideBar->getSize().x, 0.f, this->stateData.gridSize,
             this->tileMap->getTileTextureSheet());
     this->previewTexture.setSize(sf::Vector2f(this->stateData.gridSize, this->stateData.gridSize));
     this->previewTexture.setFillColor(sf::Color(255, 255, 255, 100));
@@ -240,20 +202,20 @@ void EditorState::renderGui(sf::RenderTarget *target) {
         this->textureSelector->render(*target);
     }
 
-    target->draw(this->sideBar);
-    this->renderButtons(target);
+    this->sideBar->render(*target);
 }
 
 
 void EditorState::updateInput(const float &dt) {
     this->updateView(dt);
 
-    if (!this->sideBar.getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
+    if (!this->sideBar->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             if (this->textureSelector->isActive()) {
                 this->textureSelector->setSelectedTile(mousePosWindow);
             } else {
-                GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->buttons["TOGGLE_TILES"]);
+                GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(
+                        "TOGGLE_TILES"));
                 if (switchBtn && switchBtn->isActive()) {
                     addTile();
                 } else {
