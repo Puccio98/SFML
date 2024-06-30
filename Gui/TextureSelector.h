@@ -19,7 +19,7 @@ public:
 
     virtual ~TextureSelector();
 
-    void update(sf::Vector2i mousePosWindow);
+    void update(sf::Vector2f mousePos);
 
     void render(sf::RenderTarget &target);
 
@@ -35,7 +35,7 @@ public:
      * Seleziona la tile in base alla posizione del mouse
      * @param mousePosWindow
      */
-    void setSelectedTile(sf::Vector2i &mousePosWindow);
+    void setSelectedTile(sf::Vector2f &mousePos);
 
     /**
      * Seleziona la tile prendendo una direzione
@@ -56,7 +56,7 @@ public:
      * @param absolutePosition
      * @return
      */
-    sf::Vector2i getGridPosition(const sf::Vector2i &absolutePosition);
+    sf::Vector2i getGridPosition(const sf::Vector2f &absolutePosition);
 };
 
 

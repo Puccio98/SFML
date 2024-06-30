@@ -16,6 +16,7 @@ class GraphicsSettings {
 public:
     //region Public Properties
     std::string title;
+    sf::VideoMode defaultResolution;
     sf::VideoMode resolution;
     bool fullscreen;
     unsigned frameRateLimit;

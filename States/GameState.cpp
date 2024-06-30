@@ -18,9 +18,9 @@ GameState::~GameState() {
 
 void GameState::update(const float &dt) {
     //per debug
-    this->updateMouseDebug();
+    this->updateMouseDebug(this->view);
     if (!pauseMenuState.isPaused()) {
-        State::update(dt, this->view);
+        State::update(dt); //, this->view
         this->updateView(dt);
         this->updateInput(dt);
         this->updateEntity(dt, *this->player);
@@ -77,7 +77,8 @@ void GameState::initTextures() {
 }
 
 void GameState::initPlayer() {
-    this->player = new Player(380, 340, this->textures["PLAYER_SHEET"], *this->tilemap);
+    this->player = new Player(this->dvm.width / 2 - 100, this->dvm.height / 2 - 100, this->textures["PLAYER_SHEET"],
+                              *this->tilemap);
 }
 
 void GameState::handleEvent(sf::Event &event, const float &dt) {
@@ -104,10 +105,10 @@ void GameState::initTilemap() {
 }
 
 void GameState::initView() {
-    this->view.setSize(sf::Vector2f(this->stateData.graphicsSettings->resolution.width,
-                                    this->stateData.graphicsSettings->resolution.height));
-    this->view.setCenter(this->stateData.graphicsSettings->resolution.width / 2.f,
-                         this->stateData.graphicsSettings->resolution.height / 2.f);
+    this->view.setSize(sf::Vector2f(this->dvm.width,
+                                    this->dvm.height));
+    this->view.setCenter(this->dvm.width / 2.f,
+                         this->dvm.height / 2.f);
 
 }
 
@@ -139,5 +140,5 @@ void GameState::updateEntity(const float &dt, Entity &entity) {
 }
 
 void GameState::initPlayerGUI(Player *_player) {
-    this->playerGUI = new GUI::PlayerGUI(_player);
+    this->playerGUI = new GUI::PlayerGUI(_player, this->stateData.graphicsSettings->resolution);
 }

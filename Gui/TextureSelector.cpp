@@ -47,11 +47,11 @@ void TextureSelector::render(sf::RenderTarget &target) {
 }
 
 
-void TextureSelector::update(const sf::Vector2i mousePosWindow) {
-    this->active = this->bounds.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow));
+void TextureSelector::update(const sf::Vector2f mousePos) {
+    this->active = this->bounds.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos));
 
     if (this->active) {
-        sf::Vector2i gridPosition = getGridPosition(mousePosWindow);
+        sf::Vector2i gridPosition = getGridPosition(mousePos);
         const sf::Vector2f position = sf::Vector2f((gridPosition.x * gridSize) + bounds.getPosition().x,
                                                    (gridPosition.y *
                                                     gridSize) + bounds.getPosition().y);
@@ -59,7 +59,7 @@ void TextureSelector::update(const sf::Vector2i mousePosWindow) {
     }
 }
 
-sf::Vector2i TextureSelector::getGridPosition(const sf::Vector2i &absolutePosition) {
+sf::Vector2i TextureSelector::getGridPosition(const sf::Vector2f &absolutePosition) {
     float relativeX = absolutePosition.x - bounds.getPosition().x;
     float relativeY = absolutePosition.y - bounds.getPosition().y;
 
@@ -73,8 +73,8 @@ bool TextureSelector::isActive() const {
     return active;
 }
 
-void TextureSelector::setSelectedTile(sf::Vector2i &mousePosWindow) {
-    sf::Vector2i gridPosition = getGridPosition(mousePosWindow);
+void TextureSelector::setSelectedTile(sf::Vector2f &mousePos) {
+    sf::Vector2i gridPosition = getGridPosition(mousePos);
     const sf::Vector2f position = sf::Vector2f((gridPosition.x * gridSize) + bounds.getPosition().x, (gridPosition.y *
                                                                                                       gridSize) +
                                                                                                      bounds.getPosition().y);

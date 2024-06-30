@@ -11,13 +11,13 @@ namespace GUI {
     private:
         Player *player;
         sf::Font font;
-
+        sf::VideoMode resolution;
         GUI::HealthBar *hpBar;
 
         void initFont();
 
     public:
-        explicit PlayerGUI(Player *player);
+        explicit PlayerGUI(Player *player, sf::VideoMode &resolution);
 
         virtual ~PlayerGUI();
 

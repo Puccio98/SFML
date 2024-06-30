@@ -28,9 +28,9 @@ private:
     sf::Text menuText;
     std::map<std::string, GUI::Button *> buttons;
 
-    void initMouseDebug();
+    void initMenuText();
 
-    void initContainer(const sf::RenderWindow *window);
+    void initContainer();
 
     void initButton();
 

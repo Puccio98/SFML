@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)
 project(SFML)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 add_executable(SFML
         main.cpp
@@ -52,6 +52,9 @@ add_executable(SFML
         Gui/HealthBar.h
         Gui/Utils.h
         Gui/Utils.cpp
+        Gui/Sidebar.cpp
+        Gui/Sidebar.h
+        Gui/Structs/SidebarButton.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)
