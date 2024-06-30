@@ -26,10 +26,10 @@ void GUI::Sidebar::initContainer() {
     this->container.setOutlineThickness(1.f);
 }
 
-void GUI::Sidebar::update(float dt, sf::Vector2<int> mousePosition) {
+void GUI::Sidebar::update(float dt, sf::Vector2f mousePosition) {
     /*Updates all buttons in state and handles their functionality*/
     for (auto &button: this->buttons) {
-        button.second->update(static_cast<sf::Vector2f>(mousePosition));
+        button.second->update(mousePosition);
     }
 }
 
@@ -79,9 +79,9 @@ bool GUI::Sidebar::isButtonClicked(std::string key) {
     return this->buttons[key]->isClicked();
 }
 
-void GUI::Sidebar::handleEvent(sf::Event &event, const float &dt, sf::Vector2<int> mousePosition) {
+void GUI::Sidebar::handleEvent(sf::Event &event, const float &dt, sf::Vector2f mousePosition) {
     for (auto &button: this->buttons) {
-        button.second->handleEvent(event, static_cast<sf::Vector2f>(mousePosition));
+        button.second->handleEvent(event, mousePosition);
     }
 }
 

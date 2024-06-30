@@ -28,16 +28,16 @@ PauseMenuState::PauseMenuState(StateData &stateData)
         : State(stateData) {
     // *(new State::StateData(nullptr, stateData.window, stateData.supportedKeys, stateData.font))
     State::initKeybinds("Config/menustate_keybinds.ini");
-    this->initContainer(stateData.window);
+    this->initContainer();
     this->initMenuText();
     this->initButton();
 }
 
-void PauseMenuState::initContainer(const sf::RenderWindow *window) {
-    container.setSize(sf::Vector2f(sf::Vector2f(window->getSize()) / 2.f));
+void PauseMenuState::initContainer() {
+    container.setSize(sf::Vector2f(this->abba.width / 2.f, this->abba.height / 2.f));
     container.setFillColor(sf::Color(40, 40, 80, 200));
     container.setPosition(
-            sf::Vector2f(window->getSize()) / 2.f -
+            sf::Vector2f(this->abba.width / 2.f, this->abba.height / 2.f) -
             sf::Vector2f(container.getGlobalBounds().width / 2.f, container.getGlobalBounds().height / 2.f));
 }
 
@@ -45,7 +45,7 @@ void PauseMenuState::initMenuText() {
     menuText.setFont(*stateData.font);
     menuText.setFillColor(sf::Color(200, 200, 200, 200));
     menuText.setString("Paused");
-    menuText.setCharacterSize(GUI::Utils::charSize(stateData.graphicsSettings->resolution, 3));
+    menuText.setCharacterSize(GUI::Utils::charSize(this->abba, 3));
     menuText.setPosition(
             container.getPosition().x + container.getSize().x / 2.f -
             menuText.getGlobalBounds().width / 2.f,
@@ -88,16 +88,15 @@ void PauseMenuState::updateButtons() {
 }
 
 void PauseMenuState::initButton() {
-    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
-    float width = GUI::Utils::p2px(15, vm);
-    float height = GUI::Utils::p2py(7, vm);
+    float width = GUI::Utils::p2px(15, this->abba);
+    float height = GUI::Utils::p2py(7, this->abba);
     float x = this->container.getPosition().x + this->container.getSize().x / 2.f - width / 2.f;
     float basePosY = this->container.getPosition().y;
 
     auto createButton = [&](const std::string &key, const std::string &label, int yMultiplier) {
-        float y = basePosY + GUI::Utils::p2py(20 + (12 * yMultiplier), vm);
+        float y = basePosY + GUI::Utils::p2py(20 + (12 * yMultiplier), this->abba);
         this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label,
-                                                 GUI::Utils::charSize(vm),
+                                                 GUI::Utils::charSize(this->abba),
                                                  CssColor::ClassicText(), CssColor::ClassicButton());
     };
 

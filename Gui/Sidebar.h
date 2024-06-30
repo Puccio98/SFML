@@ -26,9 +26,9 @@ namespace GUI {
     public:
         virtual ~Sidebar();
 
-        void update(float dt, sf::Vector2<int> mousePosition);
+        void update(float dt, sf::Vector2f mousePosition);
 
-        void handleEvent(sf::Event &event, const float &dt, sf::Vector2<int> mousePosition);
+        void handleEvent(sf::Event &event, const float &dt, sf::Vector2f mousePosition);
 
         void render(sf::RenderTarget &target);
 

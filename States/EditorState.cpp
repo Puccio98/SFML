@@ -7,7 +7,7 @@ EditorState::EditorState(StateData &stateData) :
         State(stateData),
         pauseMenuState(PauseMenuState(stateData)) {
     this->initButtonsKeyLabel();
-    this->sideBar = new GUI::Sidebar(stateData.graphicsSettings->resolution, *stateData.font, this->buttonsKeyLabel);
+    this->sideBar = new GUI::Sidebar(this->abba, *stateData.font, this->buttonsKeyLabel);
 
     this->initVariables();
     this->initView();
@@ -24,7 +24,7 @@ EditorState::~EditorState() {
 
 void EditorState::update(const float &dt) {
     if (!pauseMenuState.isPaused()) {
-        State::update(dt, this->view);
+        State::update(dt);
         this->updateInput(dt);
         this->updateGui();
         this->updateSidebar(dt);
@@ -44,8 +44,10 @@ void EditorState::render(sf::RenderTarget *target) {
     this->renderGui(target);
 
     if (!pauseMenuState.isPaused() && !this->textureSelector->isActive() &&
-        !this->sideBar->getGlobalBounds().contains(this->mousePosWindow.x, this->mousePosWindow.y)) {
+        !this->sideBar->getGlobalBounds().contains(this->mousePosView.x, this->mousePosView.y)) {
         target->draw(this->mouseDebug);
+
+
         target->setView(this->view);
         target->draw(this->previewTexture);
         target->setView(this->stateData.window->getDefaultView());
@@ -66,7 +68,7 @@ void EditorState::initButtonsKeyLabel() {
 }
 
 void EditorState::updateSidebar(float dt) {
-    this->sideBar->update(dt, this->mousePosWindow);
+    this->sideBar->update(dt, this->mousePosView);
 
     if (this->sideBar->isButtonClicked("OPEN_TEXTURE_SELECTOR")) {
         this->showTextureSelector = !this->showTextureSelector;
@@ -105,9 +107,8 @@ void EditorState::initVariables() {
 }
 
 void EditorState::initView() {
-    const sf::VideoMode vm = this->stateData.getCurrentVideoMode();
-    this->view.setSize(sf::Vector2f(vm.width, vm.height));
-    this->view.setCenter(vm.width / 2.f, vm.height / 2.f);
+    this->view.setSize(sf::Vector2f(this->abba.width, this->abba.height));
+    this->view.setCenter(this->abba.width / 2.f, this->abba.height / 2.f);
 }
 
 void EditorState::handleEvent(sf::Event &event, const float &dt) {
@@ -118,12 +119,12 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
 
     if (!this->pauseMenuState.isPaused()) {
         // se sidebar
-        if (this->sideBar->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
-            this->sideBar->handleEvent(event, dt, this->mousePosWindow);
+        if (this->sideBar->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosView))) {
+            this->sideBar->handleEvent(event, dt, this->mousePosView);
         }
 
         // se non è sidebar
-        if (!this->sideBar->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
+        if (!this->sideBar->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosView))) {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
                 this->openTextureSelector();
                 this->textureSelector->setSelectedTile(1, 0);
@@ -162,9 +163,8 @@ bool EditorState::isQuit() const {
 }
 
 void EditorState::initGui() {
-    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
     this->textureSelector = new TextureSelector(
-            this->stateData.window->getSize().x - this->tileMap->getTileTextureSheet().getSize().x -
+            this->abba.width - this->tileMap->getTileTextureSheet().getSize().x -
             this->sideBar->getSize().x, 0.f, this->stateData.gridSize,
             this->tileMap->getTileTextureSheet());
     this->previewTexture.setSize(sf::Vector2f(this->stateData.gridSize, this->stateData.gridSize));
@@ -178,7 +178,7 @@ void EditorState::initGui() {
 
 void EditorState::updateGui() {
     if (this->showTextureSelector) {
-        this->textureSelector->update(this->mousePosWindow);
+        this->textureSelector->update(this->mousePosView);
     }
 
     if (!this->textureSelector->isActive()) {
@@ -186,11 +186,11 @@ void EditorState::updateGui() {
         this->previewTexture.setTextureRect(
                 sf::IntRect(tileTexturePosition.x, tileTexturePosition.y, this->stateData.gridSize,
                             this->stateData.gridSize));
-        this->previewTexture.setPosition(this->getPosGrid(VIEW_TYPES::VIEW).x * this->stateData.gridSize,
-                                         this->getPosGrid(VIEW_TYPES::VIEW).y * this->stateData.gridSize);
+        this->previewTexture.setPosition(this->getPosGrid(VIEW_TYPES::VIEW, this->view).x * this->stateData.gridSize,
+                                         this->getPosGrid(VIEW_TYPES::VIEW, this->view).y * this->stateData.gridSize);
     }
 
-    this->updateMouseDebug();
+    this->updateMouseDebug(this->view);
 }
 
 void EditorState::renderGui(sf::RenderTarget *target) {
@@ -209,10 +209,10 @@ void EditorState::renderGui(sf::RenderTarget *target) {
 void EditorState::updateInput(const float &dt) {
     this->updateView(dt);
 
-    if (!this->sideBar->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
+    if (!this->sideBar->getGlobalBounds().contains(this->mousePosView)) {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             if (this->textureSelector->isActive()) {
-                this->textureSelector->setSelectedTile(mousePosWindow);
+                this->textureSelector->setSelectedTile(mousePosView);
             } else {
                 GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(
                         "TOGGLE_TILES"));
@@ -228,8 +228,8 @@ void EditorState::updateInput(const float &dt) {
             if (this->textureSelector->isActive()) {
 
             } else {
-                int grid_x = this->getPosGrid(VIEW_TYPES::VIEW).x;
-                int grid_y = this->getPosGrid(VIEW_TYPES::VIEW).y;
+                int grid_x = this->getPosGrid(VIEW_TYPES::VIEW, this->view).x;
+                int grid_y = this->getPosGrid(VIEW_TYPES::VIEW, this->view).y;
                 if (!this->positionMap[{grid_x, grid_y}]) {
                     this->tileMap->removeTile(grid_x,
                                               grid_y);
@@ -243,8 +243,8 @@ void EditorState::updateInput(const float &dt) {
 void EditorState::addTile() {
     TileData tileData;
     tileData.gridSize = stateData.gridSize;
-    tileData.index_x = getPosGrid(VIEW_TYPES::VIEW).x;
-    tileData.index_y = getPosGrid(VIEW_TYPES::VIEW).y;
+    tileData.index_x = getPosGrid(VIEW_TYPES::VIEW, this->view).x;
+    tileData.index_y = getPosGrid(VIEW_TYPES::VIEW, this->view).y;
     tileData.index_z = tileMap->getMap()[tileData.index_x][tileData.index_y].size();
     tileData.types = tileTypes; // Copia contenuto del vettore :D
 
@@ -255,8 +255,8 @@ void EditorState::addTile() {
 }
 
 void EditorState::addTexture() {
-    int index_x = getPosGrid(VIEW_TYPES::VIEW).x;
-    int index_y = getPosGrid(VIEW_TYPES::VIEW).y;
+    int index_x = getPosGrid(VIEW_TYPES::VIEW, this->view).x;
+    int index_y = getPosGrid(VIEW_TYPES::VIEW, this->view).y;
     this->tileMap->addTexture(index_x, index_y, this->textureSelector->getSelectedRelativePosition());
 }
 

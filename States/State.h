@@ -52,11 +52,13 @@ protected:
     //Functions
     virtual void initKeybinds(std::string keybindsFilePath);
 
-    void updateMouseDebug();
+    void updateMouseDebug(sf::View view);
 
     sf::Vector2i getPosGrid(VIEW_TYPES viewType) const;
 
     void initMouseDebug();
+
+    sf::Vector2i getPosGrid(VIEW_TYPES viewType, sf::View view) const;
 };
 
 

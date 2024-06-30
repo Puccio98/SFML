@@ -30,7 +30,7 @@ private:
 
     void initMenuText();
 
-    void initContainer(const sf::RenderWindow *window);
+    void initContainer();
 
     void initButton();
 
