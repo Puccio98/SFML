@@ -55,6 +55,16 @@ add_executable(SFML
         Gui/Sidebar.cpp
         Gui/Sidebar.h
         Gui/Structs/SidebarButton.h
+        Items/Item.cpp
+        Items/Item.h
+        Items/Weapons/MeleeWeapon/MeleeWeapon.cpp
+        Items/Weapons/MeleeWeapon/MeleeWeapon.h
+        Items/Weapons/MeleeWeapon/Sword.cpp
+        Items/Weapons/MeleeWeapon/Sword.h
+        Items/Weapons/RangeWeapon/RangedWeapon.cpp
+        Items/Weapons/RangeWeapon/RangedWeapon.h
+        Items/Weapons/RangeWeapon/Bow.cpp
+        Items/Weapons/RangeWeapon/Bow.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

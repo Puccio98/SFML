@@ -12,6 +12,8 @@ Player::Player(float x, float y, sf::Texture &texture_sheet, Tilemap &map) : map
     this->animationComponent->addAnimation("IDLE", 2.f, 0, 0, 13, 0, 192, 192);
     this->animationComponent->addAnimation("WALK", 2.f, 0, 1, 11, 1, 192, 192);
     this->animationComponent->addAnimation("ATTACK", 2.f, 0, 2, 13, 2, 192 * 2, 192, false);
+
+
 }
 
 Player::~Player() {
@@ -38,6 +40,7 @@ void Player::update(const MovementData &next, const float &dt) {
     this->movementComponent->update(next);
     this->updateAnimation(dt);
     this->hitboxComponent->update();
+    this->sword.update(this->hitboxComponent->getPosition());
 }
 
 void Player::updateAnimation(const float &dt) {
@@ -68,4 +71,9 @@ float Player::getCurrentHp() {
 
 float Player::getMaxHp() {
     return this->getAttributeComponent()->getHpMax();
+}
+
+void Player::render(sf::RenderTarget &target) {
+    Entity::render(target);
+    this->sword.render(target);
 }
