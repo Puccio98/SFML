@@ -5,6 +5,7 @@
 #include "Components/MovementComponent.h"
 #include "Components/AnimationComponent.h"
 #include "Components/AttributeComponent.h"
+#include "Components/SkillComponent.h"
 
 class Entity {
 
@@ -19,6 +20,7 @@ protected:
     MovementComponent *movementComponent{};
     AnimationComponent *animationComponent{};
     AttributeComponent *attributeComponent{};
+    SkillComponent *skillComponent{};
 public:
     Entity();
 
@@ -35,6 +37,8 @@ public:
     void createMovementComponent(float maxVelocity, float acceleration, float deceleration);
 
     void createAnimationComponent(sf::Texture &texture_sheet);
+
+    void createSkillComponent();
 
     void createHitboxComponent(sf::Sprite &_sprite, float offset_x, float offset_y, float width, float height);
 

@@ -9,6 +9,7 @@ Entity::~Entity() {
     delete this->movementComponent;
     delete this->animationComponent;
     delete this->attributeComponent;
+    delete this->skillComponent;
 }
 
 void Entity::setDirection(sf::Vector2f direction, const float &dt) {
@@ -39,6 +40,7 @@ void Entity::initVariables() {
     this->movementComponent = nullptr;
     this->animationComponent = nullptr;
     this->attributeComponent = nullptr;
+    this->skillComponent = nullptr;
 }
 
 void Entity::createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration) {
@@ -87,6 +89,10 @@ void Entity::createAttributeComponent() {
 
 AttributeComponent *Entity::getAttributeComponent() const {
     return attributeComponent;
+}
+
+void Entity::createSkillComponent() {
+    this->skillComponent = new SkillComponent();
 }
 
 

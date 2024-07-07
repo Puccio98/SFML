@@ -65,6 +65,10 @@ add_executable(SFML
         Items/Weapons/RangeWeapon/RangedWeapon.h
         Items/Weapons/RangeWeapon/Bow.cpp
         Items/Weapons/RangeWeapon/Bow.h
+        Entities/Components/SkillComponent.cpp
+        Entities/Components/SkillComponent.h
+        Entities/Components/Skill.cpp
+        Entities/Components/Skill.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)
