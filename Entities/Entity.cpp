@@ -55,6 +55,10 @@ void Entity::createHitboxComponent(sf::Sprite &_sprite, float offset_x, float of
     this->hitboxComponent = new HitboxComponent(_sprite, offset_x, offset_y, width, height);
 }
 
+void Entity::createSkillComponent() {
+    this->skillComponent = new SkillComponent();
+}
+
 const sf::Vector2f Entity::getPosition() const {
     return this->sprite.getPosition();
 }
@@ -91,8 +95,5 @@ AttributeComponent *Entity::getAttributeComponent() const {
     return attributeComponent;
 }
 
-void Entity::createSkillComponent() {
-    this->skillComponent = new SkillComponent();
-}
 
 

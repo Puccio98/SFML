@@ -10,6 +10,6 @@ Skill::~Skill() {
 
 }
 
-void Skill::update() {
+void Skill::update() const {
 
 }

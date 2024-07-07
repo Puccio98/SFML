@@ -13,7 +13,7 @@ public:
 
     virtual ~Skill();
 
-    void update();
+    void update() const;
 };
 
 
