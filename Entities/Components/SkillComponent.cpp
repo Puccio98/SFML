@@ -1,13 +1,11 @@
 #include "SkillComponent.h"
 
 SkillComponent::SkillComponent() {
-    this->skills["wood_cutting"];
-    this->skills["mining"];
+    this->skills.emplace(SKILL::WOOD_CUTTING, Skill(SKILL::WOOD_CUTTING));
+    this->skills.emplace(SKILL::MINING, Skill(SKILL::MINING));
 }
 
-SkillComponent::~SkillComponent() {
-
-}
+SkillComponent::~SkillComponent() = default;
 
 void SkillComponent::update() {
     for (const auto &skill: this->skills) {
@@ -15,9 +13,9 @@ void SkillComponent::update() {
     }
 }
 
-const Skill &SkillComponent::getSkill(const std::string &key) {
-    if (this->skills.count(key) == 0) {
-        throw ("ERROR::SKILLCOMPONENT::SKILL DOES NOT EXIST " + key);
+const Skill &SkillComponent::getSkill(const SKILL skill) {
+    if (this->skills.count(skill) == 0) {
+        throw ("ERROR::SKILLCOMPONENT::SKILL DOES NOT EXIST " + static_cast<int>(skill));
     }
-    return this->skills[key];
+    return this->skills.at(skill);
 }

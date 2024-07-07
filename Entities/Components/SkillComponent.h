@@ -8,7 +8,7 @@
 
 class SkillComponent {
 private:
-    std::map<std::string, Skill> skills;
+    std::map<SKILL, Skill> skills;
 public:
     SkillComponent();
 
@@ -16,7 +16,7 @@ public:
 
     void update();
 
-    const Skill &getSkill(const std::string &key);
+    const Skill &getSkill(const SKILL skill);
 };
 
 

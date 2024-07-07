@@ -1,6 +1,6 @@
 #include "Skill.h"
 
-Skill::Skill() {
+Skill::Skill(SKILL type) : type(type) {
     this->level = 1;
     this->exp = 0;
     this->expNext = 100;

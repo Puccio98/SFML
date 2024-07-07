@@ -35,6 +35,7 @@ add_executable(SFML
         Gui/TextureSelector.cpp
         Gui/TextureSelector.h
         enums/tile_types.cpp
+        enums/skill_enum.cpp
         Entities/Components/MovementData.h
         Gui/PushButton.cpp
         Gui/PushButton.h
