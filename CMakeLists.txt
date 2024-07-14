@@ -73,6 +73,9 @@ add_executable(SFML
         Entities/Enemy.cpp
         Entities/Enemy.h
         Entities/EntityDimensionData.h
+        Entities/EnemySpawner.cpp
+        Entities/EnemySpawner.h
+        enums/enemy_types.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)
