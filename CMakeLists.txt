@@ -70,6 +70,9 @@ add_executable(SFML
         Entities/Components/SkillComponent.h
         Entities/Components/Skill.cpp
         Entities/Components/Skill.h
+        Entities/Enemy.cpp
+        Entities/Enemy.h
+        Entities/EntityDimensionData.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

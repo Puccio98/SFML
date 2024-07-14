@@ -7,10 +7,7 @@
 
 class Player final : public Entity {
 private:
-    //Variables
-    Tilemap &map;
     Sword sword;
-
 
     //Initializer Functions
     void initVariables();

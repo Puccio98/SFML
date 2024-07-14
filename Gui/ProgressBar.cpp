@@ -1,6 +1,7 @@
 #include "ProgressBar.h"
 
-GUI::ProgressBar::ProgressBar(const sf::Font &font, const ProgressBarData &progressBarData) : font(font) {
+GUI::ProgressBar::ProgressBar(const sf::Font &font, const sf::Color color, const ProgressBarData &progressBarData)
+        : font(font), color(color) {
     this->init(progressBarData);
 }
 

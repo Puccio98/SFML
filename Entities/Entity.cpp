@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity() {
+Entity::Entity(Tilemap &map) : map(map) {
     this->initVariables();
 }
 
@@ -29,11 +29,6 @@ void Entity::setPosition(const float x, const float y) {
     this->sprite.setPosition(x, y);
 }
 
-void Entity::setTexture(sf::Texture &texture) {
-    this->sprite.setTexture(texture);
-    // togli
-    this->sprite.setScale(0.2, 0.2);
-}
 
 void Entity::initVariables() {
     this->hitboxComponent = nullptr;

@@ -1,6 +1,6 @@
-#include "Player.h"
+#include "Enemy.h"
 
-Player::Player(float x, float y, sf::Texture &texture_sheet, Tilemap &map) : Entity(map) {
+Enemy::Enemy(float x, float y, sf::Texture &texture_sheet, Tilemap &map) : Entity(map) {
     this->initVariables();
     this->setPosition(x, y);
 
@@ -15,18 +15,16 @@ Player::Player(float x, float y, sf::Texture &texture_sheet, Tilemap &map) : Ent
     this->animationComponent->addAnimation("ATTACK", 2.f, 0, 2, 13, 2, 192 * 2, 192, false);
 }
 
-Player::~Player() {
+Enemy::~Enemy() {
 
 }
 
-//Initializer Functions
-
-void Player::initVariables() {
-
+void Enemy::render(sf::RenderTarget &target) {
+    Entity::render(target);
 }
 
 
-void Player::update(const float &dt) {
+void Enemy::update(const float &dt) {
     // Se chiamato senza i dati del movimento li calcola autonomamente assumendo che possa muoversi in quelle direzioni/punti
     MovementData next = this->movementComponent->nextMovementData(dt);
 
@@ -35,14 +33,13 @@ void Player::update(const float &dt) {
     this->hitboxComponent->update();
 }
 
-void Player::update(const MovementData &next, const float &dt) {
+void Enemy::update(const MovementData &next, const float &dt) {
     this->movementComponent->update(next);
     this->updateAnimation(dt);
     this->hitboxComponent->update();
-    this->sword.update(this->hitboxComponent->getPosition());
 }
 
-void Player::updateAnimation(const float &dt) {
+void Enemy::updateAnimation(const float &dt) {
     if (movementComponent->getState(MOVEMENT_STATES::IDLE))
         animationComponent->play("IDLE", dt);
     else if (movementComponent->getState(MOVEMENT_STATES::MOVING_LEFT)) {
@@ -60,19 +57,11 @@ void Player::updateAnimation(const float &dt) {
                                              movementComponent->getMaxVelocity());
 }
 
-void Player::attack(const float &dt) {
-    this->animationComponent->play("ATTACK", dt);
+
+void Enemy::initVariables() {
+
 }
 
-float Player::getCurrentHp() {
-    return this->getAttributeComponent()->getHp();
-}
+void Enemy::initAnimations() {
 
-float Player::getMaxHp() {
-    return this->getAttributeComponent()->getHpMax();
-}
-
-void Player::render(sf::RenderTarget &target) {
-    Entity::render(target);
-    this->sword.render(target);
 }
