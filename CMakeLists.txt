@@ -35,6 +35,7 @@ add_executable(SFML
         Gui/TextureSelector.cpp
         Gui/TextureSelector.h
         enums/tile_types.cpp
+        enums/skill_enum.cpp
         Entities/Components/MovementData.h
         Gui/PushButton.cpp
         Gui/PushButton.h
@@ -55,6 +56,26 @@ add_executable(SFML
         Gui/Sidebar.cpp
         Gui/Sidebar.h
         Gui/Structs/SidebarButton.h
+        Items/Item.cpp
+        Items/Item.h
+        Items/Weapons/MeleeWeapon/MeleeWeapon.cpp
+        Items/Weapons/MeleeWeapon/MeleeWeapon.h
+        Items/Weapons/MeleeWeapon/Sword.cpp
+        Items/Weapons/MeleeWeapon/Sword.h
+        Items/Weapons/RangeWeapon/RangedWeapon.cpp
+        Items/Weapons/RangeWeapon/RangedWeapon.h
+        Items/Weapons/RangeWeapon/Bow.cpp
+        Items/Weapons/RangeWeapon/Bow.h
+        Entities/Components/SkillComponent.cpp
+        Entities/Components/SkillComponent.h
+        Entities/Components/Skill.cpp
+        Entities/Components/Skill.h
+        Entities/Enemy.cpp
+        Entities/Enemy.h
+        Entities/EntityDimensionData.h
+        Entities/EnemySpawner.cpp
+        Entities/EnemySpawner.h
+        enums/enemy_types.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

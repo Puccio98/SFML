@@ -26,8 +26,8 @@ void Tilemap::update() {
 
 }
 
-void Tilemap::render(sf::RenderTarget &target, Entity *entity, unsigned layerIndex) {
-    sf::Vector2f position = entity->getHitboxComponent()->getPosition();
+void Tilemap::render(sf::RenderTarget &target, EntityDimensionData &entity, unsigned layerIndex) {
+    sf::Vector2f position = entity.position;
     float entityGridPosition_x = position.x / this->gridSizeF;
     float entityGridPosition_y = position.y / this->gridSizeF;
 
@@ -46,10 +46,10 @@ void Tilemap::render(sf::RenderTarget &target, Entity *entity, unsigned layerInd
     };
 
     int startTile_x = calculateStartTile(entityGridPosition_x, halfSize_x);
-    int endTile_x = calculateEndTile(entityGridPosition_x, halfSize_x, entity->getSize().width);
+    int endTile_x = calculateEndTile(entityGridPosition_x, halfSize_x, entity.size.width);
 
     int startTile_y = calculateStartTile(entityGridPosition_y, halfSize_y);
-    int endTile_y = calculateEndTile(entityGridPosition_y, halfSize_y, entity->getSize().height);
+    int endTile_y = calculateEndTile(entityGridPosition_y, halfSize_y, entity.size.height);
 
 
     for (int i = startTile_x; i <= endTile_x && i < this->map.size(); ++i) {

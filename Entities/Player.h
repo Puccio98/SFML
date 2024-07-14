@@ -3,11 +3,11 @@
 
 #include "Entity.h"
 #include "../Map/Tilemap.h"
+#include "../Items/Weapons/MeleeWeapon/Sword.h"
 
 class Player final : public Entity {
 private:
-    //Variables
-    Tilemap &map;
+    Sword sword;
 
     //Initializer Functions
     void initVariables();
@@ -21,6 +21,8 @@ public:
     void update(const float &dt) override;
 
     void update(const MovementData &next, const float &dt) override;
+
+    void render(sf::RenderTarget &target);
 
     void attack(const float &dt);
 

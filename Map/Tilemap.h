@@ -2,7 +2,7 @@
 #define SFML_TILEMAP_H
 
 #include "../Tile/Tile.h"
-#include "../Entities/Entity.h"
+#include "../Entities/EntityDimensionData.h"
 
 class Tilemap {
 private:
@@ -32,7 +32,7 @@ public:
 
     unsigned int getMaxLayerIndex() const;
 
-    void render(sf::RenderTarget &target, Entity *entity, unsigned layerIndex);
+    void render(sf::RenderTarget &target, EntityDimensionData &entity, unsigned layerIndex);
 
     void render(sf::RenderTarget &target);
 

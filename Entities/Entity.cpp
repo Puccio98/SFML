@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity() {
+Entity::Entity(Tilemap &map) : map(map) {
     this->initVariables();
 }
 
@@ -9,6 +9,7 @@ Entity::~Entity() {
     delete this->movementComponent;
     delete this->animationComponent;
     delete this->attributeComponent;
+    delete this->skillComponent;
 }
 
 void Entity::setDirection(sf::Vector2f direction, const float &dt) {
@@ -28,17 +29,13 @@ void Entity::setPosition(const float x, const float y) {
     this->sprite.setPosition(x, y);
 }
 
-void Entity::setTexture(sf::Texture &texture) {
-    this->sprite.setTexture(texture);
-    // togli
-    this->sprite.setScale(0.2, 0.2);
-}
 
 void Entity::initVariables() {
     this->hitboxComponent = nullptr;
     this->movementComponent = nullptr;
     this->animationComponent = nullptr;
     this->attributeComponent = nullptr;
+    this->skillComponent = nullptr;
 }
 
 void Entity::createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration) {
@@ -51,6 +48,10 @@ void Entity::createAnimationComponent(sf::Texture &texture_sheet) {
 
 void Entity::createHitboxComponent(sf::Sprite &_sprite, float offset_x, float offset_y, float width, float height) {
     this->hitboxComponent = new HitboxComponent(_sprite, offset_x, offset_y, width, height);
+}
+
+void Entity::createSkillComponent() {
+    this->skillComponent = new SkillComponent();
 }
 
 const sf::Vector2f Entity::getPosition() const {
@@ -88,5 +89,6 @@ void Entity::createAttributeComponent() {
 AttributeComponent *Entity::getAttributeComponent() const {
     return attributeComponent;
 }
+
 
 
