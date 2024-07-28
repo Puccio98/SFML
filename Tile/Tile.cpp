@@ -9,11 +9,9 @@ Tile::Tile(TileData tileData, sf::Texture &texture,
 }
 
 Tile::Tile(TileData tileData, sf::Texture &texture,
-           sf::Font &font) : Tile(tileData, texture, font, false) {}
+           sf::Font &font) : Tile(std::move(tileData), texture, font, false) {}
 
-Tile::~Tile() {
-
-}
+Tile::~Tile() = default;
 
 void Tile::render(sf::RenderTarget &target) {
     if (sprites.empty()) {

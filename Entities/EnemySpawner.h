@@ -7,7 +7,7 @@
 #include "../Entities/Enemy.h"
 
 
-class EnemySpawner {
+class EnemySpawner : public Tile {
 private:
     ENEMY type;
     EntityDimensionData edd;
@@ -21,11 +21,15 @@ private:
 
     sf::RectangleShape shape;
 public:
-    EnemySpawner(EntityDimensionData edd, ENEMY type, int amount, int timeToSpawn, float maxDistance);
+    EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font, bool hud,
+                 EntityDimensionData edd, ENEMY type, int amount, int timeToSpawn, float maxDistance);
+
+    EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font,
+                 EntityDimensionData edd, ENEMY type, int amount, int timeToSpawn, float maxDistance);
 
     virtual ~EnemySpawner();
 
-    void update(const float &dt);
+    void update();
 
     void render(sf::RenderTarget &target);
 

@@ -45,8 +45,6 @@ public:
 
     void render(sf::RenderTarget &target);
 
-    void render(sf::RenderTarget &target, bool hud);
-
     std::string getAsString(unsigned x, unsigned y, unsigned z) const;
 
     bool isOfType(TILE_TYPES type);

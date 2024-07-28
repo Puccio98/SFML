@@ -127,19 +127,19 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
         if (!this->sideBar->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosView))) {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
                 this->openTextureSelector();
-                this->textureSelector->setSelectedTile(1, 0);
+                this->setSelectedTile(1, 0);
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
                 this->openTextureSelector();
-                this->textureSelector->setSelectedTile(-1, 0);
+                this->setSelectedTile(-1, 0);
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up) {
                 this->openTextureSelector();
-                this->textureSelector->setSelectedTile(0, -1);
+                this->setSelectedTile(0, -1);
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down) {
                 this->openTextureSelector();
-                this->textureSelector->setSelectedTile(0, 1);
+                this->setSelectedTile(0, 1);
             }
 
             if (event.type == sf::Event::MouseButtonPressed) {
@@ -212,7 +212,7 @@ void EditorState::updateInput(const float &dt) {
     if (!this->sideBar->getGlobalBounds().contains(this->mousePosView)) {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             if (this->textureSelector->isActive()) {
-                this->textureSelector->setSelectedTile(mousePosView);
+                this->setSelectedTile(mousePosView);
             } else {
                 GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(
                         "TOGGLE_TILES"));
@@ -271,4 +271,14 @@ void EditorState::updateView(const float &dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds["MAP_RIGHT"])))
         direction.x = 1;
     view.move(direction * cameraSpeed * dt);
+}
+
+void EditorState::setSelectedTile(sf::Vector2f &mousePos) {
+    this->clock.restart();
+    this->textureSelector->setSelectedTile(mousePos);
+}
+
+void EditorState::setSelectedTile(int dir_x, int dir_y) {
+    this->clock.restart();
+    this->textureSelector->setSelectedTile(dir_x, dir_y);
 }
