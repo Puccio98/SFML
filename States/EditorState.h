@@ -84,6 +84,19 @@ private:
     void addTile();
 
     void addTexture();
+
+    /**
+     * Seleziona la tile in base alla posizione del mouse e resetta il clock.
+     * @param mousePosWindow
+     */
+    void setSelectedTile(sf::Vector2f &mousePos);
+
+    /**
+     * Seleziona la tile prendendo una direzione e resetta il clock.
+     * @param dir_x
+     * @param dir_y
+     */
+    void setSelectedTile(int dir_x, int dir_y);
 };
 
 
