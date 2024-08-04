@@ -44,7 +44,7 @@ add_executable(SFML
         States/StateData.h
         Gui/TextureSelector.cpp
         Gui/TextureSelector.h
-        enums/tile_types.cpp
+        enums/behaviour_types.cpp
         enums/skill_enum.cpp
         Entities/Components/MovementData.h
         Gui/PushButton.cpp
@@ -88,6 +88,7 @@ add_executable(SFML
         enums/enemy_types.cpp
         Helper/Json/Serializable.h
         Helper/Json/Struct/MapData.h
+        enums/tile_types.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

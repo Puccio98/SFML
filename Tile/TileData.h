@@ -1,13 +1,16 @@
 #include <vector>
 #include <System/Vector2.hpp>
-#include"../enums/tile_types.cpp"
+#include"../enums/behaviour_types.cpp"
 #include "../Helper/Json/Serializable.h"
+
+#include "../enums/tile_types.cpp"
 
 struct TileData : Serializable {
     int index_x;
     int index_y;
     int index_z;
     float gridSize;
+    TILE_TYPES type;
     /**
      * Definisce le posizioni della texture nello sheet, quindi determina la texture da applicare
      */
@@ -37,7 +40,7 @@ struct TileData : Serializable {
         }
 
         // Tile type
-        j["type"] = {0};
+        j["type"] = this->type;
         return j;
     };
 
@@ -65,5 +68,7 @@ struct TileData : Serializable {
             behaviourJson.get_to(behaviour);
             behaviours.push_back(behaviour);
         }
+
+        j.at("type").get_to(type);
     };
 };

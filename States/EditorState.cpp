@@ -217,7 +217,7 @@ void EditorState::updateInput(const float &dt) {
                 GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(
                         "TOGGLE_TILES"));
                 if (switchBtn && switchBtn->isActive()) {
-                    addTile();
+                    addTile(TILE_TYPES::DEFAULT);
                 } else {
                     addTexture();
                 }
@@ -240,13 +240,14 @@ void EditorState::updateInput(const float &dt) {
     }
 }
 
-void EditorState::addTile() {
+void EditorState::addTile(TILE_TYPES type) {
     TileData tileData;
     tileData.gridSize = stateData.gridSize;
     tileData.index_x = getPosGrid(VIEW_TYPES::VIEW, this->view).x;
     tileData.index_y = getPosGrid(VIEW_TYPES::VIEW, this->view).y;
     tileData.index_z = tileMap->getMap()[tileData.index_x][tileData.index_y].size();
     tileData.behaviours = tileTypes; // Copia contenuto del vettore :D
+    tileData.type = type;
 
     if (!positionMap[{tileData.index_x, tileData.index_y}]) {
         tileMap->addTile(tileData);

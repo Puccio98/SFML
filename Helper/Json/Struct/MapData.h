@@ -101,10 +101,7 @@ struct MapData : Serializable {
                 this->tiles[x][y].resize(z + 1);
             }
 
-            this->tiles[x][y][z] = new Tile(tileData,
-                                            this->tileTextureSheet,
-                                            this->font,
-                                            this->hud); // Assume Tile has a constructor that takes TileData
+            this->tiles[x][y][z] = GetTile(tileData);
         }
     };
 
@@ -116,5 +113,21 @@ struct MapData : Serializable {
                 }
             }
         }
+    }
+
+private:
+    Tile *GetTile(const TileData &tileData) {
+        switch (tileData.type) {
+            case TILE_TYPES::DEFAULT:
+                return new Tile(tileData,
+                                this->tileTextureSheet,
+                                this->font,
+                                this->hud);
+            case TILE_TYPES::SPAWNER:
+                break;
+            case TILE_TYPES::WARP:
+                break;
+        }
+        return nullptr;
     }
 };
