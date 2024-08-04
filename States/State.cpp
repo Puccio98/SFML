@@ -120,7 +120,7 @@ sf::Vector2i State::getPosGrid(VIEW_TYPES viewType, sf::View view) const {
 void State::updateMouseDebug(sf::View view) {
     std::stringstream ss;
     mouseDebug.setPosition(mousePosView.x + 20, mousePosView.y - 20);
-    ss << "w:" << mousePosWindow.x << " x " << mousePosWindow.y << "\n"
+    ss << "mapData:" << mousePosWindow.x << " x " << mousePosWindow.y << "\n"
        << "v:" << mousePosView.x << " x " << mousePosView.y << "\n"
        << "gw:" << getPosGrid(VIEW_TYPES::WINDOW, view).x << " x " << getPosGrid(VIEW_TYPES::WINDOW, view).y << "\n"
        << "gv:" << getPosGrid(VIEW_TYPES::VIEW, view).x << " x " << getPosGrid(VIEW_TYPES::VIEW, view).y << "\n";

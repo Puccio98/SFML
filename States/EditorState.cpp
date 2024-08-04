@@ -83,11 +83,11 @@ void EditorState::updateSidebar(float dt) {
     }
 
     if (this->sideBar->isButtonClicked("TOGGLE_COLLISIONS")) {
-        auto i = std::find(this->tileTypes.begin(), this->tileTypes.end(), TILE_TYPES::COLLISION);
+        auto i = std::find(this->tileTypes.begin(), this->tileTypes.end(), TILE_BEHAVIOURS::COLLISION);
         if (i != this->tileTypes.end()) {
             this->tileTypes.erase(i);
         } else {
-            this->tileTypes.push_back(TILE_TYPES::COLLISION);
+            this->tileTypes.push_back(TILE_BEHAVIOURS::COLLISION);
         }
     }
 
@@ -101,7 +101,7 @@ void EditorState::initVariables() {
     this->showTextureSelector = false;
     this->tileTexturePath = "Resources/images/tiles/nuovo_tilesheet.png";
     this->tileMap = new Tilemap("Resources/map/map.slmp", *this->stateData.font, true);
-    this->tileTypes.push_back(TILE_TYPES::DEFAULT);
+    this->tileTypes.push_back(TILE_BEHAVIOURS::DEFAULT);
 
     this->cameraSpeed = 300.f;
 }
@@ -246,7 +246,7 @@ void EditorState::addTile() {
     tileData.index_x = getPosGrid(VIEW_TYPES::VIEW, this->view).x;
     tileData.index_y = getPosGrid(VIEW_TYPES::VIEW, this->view).y;
     tileData.index_z = tileMap->getMap()[tileData.index_x][tileData.index_y].size();
-    tileData.types = tileTypes; // Copia contenuto del vettore :D
+    tileData.behaviours = tileTypes; // Copia contenuto del vettore :D
 
     if (!positionMap[{tileData.index_x, tileData.index_y}]) {
         tileMap->addTile(tileData);

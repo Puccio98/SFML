@@ -3,19 +3,11 @@
 
 #include "../Tile/Tile.h"
 #include "../Entities/EntityDimensionData.h"
+#include "../Helper/Json/Struct/MapData.h"
 
 class Tilemap {
 private:
-    unsigned gridSizeU;
-    float gridSizeF;
-    unsigned maxLayerIndex;
-    sf::Vector2u maxSizeGrid;
-    sf::Vector2f maxSizeWorld;
-    std::vector<std::vector<std::vector<Tile *>>> map;
-    std::string texturePath;
-    sf::Texture tileTextureSheet;
-    sf::Font font;
-    bool hud;
+    MapData mapData;
 
     void setMaxLayer();
 

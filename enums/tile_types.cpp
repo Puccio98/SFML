@@ -1,4 +1,4 @@
-enum class TILE_TYPES {
+enum class TILE_BEHAVIOURS {
     DEFAULT = 6,
     COLLISION = 9,
     SPAWNER = 2

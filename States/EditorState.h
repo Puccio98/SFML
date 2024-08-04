@@ -39,7 +39,7 @@ private:
     float cameraSpeed;
     std::vector<SidebarButton> buttonsKeyLabel;
 
-    std::vector<TILE_TYPES> tileTypes;
+    std::vector<TILE_BEHAVIOURS> tileTypes;
 
     // Define a simple Point struct to hold x and y coordinates
     struct Point {

@@ -16,18 +16,27 @@ struct MapData : Serializable {
     sf::Vector2u maxSizeGrid;
     std::string texturePath;
 
-    //Tiles
+    // Tiles
     std::vector<std::vector<std::vector<Tile *>>> tiles;
 
-    //Functions
+    // non serializza
+    sf::Vector2f maxSizeWorld;
+    sf::Texture tileTextureSheet;
+    sf::Font &font;
+    bool hud;
+
+    MapData(sf::Font &font, bool hud) : font(font), hud(hud) {
+    }
+
+    // Functions
     json to_json() const override {
         json j;
 
         j["maxSizeGrid"] = {{"x", this->maxSizeGrid.x},
                             {"y", this->maxSizeGrid.y}};
-        j["gridSizeU"] = {this->gridSizeU};
-        j["maxLayerIndex"] = {this->maxLayerIndex};
-        j["texturePath"] = {this->texturePath};
+        j["gridSizeU"] = this->gridSizeU;
+        j["maxLayerIndex"] = this->maxLayerIndex;
+        j["texturePath"] = this->texturePath;
 
         j["tiles"] = nlohmann::json::array();
 
@@ -41,26 +50,71 @@ struct MapData : Serializable {
         return j;
     };
 
-
     void from_json(const json &j) override {
-//        j.at("name").get_to(p.name);
-//        j.at("age").get_to(p.age);
-//        j.at("city").get_to(p.city);
-    };
+        // Parse base data
+        j.at("maxSizeGrid").at("x").get_to(this->maxSizeGrid.x);
+        j.at("maxSizeGrid").at("y").get_to(this->maxSizeGrid.y);
+        j.at("gridSizeU").get_to(this->gridSizeU);
+        j.at("maxLayerIndex").get_to(this->maxLayerIndex);
+        j.at("texturePath").get_to(this->texturePath);
 
-
-    virtual ~MapData() {
-        for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
-            for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
-                while (this->map[x][y].size() != 0) {
-                    delete this->map[x][y].at(this->map[x][y].size() - 1);
-                    this->map[x][y].pop_back();
+        this->gridSizeF = static_cast<float>(this->gridSizeU);
+        this->maxSizeWorld.x = static_cast<float>(this->maxSizeGrid.x * this->gridSizeU);
+        this->maxSizeWorld.y = static_cast<float>(this->maxSizeGrid.y * this->gridSizeU);
+        // Clear existing tiles to avoid memory leaks
+        for (auto &row: this->tiles) {
+            for (auto &column: row) {
+                for (auto &tile: column) {
+                    delete tile;
                 }
-                this->map[x][y].clear();
             }
-            this->map[x].clear();
+        }
+        this->tiles.clear();
+
+        // Initialize tiles based on the grid size
+        this->tiles.resize(this->maxSizeGrid.x);
+        for (auto &row: this->tiles) {
+            row.resize(this->maxSizeGrid.y);
         }
 
-        this->map.clear();
+        if (!this->tileTextureSheet.loadFromFile(this->texturePath)) {
+            std::cout << "ERROR::TILEMAP::FAILED TO LOAD TILETEXTURESHEET::FILENAME:" << this->texturePath << "\n";
+        }
+
+        // Populate tiles from JSON
+        const auto &json_tiles = j.at("tiles");
+        for (const auto &tile_json: json_tiles) {
+            TileData tileData;
+            tileData.from_json(tile_json);
+
+            int x = tileData.index_x;
+            int y = tileData.index_y;
+            int z = tileData.index_z;
+            tileData.gridSize = this->gridSizeF;
+
+            // Ensure the vector is large enough
+            if (x >= this->tiles.size() || y >= this->tiles[x].size()) {
+                continue; // Handle out-of-bounds safely
+            }
+
+            if (z >= this->tiles[x][y].size()) {
+                this->tiles[x][y].resize(z + 1);
+            }
+
+            this->tiles[x][y][z] = new Tile(tileData,
+                                            this->tileTextureSheet,
+                                            this->font,
+                                            this->hud); // Assume Tile has a constructor that takes TileData
+        }
+    };
+
+    virtual ~MapData() {
+        for (auto &row: this->tiles) {
+            for (auto &column: row) {
+                for (auto &tile: column) {
+                    delete tile;
+                }
+            }
+        }
     }
 };
