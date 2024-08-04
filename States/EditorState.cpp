@@ -60,11 +60,16 @@ void EditorState::render(sf::RenderTarget *target) {
 
 
 void EditorState::initButtonsKeyLabel() {
-    this->buttonsKeyLabel.emplace_back("OPEN_TEXTURE_SELECTOR", "TS", false);
+    this->buttonsKeyLabel.emplace_back("OPEN_TEXTURE_SELECTOR", "TS", true);
     this->buttonsKeyLabel.emplace_back("TOGGLE_TILES", "T", true);
+    this->buttonsKeyLabel.emplace_back("TOGGLE_E_SPAWNER", "SP", true);
     this->buttonsKeyLabel.emplace_back("SAVE_TEXTURE_MAP", "SV", false);
     this->buttonsKeyLabel.emplace_back("TOGGLE_COLLISIONS", "COL", true);
     this->buttonsKeyLabel.emplace_back("CLEAR_MAP", "R", false);
+
+    this->singleChoiceButton.emplace_back("OPEN_TEXTURE_SELECTOR");
+    this->singleChoiceButton.emplace_back("TOGGLE_TILES");
+    this->singleChoiceButton.emplace_back("TOGGLE_E_SPAWNER");
 }
 
 void EditorState::updateSidebar(float dt) {
@@ -73,9 +78,15 @@ void EditorState::updateSidebar(float dt) {
     if (this->sideBar->isButtonClicked("OPEN_TEXTURE_SELECTOR")) {
         this->showTextureSelector = !this->showTextureSelector;
         this->clock.restart();
+        this->enableButton("OPEN_TEXTURE_SELECTOR");
+    }
+
+    if (this->sideBar->isButtonClicked("TOGGLE_E_SPAWNER")) {
+        this->enableButton("TOGGLE_E_SPAWNER");
     }
 
     if (this->sideBar->isButtonClicked("TOGGLE_TILES")) {
+        this->enableButton("TOGGLE_TILES");
     }
 
     if (this->sideBar->isButtonClicked("SAVE_TEXTURE_MAP")) {
@@ -214,12 +225,11 @@ void EditorState::updateInput(const float &dt) {
             if (this->textureSelector->isActive()) {
                 this->setSelectedTile(mousePosView);
             } else {
-                GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(
-                        "TOGGLE_TILES"));
-                if (switchBtn && switchBtn->isActive()) {
-                    addTile(TILE_TYPES::DEFAULT);
-                } else {
-                    addTexture();
+                for (const auto &key: this->singleChoiceButton) {
+                    GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(key));
+                    if (switchBtn->isActive()) {
+                        this->executeButton(key);
+                    }
                 }
             }
         }
@@ -282,4 +292,25 @@ void EditorState::setSelectedTile(sf::Vector2f &mousePos) {
 void EditorState::setSelectedTile(int dir_x, int dir_y) {
     this->clock.restart();
     this->textureSelector->setSelectedTile(dir_x, dir_y);
+}
+
+void EditorState::executeButton(const std::string &key) {
+    if (key == "OPEN_TEXTURE_SELECTOR") {
+        this->addTexture();
+    } else if (key == "TOGGLE_TILES") {
+        this->addTile(TILE_TYPES::DEFAULT);
+    } else if (key == "TOGGLE_E_SPAWNER") {
+        this->addTile(TILE_TYPES::SPAWNER);
+    } else {
+        return;
+    }
+}
+
+void EditorState::enableButton(const std::string &activeButtonKey) {
+    for (const auto &button: this->singleChoiceButton) {
+        if (activeButtonKey != button) {
+            GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(button));
+            switchBtn->setActive(false);
+        }
+    }
 }
