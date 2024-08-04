@@ -96,11 +96,7 @@ void Tilemap::addTile(const TileData &tileData) {
     if (tileData.index_x < this->mapData.maxSizeGrid.x &&
         tileData.index_y < this->mapData.maxSizeGrid.y //&& tileData.index_z < this->mapData.maxLayerIndex
             ) {
-        this->mapData.tiles[tileData.index_x][tileData.index_y].push_back(new Tile(
-                tileData,
-                this->mapData.tileTextureSheet,
-                this->mapData.font,
-                this->mapData.hud));
+        this->mapData.addTile(tileData);
     }
 }
 

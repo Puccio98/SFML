@@ -2,7 +2,6 @@
 #define SFML_ENEMY_H
 
 #include "Entity.h"
-#include "../Map/Tilemap.h"
 
 class Enemy : public Entity {
 private:
@@ -12,7 +11,7 @@ private:
 
 
 public:
-    Enemy(float x, float y, sf::Texture &texture_sheet, Tilemap &map);
+    Enemy(float x, float y, sf::Texture &texture_sheet);
 
     void render(sf::RenderTarget &target) override;
 

@@ -5,6 +5,9 @@
 #include <System/Vector2.hpp>
 #include "../enums/enemy_types.cpp"
 #include "../Entities/Enemy.h"
+#include "EntityDimensionData.h"
+#include "../Tile/Tile.h"
+#include <utility>
 
 
 class EnemySpawner : public Tile {

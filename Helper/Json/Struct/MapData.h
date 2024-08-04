@@ -1,7 +1,4 @@
-#include <System/Vector2.hpp>
-#include <string>
-#include <vector>
-#include "../../../Tile/Tile.h"
+#include "../../../Entities/EnemySpawner.h"
 
 #ifndef SFML_MAPDATA_H
 #define SFML_MAPDATA_H
@@ -115,6 +112,10 @@ struct MapData : Serializable {
         }
     }
 
+    void addTile(const TileData tileData) {
+        this->tiles[tileData.index_x][tileData.index_y].push_back(this->GetTile(tileData));
+    }
+
 private:
     Tile *GetTile(const TileData &tileData) {
         switch (tileData.type) {
@@ -124,6 +125,9 @@ private:
                                 this->font,
                                 this->hud);
             case TILE_TYPES::SPAWNER:
+                return new EnemySpawner(tileData, this->tileTextureSheet, this->font, this->hud,
+                                        EntityDimensionData(sf::Vector2f(), sf::Rect<float>()), ENEMY::SALTERELLO, 0, 0,
+                                        0);
                 break;
             case TILE_TYPES::WARP:
                 break;

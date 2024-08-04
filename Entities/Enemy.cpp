@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-Enemy::Enemy(float x, float y, sf::Texture &texture_sheet, Tilemap &map) : Entity(map) {
+Enemy::Enemy(float x, float y, sf::Texture &texture_sheet) {
     this->initVariables();
     this->setPosition(x, y);
 

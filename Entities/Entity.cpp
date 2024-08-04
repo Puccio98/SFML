@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity(Tilemap &map) : map(map) {
+Entity::Entity() {
     this->initVariables();
 }
 
