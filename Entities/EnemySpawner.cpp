@@ -19,6 +19,7 @@ EnemySpawner::EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &fo
 
 
 void EnemySpawner::render(sf::RenderTarget &target) {
+    target.draw(this->shape);
 
 }
 

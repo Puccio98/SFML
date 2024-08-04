@@ -42,9 +42,9 @@ public:
 
     const TileData &getTiledata() const;
 
-    void update();
+    virtual void update();
 
-    void render(sf::RenderTarget &target);
+    virtual void render(sf::RenderTarget &target);
 
     std::string getAsString(unsigned x, unsigned y, unsigned z) const;
 

@@ -126,12 +126,19 @@ private:
                                 this->hud);
             case TILE_TYPES::SPAWNER:
                 return new EnemySpawner(tileData, this->tileTextureSheet, this->font, this->hud,
-                                        EntityDimensionData(sf::Vector2f(), sf::Rect<float>()), ENEMY::SALTERELLO, 0, 0,
+                                        EntityDimensionData(sf::Vector2f(tileData.gridSize * tileData.index_x,
+                                                                         tileData.gridSize * tileData.index_y),
+                                                            sf::Rect(sf::Vector2f(tileData.gridSize * tileData.index_x,
+                                                                                  tileData.gridSize * tileData.index_y),
+                                                                     sf::Vector2(tileData.gridSize, tileData.gridSize)
+                                                            )),
+                                        ENEMY::SALTERELLO, 0, 0,
                                         0);
                 break;
             case TILE_TYPES::WARP:
                 break;
         }
+
         return nullptr;
     }
 };
