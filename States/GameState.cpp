@@ -17,6 +17,8 @@ GameState::~GameState() {
 }
 
 void GameState::update(const float &dt) {
+    EntityDimensionData edd(this->player->getHitboxComponent()->getPosition(), this->player->getSize());
+
     //per debug
     this->updateMouseDebug(this->view);
     if (!pauseMenuState.isPaused()) {
@@ -24,9 +26,8 @@ void GameState::update(const float &dt) {
         this->updateView(dt);
         this->updateInput(dt);
         this->updateEntity(dt, *this->player);
+        this->tilemap->update(*this->stateData.window, edd, dt);
         this->playerGUI->update(dt);
-        //todo:: generazione dei nemici
-        // dovresti fare tilemap upadate e aggiornare solamente le tile che sono visibili a schermo
     } else {
         pauseMenuState.update(dt);
     }
@@ -40,7 +41,7 @@ void GameState::render(sf::RenderTarget *target = nullptr) {
     target->setView(this->view);
     for (int layerIndex = 0; layerIndex <= this->tilemap->getMaxLayerIndex(); layerIndex++) {
         EntityDimensionData edd(this->player->getHitboxComponent()->getPosition(), this->player->getSize());
-        this->tilemap->render(*target, edd, layerIndex);
+        this->tilemap->renderLayer(*target, edd, layerIndex);
         if (layerIndex == this->player->getLayer()) {
             this->player->render(*target);
         }
@@ -117,8 +118,8 @@ void GameState::initView() {
 void GameState::updateView(const float &dt) {
     auto pos = this->player->getPosition();
     auto size = this->player->getSize();
-    //floor serve perchè setCenter sarebbe meglio passargli degli interi per non sminchiare il render
-    this->view.setCenter(std::floor(pos.x + size.width / 2), std::floor(pos.y + size.height / 2));
+    //floor serve perchè setCenter sarebbe meglio passargli degli interi per non sminchiare il renderLayer
+    this->view.setCenter(std::floor(pos.x + size.x / 2), std::floor(pos.y + size.y / 2));
 }
 
 void GameState::updateEntity(const float &dt, Entity &entity) {

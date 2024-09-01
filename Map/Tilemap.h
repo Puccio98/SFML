@@ -18,13 +18,13 @@ public:
 
     virtual ~Tilemap();
 
-    void update();
+    void update(sf::RenderTarget &target, EntityDimensionData &entity, float dt);
 
     const std::vector<std::vector<std::vector<Tile *>>> &getMap() const;
 
     unsigned int getMaxLayerIndex() const;
 
-    void render(sf::RenderTarget &target, EntityDimensionData &entity, unsigned layerIndex);
+    void renderLayer(sf::RenderTarget &target, EntityDimensionData &entity, unsigned layerIndex);
 
     void render(sf::RenderTarget &target);
 
@@ -66,7 +66,7 @@ public:
 
     std::vector<Tile *> *getTileLayers(int x, int y);
 
-    sf::IntRect getInteractiveArea(sf::RenderTarget &target, EntityDimensionData &data);
+    sf::IntRect getInteractiveArea(sf::RenderTarget &target, EntityDimensionData &halfSizeGrid);
 };
 
 

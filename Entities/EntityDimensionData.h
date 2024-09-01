@@ -5,10 +5,10 @@
 
 
 struct EntityDimensionData {
-    EntityDimensionData(sf::Vector2f _position, sf::Rect<float> _size) : position(_position), size(_size) {};
+    EntityDimensionData(sf::Vector2f _position, sf::Vector2f _size) : position(_position), size(_size) {};
 
     sf::Vector2f position;
-    sf::Rect<float> size;
+    sf::Vector2f size;
 
 };
 

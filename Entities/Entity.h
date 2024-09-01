@@ -51,7 +51,7 @@ public:
 
     virtual const sf::Vector2f getPosition() const;
 
-    virtual const sf::Rect<float> getSize() const;
+    virtual const sf::Vector2f getSize() const;
 
     virtual void setDirection(sf::Vector2f direction, const float &dt);
 

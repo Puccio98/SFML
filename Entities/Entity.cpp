@@ -58,8 +58,8 @@ const sf::Vector2f Entity::getPosition() const {
     return this->sprite.getPosition();
 }
 
-const sf::Rect<float> Entity::getSize() const {
-    return this->sprite.getGlobalBounds();
+const sf::Vector2f Entity::getSize() const {
+    return this->hitboxComponent->getSize();
 }
 
 MovementComponent *Entity::getMovementComponent() const {

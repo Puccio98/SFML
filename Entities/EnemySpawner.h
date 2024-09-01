@@ -14,7 +14,7 @@ class EnemySpawner : public Tile {
 private:
     ENEMY type;
     EntityDimensionData edd;
-    int amount;
+    int counter;
     int timeToSpawn;
     float maxDistance;
     sf::RectangleShape shape;
@@ -27,7 +27,7 @@ public:
 
     virtual ~EnemySpawner();
 
-    void update() override;
+    void update(float dt) override;
 
     void render(sf::RenderTarget &target) override;
 

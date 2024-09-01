@@ -42,7 +42,7 @@ public:
 
     const TileData &getTiledata() const;
 
-    virtual void update();
+    virtual void update(float dt);
 
     virtual void render(sf::RenderTarget &target);
 

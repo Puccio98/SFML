@@ -49,3 +49,7 @@ sf::RectangleShape HitboxComponent::getHitboxRectangleShapeFromPosition(sf::Vect
     rectangleShape.setPosition(this->computePosition(spritePosition));
     return rectangleShape;
 }
+
+sf::Vector2f HitboxComponent::getSize() {
+    return this->hitbox.getSize();
+}
