@@ -65,6 +65,8 @@ public:
     void loadTile(const std::string &line);
 
     std::vector<Tile *> *getTileLayers(int x, int y);
+
+    sf::IntRect getInteractiveArea(sf::RenderTarget &target, EntityDimensionData &data);
 };
 
 
