@@ -43,7 +43,6 @@ void Tilemap::renderLayer(sf::RenderTarget &target, EntityDimensionData &entity,
     sf::IntRect area = getInteractiveArea(target, entity);
     int end_x = area.left + area.width;
     int end_y = area.top + area.height;
-    std::cout << "start x " << area.left << std::endl;
 
     for (int i = area.left; i <= end_x && i < this->mapData.tiles.size(); ++i) {
         for (int j = area.top; j <= end_y && j < this->mapData.tiles[i].size(); ++j) {

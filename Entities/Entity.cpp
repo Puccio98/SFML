@@ -55,7 +55,7 @@ void Entity::createSkillComponent() {
 }
 
 const sf::Vector2f Entity::getPosition() const {
-    return this->sprite.getPosition();
+    return this->hitboxComponent->getPosition();
 }
 
 const sf::Vector2f Entity::getSize() const {

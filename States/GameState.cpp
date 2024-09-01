@@ -81,7 +81,7 @@ void GameState::initTextures() {
 }
 
 void GameState::initPlayer() {
-    this->player = new Player(this->dvm.width / 2 - 100, this->dvm.height / 2 - 100, this->textures["PLAYER_SHEET"]);
+    this->player = new Player(this->dvm.width / 2 - 130, this->dvm.height / 2 - 125, this->textures["PLAYER_SHEET"]);
 }
 
 void GameState::handleEvent(sf::Event &event, const float &dt) {
