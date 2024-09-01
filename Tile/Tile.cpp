@@ -14,11 +14,11 @@ Tile::Tile(TileData tileData, sf::Texture &texture,
 Tile::~Tile() = default;
 
 void Tile::render(sf::RenderTarget &target) {
-    if (sprites.empty()) {
+    if (this->tiledata.sprites.empty()) {
         target.draw(defaultSprite);
     }
 
-    for (const auto &sprite: this->sprites) {
+    for (const auto &sprite: this->tiledata.sprites) {
         target.draw(sprite);
     }
 
@@ -41,21 +41,22 @@ std::string Tile::getAsString(unsigned x, unsigned y, unsigned z) const {
 
 std::string Tile::getTypesAsString() const {
     std::string s;
-    for (TILE_TYPES i: tiledata.types) {
+    for (TILE_BEHAVIOURS i: tiledata.behaviours) {
         s.append(std::to_string(static_cast<int>(i)) + " ");
     }
 
     return s;
 }
 
-bool Tile::isOfType(TILE_TYPES type) {
-    return std::find(this->tiledata.types.begin(), this->tiledata.types.end(), type) != tiledata.types.end();
+bool Tile::isOfType(TILE_BEHAVIOURS type) {
+    return std::find(this->tiledata.behaviours.begin(), this->tiledata.behaviours.end(), type) !=
+           tiledata.behaviours.end();
 }
 
 std::string Tile::getSpritesAsString() const {
     std::string s;
 
-    for (const sf::RectangleShape &sprite: this->sprites) {
+    for (const sf::RectangleShape &sprite: this->tiledata.sprites) {
         s.append(
                 std::to_string(sprite.getTextureRect().left) + " " + std::to_string(sprite.getTextureRect().top) + " "
         );
@@ -82,9 +83,9 @@ void
 Tile::addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition) {
     sf::IntRect textureRect = sf::IntRect(texturePosition.x, texturePosition.y, this->tiledata.gridSize,
                                           this->tiledata.gridSize);
-    if (!sprites.empty()) {
+    if (!this->tiledata.sprites.empty()) {
         // Controllo che non stia inserendo la stessa texture di prima
-        if (sprites[sprites.size() - 1].getTextureRect() == textureRect) {
+        if (this->tiledata.sprites[this->tiledata.sprites.size() - 1].getTextureRect() == textureRect) {
             return;
         }
     }
@@ -99,11 +100,11 @@ Tile::addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition)
         this->setCollisionOutline(texture);
     }
 
-    sprites.push_back(texture);
+    this->tiledata.sprites.push_back(texture);
 }
 
 void Tile::setCollisionOutline(sf::RectangleShape &texture) {
-    if (isOfType(TILE_TYPES::COLLISION)) {
+    if (isOfType(TILE_BEHAVIOURS::COLLISION)) {
         texture.setOutlineColor(sf::Color(255, 0, 0, 150));
         texture.setOutlineThickness(-2);
     }
@@ -142,5 +143,9 @@ float Tile::get_x() {
 
 float Tile::get_y() {
     return tiledata.index_y * tiledata.gridSize;
+}
+
+const TileData &Tile::getTiledata() const {
+    return tiledata;
 }
 

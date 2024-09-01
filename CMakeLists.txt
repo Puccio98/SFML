@@ -1,6 +1,16 @@
 cmake_minimum_required(VERSION 3.23)
 project(SFML)
 set(CMAKE_CXX_STANDARD 17)
+# Include FetchContent module
+include(FetchContent)
+
+# Fetch the nlohmann json library
+FetchContent_Declare(
+        nlohmann_json
+        GIT_REPOSITORY https://github.com/nlohmann/json.git
+        GIT_TAG v3.11.2 # Specify the version you want to use
+)
+FetchContent_MakeAvailable(nlohmann_json)
 
 add_executable(SFML
         main.cpp
@@ -34,7 +44,7 @@ add_executable(SFML
         States/StateData.h
         Gui/TextureSelector.cpp
         Gui/TextureSelector.h
-        enums/tile_types.cpp
+        enums/behaviour_types.cpp
         enums/skill_enum.cpp
         Entities/Components/MovementData.h
         Gui/PushButton.cpp
@@ -76,6 +86,9 @@ add_executable(SFML
         Entities/EnemySpawner.cpp
         Entities/EnemySpawner.h
         enums/enemy_types.cpp
+        Helper/Json/Serializable.h
+        Helper/Json/Struct/MapData.h
+        enums/tile_types.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)
@@ -97,5 +110,5 @@ add_custom_command(
         #        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources/map $<TARGET_FILE_DIR:SFML>/Resources/map
 )
 
-
-target_link_libraries(SFML sfml-system sfml-window sfml-graphics sfml-audio)
+# Link the nlohmann json library
+target_link_libraries(SFML PRIVATE sfml-system sfml-window sfml-graphics sfml-audio nlohmann_json::nlohmann_json)

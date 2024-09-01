@@ -1,25 +1,28 @@
 #include "Tilemap.h"
 
+using json = nlohmann::json;
+
 Tilemap::Tilemap(const std::string &file_name, sf::Font &font) : Tilemap(file_name, font, false) {
 }
 
-Tilemap::Tilemap(const std::string &file_name, sf::Font &font, bool hud) : font(font), hud(hud) {
+Tilemap::Tilemap(const std::string &file_name, sf::Font &font, bool hud) : mapData(font, hud) {
     this->loadFromFile(file_name);
 }
 
 Tilemap::~Tilemap() {
-    for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
-        for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
-            while (this->map[x][y].size() != 0) {
-                delete this->map[x][y].at(this->map[x][y].size() - 1);
-                this->map[x][y].pop_back();
+
+    for (size_t x = 0; x < this->mapData.maxSizeGrid.x; x++) {
+        for (size_t y = 0; y < this->mapData.maxSizeGrid.y; y++) {
+            while (this->mapData.tiles[x][y].size() != 0) {
+                delete this->mapData.tiles[x][y].at(this->mapData.tiles[x][y].size() - 1);
+                this->mapData.tiles[x][y].pop_back();
             }
-            this->map[x][y].clear();
+            this->mapData.tiles[x][y].clear();
         }
-        this->map[x].clear();
+        this->mapData.tiles[x].clear();
     }
 
-    this->map.clear();
+    this->mapData.tiles.clear();
 }
 
 void Tilemap::update() {
@@ -28,20 +31,20 @@ void Tilemap::update() {
 
 void Tilemap::render(sf::RenderTarget &target, EntityDimensionData &entity, unsigned layerIndex) {
     sf::Vector2f position = entity.position;
-    float entityGridPosition_x = position.x / this->gridSizeF;
-    float entityGridPosition_y = position.y / this->gridSizeF;
+    float entityGridPosition_x = position.x / this->mapData.gridSizeF;
+    float entityGridPosition_y = position.y / this->mapData.gridSizeF;
 
     sf::Vector2f viewSize = target.getView().getSize();
     float halfSize_x = viewSize.x / 2.f;
     float halfSize_y = viewSize.y / 2.f;
 
     auto calculateStartTile = [this](float entityGridPosition, float halfSize) -> int {
-        int startTile = entityGridPosition - (halfSize / this->gridSizeU);
+        int startTile = entityGridPosition - (halfSize / this->mapData.gridSizeU);
         return startTile <= 0 ? 0 : startTile;
     };
 
     auto calculateEndTile = [this](float entityGridPosition, float halfSize, float entitySize) -> int {
-        int endTile = entityGridPosition + entitySize + (halfSize / this->gridSizeU);
+        int endTile = entityGridPosition + entitySize + (halfSize / this->mapData.gridSizeU);
         return endTile <= 0 ? 0 : endTile;
     };
 
@@ -52,11 +55,11 @@ void Tilemap::render(sf::RenderTarget &target, EntityDimensionData &entity, unsi
     int endTile_y = calculateEndTile(entityGridPosition_y, halfSize_y, entity.size.height);
 
 
-    for (int i = startTile_x; i <= endTile_x && i < this->map.size(); ++i) {
-        for (int j = startTile_y; j <= endTile_y && j < this->map[i].size(); ++j) {
-            size_t layers = map[i][j].size();
+    for (int i = startTile_x; i <= endTile_x && i < this->mapData.tiles.size(); ++i) {
+        for (int j = startTile_y; j <= endTile_y && j < this->mapData.tiles[i].size(); ++j) {
+            size_t layers = this->mapData.tiles[i][j].size();
             if (layers > layerIndex) {
-                Tile *z = this->map[i][j][layerIndex];
+                Tile *z = this->mapData.tiles[i][j][layerIndex];
                 z->render(target);
             }
         }
@@ -64,7 +67,7 @@ void Tilemap::render(sf::RenderTarget &target, EntityDimensionData &entity, unsi
 }
 
 void Tilemap::renderTileLayer(int i, int j, sf::RenderTarget &target) {
-    for (auto z: this->map[i][j]) {
+    for (auto z: this->mapData.tiles[i][j]) {
         if (z != nullptr) {
             z->render(target);
         }
@@ -73,36 +76,33 @@ void Tilemap::renderTileLayer(int i, int j, sf::RenderTarget &target) {
 
 
 void Tilemap::render(sf::RenderTarget &target) {
-    for (int i = 0; i < this->map.size(); ++i) {
-        for (int j = 0; j < this->map[i].size(); ++j) {
+    for (int i = 0; i < this->mapData.tiles.size(); ++i) {
+        for (int j = 0; j < this->mapData.tiles[i].size(); ++j) {
             this->renderTileLayer(i, j, target);
         }
     }
 }
 
 void Tilemap::removeTile(const unsigned index_x, const unsigned index_y) {
-    if (index_x < this->maxSizeGrid.x && index_y < this->maxSizeGrid.y && this->map[index_x][index_y].size() != 0) {
-        delete this->map[index_x][index_y].at(this->map[index_x][index_y].size() - 1);
-        this->map[index_x][index_y].pop_back();
+    if (index_x < this->mapData.maxSizeGrid.x && index_y < this->mapData.maxSizeGrid.y &&
+        this->mapData.tiles[index_x][index_y].size() != 0) {
+        delete this->mapData.tiles[index_x][index_y].at(this->mapData.tiles[index_x][index_y].size() - 1);
+        this->mapData.tiles[index_x][index_y].pop_back();
     }
 }
 
 
 void Tilemap::addTile(const TileData &tileData) {
-    if (tileData.index_x < this->maxSizeGrid.x &&
-        tileData.index_y < this->maxSizeGrid.y //&& tileData.index_z < this->maxLayerIndex
+    if (tileData.index_x < this->mapData.maxSizeGrid.x &&
+        tileData.index_y < this->mapData.maxSizeGrid.y //&& tileData.index_z < this->mapData.maxLayerIndex
             ) {
-        this->map[tileData.index_x][tileData.index_y].push_back(new Tile(
-                tileData,
-                this->tileTextureSheet,
-                this->font,
-                this->hud));
+        this->mapData.addTile(tileData);
     }
 }
 
 
 const sf::Texture &Tilemap::getTileTextureSheet() const {
-    return tileTextureSheet;
+    return this->mapData.tileTextureSheet;
 }
 
 
@@ -116,121 +116,12 @@ void Tilemap::loadFromFile(const std::string file_name) {
     }
 
     if (file.is_open()) {
-        // Skip the first row of the legend
-        std::string _legenda;
-        std::getline(file, _legenda);
-
-        sf::Vector2u _size;
-        unsigned _gridSizeU = 0;
-        unsigned _layers = 0;
-        std::string _texturePath;
-
-        // Read max_size_grid
-        std::string line;
-        std::getline(file, line);
-        {
-            std::istringstream iss(line);
-            std::string label;
-            iss >> label >> _size.x >> _size.y;
-        }
-
-        // Read grid_size
-        std::getline(file, line);
-        {
-            std::istringstream iss(line);
-            std::string label;
-            iss >> label >> _gridSizeU;
-        }
-
-        // Read max_layer_index
-        std::getline(file, line);
-        {
-            std::istringstream iss(line);
-            std::string label;
-            iss >> label >> _layers;
-        }
-
-        // Read texture_path
-        std::getline(file, line);
-        {
-            std::istringstream iss(line);
-            std::string label;
-            iss >> label >> _texturePath;
-        }
-
-        this->gridSizeF = static_cast<float>(_gridSizeU);
-        this->gridSizeU = _gridSizeU;
-        this->maxSizeGrid.x = _size.x;
-        this->maxSizeGrid.y = _size.y;
-        this->maxSizeWorld.x = static_cast<float>(_size.x * _gridSizeU);
-        this->maxSizeWorld.y = static_cast<float>(_size.y * _gridSizeU);
-        this->maxLayerIndex = _layers;
-        this->texturePath = _texturePath;
-
-        this->clear();
-
-        if (!this->tileTextureSheet.loadFromFile(this->texturePath)) {
-            std::cout << "ERROR::TILEMAP::FAILED TO LOAD TILETEXTURESHEET::FILENAME:" << this->texturePath << "\n";
-        }
-
-        this->map.resize(this->maxSizeGrid.x);
-        for (unsigned x = 0; x < this->maxSizeGrid.x; x++) {
-            this->map[x].resize(this->maxSizeGrid.y);
-            for (unsigned y = 0; y < this->maxSizeGrid.y; y++) {
-                // Initialize empty map
-                this->map[x][y] = std::vector<Tile *>();
-                //this->map[x][y].resize(this->maxLayerIndex, nullptr);
-            }
-        }
-
-        // Load all Tiles
-        while (std::getline(file, line)) {
-            if (line.empty()) {
-                continue;
-            }
-
-            this->loadTile(line);
-        }
-    } else {
-        std::cout << "ERROR::TILEMAP::COULD NOT LOAD FROM FILE: " << file_name << "\n";
+        json jsonMap;
+        file >> jsonMap;  // Read and parse the JSON content from the file
+        this->mapData.from_json(jsonMap);
     }
 
     file.close();
-}
-
-void Tilemap::loadTile(const std::string &line) {
-    TileData tileData;
-    tileData.gridSize = this->gridSizeF;
-
-    std::istringstream iss(line);
-
-    // Parse the tile position (p x y z)
-    std::string label;
-    iss >> label >> tileData.index_x >> tileData.index_y >> tileData.index_z;
-
-    // Parse the texture position (t_p x y), until "t_t" is reached
-    iss >> label; // t_p
-    std::string x;
-
-    while (iss >> x) {
-        std::string y;
-        if (x == "t_t") {
-            break;
-        }
-        iss >> y;
-        if (y == "t_t") {
-            break;
-        }
-        tileData.texturePositions.emplace_back(std::stof(x), std::stof(y));
-    }
-
-    // Parse the tile types (t_t ...)
-    int intType;
-    while (iss >> intType) {
-        tileData.types.push_back(static_cast<TILE_TYPES>(intType));
-    }
-
-    addTile(tileData);
 }
 
 void Tilemap::saveToFile(std::string file_name) {
@@ -240,20 +131,7 @@ void Tilemap::saveToFile(std::string file_name) {
     out_file.open(file_name, std::ofstream::out | std::ofstream::trunc);
 
     if (out_file.is_open()) {
-        out_file
-                << "Legenda: p == position(x,y,z), t_p == vettore di texture position(x,y), t_t == vettore di tipi di tile \n";
-        out_file << "max_size_grid " << this->maxSizeGrid.x << " " << this->maxSizeGrid.y << "\n";
-        out_file << "grid_size " << this->gridSizeU << "\n";
-        out_file << "max_layer_index " << this->maxLayerIndex << "\n";
-        out_file << "texture_path " << this->texturePath << "\n";
-
-        for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
-            for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
-                for (size_t z = 0; z < this->map[x][y].size(); z++) {
-                    out_file << this->map[x][y][z]->getAsString(x, y, z) << "\n";
-                }
-            }
-        }
+        out_file << this->mapData.to_json();
     } else {
         std::cout << "ERROR::TILEMAP::COULD NOT SAVE TO FILE: " << file_name << "\n";
     }
@@ -262,14 +140,14 @@ void Tilemap::saveToFile(std::string file_name) {
 }
 
 void Tilemap::clear() {
-    if (this->map.empty()) {
+    if (this->mapData.tiles.empty()) {
         return;
     }
-    for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
-        for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
-            while (this->map[x][y].size() != 0) {
-                delete this->map[x][y].at(this->map[x][y].size() - 1);
-                this->map[x][y].pop_back();
+    for (size_t x = 0; x < this->mapData.maxSizeGrid.x; x++) {
+        for (size_t y = 0; y < this->mapData.maxSizeGrid.y; y++) {
+            while (this->mapData.tiles[x][y].size() != 0) {
+                delete this->mapData.tiles[x][y].at(this->mapData.tiles[x][y].size() - 1);
+                this->mapData.tiles[x][y].pop_back();
             }
         }
     }
@@ -285,8 +163,8 @@ Tilemap::checkCollision(const sf::RectangleShape &currentShape, const sf::Rectan
 std::tuple<bool, bool> Tilemap::checkOutOfBounds(const sf::RectangleShape &rectangleShape) const {
     sf::FloatRect rect = rectangleShape.getGlobalBounds();
 
-    bool dir_x = rect.left < 0 || rect.left + rect.width > this->maxSizeWorld.x;
-    bool dir_y = rect.top < 0 || rect.top + rect.height > this->maxSizeWorld.y;
+    bool dir_x = rect.left < 0 || rect.left + rect.width > this->mapData.maxSizeWorld.x;
+    bool dir_y = rect.top < 0 || rect.top + rect.height > this->mapData.maxSizeWorld.y;
 
     return std::make_tuple(dir_x, dir_y);
 }
@@ -315,10 +193,10 @@ Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf
     auto checkDirection = [&](int startX, int endX, int startY, int endY, bool isVertical) {
         for (int x = startX; x <= endX; ++x) {
             for (int y = startY; y <= endY; ++y) {
-                auto tileLayers = map[x][y];
+                auto tileLayers = this->mapData.tiles[x][y];
                 if (tileLayers.size() > layer) {
-                    Tile *tile = map[x][y][layer];
-                    if (tile != nullptr && tile->isOfType(TILE_TYPES::COLLISION)) {
+                    Tile *tile = this->mapData.tiles[x][y][layer];
+                    if (tile != nullptr && tile->isOfType(TILE_BEHAVIOURS::COLLISION)) {
                         if (isVertical) {
                             forbidden_directions = std::make_tuple(std::get<0>(forbidden_directions), true);
                         } else {
@@ -360,8 +238,8 @@ Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf
 
 
 sf::Vector2i Tilemap::getGridPosition(const sf::Vector2f &absolutePosition) const {
-    return {static_cast<int>(absolutePosition.x / this->gridSizeU),
-            static_cast<int>(absolutePosition.y / this->gridSizeU)};
+    return {static_cast<int>(absolutePosition.x / this->mapData.gridSizeU),
+            static_cast<int>(absolutePosition.y / this->mapData.gridSizeU)};
 }
 
 std::tuple<sf::Vector2i, sf::Vector2i>
@@ -389,52 +267,53 @@ Tilemap::getCollisionBounds(const sf::RectangleShape &currentShape, const sf::Re
 }
 
 std::vector<Tile *> *Tilemap::getTileLayers(int x, int y) {
-    if (x >= this->map.size()) {
+    if (x >= this->mapData.tiles.size()) {
         return nullptr;
     }
 
-    if (y >= this->map[x].size()) {
+    if (y >= this->mapData.tiles[x].size()) {
         return nullptr;
     }
 
-    return &this->map[x][y];
+    return &this->mapData.tiles[x][y];
 }
 
 const std::vector<std::vector<std::vector<Tile *>>> &Tilemap::getMap() const {
-    return map;
+    return this->mapData.tiles;
 }
 
 void Tilemap::addTexture(int index_x, int index_y, const sf::Vector2f &texturePosition) {
-    if (index_x < this->map.size() &&
-        index_y < this->map[index_x].size() &&
-        !this->map[index_x][index_y].empty() &&
-        this->map[index_x][index_y][this->map[index_x][index_y].size() - 1] != nullptr) {
+    if (index_x < this->mapData.tiles.size() &&
+        index_y < this->mapData.tiles[index_x].size() &&
+        !this->mapData.tiles[index_x][index_y].empty() &&
+        this->mapData.tiles[index_x][index_y][this->mapData.tiles[index_x][index_y].size() - 1] != nullptr) {
 
-        this->map[index_x][index_y][this->map[index_x][index_y].size() - 1]->addTexture(this->tileTextureSheet,
-                                                                                        texturePosition);
+        this->mapData.tiles[index_x][index_y][this->mapData.tiles[index_x][index_y].size() - 1]->addTexture(
+                this->mapData.tileTextureSheet,
+                texturePosition);
     }
 }
 
 void Tilemap::setMaxLayer() {
     size_t layerIndex = 0;
 
-    if (this->map.empty()) {
-        this->maxLayerIndex = layerIndex;
+    if (this->mapData.tiles.empty()) {
+        this->mapData.maxLayerIndex = layerIndex;
         return;
     }
-    for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
-        for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
-            if (this->map[x][y].size() > 1) {
-                size_t layerIndexZ = this->map[x][y].size() - 1;
+    for (size_t x = 0; x < this->mapData.maxSizeGrid.x; x++) {
+        for (size_t y = 0; y < this->mapData.maxSizeGrid.y; y++) {
+            if (this->mapData.tiles[x][y].size() > 1) {
+                size_t layerIndexZ = this->mapData.tiles[x][y].size() - 1;
                 layerIndex = layerIndex < layerIndexZ ? layerIndexZ : layerIndex;
             }
         }
     }
 
-    this->maxLayerIndex = layerIndex;
+    this->mapData.maxLayerIndex = layerIndex;
 }
 
 unsigned int Tilemap::getMaxLayerIndex() const {
-    return maxLayerIndex;
+    return this->mapData.maxLayerIndex;
 }
 

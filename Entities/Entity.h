@@ -6,7 +6,6 @@
 #include "Components/AnimationComponent.h"
 #include "Components/AttributeComponent.h"
 #include "Components/SkillComponent.h"
-#include "../Map/Tilemap.h"
 
 class Entity {
 
@@ -16,7 +15,6 @@ private:
 protected:
     sf::Sprite sprite;
 
-    Tilemap &map;
     unsigned layerIndex = 0;
     HitboxComponent *hitboxComponent{};
     MovementComponent *movementComponent{};
@@ -24,7 +22,7 @@ protected:
     AttributeComponent *attributeComponent{};
     SkillComponent *skillComponent{};
 public:
-    explicit Entity(Tilemap &map);
+    explicit Entity();
 
     unsigned int getLayer() const;
 

@@ -25,6 +25,8 @@ void GameState::update(const float &dt) {
         this->updateInput(dt);
         this->updateEntity(dt, *this->player);
         this->playerGUI->update(dt);
+        //todo:: generazione dei nemici
+        // dovresti fare tilemap upadate e aggiornare solamente le tile che sono visibili a schermo
     } else {
         pauseMenuState.update(dt);
     }
@@ -78,8 +80,7 @@ void GameState::initTextures() {
 }
 
 void GameState::initPlayer() {
-    this->player = new Player(this->dvm.width / 2 - 100, this->dvm.height / 2 - 100, this->textures["PLAYER_SHEET"],
-                              *this->tilemap);
+    this->player = new Player(this->dvm.width / 2 - 100, this->dvm.height / 2 - 100, this->textures["PLAYER_SHEET"]);
 }
 
 void GameState::handleEvent(sf::Event &event, const float &dt) {

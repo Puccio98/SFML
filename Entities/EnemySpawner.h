@@ -5,6 +5,9 @@
 #include <System/Vector2.hpp>
 #include "../enums/enemy_types.cpp"
 #include "../Entities/Enemy.h"
+#include "EntityDimensionData.h"
+#include "../Tile/Tile.h"
+#include <utility>
 
 
 class EnemySpawner : public Tile {
@@ -14,11 +17,6 @@ private:
     int amount;
     int timeToSpawn;
     float maxDistance;
-    /**
-     * Renderizza lo spawner solamente in EditorState
-     */
-    bool show = false;
-
     sf::RectangleShape shape;
 public:
     EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font, bool hud,
@@ -29,9 +27,9 @@ public:
 
     virtual ~EnemySpawner();
 
-    void update();
+    void update() override;
 
-    void render(sf::RenderTarget &target);
+    void render(sf::RenderTarget &target) override;
 
     void spawn();
 

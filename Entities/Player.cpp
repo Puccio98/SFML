@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(float x, float y, sf::Texture &texture_sheet, Tilemap &map) : Entity(map) {
+Player::Player(float x, float y, sf::Texture &texture_sheet) {
     this->initVariables();
     this->setPosition(x, y);
 

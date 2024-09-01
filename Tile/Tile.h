@@ -20,7 +20,7 @@ private:
 
     void initShapes(sf::Texture &textureSheet);
 
-    const TileData tiledata;
+    TileData tiledata;
     sf::Text layerText;
 
     float get_x();
@@ -30,7 +30,6 @@ private:
     bool hud = false;
 
 protected:
-    std::vector<sf::RectangleShape> sprites;
     sf::RectangleShape defaultSprite;
 
 public:
@@ -41,13 +40,15 @@ public:
 
     virtual ~Tile();
 
-    void update();
+    const TileData &getTiledata() const;
 
-    void render(sf::RenderTarget &target);
+    virtual void update();
+
+    virtual void render(sf::RenderTarget &target);
 
     std::string getAsString(unsigned x, unsigned y, unsigned z) const;
 
-    bool isOfType(TILE_TYPES type);
+    bool isOfType(TILE_BEHAVIOURS type);
 
     void initLayerText(sf::Font &font);
 

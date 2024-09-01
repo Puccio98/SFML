@@ -2,7 +2,6 @@
 #define SFML_PLAYER_H
 
 #include "Entity.h"
-#include "../Map/Tilemap.h"
 #include "../Items/Weapons/MeleeWeapon/Sword.h"
 
 class Player final : public Entity {
@@ -13,7 +12,7 @@ private:
     void initVariables();
 
 public:
-    Player(float x, float y, sf::Texture &texture_sheet, Tilemap &map);
+    Player(float x, float y, sf::Texture &texture_sheet);
 
     ~Player() final;
 
