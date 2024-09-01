@@ -38,7 +38,7 @@ private:
     sf::View view;
     float cameraSpeed;
     std::vector<SidebarButton> buttonsKeyLabel;
-    std::vector<std::string> singleChoiceButton;
+    std::vector<std::string> singleChoiceButtons;
 
     std::vector<TILE_BEHAVIOURS> tileTypes;
 
@@ -101,7 +101,7 @@ private:
 
     void executeButton(const std::string &key);
 
-    void enableButton(const std::string &activeButtonKey);
+    void disableSingleChoiceButtons(const std::string &activeButtonKey);
 };
 
 
