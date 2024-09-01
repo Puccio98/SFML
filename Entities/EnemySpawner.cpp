@@ -7,9 +7,10 @@ EnemySpawner::EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &fo
                            EntityDimensionData edd, ENEMY type, int amount, int timeToSpawn, float maxDistance)
         : Tile(std::move(tileData), texture, font, hud), edd(edd), type(type), amount(amount), maxDistance(maxDistance),
           timeToSpawn(timeToSpawn) {
+    this->layerText.setString(this->layerText.getString() + ", es");
+    this->layerText.setFillColor(sf::Color(200, 200, 30));
     this->shape.setSize(edd.size.getSize());
     this->shape.setPosition(edd.position);
-    this->shape.setFillColor(sf::Color(206, 231, 24, 200));
 }
 
 EnemySpawner::EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font,
@@ -19,12 +20,11 @@ EnemySpawner::EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &fo
 
 
 void EnemySpawner::render(sf::RenderTarget &target) {
-    target.draw(this->shape);
-
+    Tile::render(target);
 }
 
 void EnemySpawner::update() {
-
+    Tile::update();
 }
 
 void EnemySpawner::spawn() {

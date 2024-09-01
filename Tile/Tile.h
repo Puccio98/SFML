@@ -21,7 +21,6 @@ private:
     void initShapes(sf::Texture &textureSheet);
 
     TileData tiledata;
-    sf::Text layerText;
 
     float get_x();
 
@@ -31,6 +30,7 @@ private:
 
 protected:
     sf::RectangleShape defaultSprite;
+    sf::Text layerText;
 
 public:
 
