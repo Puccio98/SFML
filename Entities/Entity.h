@@ -40,7 +40,7 @@ public:
 
     void createSkillComponent();
 
-    void createHitboxComponent(sf::Sprite &_sprite, float offset_x, float offset_y, float width, float height);
+    void createHitboxComponent(float offset_x, float offset_y, float width, float height);
 
     void createAttributeComponent();
 

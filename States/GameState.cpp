@@ -14,6 +14,10 @@ GameState::GameState(StateData &stateData)
 GameState::~GameState() {
     delete this->player;
     delete this->playerGUI;
+    for (auto *enemy: this->enemies) {
+        delete enemy;
+    }
+    this->enemies.clear();
 }
 
 void GameState::update(const float &dt) {
@@ -26,7 +30,8 @@ void GameState::update(const float &dt) {
         this->updateView(dt);
         this->updateInput(dt);
         this->updateEntity(dt, *this->player);
-        this->tilemap->update(*this->stateData.window, edd, dt);
+        this->updateEnemies(dt);
+        this->tilemap->update(*this->stateData.window, edd, dt, enemies);
         this->playerGUI->update(dt);
     } else {
         pauseMenuState.update(dt);
@@ -42,6 +47,7 @@ void GameState::render(sf::RenderTarget *target = nullptr) {
     for (int layerIndex = 0; layerIndex <= this->tilemap->getMaxLayerIndex(); layerIndex++) {
         EntityDimensionData edd(this->player->getHitboxComponent()->getPosition(), this->player->getSize());
         this->tilemap->renderLayer(*target, edd, layerIndex);
+        this->renderEnemies(layerIndex, target);
         if (layerIndex == this->player->getLayer()) {
             this->player->render(*target);
         }
@@ -144,4 +150,19 @@ void GameState::updateEntity(const float &dt, Entity &entity) {
 
 void GameState::initPlayerGUI(Player *_player) {
     this->playerGUI = new GUI::PlayerGUI(_player, this->stateData.graphicsSettings->resolution);
+}
+
+void GameState::updateEnemies(const float &dt) {
+    for (auto enemy: this->enemies) {
+        this->updateEntity(dt, *enemy);
+    }
+
+}
+
+void GameState::renderEnemies(int layerIndex, sf::RenderTarget *target) {
+    for (auto enemy: this->enemies) {
+        if (layerIndex == enemy->getLayer()) {
+            enemy->render(*target);
+        }
+    }
 }

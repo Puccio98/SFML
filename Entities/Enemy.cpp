@@ -4,15 +4,15 @@ Enemy::Enemy(float x, float y, sf::Texture &texture_sheet) {
     this->initVariables();
     this->setPosition(x, y);
 
-    this->createHitboxComponent(this->sprite, 92.f, 70.f, 75.f, 106.f);
+    this->createHitboxComponent(0, 0, 17, 24);
     this->createMovementComponent(300.f, 3800.f, 1800.f);
     this->createAnimationComponent(texture_sheet);
     this->createAttributeComponent();
     this->createSkillComponent();
 
-    this->animationComponent->addAnimation("IDLE", 2.f, 0, 0, 13, 0, 192, 192);
-    this->animationComponent->addAnimation("WALK", 2.f, 0, 1, 11, 1, 192, 192);
-    this->animationComponent->addAnimation("ATTACK", 2.f, 0, 2, 13, 2, 192 * 2, 192, false);
+    this->animationComponent->addAnimation("IDLE", 10.f, 0, 0, 3, 0, 17, 24);
+//    this->animationComponent->addAnimation("WALK", 2.f, 0, 1, 11, 1, 192, 192);
+//    this->animationComponent->addAnimation("ATTACK", 2.f, 0, 2, 13, 2, 192 * 2, 192, false);
 }
 
 Enemy::~Enemy() {
@@ -59,9 +59,5 @@ void Enemy::updateAnimation(const float &dt) {
 
 
 void Enemy::initVariables() {
-
-}
-
-void Enemy::initAnimations() {
 
 }

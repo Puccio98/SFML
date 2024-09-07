@@ -7,9 +7,6 @@ class Enemy : public Entity {
 private:
     void initVariables();
 
-    void initAnimations();
-
-
 public:
     Enemy(float x, float y, sf::Texture &texture_sheet);
 

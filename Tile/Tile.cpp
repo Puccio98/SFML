@@ -27,7 +27,7 @@ void Tile::render(sf::RenderTarget &target) {
     }
 }
 
-void Tile::update(float dt) {
+void Tile::update(float dt, std::vector<Enemy *> &enemies) {
 
 }
 

@@ -18,7 +18,7 @@ public:
 
     virtual ~Tilemap();
 
-    void update(sf::RenderTarget &target, EntityDimensionData &entity, float dt);
+    void update(sf::RenderTarget &target, EntityDimensionData &entity, float dt, std::vector<Enemy *> &enemies);
 
     const std::vector<std::vector<std::vector<Tile *>>> &getMap() const;
 

@@ -11,6 +11,7 @@
 #include"SFML/Window.hpp"
 #include"SFML/Graphics.hpp"
 #include "TileData.h"
+#include "../Entities/Enemy.h"
 
 class Tile {
 private:
@@ -20,7 +21,6 @@ private:
 
     void initShapes(sf::Texture &textureSheet);
 
-    TileData tiledata;
 
     float get_x();
 
@@ -29,6 +29,7 @@ private:
     bool hud = false;
 
 protected:
+    TileData tiledata;
     sf::RectangleShape defaultSprite;
     sf::Text layerText;
 
@@ -42,7 +43,7 @@ public:
 
     const TileData &getTiledata() const;
 
-    virtual void update(float dt);
+    virtual void update(float dt, std::vector<Enemy *> &enemies);
 
     virtual void render(sf::RenderTarget &target);
 

@@ -25,7 +25,7 @@ Tilemap::~Tilemap() {
     this->mapData.tiles.clear();
 }
 
-void Tilemap::update(sf::RenderTarget &target, EntityDimensionData &entity, float dt) {
+void Tilemap::update(sf::RenderTarget &target, EntityDimensionData &entity, float dt, std::vector<Enemy *> &enemies) {
     sf::IntRect area = getInteractiveArea(target, entity);
     int end_x = area.left + area.width;
     int end_y = area.top + area.height;
@@ -33,7 +33,7 @@ void Tilemap::update(sf::RenderTarget &target, EntityDimensionData &entity, floa
     for (int i = area.left; i <= end_x && i < this->mapData.tiles.size(); ++i) {
         for (int j = area.top; j <= end_y && j < this->mapData.tiles[i].size(); ++j) {
             for (auto &k: this->mapData.tiles[i][j]) {
-                k->update(dt);
+                k->update(dt, enemies);
             }
         }
     }
