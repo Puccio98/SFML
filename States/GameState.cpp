@@ -14,9 +14,15 @@ GameState::GameState(StateData &stateData)
 GameState::~GameState() {
     delete this->player;
     delete this->playerGUI;
+    for (auto *enemy: this->enemies) {
+        delete enemy;
+    }
+    this->enemies.clear();
 }
 
 void GameState::update(const float &dt) {
+    EntityDimensionData edd(this->player->getHitboxComponent()->getPosition(), this->player->getSize());
+
     //per debug
     this->updateMouseDebug(this->view);
     if (!pauseMenuState.isPaused()) {
@@ -24,9 +30,9 @@ void GameState::update(const float &dt) {
         this->updateView(dt);
         this->updateInput(dt);
         this->updateEntity(dt, *this->player);
+        this->updateEnemies(dt);
+        this->tilemap->update(*this->stateData.window, edd, dt, enemies);
         this->playerGUI->update(dt);
-        //todo:: generazione dei nemici
-        // dovresti fare tilemap upadate e aggiornare solamente le tile che sono visibili a schermo
     } else {
         pauseMenuState.update(dt);
     }
@@ -40,7 +46,8 @@ void GameState::render(sf::RenderTarget *target = nullptr) {
     target->setView(this->view);
     for (int layerIndex = 0; layerIndex <= this->tilemap->getMaxLayerIndex(); layerIndex++) {
         EntityDimensionData edd(this->player->getHitboxComponent()->getPosition(), this->player->getSize());
-        this->tilemap->render(*target, edd, layerIndex);
+        this->tilemap->renderLayer(*target, edd, layerIndex);
+        this->renderEnemies(layerIndex, target);
         if (layerIndex == this->player->getLayer()) {
             this->player->render(*target);
         }
@@ -80,7 +87,7 @@ void GameState::initTextures() {
 }
 
 void GameState::initPlayer() {
-    this->player = new Player(this->dvm.width / 2 - 100, this->dvm.height / 2 - 100, this->textures["PLAYER_SHEET"]);
+    this->player = new Player(this->dvm.width / 2 - 130, this->dvm.height / 2 - 125, this->textures["PLAYER_SHEET"]);
 }
 
 void GameState::handleEvent(sf::Event &event, const float &dt) {
@@ -117,8 +124,8 @@ void GameState::initView() {
 void GameState::updateView(const float &dt) {
     auto pos = this->player->getPosition();
     auto size = this->player->getSize();
-    //floor serve perchè setCenter sarebbe meglio passargli degli interi per non sminchiare il render
-    this->view.setCenter(std::floor(pos.x + size.width / 2), std::floor(pos.y + size.height / 2));
+    //floor serve perchè setCenter sarebbe meglio passargli degli interi per non sminchiare il renderLayer
+    this->view.setCenter(std::floor(pos.x + size.x / 2), std::floor(pos.y + size.y / 2));
 }
 
 void GameState::updateEntity(const float &dt, Entity &entity) {
@@ -143,4 +150,19 @@ void GameState::updateEntity(const float &dt, Entity &entity) {
 
 void GameState::initPlayerGUI(Player *_player) {
     this->playerGUI = new GUI::PlayerGUI(_player, this->stateData.graphicsSettings->resolution);
+}
+
+void GameState::updateEnemies(const float &dt) {
+    for (auto enemy: this->enemies) {
+        this->updateEntity(dt, *enemy);
+    }
+
+}
+
+void GameState::renderEnemies(int layerIndex, sf::RenderTarget *target) {
+    for (auto enemy: this->enemies) {
+        if (layerIndex == enemy->getLayer()) {
+            enemy->render(*target);
+        }
+    }
 }

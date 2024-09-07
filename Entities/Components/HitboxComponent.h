@@ -40,6 +40,8 @@ public:
     void update();
 
     void render(sf::RenderTarget &target);
+
+    sf::Vector2f getSize();
 };
 
 #endif //SFML_HITBOXCOMPONENT_H

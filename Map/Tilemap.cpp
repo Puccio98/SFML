@@ -25,43 +25,73 @@ Tilemap::~Tilemap() {
     this->mapData.tiles.clear();
 }
 
-void Tilemap::update() {
+void Tilemap::update(sf::RenderTarget &target, EntityDimensionData &entity, float dt, std::vector<Enemy *> &enemies) {
+    sf::IntRect area = getInteractiveArea(target, entity);
+    int end_x = area.left + area.width;
+    int end_y = area.top + area.height;
 
+    for (int i = area.left; i <= end_x && i < this->mapData.tiles.size(); ++i) {
+        for (int j = area.top; j <= end_y && j < this->mapData.tiles[i].size(); ++j) {
+            for (auto &k: this->mapData.tiles[i][j]) {
+                k->update(dt, enemies);
+            }
+        }
+    }
 }
 
-void Tilemap::render(sf::RenderTarget &target, EntityDimensionData &entity, unsigned layerIndex) {
-    sf::Vector2f position = entity.position;
-    float entityGridPosition_x = position.x / this->mapData.gridSizeF;
-    float entityGridPosition_y = position.y / this->mapData.gridSizeF;
+void Tilemap::renderLayer(sf::RenderTarget &target, EntityDimensionData &entity, unsigned layerIndex) {
+    sf::IntRect area = getInteractiveArea(target, entity);
+    int end_x = area.left + area.width;
+    int end_y = area.top + area.height;
 
-    sf::Vector2f viewSize = target.getView().getSize();
-    float halfSize_x = viewSize.x / 2.f;
-    float halfSize_y = viewSize.y / 2.f;
-
-    auto calculateStartTile = [this](float entityGridPosition, float halfSize) -> int {
-        int startTile = entityGridPosition - (halfSize / this->mapData.gridSizeU);
-        return startTile <= 0 ? 0 : startTile;
-    };
-
-    auto calculateEndTile = [this](float entityGridPosition, float halfSize, float entitySize) -> int {
-        int endTile = entityGridPosition + entitySize + (halfSize / this->mapData.gridSizeU);
-        return endTile <= 0 ? 0 : endTile;
-    };
-
-    int startTile_x = calculateStartTile(entityGridPosition_x, halfSize_x);
-    int endTile_x = calculateEndTile(entityGridPosition_x, halfSize_x, entity.size.width);
-
-    int startTile_y = calculateStartTile(entityGridPosition_y, halfSize_y);
-    int endTile_y = calculateEndTile(entityGridPosition_y, halfSize_y, entity.size.height);
-
-
-    for (int i = startTile_x; i <= endTile_x && i < this->mapData.tiles.size(); ++i) {
-        for (int j = startTile_y; j <= endTile_y && j < this->mapData.tiles[i].size(); ++j) {
+    for (int i = area.left; i <= end_x && i < this->mapData.tiles.size(); ++i) {
+        for (int j = area.top; j <= end_y && j < this->mapData.tiles[i].size(); ++j) {
             size_t layers = this->mapData.tiles[i][j].size();
             if (layers > layerIndex) {
                 Tile *z = this->mapData.tiles[i][j][layerIndex];
                 z->render(target);
             }
+        }
+    }
+}
+
+sf::IntRect Tilemap::getInteractiveArea(sf::RenderTarget &target, EntityDimensionData &entity) {
+    int bufferArea = 3;
+    sf::Vector2f position = entity.position;
+    int entityGridPosition_x = position.x / this->mapData.gridSizeF;
+    int entityGridPosition_y = position.y / this->mapData.gridSizeF;
+
+    sf::Vector2f viewSize = target.getView().getSize();
+    int halfSizeGrid_x = (viewSize.x / 2.f) / this->mapData.gridSizeU;
+    int halfSizeGrid_y = (viewSize.y / 2.f) / this->mapData.gridSizeU;
+
+    auto calculateStartTile = [this](int entityGridPosition, int halfSizeGrid) -> int {
+        int startTile = entityGridPosition - halfSizeGrid;
+        return startTile <= 0 ? 0 : startTile;
+    };
+
+    auto calculateEndTile = [this](int entityGridPosition, int halfSizeGrid, float entitySize) -> int {
+        int endTile = entityGridPosition + (int) (entitySize / this->mapData.gridSizeU) + halfSizeGrid;
+        return endTile <= 0 ? 0 : endTile;
+    };
+
+    int startTile_x = calculateStartTile(entityGridPosition_x, halfSizeGrid_x);
+    int endTile_x = calculateEndTile(entityGridPosition_x, halfSizeGrid_x, entity.size.x);
+
+    int startTile_y = calculateStartTile(entityGridPosition_y, halfSizeGrid_y);
+    int endTile_y = calculateEndTile(entityGridPosition_y, halfSizeGrid_y, entity.size.y);
+    sf::IntRect area;
+    area.left = startTile_x;
+    area.width = endTile_x - startTile_x + bufferArea;
+    area.top = startTile_y;
+    area.height = endTile_y - startTile_y + bufferArea;
+    return area;
+}
+
+void Tilemap::render(sf::RenderTarget &target) {
+    for (int i = 0; i < this->mapData.tiles.size(); ++i) {
+        for (int j = 0; j < this->mapData.tiles[i].size(); ++j) {
+            this->renderTileLayer(i, j, target);
         }
     }
 }
@@ -74,14 +104,6 @@ void Tilemap::renderTileLayer(int i, int j, sf::RenderTarget &target) {
     }
 };
 
-
-void Tilemap::render(sf::RenderTarget &target) {
-    for (int i = 0; i < this->mapData.tiles.size(); ++i) {
-        for (int j = 0; j < this->mapData.tiles[i].size(); ++j) {
-            this->renderTileLayer(i, j, target);
-        }
-    }
-}
 
 void Tilemap::removeTile(const unsigned index_x, const unsigned index_y) {
     if (index_x < this->mapData.maxSizeGrid.x && index_y < this->mapData.maxSizeGrid.y &&

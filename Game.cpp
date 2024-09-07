@@ -88,7 +88,7 @@ void Game::run() {
 }
 
 void Game::updateDT() {
-    /*Update the dt variable with the time it takes to play and render one frame */
+    /*Update the dt variable with the time it takes to play and renderLayer one frame */
     this->dt = this->dtClock.restart().asSeconds();
 }
 

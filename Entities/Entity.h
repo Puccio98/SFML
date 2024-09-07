@@ -40,7 +40,7 @@ public:
 
     void createSkillComponent();
 
-    void createHitboxComponent(sf::Sprite &_sprite, float offset_x, float offset_y, float width, float height);
+    void createHitboxComponent(float offset_x, float offset_y, float width, float height);
 
     void createAttributeComponent();
 
@@ -51,7 +51,7 @@ public:
 
     virtual const sf::Vector2f getPosition() const;
 
-    virtual const sf::Rect<float> getSize() const;
+    virtual const sf::Vector2f getSize() const;
 
     virtual void setDirection(sf::Vector2f direction, const float &dt);
 

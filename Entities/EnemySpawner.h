@@ -14,10 +14,12 @@ class EnemySpawner : public Tile {
 private:
     ENEMY type;
     EntityDimensionData edd;
-    int amount;
+    int counter;
     int timeToSpawn;
     float maxDistance;
     sf::RectangleShape shape;
+    std::map<std::string, sf::Texture> textures;
+
 public:
     EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font, bool hud,
                  EntityDimensionData edd, ENEMY type, int amount, int timeToSpawn, float maxDistance);
@@ -27,13 +29,15 @@ public:
 
     virtual ~EnemySpawner();
 
-    void update() override;
+    void update(float dt, std::vector<Enemy *> &enemies) override;
 
     void render(sf::RenderTarget &target) override;
 
-    void spawn();
+    void spawn(std::vector<Enemy *> &enemies);
 
     void clear();
+
+    void initTextures();
 };
 
 

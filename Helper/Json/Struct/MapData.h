@@ -128,12 +128,9 @@ private:
                 return new EnemySpawner(tileData, this->tileTextureSheet, this->font, this->hud,
                                         EntityDimensionData(sf::Vector2f(tileData.gridSize * tileData.index_x,
                                                                          tileData.gridSize * tileData.index_y),
-                                                            sf::Rect(sf::Vector2f(tileData.gridSize * tileData.index_x,
-                                                                                  tileData.gridSize * tileData.index_y),
-                                                                     sf::Vector2(tileData.gridSize, tileData.gridSize)
-                                                            )),
-                                        ENEMY::SALTERELLO, 0, 0,
-                                        0);
+                                                            sf::Vector2(tileData.gridSize, tileData.gridSize)
+                                        ),
+                                        ENEMY::SALTERELLO, 0, 0, 0);
                 break;
             case TILE_TYPES::WARP:
                 break;

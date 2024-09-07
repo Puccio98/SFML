@@ -10,6 +10,7 @@
 class GameState : public State {
 private:
     Player *player{};
+    std::vector<Enemy *> enemies;
     PauseMenuState pauseMenuState;
     Tilemap *tilemap;
     sf::View view;
@@ -47,6 +48,9 @@ public:
 
     void initTilemap();
 
+    void updateEnemies(const float &dt);
+
+    void renderEnemies(int layerIndex, sf::RenderTarget *target = nullptr);
 };
 
 #endif //SFML_GAMESTATE_H

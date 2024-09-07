@@ -28,9 +28,6 @@ void EditorState::update(const float &dt) {
         this->updateInput(dt);
         this->updateGui();
         this->updateSidebar(dt);
-        if (this->clock.getElapsedTime() > this->textureSelectorTimer) {
-            this->showTextureSelector = false;
-        }
     } else {
         pauseMenuState.update(dt);
     }
@@ -67,9 +64,9 @@ void EditorState::initButtonsKeyLabel() {
     this->buttonsKeyLabel.emplace_back("TOGGLE_COLLISIONS", "COL", true);
     this->buttonsKeyLabel.emplace_back("CLEAR_MAP", "R", false);
 
-    this->singleChoiceButton.emplace_back("OPEN_TEXTURE_SELECTOR");
-    this->singleChoiceButton.emplace_back("TOGGLE_TILES");
-    this->singleChoiceButton.emplace_back("TOGGLE_E_SPAWNER");
+    this->singleChoiceButtons.emplace_back("OPEN_TEXTURE_SELECTOR");
+    this->singleChoiceButtons.emplace_back("TOGGLE_TILES");
+    this->singleChoiceButtons.emplace_back("TOGGLE_E_SPAWNER");
 }
 
 void EditorState::updateSidebar(float dt) {
@@ -78,15 +75,15 @@ void EditorState::updateSidebar(float dt) {
     if (this->sideBar->isButtonClicked("OPEN_TEXTURE_SELECTOR")) {
         this->showTextureSelector = !this->showTextureSelector;
         this->clock.restart();
-        this->enableButton("OPEN_TEXTURE_SELECTOR");
+        this->disableSingleChoiceButtons("OPEN_TEXTURE_SELECTOR");
     }
 
     if (this->sideBar->isButtonClicked("TOGGLE_E_SPAWNER")) {
-        this->enableButton("TOGGLE_E_SPAWNER");
+        this->disableSingleChoiceButtons("TOGGLE_E_SPAWNER");
     }
 
     if (this->sideBar->isButtonClicked("TOGGLE_TILES")) {
-        this->enableButton("TOGGLE_TILES");
+        this->disableSingleChoiceButtons("TOGGLE_TILES");
     }
 
     if (this->sideBar->isButtonClicked("SAVE_TEXTURE_MAP")) {
@@ -161,8 +158,9 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
 }
 
 void EditorState::openTextureSelector() {
-    clock.restart();
-    showTextureSelector = true;
+    this->showTextureSelector = true;
+    this->clock.restart();
+    this->disableSingleChoiceButtons("OPEN_TEXTURE_SELECTOR");
 }
 
 /**
@@ -209,7 +207,7 @@ void EditorState::renderGui(sf::RenderTarget *target) {
     this->tileMap->render(*target);
     target->setView(this->stateData.window->getDefaultView());
 
-    if (this->showTextureSelector) {
+    if (this->showTextureSelector && this->clock.getElapsedTime() < this->textureSelectorTimer) {
         this->textureSelector->render(*target);
     }
 
@@ -225,7 +223,7 @@ void EditorState::updateInput(const float &dt) {
             if (this->textureSelector->isActive()) {
                 this->setSelectedTile(mousePosView);
             } else {
-                for (const auto &key: this->singleChoiceButton) {
+                for (const auto &key: this->singleChoiceButtons) {
                     GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(key));
                     if (switchBtn->isActive()) {
                         this->executeButton(key);
@@ -306,8 +304,8 @@ void EditorState::executeButton(const std::string &key) {
     }
 }
 
-void EditorState::enableButton(const std::string &activeButtonKey) {
-    for (const auto &button: this->singleChoiceButton) {
+void EditorState::disableSingleChoiceButtons(const std::string &activeButtonKey) {
+    for (const auto &button: this->singleChoiceButtons) {
         if (activeButtonKey != button) {
             GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(button));
             switchBtn->setActive(false);
