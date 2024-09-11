@@ -1,5 +1,9 @@
 enum class MOVEMENT_STATES {
     IDLE,
+    IDLE_RIGHT,
+    IDLE_LEFT,
+    IDLE_UP,
+    IDLE_DOWN,
     MOVING,
     MOVING_LEFT,
     MOVING_RIGHT,
