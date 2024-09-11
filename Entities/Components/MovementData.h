@@ -12,6 +12,7 @@ struct MovementData {
             deceleration(deceleration),
             position(position) {
         this->direction = sf::Vector2f(0.f, 0.f);
+        this->lastDirection = sf::Vector2f(0.f, 0.f);
         this->velocity = sf::Vector2f(0.f, 0.f);
     }
 
@@ -20,6 +21,7 @@ struct MovementData {
         acceleration = movementData.acceleration;
         deceleration = movementData.deceleration;
         direction = movementData.direction;
+        lastDirection = movementData.lastDirection;
         position = movementData.position;
         velocity = movementData.velocity;
     }
@@ -30,6 +32,7 @@ struct MovementData {
     float acceleration;
     float deceleration;
     sf::Vector2f direction;
+    sf::Vector2f lastDirection;
     sf::Vector2f position;
     sf::Vector2f velocity;
 };

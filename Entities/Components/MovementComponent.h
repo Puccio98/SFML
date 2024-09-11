@@ -21,6 +21,7 @@
 class MovementComponent {
 private:
     sf::Sprite &sprite;
+
     __attribute__((unused)) void debugVelocity() const;
     //Initializer FUnctions
 
@@ -55,6 +56,8 @@ public:
     MovementData nextMovementData(const float &dt, std::tuple<bool, bool> forbidden_directions) const;
 
     static MovementData computeNextMovementData(const float &dt, MovementData next);
+
+    const MovementData &getMovementData() const;
 };
 
 

@@ -62,12 +62,24 @@ void MovementComponent::setDirection(sf::Vector2f _direction) {
     this->md.direction = _direction;
 }
 
+const MovementData &MovementComponent::getMovementData() const {
+    return md;
+}
+
 const sf::Vector2f &MovementComponent::getVelocity() const {
     return this->md.velocity;
 }
 
 bool MovementComponent::getState(const MOVEMENT_STATES state) const {
     switch (state) {
+        case MOVEMENT_STATES::IDLE_RIGHT:
+            return (this->md.velocity.x == 0.f && this->md.velocity.y == 0.f && this->md.lastDirection.x == 1);
+        case MOVEMENT_STATES::IDLE_LEFT:
+            return (this->md.velocity.x == 0.f && this->md.velocity.y == 0.f && this->md.lastDirection.x == -1);
+        case MOVEMENT_STATES::IDLE_UP:
+            return (this->md.velocity.x == 0.f && this->md.velocity.y == 0.f && this->md.lastDirection.y == -1);
+        case MOVEMENT_STATES::IDLE_DOWN:
+            return (this->md.velocity.x == 0.f && this->md.velocity.y == 0.f && this->md.lastDirection.y == 1);
         case MOVEMENT_STATES::IDLE:
             return (this->md.velocity.x == 0.f && this->md.velocity.y == 0.f);
         case MOVEMENT_STATES::MOVING:
@@ -77,9 +89,9 @@ bool MovementComponent::getState(const MOVEMENT_STATES state) const {
         case MOVEMENT_STATES::MOVING_RIGHT:
             return (this->md.velocity.x > 0.f);
         case MOVEMENT_STATES::MOVING_UP:
-            return (this->md.velocity.y > 0.f);
-        case MOVEMENT_STATES::MOVING_DOWN:
             return (this->md.velocity.y < 0.f);
+        case MOVEMENT_STATES::MOVING_DOWN:
+            return (this->md.velocity.y > 0.f);
     }
     return false;
 }
@@ -123,8 +135,23 @@ MovementData MovementComponent::nextMovementData(const float &dt,
 
 MovementData
 MovementComponent::computeNextMovementData(const float &dt, MovementData next) {
+    // Aggiorno ultima direzione
+    if ((next.direction.x != 0 && next.direction.y == 0)) {
+        next.lastDirection.x = next.direction.x;
+        next.lastDirection.y = 0;
+
+    }
+    if ((next.direction.y != 0 && next.direction.x == 0)) {
+        next.lastDirection.y = next.direction.y;
+        next.lastDirection.x = 0;
+        std::cout << "scaturchio" << std::endl;
+
+    }
+    std::cout << "direzione x " << next.lastDirection.x << std::endl;
+
+
     // Create acceleration vector
-    sf::Vector2f accelerationV = sf::Vector2f(next.direction * next.acceleration);
+    auto accelerationV = sf::Vector2f(next.direction * next.acceleration);
 
     // Apply acceleration on current velocity
     next.velocity = next.velocity + ((accelerationV) * dt);
