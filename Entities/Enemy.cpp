@@ -40,23 +40,8 @@ void Enemy::update(const MovementData &next, const float &dt) {
 }
 
 void Enemy::updateAnimation(const float &dt) {
-    if (movementComponent->getState(MOVEMENT_STATES::IDLE))
-        animationComponent->play("IDLE", dt);
-    else if (movementComponent->getState(MOVEMENT_STATES::MOVING_LEFT)) {
-        sprite.setOrigin(0.f, 0.f);
-        sprite.setScale(1.f, 1.f);
-        animationComponent->play("WALK", dt, movementComponent->getVelocityMagnitude() /
-                                             movementComponent->getMaxVelocity());
-    } else if (movementComponent->getState(MOVEMENT_STATES::MOVING_RIGHT)) {
-        sprite.setOrigin(258.f, 0.f);
-        sprite.setScale(-1.f, 1.f);
-        animationComponent->play("WALK", dt, movementComponent->getVelocityMagnitude() /
-                                             movementComponent->getMaxVelocity());
-    } else
-        animationComponent->play("WALK", dt, movementComponent->getVelocityMagnitude() /
-                                             movementComponent->getMaxVelocity());
-}
 
+}
 
 void Enemy::initVariables() {
 

@@ -41,7 +41,7 @@ public:
     const sf::Vector2f &getVelocity() const;
 
     //Function
-    bool getState(MOVEMENT_STATES state) const;
+    bool isState(MOVEMENT_STATES state) const;
 
     void setDirection(sf::Vector2f _direction);
 
@@ -58,6 +58,8 @@ public:
     static MovementData computeNextMovementData(const float &dt, MovementData next);
 
     const MovementData &getMovementData() const;
+
+    static MovementData &updateFacingDirection(MovementData &next);
 };
 
 

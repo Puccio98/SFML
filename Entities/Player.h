@@ -30,6 +30,8 @@ public:
     float getCurrentHp();
 
     float getMaxHp();
+
+    void flipAnimation(std::optional<DIRECTIONS> dir);
 };
 
 

@@ -11,11 +11,11 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
     this->createSkillComponent();
 
     this->animationComponent->addAnimation("IDLE_DOWN", 10.f, 0, 0, 1, 0, 51, 72);
-    this->animationComponent->addAnimation("IDLE_RIGHT", 10.f, 0, 1, 1, 1, 51, 72);
     this->animationComponent->addAnimation("IDLE_UP", 10.f, 0, 2, 1, 2, 51, 72);
-    this->animationComponent->addAnimation("WALK_DOWN", 5.f, 0, 3, 3, 3, 51, 72);
-    this->animationComponent->addAnimation("WALK_RIGHT", 5.f, 0, 4, 3, 4, 51, 72);
-    this->animationComponent->addAnimation("WALK_UP", 5.f, 0, 5, 3, 5, 51, 72);
+    this->animationComponent->addAnimation("MOVING_DOWN", 5.f, 0, 3, 3, 3, 51, 72);
+    this->animationComponent->addAnimation("MOVING_SIDE_UP", 5.f, 0, 4, 3, 4, 51, 72);
+    this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 5.f, 0, 4, 3, 4, 51, 72);
+    this->animationComponent->addAnimation("MOVING_UP", 5.f, 0, 5, 3, 5, 51, 72);
     this->animationComponent->addAnimation("ATTACK", 2.f, 0, 2, 13, 2, 51, 72, false);
 }
 
@@ -47,34 +47,43 @@ void Player::update(const MovementData &next, const float &dt) {
 }
 
 void Player::updateAnimation(const float &dt) {
-    if (movementComponent->getState(MOVEMENT_STATES::IDLE_DOWN)) {
-        animationComponent->play("IDLE_DOWN", dt);
-    } else if (movementComponent->getState(MOVEMENT_STATES::IDLE_RIGHT)) {
+    MovementData md = movementComponent->getMovementData();
+    std::string animation;
+
+    if (movementComponent->isState(MOVEMENT_STATES::IDLE)) {
+        if (md.facingDirection.second == DIRECTIONS::DOWN) {
+            animation = "IDLE_DOWN";
+        } else if (md.facingDirection.second == DIRECTIONS::UP) {
+            animation = "IDLE_UP";
+        }
+    } else if (movementComponent->isState(MOVEMENT_STATES::MOVING)) {
+        if (md.facingDirection.second == DIRECTIONS::DOWN) {
+            animation = "MOVING_DOWN";
+            if (md.facingDirection.first != std::nullopt) {
+                animation = "MOVING_SIDE_DOWN";
+            }
+
+        } else if (md.facingDirection.second == DIRECTIONS::UP) {
+            animation = "MOVING_UP";
+            if (md.facingDirection.first != std::nullopt) {
+                animation = "MOVING_SIDE_UP";
+            }
+        }
+        this->flipAnimation(md.facingDirection.first);
+    }
+    animationComponent->play(animation, dt);
+}
+
+void Player::flipAnimation(std::optional<DIRECTIONS> dir) {
+    if (dir == std::nullopt) { return; }
+    if (dir == DIRECTIONS::RIGHT) {
         sprite.setOrigin(0.f, 0.f);
         sprite.setScale(1.f, 1.f);
-        animationComponent->play("IDLE_RIGHT", dt);
-    } else if (movementComponent->getState(MOVEMENT_STATES::IDLE_UP)) {
-        animationComponent->play("IDLE_UP", dt);
-    } else if (movementComponent->getState(MOVEMENT_STATES::IDLE_LEFT)) {
+    }
+    if (dir == DIRECTIONS::LEFT) {
         sprite.setOrigin(51.f, 0.f);
         sprite.setScale(-1.f, 1.f);
-        animationComponent->play("IDLE_RIGHT", dt);
-    } else if (movementComponent->getState(MOVEMENT_STATES::MOVING_LEFT)) {
-        sprite.setOrigin(51.f, 0.f);
-        sprite.setScale(-1.f, 1.f);
-        animationComponent->play("WALK_RIGHT", dt, movementComponent->getVelocityMagnitude() /
-                                                   movementComponent->getMaxVelocity());
-    } else if (movementComponent->getState(MOVEMENT_STATES::MOVING_RIGHT)) {
-        sprite.setOrigin(0.f, 0.f);
-        sprite.setScale(1.f, 1.f);
-        animationComponent->play("WALK_RIGHT", dt, movementComponent->getVelocityMagnitude() /
-                                                   movementComponent->getMaxVelocity());
-    } else if (movementComponent->getState(MOVEMENT_STATES::MOVING_DOWN))
-        animationComponent->play("WALK_DOWN", dt, movementComponent->getVelocityMagnitude() /
-                                                  movementComponent->getMaxVelocity());
-    else if (movementComponent->getState(MOVEMENT_STATES::MOVING_UP))
-        animationComponent->play("WALK_UP", dt, movementComponent->getVelocityMagnitude() /
-                                                movementComponent->getMaxVelocity());
+    }
 }
 
 void Player::attack(const float &dt) {
