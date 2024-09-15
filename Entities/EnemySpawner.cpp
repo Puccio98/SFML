@@ -23,7 +23,7 @@ EnemySpawner::EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &fo
 
 void EnemySpawner::initTextures() {
     if (!this->textures["ENEMY_SHEET"].loadFromFile(
-            "Resources/images/sprites/entities/enemies/wisp/test_walk_back.png")) {
+            "Resources/images/sprites/entities/enemies/wisp/wisp_sheet_x3.png")) {
         throw "ERROR::enemy_spawner::COULD_NOT_ENEMY_TEXTURE";
     }
 }

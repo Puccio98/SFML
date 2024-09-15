@@ -4,7 +4,7 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
     this->initVariables();
     this->setPosition(x, y);
 
-    this->createHitboxComponent(92.f, 70.f, 75.f, 106.f);
+    this->createHitboxComponent(0.f, 0.f, 51, 72);
     this->createMovementComponent(300.f, 3800.f, 1800.f);
     this->createAnimationComponent(texture_sheet);
     this->createAttributeComponent();
