@@ -73,7 +73,6 @@ void EditorState::updateSidebar(float dt) {
     this->sideBar->update(dt, this->mousePosView);
 
     if (this->sideBar->isButtonClicked("OPEN_TEXTURE_SELECTOR")) {
-        this->showTextureSelector = !this->showTextureSelector;
         this->clock.restart();
         this->disableSingleChoiceButtons("OPEN_TEXTURE_SELECTOR");
     }
@@ -106,7 +105,6 @@ void EditorState::updateSidebar(float dt) {
 
 //Initializer Functions
 void EditorState::initVariables() {
-    this->showTextureSelector = false;
     this->tileTexturePath = "Resources/images/tiles/nuovo_tilesheet.png";
     this->tileMap = new Tilemap("Resources/map/map.slmp", *this->stateData.font, true);
     this->tileTypes.push_back(TILE_BEHAVIOURS::DEFAULT);
@@ -158,7 +156,6 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
 }
 
 void EditorState::openTextureSelector() {
-    this->showTextureSelector = true;
     this->clock.restart();
     this->disableSingleChoiceButtons("OPEN_TEXTURE_SELECTOR");
 }
@@ -186,7 +183,7 @@ void EditorState::initGui() {
 }
 
 void EditorState::updateGui() {
-    if (this->showTextureSelector) {
+    if (this->isSwitchButtonActive("OPEN_TEXTURE_SELECTOR")) {
         this->textureSelector->update(this->mousePosView);
     }
 
@@ -207,7 +204,8 @@ void EditorState::renderGui(sf::RenderTarget *target) {
     this->tileMap->render(*target);
     target->setView(this->stateData.window->getDefaultView());
 
-    if (this->showTextureSelector && this->clock.getElapsedTime() < this->textureSelectorTimer) {
+    if (this->isSwitchButtonActive("OPEN_TEXTURE_SELECTOR") &&
+        this->clock.getElapsedTime() < this->textureSelectorTimer) {
         this->textureSelector->render(*target);
     }
 
@@ -311,4 +309,9 @@ void EditorState::disableSingleChoiceButtons(const std::string &activeButtonKey)
             switchBtn->setActive(false);
         }
     }
+}
+
+bool EditorState::isSwitchButtonActive(std::string buttonKey) {
+    GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(buttonKey));
+    return switchBtn->isActive();
 }

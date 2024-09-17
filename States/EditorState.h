@@ -29,7 +29,6 @@ private:
     PauseMenuState pauseMenuState;
     Tilemap *tileMap;
     sf::RectangleShape previewTexture;
-    bool showTextureSelector;
     sf::Time textureSelectorTimer = sf::seconds(5);
     sf::Clock clock;
     GUI::Sidebar *sideBar;
@@ -101,7 +100,13 @@ private:
 
     void executeButton(const std::string &key);
 
+    /**
+     * Disattiva tutti i bottoni del gruppo scelta singola tranne il bottone che riceve in input che non viene modificato.
+     * @param activeButtonKey
+     */
     void disableSingleChoiceButtons(const std::string &activeButtonKey);
+
+    bool isSwitchButtonActive(std::string buttonKey);
 };
 
 
