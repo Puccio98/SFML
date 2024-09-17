@@ -89,6 +89,7 @@ add_executable(SFML
         Helper/Json/Serializable.h
         Helper/Json/Struct/MapData.h
         enums/tile_types.cpp
+        enums/directions.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

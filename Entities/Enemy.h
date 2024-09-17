@@ -7,6 +7,8 @@ class Enemy : public Entity {
 private:
     void initVariables();
 
+    // Create a static clock to track the time
+    sf::Clock clock;
 public:
     Enemy(float x, float y, sf::Texture &texture_sheet);
 
@@ -19,6 +21,8 @@ public:
     void updateAnimation(const float &dt);
 
     ~Enemy() override;
+
+    void updateDirections(const float &dt);
 };
 
 

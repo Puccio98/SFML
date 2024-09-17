@@ -4,15 +4,13 @@ Enemy::Enemy(float x, float y, sf::Texture &texture_sheet) {
     this->initVariables();
     this->setPosition(x, y);
 
-    this->createHitboxComponent(0, 0, 17, 24);
-    this->createMovementComponent(300.f, 3800.f, 1800.f);
+    this->createHitboxComponent(0, 0, 51, 72);
+    this->createMovementComponent(100.f, 2000.f, 900.f);
     this->createAnimationComponent(texture_sheet);
     this->createAttributeComponent();
     this->createSkillComponent();
 
-    this->animationComponent->addAnimation("IDLE", 10.f, 0, 0, 3, 0, 17, 24);
-//    this->animationComponent->addAnimation("WALK", 2.f, 0, 1, 11, 1, 192, 192);
-//    this->animationComponent->addAnimation("ATTACK", 2.f, 0, 2, 13, 2, 192 * 2, 192, false);
+    this->animationComponent->addAnimation("IDLE", 5.f, 0, 0, 3, 0, 51, 72);
 }
 
 Enemy::~Enemy() {
@@ -37,27 +35,37 @@ void Enemy::update(const MovementData &next, const float &dt) {
     this->movementComponent->update(next);
     this->updateAnimation(dt);
     this->hitboxComponent->update();
+    this->updateDirections(dt);
+//    std::cout << "velocita x " << this->movementComponent->getVelocity().x << std::endl;
+//    std::cout << "velocita y " << this->movementComponent->getVelocity().y << std::endl;
 }
 
 void Enemy::updateAnimation(const float &dt) {
-    if (movementComponent->getState(MOVEMENT_STATES::IDLE))
-        animationComponent->play("IDLE", dt);
-    else if (movementComponent->getState(MOVEMENT_STATES::MOVING_LEFT)) {
-        sprite.setOrigin(0.f, 0.f);
-        sprite.setScale(1.f, 1.f);
-        animationComponent->play("WALK", dt, movementComponent->getVelocityMagnitude() /
-                                             movementComponent->getMaxVelocity());
-    } else if (movementComponent->getState(MOVEMENT_STATES::MOVING_RIGHT)) {
-        sprite.setOrigin(258.f, 0.f);
-        sprite.setScale(-1.f, 1.f);
-        animationComponent->play("WALK", dt, movementComponent->getVelocityMagnitude() /
-                                             movementComponent->getMaxVelocity());
-    } else
-        animationComponent->play("WALK", dt, movementComponent->getVelocityMagnitude() /
-                                             movementComponent->getMaxVelocity());
+    // Play the idle animation
+    this->animationComponent->play("IDLE", dt);
 }
-
 
 void Enemy::initVariables() {
 
+}
+
+void Enemy::updateDirections(const float &dt) {
+    // Get the elapsed time
+    sf::Time elapsedTime = clock.getElapsedTime();
+
+    // If 5 seconds have passed
+    if (elapsedTime.asSeconds() >= 3.0f) {
+        // Generate random directions (-1, 0, or 1) for both x and y
+        int xDir = (rand() % 3) - 1; // Generates -1, 0, or 1
+        int yDir = (rand() % 3) - 1; // Generates -1, 0, or 1
+
+        // Set the new random direction
+        this->movementComponent->setDirection(sf::Vector2f(xDir, yDir));
+
+        // Restart the clock to measure the next 5 seconds
+        clock.restart();
+
+        std::cout << "dir x " << this->movementComponent->getMovementData().accelerationDirection.x << std::endl;
+        std::cout << "dir y " << this->movementComponent->getMovementData().accelerationDirection.y << std::endl;
+    }
 }

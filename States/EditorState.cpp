@@ -58,6 +58,7 @@ void EditorState::render(sf::RenderTarget *target) {
 
 void EditorState::initButtonsKeyLabel() {
     this->buttonsKeyLabel.emplace_back("OPEN_TEXTURE_SELECTOR", "TS", true);
+    this->buttonsKeyLabel.emplace_back("OPEN_ENEMY_TEXTURE_SELECTOR", "ES", true);
     this->buttonsKeyLabel.emplace_back("TOGGLE_TILES", "T", true);
     this->buttonsKeyLabel.emplace_back("TOGGLE_E_SPAWNER", "SP", true);
     this->buttonsKeyLabel.emplace_back("SAVE_TEXTURE_MAP", "SV", false);
@@ -65,6 +66,7 @@ void EditorState::initButtonsKeyLabel() {
     this->buttonsKeyLabel.emplace_back("CLEAR_MAP", "R", false);
 
     this->singleChoiceButtons.emplace_back("OPEN_TEXTURE_SELECTOR");
+    this->singleChoiceButtons.emplace_back("OPEN_ENEMY_TEXTURE_SELECTOR");
     this->singleChoiceButtons.emplace_back("TOGGLE_TILES");
     this->singleChoiceButtons.emplace_back("TOGGLE_E_SPAWNER");
 }
@@ -73,9 +75,13 @@ void EditorState::updateSidebar(float dt) {
     this->sideBar->update(dt, this->mousePosView);
 
     if (this->sideBar->isButtonClicked("OPEN_TEXTURE_SELECTOR")) {
-        this->showTextureSelector = !this->showTextureSelector;
         this->clock.restart();
         this->disableSingleChoiceButtons("OPEN_TEXTURE_SELECTOR");
+    }
+
+    if (this->sideBar->isButtonClicked("OPEN_ENEMY_TEXTURE_SELECTOR")) {
+        this->clock.restart();
+        this->disableSingleChoiceButtons("OPEN_ENEMY_TEXTURE_SELECTOR");
     }
 
     if (this->sideBar->isButtonClicked("TOGGLE_E_SPAWNER")) {
@@ -106,7 +112,6 @@ void EditorState::updateSidebar(float dt) {
 
 //Initializer Functions
 void EditorState::initVariables() {
-    this->showTextureSelector = false;
     this->tileTexturePath = "Resources/images/tiles/nuovo_tilesheet.png";
     this->tileMap = new Tilemap("Resources/map/map.slmp", *this->stateData.font, true);
     this->tileTypes.push_back(TILE_BEHAVIOURS::DEFAULT);
@@ -158,7 +163,6 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
 }
 
 void EditorState::openTextureSelector() {
-    this->showTextureSelector = true;
     this->clock.restart();
     this->disableSingleChoiceButtons("OPEN_TEXTURE_SELECTOR");
 }
@@ -176,6 +180,10 @@ void EditorState::initGui() {
             this->dvm.width - this->tileMap->getTileTextureSheet().getSize().x -
             this->sideBar->getSize().x, 0.f, this->stateData.gridSize,
             this->tileMap->getTileTextureSheet());
+    this->enemySelectorTexture.loadFromFile("Resources/images/tiles/enemy_texture_selector.png");
+    this->enemyTextureSelector = new TextureSelector(
+            this->dvm.width - enemySelectorTexture.getSize().x -
+            this->sideBar->getSize().x, 0.f, this->stateData.gridSize, this->enemySelectorTexture);
     this->previewTexture.setSize(sf::Vector2f(this->stateData.gridSize, this->stateData.gridSize));
     this->previewTexture.setFillColor(sf::Color(255, 255, 255, 100));
     this->previewTexture.setOutlineThickness(1.f);
@@ -186,8 +194,12 @@ void EditorState::initGui() {
 }
 
 void EditorState::updateGui() {
-    if (this->showTextureSelector) {
+    if (this->isSwitchButtonActive("OPEN_TEXTURE_SELECTOR")) {
         this->textureSelector->update(this->mousePosView);
+    }
+
+    if (this->isSwitchButtonActive("OPEN_ENEMY_TEXTURE_SELECTOR")) {
+        this->enemyTextureSelector->update(this->mousePosView);
     }
 
     if (!this->textureSelector->isActive()) {
@@ -207,8 +219,15 @@ void EditorState::renderGui(sf::RenderTarget *target) {
     this->tileMap->render(*target);
     target->setView(this->stateData.window->getDefaultView());
 
-    if (this->showTextureSelector && this->clock.getElapsedTime() < this->textureSelectorTimer) {
+    if (this->isSwitchButtonActive("OPEN_TEXTURE_SELECTOR") &&
+        this->clock.getElapsedTime() < this->textureSelectorTimer) {
         this->textureSelector->render(*target);
+    }
+
+
+    if (this->isSwitchButtonActive("OPEN_ENEMY_TEXTURE_SELECTOR") &&
+        this->clock.getElapsedTime() < this->textureSelectorTimer) {
+        this->enemyTextureSelector->render(*target);
     }
 
     this->sideBar->render(*target);
@@ -311,4 +330,9 @@ void EditorState::disableSingleChoiceButtons(const std::string &activeButtonKey)
             switchBtn->setActive(false);
         }
     }
+}
+
+bool EditorState::isSwitchButtonActive(std::string buttonKey) {
+    GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(buttonKey));
+    return switchBtn->isActive();
 }
