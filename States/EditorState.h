@@ -33,7 +33,9 @@ private:
     sf::Clock clock;
     GUI::Sidebar *sideBar;
     std::string tileTexturePath;
+    sf::Texture enemySelectorTexture;
     TextureSelector *textureSelector;
+    TextureSelector *enemyTextureSelector;
     sf::View view;
     float cameraSpeed;
     std::vector<SidebarButton> buttonsKeyLabel;
