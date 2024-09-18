@@ -153,6 +153,11 @@ MovementData &MovementComponent::updateFacingDirection(MovementData &next) {
         next.facingDirection.first = next.velocity.x > 0 ? DIRECTIONS::RIGHT : DIRECTIONS::LEFT;
     }
 
+    //Se mi muovo solo orizzontalmente l'omino è mostrato frontale
+    if (next.velocity.y == 0 && next.velocity.x != 0) {
+        next.facingDirection.second = DIRECTIONS::DOWN;
+    }
+
     return next;
 }
 

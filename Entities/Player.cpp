@@ -11,10 +11,10 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
     this->createSkillComponent();
 
     this->animationComponent->addAnimation("IDLE_DOWN", 10.f, 0, 0, 1, 0, 51, 72);
-    this->animationComponent->addAnimation("IDLE_UP", 10.f, 0, 2, 1, 2, 51, 72);
-    this->animationComponent->addAnimation("MOVING_DOWN", 5.f, 0, 3, 3, 3, 51, 72);
+    this->animationComponent->addAnimation("IDLE_UP", 10.f, 0, 1, 1, 1, 51, 72);
+    this->animationComponent->addAnimation("MOVING_DOWN", 5.f, 0, 2, 3, 2, 51, 72);
+    this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 5.f, 0, 3, 3, 3, 51, 72);
     this->animationComponent->addAnimation("MOVING_SIDE_UP", 5.f, 0, 4, 3, 4, 51, 72);
-    this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 5.f, 0, 4, 3, 4, 51, 72);
     this->animationComponent->addAnimation("MOVING_UP", 5.f, 0, 5, 3, 5, 51, 72);
     this->animationComponent->addAnimation("ATTACK", 2.f, 0, 2, 13, 2, 51, 72, false);
 }
