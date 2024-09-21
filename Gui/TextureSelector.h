@@ -4,10 +4,17 @@
 
 #include <Graphics/RectangleShape.hpp>
 #include <Graphics/Sprite.hpp>
+#include <string>
+#include <Graphics/Texture.hpp>
+#include <System/Time.hpp>
+#include <System/Clock.hpp>
 
 class TextureSelector {
 private:
+    sf::Time textureSelectorTimer = sf::seconds(3);
+    sf::Clock clock;
     sf::RectangleShape bounds;
+    sf::Texture texture;
     sf::Sprite sheet;
     sf::RectangleShape selector;
     sf::RectangleShape selected;
@@ -17,6 +24,8 @@ private:
 public:
     TextureSelector(float x, float y, float gridSize, const sf::Texture &texture_sheet);
 
+    TextureSelector(float x, float y, float gridSize, const std::string &texturePath);
+
     virtual ~TextureSelector();
 
     void update(sf::Vector2f mousePos);
@@ -24,6 +33,10 @@ public:
     void render(sf::RenderTarget &target);
 
     bool isActive() const;
+
+    void restartTimer();
+
+    bool isTimerOver();
 
     /**
      * Restituisce la posizione della cella selezionata relativa al suo contenitore (TextureSelector)
@@ -57,6 +70,8 @@ public:
      * @return
      */
     sf::Vector2i getGridPosition(const sf::Vector2f &absolutePosition);
+
+    sf::Texture LoadTexture(const std::string &texturePath);
 };
 
 

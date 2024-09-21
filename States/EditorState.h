@@ -29,12 +29,10 @@ private:
     PauseMenuState pauseMenuState;
     Tilemap *tileMap;
     sf::RectangleShape previewTexture;
-    sf::Time textureSelectorTimer = sf::seconds(5);
-    sf::Clock clock;
     GUI::Sidebar *sideBar;
     std::string tileTexturePath;
     sf::Texture enemySelectorTexture;
-    TextureSelector *textureSelector;
+    TextureSelector *tileTextureSelector;
     TextureSelector *enemyTextureSelector;
     sf::View view;
     float cameraSpeed;
@@ -91,7 +89,7 @@ private:
      * Seleziona la tile in base alla posizione del mouse e resetta il clock.
      * @param mousePosWindow
      */
-    void setSelectedTile(sf::Vector2f &mousePos);
+    void setSelectedTexture(sf::Vector2f &mousePos);
 
     /**
      * Seleziona la tile prendendo una direzione e resetta il clock.
@@ -109,6 +107,8 @@ private:
     void disableSingleChoiceButtons(const std::string &activeButtonKey);
 
     bool isSwitchButtonActive(std::string buttonKey);
+
+    void setSelectedEnemy(sf::Vector2f &mousePos);
 };
 
 
