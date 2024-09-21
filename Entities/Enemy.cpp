@@ -64,8 +64,5 @@ void Enemy::updateDirections(const float &dt) {
 
         // Restart the clock to measure the next 5 seconds
         clock.restart();
-
-        std::cout << "dir x " << this->movementComponent->getMovementData().accelerationDirection.x << std::endl;
-        std::cout << "dir y " << this->movementComponent->getMovementData().accelerationDirection.y << std::endl;
     }
 }

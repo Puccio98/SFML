@@ -130,7 +130,7 @@ private:
                                                                          tileData.gridSize * tileData.index_y),
                                                             sf::Vector2(tileData.gridSize, tileData.gridSize)
                                         ),
-                                        ENEMY::SALTERELLO, 0, 0, 0);
+                                        tileData.enemy_type, 0, 0, 0);
                 break;
             case TILE_TYPES::WARP:
                 break;

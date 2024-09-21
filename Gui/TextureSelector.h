@@ -45,6 +45,12 @@ public:
     sf::Vector2f getSelectedRelativePosition();
 
     /**
+     * Restituisce la posizione in grid della cella selezionata (TextureSelector)
+     * @return
+     */
+    sf::Vector2i getSelectedGridPosition();
+
+    /**
      * Seleziona la tile in base alla posizione del mouse
      * @param mousePosWindow
      */

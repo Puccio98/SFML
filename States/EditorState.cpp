@@ -272,6 +272,8 @@ void EditorState::addTile(TILE_TYPES type) {
     tileData.index_z = tileMap->getMap()[tileData.index_x][tileData.index_y].size();
     tileData.behaviours = tileTypes; // Copia contenuto del vettore :D
     tileData.type = type;
+    sf::Vector2i enemyGridPos = this->enemyTextureSelector->getSelectedGridPosition();
+    tileData.enemy_type = enemyGridPos.x == 0 ? ENEMY_TYPES::WISP : ENEMY_TYPES::FOREST_GUY;
 
     if (!positionMap[{tileData.index_x, tileData.index_y}]) {
         tileMap->addTile(tileData);

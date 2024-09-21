@@ -136,4 +136,9 @@ bool TextureSelector::isTimerOver() {
     return this->clock.getElapsedTime() > this->textureSelectorTimer;
 }
 
+sf::Vector2i TextureSelector::getSelectedGridPosition() {
+    sf::Vector2f relativePos = this->getSelectedRelativePosition();
+    return {static_cast<int>(relativePos.x / gridSize), static_cast<int>(relativePos.y / gridSize)};
+}
+
 

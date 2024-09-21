@@ -1,5 +1,4 @@
-enum class ENEMY {
-    TROTTOLINO = 1,
-    SALTERELLO = 2
+enum class ENEMY_TYPES {
+    WISP = 0,
+    FOREST_GUY = 1
 };
-

@@ -85,11 +85,15 @@ add_executable(SFML
         Entities/EntityDimensionData.h
         Entities/EnemySpawner.cpp
         Entities/EnemySpawner.h
-        enums/enemy_types.cpp
         Helper/Json/Serializable.h
         Helper/Json/Struct/MapData.h
+        enums/enemy_types.cpp
         enums/tile_types.cpp
         enums/directions.cpp
+        Entities/Enemies/Wisp.cpp
+        Entities/Enemies/Wisp.h
+        Entities/Enemies/ForestGuy.cpp
+        Entities/Enemies/ForestGuy.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

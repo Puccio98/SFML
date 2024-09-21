@@ -4,6 +4,7 @@
 #include "../Helper/Json/Serializable.h"
 
 #include "../enums/tile_types.cpp"
+#include "../enums/enemy_types.cpp"
 
 struct TileData : Serializable {
     int index_x;
@@ -11,6 +12,7 @@ struct TileData : Serializable {
     int index_z;
     float gridSize;
     TILE_TYPES type;
+    ENEMY_TYPES enemy_type;
     /**
      * Definisce le posizioni della texture nello sheet, quindi determina la texture da applicare
      */
@@ -40,7 +42,10 @@ struct TileData : Serializable {
         }
 
         // Tile type
-        j["type"] = this->type;
+        j["type"] = this->type;             // Tile type
+        if (this->type == TILE_TYPES::SPAWNER) {
+            j["enemy_type"] = this->enemy_type;
+        }
         return j;
     };
 
@@ -68,7 +73,11 @@ struct TileData : Serializable {
             behaviourJson.get_to(behaviour);
             behaviours.push_back(behaviour);
         }
-
+        
         j.at("type").get_to(type);
+        auto it = j.find("enemy_type");
+        if (it != j.end()) {
+            it->get_to(enemy_type);
+        }
     };
 };
