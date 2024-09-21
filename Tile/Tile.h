@@ -11,7 +11,7 @@
 #include"SFML/Window.hpp"
 #include"SFML/Graphics.hpp"
 #include "TileData.h"
-#include "../Entities/Enemy.h"
+#include "../Entities/Enemies/Enemy.h"
 
 class Tile {
 private:

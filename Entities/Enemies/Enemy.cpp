@@ -9,8 +9,6 @@ Enemy::Enemy(float x, float y, sf::Texture &texture_sheet) {
     this->createAnimationComponent(texture_sheet);
     this->createAttributeComponent();
     this->createSkillComponent();
-
-    this->animationComponent->addAnimation("IDLE", 5.f, 0, 0, 3, 0, 51, 72);
 }
 
 Enemy::~Enemy() {
@@ -38,11 +36,6 @@ void Enemy::update(const MovementData &next, const float &dt) {
     this->updateDirections(dt);
 //    std::cout << "velocita x " << this->movementComponent->getVelocity().x << std::endl;
 //    std::cout << "velocita y " << this->movementComponent->getVelocity().y << std::endl;
-}
-
-void Enemy::updateAnimation(const float &dt) {
-    // Play the idle animation
-    this->animationComponent->play("IDLE", dt);
 }
 
 void Enemy::initVariables() {

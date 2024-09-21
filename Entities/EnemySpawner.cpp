@@ -11,7 +11,7 @@ EnemySpawner::EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &fo
           maxDistance(maxDistance),
           timeToSpawn(timeToSpawn) {
     this->initTextures();
-    this->layerText.setString(this->layerText.getString() + ", es" + (type == ENEMY_TYPES::WISP ? " w" : " f"));
+    this->layerText.setString(this->layerText.getString() + "\n" + this->getEnemyName());
     this->layerText.setFillColor(sf::Color(200, 200, 30));
     this->shape.setSize(edd.size);
     this->shape.setPosition(edd.position);
@@ -74,6 +74,19 @@ void EnemySpawner::spawn(std::vector<Enemy *> &enemies) {
 
         this->counter++;
     }
+}
+
+std::string EnemySpawner::getEnemyName() {
+    std::string enemyName;
+    switch (this->type) {
+        case ENEMY_TYPES::WISP:
+            enemyName = "wisp";
+            break;
+        case ENEMY_TYPES::FOREST_GUY:
+            enemyName = "f_guy";
+            break;
+    }
+    return enemyName;
 }
 
 void EnemySpawner::clear() {

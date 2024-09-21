@@ -80,8 +80,8 @@ add_executable(SFML
         Entities/Components/SkillComponent.h
         Entities/Components/Skill.cpp
         Entities/Components/Skill.h
-        Entities/Enemy.cpp
-        Entities/Enemy.h
+        Entities/Enemies/Enemy.cpp
+        Entities/Enemies/Enemy.h
         Entities/EntityDimensionData.h
         Entities/EnemySpawner.cpp
         Entities/EnemySpawner.h

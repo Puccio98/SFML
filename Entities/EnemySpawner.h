@@ -3,7 +3,7 @@
 
 
 #include <System/Vector2.hpp>
-#include "../Entities/Enemy.h"
+#include "Enemies/Enemy.h"
 #include "EntityDimensionData.h"
 #include "../Tile/Tile.h"
 #include <utility>
@@ -18,6 +18,8 @@ private:
     float maxDistance;
     sf::RectangleShape shape;
     std::map<std::string, sf::Texture> textures;
+
+    std::string getEnemyName();
 
 public:
     EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font, bool hud,

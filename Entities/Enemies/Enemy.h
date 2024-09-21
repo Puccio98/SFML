@@ -1,7 +1,7 @@
 #ifndef SFML_ENEMY_H
 #define SFML_ENEMY_H
 
-#include "Entity.h"
+#include "../Entity.h"
 
 class Enemy : public Entity {
 private:
@@ -18,11 +18,13 @@ public:
 
     void update(const MovementData &md, const float &dt) override;
 
-    void updateAnimation(const float &dt);
+    virtual void updateAnimation(const float &dt) = 0;
 
     ~Enemy() override;
 
     void updateDirections(const float &dt);
+
+    virtual void initAnimationComponent() = 0;
 };
 
 
