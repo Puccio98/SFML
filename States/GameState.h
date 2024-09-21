@@ -4,7 +4,7 @@
 #include "PauseMenuState.h"
 #include "../Map/Tilemap.h"
 #include "../Gui/PlayerGUI.h"
-#include "../Entities/Enemy.h"
+#include "../Entities/Enemies/Enemy.h"
 #include <cmath>
 
 class GameState : public State {

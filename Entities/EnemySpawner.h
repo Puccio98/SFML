@@ -3,8 +3,7 @@
 
 
 #include <System/Vector2.hpp>
-#include "../enums/enemy_types.cpp"
-#include "../Entities/Enemy.h"
+#include "Enemies/Enemy.h"
 #include "EntityDimensionData.h"
 #include "../Tile/Tile.h"
 #include <utility>
@@ -12,7 +11,7 @@
 
 class EnemySpawner : public Tile {
 private:
-    ENEMY type;
+    ENEMY_TYPES type;
     EntityDimensionData edd;
     int counter;
     int timeToSpawn;
@@ -20,12 +19,14 @@ private:
     sf::RectangleShape shape;
     std::map<std::string, sf::Texture> textures;
 
+    std::string getEnemyName();
+
 public:
     EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font, bool hud,
-                 EntityDimensionData edd, ENEMY type, int amount, int timeToSpawn, float maxDistance);
+                 EntityDimensionData edd, ENEMY_TYPES type, int amount, int timeToSpawn, float maxDistance);
 
     EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font,
-                 EntityDimensionData edd, ENEMY type, int amount, int timeToSpawn, float maxDistance);
+                 EntityDimensionData edd, ENEMY_TYPES type, int amount, int timeToSpawn, float maxDistance);
 
     virtual ~EnemySpawner();
 
