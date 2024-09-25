@@ -2,24 +2,32 @@
 #include "DropDownList.h"
 
 //TEXTURE SELECTOR
+TextureSelector::TextureSelector(float x, float y, float gridSize, const std::string &texturePath)
+        : TextureSelector(x, y, gridSize, LoadTexture(texturePath)) {
+}
+
+// Constructor that takes a texture directly
 TextureSelector::TextureSelector(float x, float y, float gridSize, const sf::Texture &texture_sheet) {
+    this->texture = texture_sheet;
     this->active = false;
     this->gridSize = gridSize;
     this->bounds.setSize(
-            sf::Vector2f(static_cast<float>(texture_sheet.getSize().x), static_cast<float>(texture_sheet.getSize().y)));
+            sf::Vector2f(static_cast<float>(this->texture.getSize().x), static_cast<float>(this->texture.getSize().y)));
     this->bounds.setPosition(x, y);
     this->bounds.setFillColor(sf::Color(50, 50, 50, 100));
     this->bounds.setOutlineThickness(1.f);
     this->bounds.setOutlineColor(sf::Color(255, 255, 255, 200));
 
-    this->sheet.setTexture(texture_sheet);
+    this->sheet.setTexture(this->texture);
     this->sheet.setPosition(x, y);
 
     if (this->sheet.getGlobalBounds().width > this->bounds.getGlobalBounds().width ||
         this->sheet.getGlobalBounds().height > this->bounds.getGlobalBounds().height) {
         this->sheet.setTextureRect(
-                sf::IntRect(0, 0, this->bounds.getGlobalBounds().width, this->bounds.getGlobalBounds().height));
+                sf::IntRect(0, 0, static_cast<int>(this->bounds.getGlobalBounds().width),
+                            static_cast<int>(this->bounds.getGlobalBounds().height)));
     }
+
     this->selector.setPosition(x, y);
     this->selector.setSize(sf::Vector2f(this->gridSize, this->gridSize));
     this->selector.setFillColor(sf::Color::Transparent);
@@ -32,6 +40,15 @@ TextureSelector::TextureSelector(float x, float y, float gridSize, const sf::Tex
     this->selected.setOutlineThickness(1.f);
     this->selected.setOutlineColor(sf::Color::Blue);
 }
+
+// Helper function to load texture
+sf::Texture TextureSelector::LoadTexture(const std::string &texturePath) {
+    if (!texture.loadFromFile(texturePath)) {
+        throw std::runtime_error("Failed to load texture from path: " + texturePath);
+    }
+    return texture;
+}
+
 
 TextureSelector::~TextureSelector() {
 
@@ -47,11 +64,11 @@ void TextureSelector::render(sf::RenderTarget &target) {
 }
 
 
-void TextureSelector::update(const sf::Vector2i mousePosWindow) {
-    this->active = this->bounds.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosWindow));
+void TextureSelector::update(const sf::Vector2f mousePos) {
+    this->active = this->bounds.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos));
 
     if (this->active) {
-        sf::Vector2i gridPosition = getGridPosition(mousePosWindow);
+        sf::Vector2i gridPosition = getGridPosition(mousePos);
         const sf::Vector2f position = sf::Vector2f((gridPosition.x * gridSize) + bounds.getPosition().x,
                                                    (gridPosition.y *
                                                     gridSize) + bounds.getPosition().y);
@@ -59,7 +76,7 @@ void TextureSelector::update(const sf::Vector2i mousePosWindow) {
     }
 }
 
-sf::Vector2i TextureSelector::getGridPosition(const sf::Vector2i &absolutePosition) {
+sf::Vector2i TextureSelector::getGridPosition(const sf::Vector2f &absolutePosition) {
     float relativeX = absolutePosition.x - bounds.getPosition().x;
     float relativeY = absolutePosition.y - bounds.getPosition().y;
 
@@ -73,8 +90,8 @@ bool TextureSelector::isActive() const {
     return active;
 }
 
-void TextureSelector::setSelectedTile(sf::Vector2i &mousePosWindow) {
-    sf::Vector2i gridPosition = getGridPosition(mousePosWindow);
+void TextureSelector::setSelectedTile(sf::Vector2f &mousePos) {
+    sf::Vector2i gridPosition = getGridPosition(mousePos);
     const sf::Vector2f position = sf::Vector2f((gridPosition.x * gridSize) + bounds.getPosition().x, (gridPosition.y *
                                                                                                       gridSize) +
                                                                                                      bounds.getPosition().y);
@@ -110,4 +127,18 @@ sf::Vector2f TextureSelector::getSelectedRelativePosition() {
     return sf::Vector2f(this->selected.getPosition().x - this->bounds.getPosition().x,
                         this->selected.getPosition().y - this->bounds.getPosition().y);
 }
+
+void TextureSelector::restartTimer() {
+    this->clock.restart();
+}
+
+bool TextureSelector::isTimerOver() {
+    return this->clock.getElapsedTime() > this->textureSelectorTimer;
+}
+
+sf::Vector2i TextureSelector::getSelectedGridPosition() {
+    sf::Vector2f relativePos = this->getSelectedRelativePosition();
+    return {static_cast<int>(relativePos.x / gridSize), static_cast<int>(relativePos.y / gridSize)};
+}
+
 

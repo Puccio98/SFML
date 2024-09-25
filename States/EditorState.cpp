@@ -6,31 +6,29 @@
 EditorState::EditorState(StateData &stateData) :
         State(stateData),
         pauseMenuState(PauseMenuState(stateData)) {
+    this->initButtonsKeyLabel();
+    this->sideBar = new GUI::Sidebar(this->dvm, *stateData.font, this->buttonsKeyLabel);
+
     this->initVariables();
     this->initView();
     State::initKeybinds("Config/editorstate_keybinds.ini");
-    this->initButtons();
+
     this->initGui();
 }
 
 EditorState::~EditorState() {
-    for (auto &button: this->buttons) {
-        delete button.second;
-    }
-
+    delete this->sideBar;
     delete this->tileMap;
-    delete this->textureSelector;
+    delete this->tileTextureSelector;
+    delete this->enemyTextureSelector;
 }
 
 void EditorState::update(const float &dt) {
     if (!pauseMenuState.isPaused()) {
-        State::update(dt, this->view);
+        State::update(dt);
         this->updateInput(dt);
         this->updateGui();
-        this->updateButtons();
-        if (this->clock.getElapsedTime() > this->textureSelectorTimer) {
-            this->showTextureSelector = false;
-        }
+        this->updateSidebar(dt);
     } else {
         pauseMenuState.update(dt);
     }
@@ -43,9 +41,12 @@ void EditorState::render(sf::RenderTarget *target) {
 
     this->renderGui(target);
 
-    if (!pauseMenuState.isPaused() && !this->textureSelector->isActive() &&
-        !this->sideBar.getGlobalBounds().contains(this->mousePosWindow.x, this->mousePosWindow.y)) {
+    if (!pauseMenuState.isPaused() && !this->tileTextureSelector->isActive() &&
+        !this->enemyTextureSelector->isActive() &&
+        !this->sideBar->getGlobalBounds().contains(this->mousePosView.x, this->mousePosView.y)) {
         target->draw(this->mouseDebug);
+
+
         target->setView(this->view);
         target->draw(this->previewTexture);
         target->setView(this->stateData.window->getDefaultView());
@@ -57,89 +58,66 @@ void EditorState::render(sf::RenderTarget *target) {
 }
 
 
-void EditorState::initButtons() {
-    const sf::VideoMode vm = this->stateData.graphicsSettings->resolution;
-    auto createButton = [&](const std::string &key, const std::string &label, int positionMultiplier,
-                            bool isSwitch = false) {
-        float x = this->stateData.window->getSize().x - GUI::Utils::p2px(4, vm);
-        float y = (GUI::Utils::p2px(4, vm) * positionMultiplier);
-        float width = GUI::Utils::p2px(4, vm);
-        float height = GUI::Utils::p2px(4, vm);
+void EditorState::initButtonsKeyLabel() {
+    this->buttonsKeyLabel.emplace_back("OPEN_TEXTURE_SELECTOR", "TS", true);
+    this->buttonsKeyLabel.emplace_back("OPEN_ENEMY_TEXTURE_SELECTOR", "ES", true);
+    this->buttonsKeyLabel.emplace_back("TOGGLE_TILES", "T", true);
+    this->buttonsKeyLabel.emplace_back("SAVE_TEXTURE_MAP", "SV", false);
+    this->buttonsKeyLabel.emplace_back("TOGGLE_COLLISIONS", "COL", true);
+    this->buttonsKeyLabel.emplace_back("CLEAR_MAP", "R", false);
 
-        if (isSwitch) {
-            this->buttons[key] = new GUI::SwitchButton(x, y, width, height, this->stateData.font, label,
-                                                       GUI::Utils::charSize(vm),
-                                                       CssColor::ClassicText(), CssColor::ClassicButton());
-        } else {
-            this->buttons[key] = new GUI::PushButton(x, y, width, height, this->stateData.font, label,
-                                                     GUI::Utils::charSize(vm),
-                                                     CssColor::ClassicText(), CssColor::ClassicButton());
-        }
-    };
-
-    createButton("OPEN_TEXTURE_SELECTOR", "TS", 0);
-    createButton("TOGGLE_TILES", "T", 1, true);
-    createButton("SAVE_TEXTURE_MAP", "SV", 2);
-    createButton("TOGGLE_COLLISIONS", "COL", 3, true);
-    createButton("CLEAR_MAP", "R", 4);
+    this->singleChoiceButtons.emplace_back("OPEN_TEXTURE_SELECTOR");
+    this->singleChoiceButtons.emplace_back("OPEN_ENEMY_TEXTURE_SELECTOR");
+    this->singleChoiceButtons.emplace_back("TOGGLE_TILES");
 }
 
-void EditorState::renderButtons(sf::RenderTarget *target) {
-    for (auto &button: this->buttons) {
-        button.second->render(*target);
-    }
-}
+void EditorState::updateSidebar(float dt) {
+    this->sideBar->update(dt, this->mousePosView);
 
-void EditorState::updateButtons() {
-    /*Updates all buttons in state and handles their functionality*/
-    for (auto &button: this->buttons) {
-        button.second->update(static_cast<sf::Vector2f>(this->mousePosWindow));
+    if (this->sideBar->isButtonClicked("OPEN_TEXTURE_SELECTOR")) {
+        this->tileTextureSelector->restartTimer();
+        this->disableSingleChoiceButtons("OPEN_TEXTURE_SELECTOR");
     }
 
-    if (this->buttons["OPEN_TEXTURE_SELECTOR"]->isClicked()) {
-        this->showTextureSelector = !this->showTextureSelector;
-        this->clock.restart();
+    if (this->sideBar->isButtonClicked("OPEN_ENEMY_TEXTURE_SELECTOR")) {
+        this->enemyTextureSelector->restartTimer();
+        this->disableSingleChoiceButtons("OPEN_ENEMY_TEXTURE_SELECTOR");
     }
 
-    if (this->buttons["TOGGLE_TILES"]->isClicked()) {
+    if (this->sideBar->isButtonClicked("TOGGLE_TILES")) {
+        this->disableSingleChoiceButtons("TOGGLE_TILES");
     }
 
-    if (this->buttons["SAVE_TEXTURE_MAP"]->isClicked()) {
+    if (this->sideBar->isButtonClicked("SAVE_TEXTURE_MAP")) {
         this->tileMap->saveToFile("Resources/map/map.slmp");
     }
 
-    if (this->buttons["TOGGLE_COLLISIONS"]->isClicked()) {
-        auto i = std::find(this->tileTypes.begin(), this->tileTypes.end(), TILE_TYPES::COLLISION);
+    if (this->sideBar->isButtonClicked("TOGGLE_COLLISIONS")) {
+        auto i = std::find(this->tileTypes.begin(), this->tileTypes.end(), TILE_BEHAVIOURS::COLLISION);
         if (i != this->tileTypes.end()) {
             this->tileTypes.erase(i);
         } else {
-            this->tileTypes.push_back(TILE_TYPES::COLLISION);
+            this->tileTypes.push_back(TILE_BEHAVIOURS::COLLISION);
         }
     }
 
-    if (this->buttons["CLEAR_MAP"]->isClicked()) {
+    if (this->sideBar->isButtonClicked("CLEAR_MAP")) {
         this->tileMap->clear();
     }
-
-    this->tileMap->update();
 }
 
 //Initializer Functions
 void EditorState::initVariables() {
-    this->showTextureSelector = false;
     this->tileTexturePath = "Resources/images/tiles/nuovo_tilesheet.png";
     this->tileMap = new Tilemap("Resources/map/map.slmp", *this->stateData.font, true);
-    this->tileTypes.push_back(TILE_TYPES::DEFAULT);
+    this->tileTypes.push_back(TILE_BEHAVIOURS::DEFAULT);
 
     this->cameraSpeed = 300.f;
 }
 
 void EditorState::initView() {
-    this->view.setSize(sf::Vector2f(this->stateData.graphicsSettings->resolution.width,
-                                    this->stateData.graphicsSettings->resolution.height));
-    this->view.setCenter(this->stateData.graphicsSettings->resolution.width / 2.f,
-                         this->stateData.graphicsSettings->resolution.height / 2.f);
-
+    this->view.setSize(sf::Vector2f(this->dvm.width, this->dvm.height));
+    this->view.setCenter(this->dvm.width / 2.f, this->dvm.height / 2.f);
 }
 
 void EditorState::handleEvent(sf::Event &event, const float &dt) {
@@ -150,29 +128,27 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
 
     if (!this->pauseMenuState.isPaused()) {
         // se sidebar
-        if (this->sideBar.getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
-            for (auto &button: this->buttons) {
-                button.second->handleEvent(event, static_cast<sf::Vector2f>(this->mousePosWindow));
-            }
+        if (this->sideBar->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosView))) {
+            this->sideBar->handleEvent(event, dt, this->mousePosView);
         }
 
         // se non è sidebar
-        if (!this->sideBar.getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
+        if (!this->sideBar->getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosView))) {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
                 this->openTextureSelector();
-                this->textureSelector->setSelectedTile(1, 0);
+                this->setSelectedTile(1, 0);
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
                 this->openTextureSelector();
-                this->textureSelector->setSelectedTile(-1, 0);
+                this->setSelectedTile(-1, 0);
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up) {
                 this->openTextureSelector();
-                this->textureSelector->setSelectedTile(0, -1);
+                this->setSelectedTile(0, -1);
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down) {
                 this->openTextureSelector();
-                this->textureSelector->setSelectedTile(0, 1);
+                this->setSelectedTile(0, 1);
             }
 
             if (event.type == sf::Event::MouseButtonPressed) {
@@ -183,8 +159,8 @@ void EditorState::handleEvent(sf::Event &event, const float &dt) {
 }
 
 void EditorState::openTextureSelector() {
-    clock.restart();
-    showTextureSelector = true;
+    this->tileTextureSelector->restartTimer();
+    this->disableSingleChoiceButtons("OPEN_TEXTURE_SELECTOR");
 }
 
 /**
@@ -196,41 +172,43 @@ bool EditorState::isQuit() const {
 }
 
 void EditorState::initGui() {
-    auto vm = this->stateData.graphicsSettings->resolution;
-    //TODO:: analogo della dropdown, deve essere un componente
-    this->sideBar.setPosition(static_cast<float>(vm.width) - GUI::Utils::p2px(4, vm), 0);
-    this->sideBar.setSize(sf::Vector2f(GUI::Utils::p2px(4, vm), GUI::Utils::p2py(100, vm)));
-    this->sideBar.setFillColor(sf::Color(50, 50, 50, 100));
-    this->sideBar.setOutlineColor(sf::Color(200, 200, 200, 150));
-    this->sideBar.setOutlineThickness(1.f);
-    this->textureSelector = new TextureSelector(
-            this->stateData.window->getSize().x - this->tileMap->getTileTextureSheet().getSize().x -
-            this->sideBar.getSize().x, 0.f, this->stateData.gridSize,
+    this->tileTextureSelector = new TextureSelector(
+            this->dvm.width - this->tileMap->getTileTextureSheet().getSize().x -
+            this->sideBar->getSize().x, 0.f, this->stateData.gridSize,
             this->tileMap->getTileTextureSheet());
+    this->enemySelectorTexture.loadFromFile("Resources/images/tiles/enemy_texture_selector.png");
+    this->enemyTextureSelector = new TextureSelector(
+            this->dvm.width - enemySelectorTexture.getSize().x -
+            this->sideBar->getSize().x, 0.f, this->stateData.gridSize,
+            "Resources/images/tiles/enemy_texture_selector.png");
     this->previewTexture.setSize(sf::Vector2f(this->stateData.gridSize, this->stateData.gridSize));
     this->previewTexture.setFillColor(sf::Color(255, 255, 255, 100));
     this->previewTexture.setOutlineThickness(1.f);
     this->previewTexture.setOutlineColor(sf::Color::Red);
     this->previewTexture.setTexture(&this->tileMap->getTileTextureSheet());
-    auto a = this->textureSelector->getSelected().getPosition();
+    auto a = this->tileTextureSelector->getSelected().getPosition();
     this->previewTexture.setTextureRect(sf::IntRect(a.x, a.y, this->stateData.gridSize, this->stateData.gridSize));
 }
 
 void EditorState::updateGui() {
-    if (this->showTextureSelector) {
-        this->textureSelector->update(this->mousePosWindow);
+    if (this->isSwitchButtonActive("OPEN_TEXTURE_SELECTOR")) {
+        this->tileTextureSelector->update(this->mousePosView);
     }
 
-    if (!this->textureSelector->isActive()) {
-        auto tileTexturePosition = this->textureSelector->getSelectedRelativePosition();
+    if (this->isSwitchButtonActive("OPEN_ENEMY_TEXTURE_SELECTOR")) {
+        this->enemyTextureSelector->update(this->mousePosView);
+    }
+
+    if (!this->tileTextureSelector->isActive()) {
+        auto tileTexturePosition = this->tileTextureSelector->getSelectedRelativePosition();
         this->previewTexture.setTextureRect(
                 sf::IntRect(tileTexturePosition.x, tileTexturePosition.y, this->stateData.gridSize,
                             this->stateData.gridSize));
-        this->previewTexture.setPosition(this->getPosGrid(VIEW_TYPES::VIEW).x * this->stateData.gridSize,
-                                         this->getPosGrid(VIEW_TYPES::VIEW).y * this->stateData.gridSize);
+        this->previewTexture.setPosition(this->getPosGrid(VIEW_TYPES::VIEW, this->view).x * this->stateData.gridSize,
+                                         this->getPosGrid(VIEW_TYPES::VIEW, this->view).y * this->stateData.gridSize);
     }
 
-    this->updateMouseDebug();
+    this->updateMouseDebug(this->view);
 }
 
 void EditorState::renderGui(sf::RenderTarget *target) {
@@ -238,38 +216,44 @@ void EditorState::renderGui(sf::RenderTarget *target) {
     this->tileMap->render(*target);
     target->setView(this->stateData.window->getDefaultView());
 
-    if (this->showTextureSelector) {
-        this->textureSelector->render(*target);
+    if (this->isSwitchButtonActive("OPEN_TEXTURE_SELECTOR") && !this->tileTextureSelector->isTimerOver()) {
+        this->tileTextureSelector->render(*target);
     }
 
-    target->draw(this->sideBar);
-    this->renderButtons(target);
+
+    if (this->isSwitchButtonActive("OPEN_ENEMY_TEXTURE_SELECTOR") && !this->enemyTextureSelector->isTimerOver()) {
+        this->enemyTextureSelector->render(*target);
+    }
+
+    this->sideBar->render(*target);
 }
 
 
 void EditorState::updateInput(const float &dt) {
     this->updateView(dt);
 
-    if (!this->sideBar.getGlobalBounds().contains(static_cast<sf::Vector2f>(this->mousePosWindow))) {
+    if (!this->sideBar->getGlobalBounds().contains(this->mousePosView)) {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            if (this->textureSelector->isActive()) {
-                this->textureSelector->setSelectedTile(mousePosWindow);
+            if (this->tileTextureSelector->isActive()) {
+                this->setSelectedTexture(mousePosView);
+            } else if (this->enemyTextureSelector->isActive()) {
+                this->setSelectedEnemy(mousePosView);
             } else {
-                GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->buttons["TOGGLE_TILES"]);
-                if (switchBtn && switchBtn->isActive()) {
-                    addTile();
-                } else {
-                    addTexture();
+                for (const auto &key: this->singleChoiceButtons) {
+                    GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(key));
+                    if (switchBtn->isActive()) {
+                        this->executeButton(key);
+                    }
                 }
             }
         }
 
         if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-            if (this->textureSelector->isActive()) {
+            if (this->tileTextureSelector->isActive()) {
 
             } else {
-                int grid_x = this->getPosGrid(VIEW_TYPES::VIEW).x;
-                int grid_y = this->getPosGrid(VIEW_TYPES::VIEW).y;
+                int grid_x = this->getPosGrid(VIEW_TYPES::VIEW, this->view).x;
+                int grid_y = this->getPosGrid(VIEW_TYPES::VIEW, this->view).y;
                 if (!this->positionMap[{grid_x, grid_y}]) {
                     this->tileMap->removeTile(grid_x,
                                               grid_y);
@@ -280,13 +264,16 @@ void EditorState::updateInput(const float &dt) {
     }
 }
 
-void EditorState::addTile() {
+void EditorState::addTile(TILE_TYPES type) {
     TileData tileData;
     tileData.gridSize = stateData.gridSize;
-    tileData.index_x = getPosGrid(VIEW_TYPES::VIEW).x;
-    tileData.index_y = getPosGrid(VIEW_TYPES::VIEW).y;
+    tileData.index_x = getPosGrid(VIEW_TYPES::VIEW, this->view).x;
+    tileData.index_y = getPosGrid(VIEW_TYPES::VIEW, this->view).y;
     tileData.index_z = tileMap->getMap()[tileData.index_x][tileData.index_y].size();
-    tileData.types = tileTypes; // Copia contenuto del vettore :D
+    tileData.behaviours = tileTypes; // Copia contenuto del vettore :D
+    tileData.type = type;
+    sf::Vector2i enemyGridPos = this->enemyTextureSelector->getSelectedGridPosition();
+    tileData.enemy_type = enemyGridPos.x == 0 ? ENEMY_TYPES::WISP : ENEMY_TYPES::FOREST_GUY;
 
     if (!positionMap[{tileData.index_x, tileData.index_y}]) {
         tileMap->addTile(tileData);
@@ -295,9 +282,9 @@ void EditorState::addTile() {
 }
 
 void EditorState::addTexture() {
-    int index_x = getPosGrid(VIEW_TYPES::VIEW).x;
-    int index_y = getPosGrid(VIEW_TYPES::VIEW).y;
-    this->tileMap->addTexture(index_x, index_y, this->textureSelector->getSelectedRelativePosition());
+    int index_x = getPosGrid(VIEW_TYPES::VIEW, this->view).x;
+    int index_y = getPosGrid(VIEW_TYPES::VIEW, this->view).y;
+    this->tileMap->addTexture(index_x, index_y, this->tileTextureSelector->getSelectedRelativePosition());
 }
 
 void EditorState::updateView(const float &dt) {
@@ -311,4 +298,44 @@ void EditorState::updateView(const float &dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keybinds["MAP_RIGHT"])))
         direction.x = 1;
     view.move(direction * cameraSpeed * dt);
+}
+
+void EditorState::setSelectedTexture(sf::Vector2f &mousePos) {
+    this->tileTextureSelector->restartTimer();
+    this->tileTextureSelector->setSelectedTile(mousePos);
+}
+
+void EditorState::setSelectedEnemy(sf::Vector2f &mousePos) {
+    this->enemyTextureSelector->setSelectedTile(mousePos);
+}
+
+void EditorState::setSelectedTile(int dir_x, int dir_y) {
+    this->tileTextureSelector->restartTimer();
+    this->tileTextureSelector->setSelectedTile(dir_x, dir_y);
+}
+
+void EditorState::executeButton(const std::string &key) {
+    if (key == "OPEN_TEXTURE_SELECTOR") {
+        this->addTexture();
+    } else if (key == "TOGGLE_TILES") {
+        this->addTile(TILE_TYPES::DEFAULT);
+    } else if (key == "OPEN_ENEMY_TEXTURE_SELECTOR") {
+        this->addTile(TILE_TYPES::SPAWNER);
+    } else {
+        return;
+    }
+}
+
+void EditorState::disableSingleChoiceButtons(const std::string &activeButtonKey) {
+    for (const auto &button: this->singleChoiceButtons) {
+        if (activeButtonKey != button) {
+            GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(button));
+            switchBtn->setActive(false);
+        }
+    }
+}
+
+bool EditorState::isSwitchButtonActive(std::string buttonKey) {
+    GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(buttonKey));
+    return switchBtn->isActive();
 }

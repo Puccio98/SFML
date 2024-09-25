@@ -44,7 +44,10 @@ protected:
     sf::Vector2i mousePosScreen;
     sf::Vector2i mousePosWindow;
     sf::Vector2f mousePosView;
-
+    /**
+     * Default View Mode
+     */
+    sf::VideoMode dvm;
 
     //Resources
     std::map<std::string, sf::Texture> textures;
@@ -52,11 +55,13 @@ protected:
     //Functions
     virtual void initKeybinds(std::string keybindsFilePath);
 
-    void updateMouseDebug();
+    void updateMouseDebug(sf::View view);
 
     sf::Vector2i getPosGrid(VIEW_TYPES viewType) const;
 
     void initMouseDebug();
+
+    sf::Vector2i getPosGrid(VIEW_TYPES viewType, sf::View view) const;
 };
 
 

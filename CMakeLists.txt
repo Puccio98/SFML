@@ -1,6 +1,16 @@
 cmake_minimum_required(VERSION 3.23)
 project(SFML)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
+# Include FetchContent module
+include(FetchContent)
+
+# Fetch the nlohmann json library
+FetchContent_Declare(
+        nlohmann_json
+        GIT_REPOSITORY https://github.com/nlohmann/json.git
+        GIT_TAG v3.11.2 # Specify the version you want to use
+)
+FetchContent_MakeAvailable(nlohmann_json)
 
 add_executable(SFML
         main.cpp
@@ -34,7 +44,8 @@ add_executable(SFML
         States/StateData.h
         Gui/TextureSelector.cpp
         Gui/TextureSelector.h
-        enums/tile_types.cpp
+        enums/behaviour_types.cpp
+        enums/skill_enum.cpp
         Entities/Components/MovementData.h
         Gui/PushButton.cpp
         Gui/PushButton.h
@@ -48,8 +59,41 @@ add_executable(SFML
         Gui/ProgressBar.cpp
         Gui/ProgressBar.h
         Gui/Structs/ProgressBarData.h
+        Gui/HealthBar.cpp
+        Gui/HealthBar.h
         Gui/Utils.h
         Gui/Utils.cpp
+        Gui/Sidebar.cpp
+        Gui/Sidebar.h
+        Gui/Structs/SidebarButton.h
+        Items/Item.cpp
+        Items/Item.h
+        Items/Weapons/MeleeWeapon/MeleeWeapon.cpp
+        Items/Weapons/MeleeWeapon/MeleeWeapon.h
+        Items/Weapons/MeleeWeapon/Sword.cpp
+        Items/Weapons/MeleeWeapon/Sword.h
+        Items/Weapons/RangeWeapon/RangedWeapon.cpp
+        Items/Weapons/RangeWeapon/RangedWeapon.h
+        Items/Weapons/RangeWeapon/Bow.cpp
+        Items/Weapons/RangeWeapon/Bow.h
+        Entities/Components/SkillComponent.cpp
+        Entities/Components/SkillComponent.h
+        Entities/Components/Skill.cpp
+        Entities/Components/Skill.h
+        Entities/Enemies/Enemy.cpp
+        Entities/Enemies/Enemy.h
+        Entities/EntityDimensionData.h
+        Entities/EnemySpawner.cpp
+        Entities/EnemySpawner.h
+        Helper/Json/Serializable.h
+        Helper/Json/Struct/MapData.h
+        enums/enemy_types.cpp
+        enums/tile_types.cpp
+        enums/directions.cpp
+        Entities/Enemies/Wisp.cpp
+        Entities/Enemies/Wisp.h
+        Entities/Enemies/ForestGuy.cpp
+        Entities/Enemies/ForestGuy.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)
@@ -71,5 +115,5 @@ add_custom_command(
         #        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources/map $<TARGET_FILE_DIR:SFML>/Resources/map
 )
 
-
-target_link_libraries(SFML sfml-system sfml-window sfml-graphics sfml-audio)
+# Link the nlohmann json library
+target_link_libraries(SFML PRIVATE sfml-system sfml-window sfml-graphics sfml-audio nlohmann_json::nlohmann_json)

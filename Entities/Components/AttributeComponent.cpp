@@ -1,8 +1,8 @@
 #include "AttributeComponent.h"
 
 AttributeComponent::AttributeComponent() {
-    this->hpMax = 30.f;
-    this->hp = 10.f;
+    this->hpMax = 24.f;
+    this->hp = 19.f;
 
 }
 

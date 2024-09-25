@@ -2,7 +2,7 @@
 #define SFML_PLAYERGUI_H
 
 #include "../Entities/Player.h"
-#include "ProgressBar.h"
+#include "HealthBar.h"
 
 namespace GUI {
 
@@ -11,13 +11,13 @@ namespace GUI {
     private:
         Player *player;
         sf::Font font;
-
-        GUI::ProgressBar *hpBar;
+        sf::VideoMode resolution;
+        GUI::HealthBar *hpBar;
 
         void initFont();
 
     public:
-        explicit PlayerGUI(Player *player);
+        explicit PlayerGUI(Player *player, sf::VideoMode &resolution);
 
         virtual ~PlayerGUI();
 

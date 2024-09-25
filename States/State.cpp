@@ -3,6 +3,7 @@
 State::State(StateData &stateData) : stateData(stateData) {
     this->quit = false;
     this->initMouseDebug();
+    this->dvm = this->stateData.getDefaultVideoMode();
 }
 
 State::~State() = default;
@@ -90,13 +91,39 @@ sf::Vector2i State::getPosGrid(VIEW_TYPES viewType) const {
 
 }
 
-void State::updateMouseDebug() {
+sf::Vector2i State::getPosGrid(VIEW_TYPES viewType, sf::View view) const {
+    switch (viewType) {
+        case VIEW_TYPES::SCREEN:
+            return {
+                    (this->mousePosScreen.x) / static_cast<int > (this->stateData.gridSize),
+                    (this->mousePosScreen.y) / static_cast<int > (this->stateData.gridSize)
+            };
+        case VIEW_TYPES::WINDOW:
+            return {
+                    (this->mousePosWindow.x) / static_cast<int > (this->stateData.gridSize),
+                    (this->mousePosWindow.y) / static_cast<int > (this->stateData.gridSize)
+            };
+        case VIEW_TYPES::VIEW: {
+            return {
+                    (static_cast<int>(this->mousePosView.x + (view.getCenter().x - this->dvm.width / 2))) /
+                    static_cast<int > (this->stateData.gridSize),
+                    (static_cast<int>(this->mousePosView.y + (view.getCenter().y - this->dvm.height / 2))) /
+                    static_cast<int > (this->stateData.gridSize)
+            };
+        }
+        default:
+            return {0, 0};
+    }
+
+}
+
+void State::updateMouseDebug(sf::View view) {
     std::stringstream ss;
-    mouseDebug.setPosition(mousePosWindow.x + 20, mousePosWindow.y - 20);
-    ss << "w:" << mousePosWindow.x << " x " << mousePosWindow.y << "\n"
+    mouseDebug.setPosition(mousePosView.x + 20, mousePosView.y - 20);
+    ss << "mapData:" << mousePosWindow.x << " x " << mousePosWindow.y << "\n"
        << "v:" << mousePosView.x << " x " << mousePosView.y << "\n"
-       << "gw:" << getPosGrid(VIEW_TYPES::WINDOW).x << " x " << getPosGrid(VIEW_TYPES::WINDOW).y << "\n"
-       << "gv:" << getPosGrid(VIEW_TYPES::VIEW).x << " x " << getPosGrid(VIEW_TYPES::VIEW).y << "\n";
+       << "gw:" << getPosGrid(VIEW_TYPES::WINDOW, view).x << " x " << getPosGrid(VIEW_TYPES::WINDOW, view).y << "\n"
+       << "gv:" << getPosGrid(VIEW_TYPES::VIEW, view).x << " x " << getPosGrid(VIEW_TYPES::VIEW, view).y << "\n";
     mouseDebug.setString(ss.str());
 }
 

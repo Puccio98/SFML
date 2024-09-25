@@ -2,20 +2,12 @@
 #define SFML_TILEMAP_H
 
 #include "../Tile/Tile.h"
-#include "../Entities/Entity.h"
+#include "../Entities/EntityDimensionData.h"
+#include "../Helper/Json/Struct/MapData.h"
 
 class Tilemap {
 private:
-    unsigned gridSizeU;
-    float gridSizeF;
-    unsigned maxLayerIndex;
-    sf::Vector2u maxSizeGrid;
-    sf::Vector2f maxSizeWorld;
-    std::vector<std::vector<std::vector<Tile *>>> map;
-    std::string texturePath;
-    sf::Texture tileTextureSheet;
-    sf::Font font;
-    bool hud;
+    MapData mapData;
 
     void setMaxLayer();
 
@@ -26,13 +18,13 @@ public:
 
     virtual ~Tilemap();
 
-    void update();
+    void update(sf::RenderTarget &target, EntityDimensionData &entity, float dt, std::vector<Enemy *> &enemies);
 
     const std::vector<std::vector<std::vector<Tile *>>> &getMap() const;
 
     unsigned int getMaxLayerIndex() const;
 
-    void render(sf::RenderTarget &target, Entity *entity, unsigned layerIndex);
+    void renderLayer(sf::RenderTarget &target, EntityDimensionData &entity, unsigned layerIndex);
 
     void render(sf::RenderTarget &target);
 
@@ -73,6 +65,8 @@ public:
     void loadTile(const std::string &line);
 
     std::vector<Tile *> *getTileLayers(int x, int y);
+
+    sf::IntRect getInteractiveArea(sf::RenderTarget &target, EntityDimensionData &halfSizeGrid);
 };
 
 

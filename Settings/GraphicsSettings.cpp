@@ -3,6 +3,7 @@
 GraphicsSettings::GraphicsSettings(std::string &path) {
     this->path = path;
     this->title = "Uninitialized title";
+    this->defaultResolution = sf::VideoMode::getDesktopMode();
     this->resolution = sf::VideoMode::getDesktopMode();
     this->fullscreen = false;
     this->verticalSync = false;
@@ -16,6 +17,7 @@ void GraphicsSettings::load() {
 
     if (ifs.is_open()) {
         std::getline(ifs, this->title);
+        ifs >> this->defaultResolution.width >> this->defaultResolution.height;
         ifs >> this->resolution.width >> this->resolution.height;
         ifs >> this->fullscreen;
         ifs >> this->frameRateLimit;
@@ -31,6 +33,7 @@ void GraphicsSettings::save() {
 
     if (ofs.is_open()) {
         ofs << this->title << "\n";
+        ofs << this->defaultResolution.width << " " << this->defaultResolution.height << "\n";
         ofs << this->resolution.width << " " << this->resolution.height << "\n";
         ofs << this->fullscreen << "\n";
         ofs << this->frameRateLimit << "\n";

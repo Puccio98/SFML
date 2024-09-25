@@ -27,6 +27,8 @@ namespace GUI {
 
         void handleEvent(sf::Event &event, sf::Vector2f mousePos) override;
 
+        void setActive(bool active);
+
     private:
         bool active = false;
     };

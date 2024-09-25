@@ -14,16 +14,24 @@ GameState::GameState(StateData &stateData)
 GameState::~GameState() {
     delete this->player;
     delete this->playerGUI;
+    for (auto *enemy: this->enemies) {
+        delete enemy;
+    }
+    this->enemies.clear();
 }
 
 void GameState::update(const float &dt) {
+    EntityDimensionData edd(this->player->getHitboxComponent()->getPosition(), this->player->getSize());
+
     //per debug
-    this->updateMouseDebug();
+    this->updateMouseDebug(this->view);
     if (!pauseMenuState.isPaused()) {
-        State::update(dt, this->view);
+        State::update(dt); //, this->view
         this->updateView(dt);
         this->updateInput(dt);
         this->updateEntity(dt, *this->player);
+        this->updateEnemies(dt);
+        this->tilemap->update(*this->stateData.window, edd, dt, enemies);
         this->playerGUI->update(dt);
     } else {
         pauseMenuState.update(dt);
@@ -37,7 +45,9 @@ void GameState::render(sf::RenderTarget *target = nullptr) {
     // renderizziamo mappa e giocatore tramite view, poi crea una Callback function o simile per gestire cambio di view in renderizzazione
     target->setView(this->view);
     for (int layerIndex = 0; layerIndex <= this->tilemap->getMaxLayerIndex(); layerIndex++) {
-        this->tilemap->render(*target, this->player, layerIndex);
+        EntityDimensionData edd(this->player->getHitboxComponent()->getPosition(), this->player->getSize());
+        this->tilemap->renderLayer(*target, edd, layerIndex);
+        this->renderEnemies(layerIndex, target);
         if (layerIndex == this->player->getLayer()) {
             this->player->render(*target);
         }
@@ -71,13 +81,13 @@ void GameState::updateInput(const float &dt) {
 }
 
 void GameState::initTextures() {
-    if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/images/sprites/player/PLAYER_SHEET.png")) {
-        throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_IDLE_TEXTURE";
+    if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/images/sprites/entities/player/player_sheet_x3.png")) {
+        throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE";
     }
 }
 
 void GameState::initPlayer() {
-    this->player = new Player(380, 340, this->textures["PLAYER_SHEET"], *this->tilemap);
+    this->player = new Player(this->dvm.width / 2 - 130, this->dvm.height / 2 - 125, this->textures["PLAYER_SHEET"]);
 }
 
 void GameState::handleEvent(sf::Event &event, const float &dt) {
@@ -104,18 +114,18 @@ void GameState::initTilemap() {
 }
 
 void GameState::initView() {
-    this->view.setSize(sf::Vector2f(this->stateData.graphicsSettings->resolution.width,
-                                    this->stateData.graphicsSettings->resolution.height));
-    this->view.setCenter(this->stateData.graphicsSettings->resolution.width / 2.f,
-                         this->stateData.graphicsSettings->resolution.height / 2.f);
+    this->view.setSize(sf::Vector2f(this->dvm.width,
+                                    this->dvm.height));
+    this->view.setCenter(this->dvm.width / 2.f,
+                         this->dvm.height / 2.f);
 
 }
 
 void GameState::updateView(const float &dt) {
     auto pos = this->player->getPosition();
     auto size = this->player->getSize();
-    //floor serve perchè setCenter sarebbe meglio passargli degli interi per non sminchiare il render
-    this->view.setCenter(std::floor(pos.x + size.width / 2), std::floor(pos.y + size.height / 2));
+    //floor serve perchè setCenter sarebbe meglio passargli degli interi per non sminchiare il renderLayer
+    this->view.setCenter(std::floor(pos.x + size.x / 2), std::floor(pos.y + size.y / 2));
 }
 
 void GameState::updateEntity(const float &dt, Entity &entity) {
@@ -139,5 +149,20 @@ void GameState::updateEntity(const float &dt, Entity &entity) {
 }
 
 void GameState::initPlayerGUI(Player *_player) {
-    this->playerGUI = new GUI::PlayerGUI(_player);
+    this->playerGUI = new GUI::PlayerGUI(_player, this->stateData.graphicsSettings->resolution);
+}
+
+void GameState::updateEnemies(const float &dt) {
+    for (auto enemy: this->enemies) {
+        this->updateEntity(dt, *enemy);
+    }
+
+}
+
+void GameState::renderEnemies(int layerIndex, sf::RenderTarget *target) {
+    for (auto enemy: this->enemies) {
+        if (layerIndex == enemy->getLayer()) {
+            enemy->render(*target);
+        }
+    }
 }

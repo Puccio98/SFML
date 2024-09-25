@@ -3,6 +3,8 @@
 
 #include <System/Vector2.hpp>
 #include <valarray>
+#include <optional>
+#include "../../enums/directions.cpp"
 
 struct MovementData {
 
@@ -11,7 +13,9 @@ struct MovementData {
             acceleration(acceleration),
             deceleration(deceleration),
             position(position) {
-        this->direction = sf::Vector2f(0.f, 0.f);
+        this->accelerationDirection = sf::Vector2f(0.f, 0.f);
+        this->facingDirection = std::make_pair(std::nullopt, DIRECTIONS::DOWN);
+
         this->velocity = sf::Vector2f(0.f, 0.f);
     }
 
@@ -19,7 +23,8 @@ struct MovementData {
         maxVelocity = movementData.maxVelocity;
         acceleration = movementData.acceleration;
         deceleration = movementData.deceleration;
-        direction = movementData.direction;
+        accelerationDirection = movementData.accelerationDirection;
+        facingDirection = movementData.facingDirection;
         position = movementData.position;
         velocity = movementData.velocity;
     }
@@ -29,7 +34,15 @@ struct MovementData {
     float maxVelocity;
     float acceleration;
     float deceleration;
-    sf::Vector2f direction;
+    /**
+     * Direzione dell'accelerazione
+     */
+    sf::Vector2f accelerationDirection;
+    /**
+     * Contiene le direzioni verso cui è rivolto il personaggio, viene sempre specificato se il personaggio è rivolto verso il basso o verso l'alto.
+     * La direzione orizzontale è opzionale.
+     */
+    std::pair<std::optional<DIRECTIONS>, DIRECTIONS> facingDirection;
     sf::Vector2f position;
     sf::Vector2f velocity;
 };

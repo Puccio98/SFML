@@ -59,27 +59,23 @@ void MovementComponent::handleFriction(MovementData &_md, const float &dt) {// H
 }
 
 void MovementComponent::setDirection(sf::Vector2f _direction) {
-    this->md.direction = _direction;
+    this->md.accelerationDirection = _direction;
+}
+
+const MovementData &MovementComponent::getMovementData() const {
+    return md;
 }
 
 const sf::Vector2f &MovementComponent::getVelocity() const {
     return this->md.velocity;
 }
 
-bool MovementComponent::getState(const MOVEMENT_STATES state) const {
+bool MovementComponent::isState(MOVEMENT_STATES state) const {
     switch (state) {
         case MOVEMENT_STATES::IDLE:
             return (this->md.velocity.x == 0.f && this->md.velocity.y == 0.f);
         case MOVEMENT_STATES::MOVING:
             return (this->md.velocity.x != 0.f || this->md.velocity.y != 0.f);
-        case MOVEMENT_STATES::MOVING_LEFT:
-            return (this->md.velocity.x < 0.f);
-        case MOVEMENT_STATES::MOVING_RIGHT:
-            return (this->md.velocity.x > 0.f);
-        case MOVEMENT_STATES::MOVING_UP:
-            return (this->md.velocity.y > 0.f);
-        case MOVEMENT_STATES::MOVING_DOWN:
-            return (this->md.velocity.y < 0.f);
     }
     return false;
 }
@@ -108,13 +104,13 @@ MovementData MovementComponent::nextMovementData(const float &dt,
     MovementData next(this->md);
 
     if (std::get<0>(forbidden_directions)) {
-        next.direction.x = 0;
+        next.accelerationDirection.x = 0;
         // Se non puoi muoverti in quella direzione azzera la velocità per evitare che il tempo di decelerazione ti faccia andare dove non puoi
         next.velocity.x = 0;
     }
 
     if (std::get<1>(forbidden_directions)) {
-        next.direction.y = 0;
+        next.accelerationDirection.y = 0;
         // Se non puoi muoverti in quella direzione azzera la velocità per evitare che il tempo di decelerazione ti faccia andare dove non puoi
         next.velocity.y = 0;
     }
@@ -123,8 +119,11 @@ MovementData MovementComponent::nextMovementData(const float &dt,
 
 MovementData
 MovementComponent::computeNextMovementData(const float &dt, MovementData next) {
+    // Aggiorno facing direction
+    next = updateFacingDirection(next);
+
     // Create acceleration vector
-    sf::Vector2f accelerationV = sf::Vector2f(next.direction * next.acceleration);
+    auto accelerationV = sf::Vector2f(next.accelerationDirection * next.acceleration);
 
     // Apply acceleration on current velocity
     next.velocity = next.velocity + ((accelerationV) * dt);
@@ -137,6 +136,27 @@ MovementComponent::computeNextMovementData(const float &dt, MovementData next) {
 
     // Setta la posizione calcolate tutti i vettori del movimento
     next.position = next.position + (next.velocity * dt);
+
+    return next;
+}
+
+MovementData &MovementComponent::updateFacingDirection(MovementData &next) {
+    if (next.velocity.x == 0) {
+        next.facingDirection.first = std::nullopt;
+    }
+
+    if (next.velocity.y != 0) {
+        next.facingDirection.second = next.velocity.y > 0 ? DIRECTIONS::DOWN : DIRECTIONS::UP;
+    }
+
+    if (next.velocity.x != 0) {
+        next.facingDirection.first = next.velocity.x > 0 ? DIRECTIONS::RIGHT : DIRECTIONS::LEFT;
+    }
+
+    //Se mi muovo solo orizzontalmente l'omino è mostrato frontale
+    if (next.velocity.y == 0 && next.velocity.x != 0) {
+        next.facingDirection.second = DIRECTIONS::DOWN;
+    }
 
     return next;
 }

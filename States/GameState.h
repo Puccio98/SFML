@@ -4,11 +4,13 @@
 #include "PauseMenuState.h"
 #include "../Map/Tilemap.h"
 #include "../Gui/PlayerGUI.h"
+#include "../Entities/Enemies/Enemy.h"
 #include <cmath>
 
 class GameState : public State {
 private:
     Player *player{};
+    std::vector<Enemy *> enemies;
     PauseMenuState pauseMenuState;
     Tilemap *tilemap;
     sf::View view;
@@ -46,6 +48,9 @@ public:
 
     void initTilemap();
 
+    void updateEnemies(const float &dt);
+
+    void renderEnemies(int layerIndex, sf::RenderTarget *target = nullptr);
 };
 
 #endif //SFML_GAMESTATE_H

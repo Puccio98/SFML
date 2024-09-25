@@ -7,6 +7,7 @@
 #include "../Gui/Button.h"
 #include "../Map/Tilemap.h"
 #include "../Gui/TextureSelector.h"
+#include "../Gui/Sidebar.h"
 
 class EditorState : public State {
 public:
@@ -26,19 +27,19 @@ public:
 private:
     //Variables
     PauseMenuState pauseMenuState;
-    std::map<std::string, GUI::Button *> buttons;
     Tilemap *tileMap;
     sf::RectangleShape previewTexture;
-    bool showTextureSelector;
-    sf::Time textureSelectorTimer = sf::seconds(5);
-    sf::Clock clock;
-    sf::RectangleShape sideBar;
+    GUI::Sidebar *sideBar;
     std::string tileTexturePath;
-    TextureSelector *textureSelector;
+    sf::Texture enemySelectorTexture;
+    TextureSelector *tileTextureSelector;
+    TextureSelector *enemyTextureSelector;
     sf::View view;
     float cameraSpeed;
+    std::vector<SidebarButton> buttonsKeyLabel;
+    std::vector<std::string> singleChoiceButtons;
 
-    std::vector<TILE_TYPES> tileTypes;
+    std::vector<TILE_BEHAVIOURS> tileTypes;
 
     // Define a simple Point struct to hold x and y coordinates
     struct Point {
@@ -58,13 +59,11 @@ private:
 
     void initView();
 
-    void initButtons();
+    void initButtonsKeyLabel();
 
-    void updateButtons();
+    void updateSidebar(float dt);
 
     void updateGui();
-
-    void renderButtons(sf::RenderTarget *target);
 
     void renderGui(sf::RenderTarget *target);
 
@@ -82,9 +81,34 @@ private:
         }
     }
 
-    void addTile();
+    void addTile(TILE_TYPES type);
 
     void addTexture();
+
+    /**
+     * Seleziona la tile in base alla posizione del mouse e resetta il clock.
+     * @param mousePosWindow
+     */
+    void setSelectedTexture(sf::Vector2f &mousePos);
+
+    /**
+     * Seleziona la tile prendendo una direzione e resetta il clock.
+     * @param dir_x
+     * @param dir_y
+     */
+    void setSelectedTile(int dir_x, int dir_y);
+
+    void executeButton(const std::string &key);
+
+    /**
+     * Disattiva tutti i bottoni del gruppo scelta singola tranne il bottone che riceve in input che non viene modificato.
+     * @param activeButtonKey
+     */
+    void disableSingleChoiceButtons(const std::string &activeButtonKey);
+
+    bool isSwitchButtonActive(std::string buttonKey);
+
+    void setSelectedEnemy(sf::Vector2f &mousePos);
 };
 
 

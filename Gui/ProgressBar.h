@@ -1,14 +1,13 @@
 #ifndef SFML_PROGRESSBAR_H
 #define SFML_PROGRESSBAR_H
 
-
 #include <SFML/Graphics.hpp>
 #include "Structs/ProgressBarData.h"
 
 namespace GUI {
     class ProgressBar {
     public:
-        explicit ProgressBar(const sf::Font &font, const ProgressBarData &progressBarData);
+        explicit ProgressBar(const sf::Font &font, const sf::Color color, const ProgressBarData &progressBarData);
 
         virtual ~ProgressBar();
 
@@ -20,6 +19,7 @@ namespace GUI {
         sf::RectangleShape progressBarBack;
         sf::RectangleShape progressBarFilled;
         sf::Font font;
+        sf::Color color;
 
         float width = 100.f;
         float height = 20.f;
