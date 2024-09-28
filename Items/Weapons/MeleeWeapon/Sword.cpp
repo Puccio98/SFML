@@ -1,7 +1,7 @@
 #include "Sword.h"
 
 Sword::Sword() {
-    if (!this->weapon_texture.loadFromFile("Resources/images/sprites/entities/player/sword.png")) {
+    if (!this->weapon_texture.loadFromFile("Resources/images/sprites/entities/player/player_weapons/spada.png")) {
         throw ("ERROR::PLAYER::COULD NOT LOAD WEAPON TEXTURE");
     };
     this->weapon_sprite.setTexture(weapon_texture);

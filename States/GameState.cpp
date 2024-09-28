@@ -81,7 +81,7 @@ void GameState::updateInput(const float &dt) {
 }
 
 void GameState::initTextures() {
-    if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/images/sprites/entities/player/player_sheet_x3.png")) {
+    if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/images/sprites/entities/enemies/thief/thief_sheet_x3.png")) {
         throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE";
     }
 }

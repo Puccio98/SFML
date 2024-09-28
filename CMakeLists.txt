@@ -92,8 +92,8 @@ add_executable(SFML
         enums/directions.cpp
         Entities/Enemies/Wisp.cpp
         Entities/Enemies/Wisp.h
-        Entities/Enemies/ForestGuy.cpp
-        Entities/Enemies/ForestGuy.h
+        Entities/Enemies/Thief.cpp
+        Entities/Enemies/Thief.h
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

@@ -1,5 +1,5 @@
 #include "EnemySpawner.h"
-#include "Enemies/ForestGuy.h"
+#include "Enemies/Thief.h"
 #include "Enemies/Wisp.h"
 
 
@@ -29,8 +29,8 @@ void EnemySpawner::initTextures() {
         case ENEMY_TYPES::WISP:
             enemy_texture_path = "Resources/images/sprites/entities/enemies/wisp/wisp_sheet_x3.png";
             break;
-        case ENEMY_TYPES::FOREST_GUY:
-            enemy_texture_path = "Resources/images/sprites/entities/player/player_sheet_x3.png";
+        case ENEMY_TYPES::THIEF:
+            enemy_texture_path = "Resources/images/sprites/entities/enemies/thief/thief_sheet_x3.png";
             break;
         default:
             throw "ERROR::enemy_spawner::NOT_IMPLEMENTED";
@@ -61,8 +61,8 @@ void EnemySpawner::spawn(std::vector<Enemy *> &enemies) {
                                  this->tiledata.gridSize * this->tiledata.index_y,
                                  this->textures["ENEMY_SHEET"]);
                 break;
-            case ENEMY_TYPES::FOREST_GUY:
-                enemy = new ForestGuy(this->tiledata.gridSize * this->tiledata.index_x,
+            case ENEMY_TYPES::THIEF:
+                enemy = new Thief(this->tiledata.gridSize * this->tiledata.index_x,
                                       this->tiledata.gridSize * this->tiledata.index_y,
                                       this->textures["ENEMY_SHEET"]);
                 break;
@@ -82,8 +82,8 @@ std::string EnemySpawner::getEnemyName() {
         case ENEMY_TYPES::WISP:
             enemyName = "wisp";
             break;
-        case ENEMY_TYPES::FOREST_GUY:
-            enemyName = "f_guy";
+        case ENEMY_TYPES::THIEF:
+            enemyName = "thief";
             break;
     }
     return enemyName;
