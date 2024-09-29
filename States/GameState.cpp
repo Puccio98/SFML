@@ -154,6 +154,15 @@ void GameState::updateEntities(const float &dt) {
     for (auto entity: this->entities) {
         this->updateEntity(dt, *entity);
     }
+
+    for (auto entity: this->entities) {
+        if (player != entity && player->getLayer() == entity->getLayer()) {
+            if (player->getHitboxComponent()->checkIntersect(
+                    entity->getHitboxComponent()->getHitbox().getGlobalBounds())) {
+                std::cout << "mi son fatto male " << std::endl;
+            }
+        }
+    }
 }
 
 void GameState::renderEntities(int layerIndex, sf::RenderTarget *target) {

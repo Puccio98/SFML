@@ -53,3 +53,7 @@ sf::RectangleShape HitboxComponent::getHitboxRectangleShapeFromPosition(sf::Vect
 sf::Vector2f HitboxComponent::getSize() {
     return this->hitbox.getSize();
 }
+
+const sf::RectangleShape &HitboxComponent::getHitbox() const {
+    return hitbox;
+}

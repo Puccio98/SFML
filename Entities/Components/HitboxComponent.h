@@ -42,6 +42,9 @@ public:
     void render(sf::RenderTarget &target);
 
     sf::Vector2f getSize();
+
+    const sf::RectangleShape &getHitbox() const;
+
 };
 
 #endif //SFML_HITBOXCOMPONENT_H

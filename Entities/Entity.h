@@ -62,6 +62,8 @@ public:
     virtual void render(sf::RenderTarget &target);
 
     AttributeComponent *getAttributeComponent() const;
+
+    const sf::Sprite &getSprite() const;
 };
 
 #endif //SFML_ENTITY_H

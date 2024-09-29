@@ -90,5 +90,9 @@ AttributeComponent *Entity::getAttributeComponent() const {
     return attributeComponent;
 }
 
+const sf::Sprite &Entity::getSprite() const {
+    return sprite;
+}
+
 
 
