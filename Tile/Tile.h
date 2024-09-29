@@ -43,7 +43,7 @@ public:
 
     const TileData &getTiledata() const;
 
-    virtual void update(float dt, std::vector<Enemy *> &enemies);
+    virtual void update(float dt, std::vector<Entity *> &entities);
 
     virtual void render(sf::RenderTarget &target);
 

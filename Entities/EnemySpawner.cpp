@@ -46,12 +46,12 @@ void EnemySpawner::render(sf::RenderTarget &target) {
     Tile::render(target);
 }
 
-void EnemySpawner::update(float dt, std::vector<Enemy *> &enemies) {
-    Tile::update(dt, enemies);
-    this->spawn(enemies);
+void EnemySpawner::update(float dt, std::vector<Entity *> &entities) {
+    Tile::update(dt, entities);
+    this->spawn(entities);
 }
 
-void EnemySpawner::spawn(std::vector<Enemy *> &enemies) {
+void EnemySpawner::spawn(std::vector<Entity *> &entities) {
     if (this->counter < 1) {
         std::cout << "spawnato primo nemico" << std::endl;
         Enemy *enemy;
@@ -63,14 +63,14 @@ void EnemySpawner::spawn(std::vector<Enemy *> &enemies) {
                 break;
             case ENEMY_TYPES::THIEF:
                 enemy = new Thief(this->tiledata.gridSize * this->tiledata.index_x,
-                                      this->tiledata.gridSize * this->tiledata.index_y,
-                                      this->textures["ENEMY_SHEET"]);
+                                  this->tiledata.gridSize * this->tiledata.index_y,
+                                  this->textures["ENEMY_SHEET"]);
                 break;
             default:
                 throw "ERROR::enemy_spawner::NOT_IMPLEMENTED";
         }
 
-        enemies.push_back(enemy);
+        entities.push_back(enemy);
 
         this->counter++;
     }

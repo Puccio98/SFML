@@ -10,13 +10,13 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
     this->createAttributeComponent();
     this->createSkillComponent();
 
-    this->animationComponent->addAnimation("IDLE_DOWN", 10.f, 0, 0, 1, 0, 51, 72);
-    this->animationComponent->addAnimation("IDLE_UP", 10.f, 0, 1, 1, 1, 51, 72);
+    this->animationComponent->addAnimation("IDLE_DOWN", 5.f, 0, 0, 13, 0, 51, 72);
+    this->animationComponent->addAnimation("IDLE_UP", 5.f, 0, 1, 13, 1, 51, 72);
     this->animationComponent->addAnimation("MOVING_DOWN", 5.f, 0, 2, 3, 2, 51, 72);
     this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 5.f, 0, 3, 3, 3, 51, 72);
     this->animationComponent->addAnimation("MOVING_SIDE_UP", 5.f, 0, 4, 3, 4, 51, 72);
-    this->animationComponent->addAnimation("MOVING_UP", 5.f, 0, 5, 3, 5, 51, 72);
-    this->animationComponent->addAnimation("ATTACK", 2.f, 0, 2, 13, 2, 51, 72, false);
+    this->animationComponent->addAnimation("MOVING_UP", 5.f, 0, 5, 7, 5, 51, 72);
+    this->animationComponent->addAnimation("ATTACK", 5.f, 0, 0, 13, 0, 51, 72, false);
 }
 
 Player::~Player() {
@@ -37,13 +37,14 @@ void Player::update(const float &dt) {
     this->movementComponent->update(next);
     this->updateAnimation(dt);
     this->hitboxComponent->update();
+    this->sword.update(this->hitboxComponent->getPosition(), dt);
 }
 
 void Player::update(const MovementData &next, const float &dt) {
     this->movementComponent->update(next);
     this->updateAnimation(dt);
     this->hitboxComponent->update();
-    this->sword.update(this->hitboxComponent->getPosition());
+    this->sword.update(this->hitboxComponent->getPosition(), dt);
 }
 
 void Player::updateAnimation(const float &dt) {
@@ -81,7 +82,7 @@ void Player::flipAnimation(std::optional<DIRECTIONS> dir) {
         sprite.setScale(1.f, 1.f);
     }
     if (dir == DIRECTIONS::LEFT) {
-        sprite.setOrigin(51.f, 0.f);
+        sprite.setOrigin(this->getSize().x, 0.f);
         sprite.setScale(-1.f, 1.f);
     }
 }
@@ -100,5 +101,7 @@ float Player::getMaxHp() {
 
 void Player::render(sf::RenderTarget &target) {
     Entity::render(target);
-    this->sword.render(target);
+    if (this->animationComponent->getCurrentAnimationKey() == "ATTACK") {
+        this->sword.render(target);
+    }
 }

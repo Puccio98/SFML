@@ -9,7 +9,7 @@ private:
     sf::Sprite &sprite;
     sf::Texture &texture_sheet;
     std::map<std::string, Animation *> animations;
-    Animation *lastAnimation;
+    std::pair<std::string, Animation *> lastAnimation;
 
 public:
     AnimationComponent(sf::Sprite &sprite, sf::Texture &texture_sheet);
@@ -21,6 +21,8 @@ public:
                       int height, bool canBeInterrupted = true);
 
     void play(const std::string &key, const float &dt, const float &mod_percent = 1.f);
+
+    std::string getCurrentAnimationKey();
 };
 
 

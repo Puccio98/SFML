@@ -30,11 +30,11 @@ public:
 
     virtual ~EnemySpawner();
 
-    void update(float dt, std::vector<Enemy *> &enemies) override;
+    void update(float dt, std::vector<Entity *> &entities) override;
 
     void render(sf::RenderTarget &target) override;
 
-    void spawn(std::vector<Enemy *> &enemies);
+    void spawn(std::vector<Entity *> &entities);
 
     void clear();
 

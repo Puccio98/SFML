@@ -10,7 +10,7 @@
 class GameState : public State {
 private:
     Player *player{};
-    std::vector<Enemy *> enemies;
+    std::vector<Entity *> entities;
     PauseMenuState pauseMenuState;
     Tilemap *tilemap;
     sf::View view;
@@ -48,9 +48,11 @@ public:
 
     void initTilemap();
 
-    void updateEnemies(const float &dt);
+    void updateEntities(const float &dt);
 
-    void renderEnemies(int layerIndex, sf::RenderTarget *target = nullptr);
+    void renderEntities(int layerIndex, sf::RenderTarget *target = nullptr);
+
+    static bool compareByBaseline(const Entity *a, const Entity *b);
 };
 
 #endif //SFML_GAMESTATE_H

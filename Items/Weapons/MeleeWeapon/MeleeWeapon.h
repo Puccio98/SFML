@@ -4,7 +4,7 @@
 
 #include "../../Item.h"
 
-class MeleeWeapon : Item {
+class MeleeWeapon : public Item {
 private:
 protected:
     sf::Sprite weapon_sprite;
@@ -15,10 +15,13 @@ public:
 
     ~MeleeWeapon() override;
 
-    virtual void update(const sf::Vector2f &position) = 0;
+    void update(const sf::Vector2f &position, const float &dt) override = 0;
 
 
-    virtual void render(sf::RenderTarget &target) = 0;
+    void render(sf::RenderTarget &target) override = 0;
+
+private:
+    void updateAnimation(const float &dt) override = 0;
 
 };
 
