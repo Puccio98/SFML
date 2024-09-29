@@ -12,6 +12,8 @@ public:
 
     void updateAnimation(const float &dt) override;
 
+    void flipAnimation(std::optional<DIRECTIONS> dir);
+
     void initAnimationComponent() override;
 };
 
