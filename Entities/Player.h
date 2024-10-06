@@ -7,9 +7,11 @@
 class Player final : public Entity {
 private:
     Sword sword;
+    float invincibilityDuration;
+    sf::Clock invincibilityClock;
 
     //Initializer Functions
-    void initVariables();
+    void initVariables(std::pair<int, int> pair, std::pair<int, int> pair1);
 
 public:
     Player(float x, float y, sf::Texture &texture_sheet);
@@ -32,6 +34,10 @@ public:
     float getMaxHp();
 
     void flipAnimation(std::optional<DIRECTIONS> dir);
+
+    bool isInvincible() const;
+
+    void takeDamage();
 };
 
 

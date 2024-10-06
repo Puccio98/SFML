@@ -5,12 +5,13 @@
 
 class Enemy : public Entity {
 private:
-    void initVariables();
+    void initVariables(std::pair<int, int> pair, std::pair<int, int> pair1);
 
     // Create a static clock to track the time
     sf::Clock clock;
 public:
-    Enemy(float x, float y, sf::Texture &texture_sheet);
+    Enemy(float x, float y, sf::Texture &texture_sheet, std::pair<int, int> sprite_dimension,
+          std::pair<int, int> hitbox_dimension);
 
     void render(sf::RenderTarget &target) override;
 
@@ -25,6 +26,8 @@ public:
     void updateDirections(const float &dt);
 
     virtual void initAnimationComponent() = 0;
+
+    void initEnemyComponents(sf::Texture &texture);
 };
 
 

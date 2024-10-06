@@ -11,12 +11,18 @@ public:
 private:
     //Statistiche a caso
     float hpMax;
+
 public:
     float getHpMax() const;
 
     float getHp() const;
 
+    void applyDamage(float damage = 1.f);
+
+    void restoreHealth(float amount);
+
 private:
+
     float hp;
 };
 

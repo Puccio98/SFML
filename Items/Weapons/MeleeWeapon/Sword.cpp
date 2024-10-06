@@ -34,7 +34,7 @@ void Sword::initAnimationComponent() {
 
 void Sword::initVariables() {
     this->dimensions = sf::Vector2i(22, 21);
-    this->offset = sf::Vector2f(45, 35);
+    this->offset = sf::Vector2f(45, 5);
 }
 
 void Sword::initHitboxComponent() {

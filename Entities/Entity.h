@@ -10,10 +10,12 @@
 class Entity {
 
 private:
-    void initVariables();
+    void initVariables(std::pair<int, int> pair, std::pair<int, int> pair1);
 
 protected:
     sf::Sprite sprite;
+    std::pair<int, int> spriteDimension;
+    std::pair<int, int> hitboxDimension;
 
     unsigned layerIndex = 0;
     HitboxComponent *hitboxComponent{};
@@ -21,6 +23,9 @@ protected:
     AnimationComponent *animationComponent{};
     AttributeComponent *attributeComponent{};
     SkillComponent *skillComponent{};
+
+    void createHitboxComponent(float offset_x, float offset_y, float width, float height);
+
 public:
     explicit Entity();
 
@@ -31,7 +36,7 @@ public:
     //Accessors
     HitboxComponent *getHitboxComponent() const;
 
-    //Compoent Functons
+    //Component Functons
 
 
     void createMovementComponent(float maxVelocity, float acceleration, float deceleration);
@@ -40,7 +45,6 @@ public:
 
     void createSkillComponent();
 
-    void createHitboxComponent(float offset_x, float offset_y, float width, float height);
 
     void createAttributeComponent();
 

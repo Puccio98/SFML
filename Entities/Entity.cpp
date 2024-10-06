@@ -1,7 +1,7 @@
 #include "Entity.h"
 
 Entity::Entity() {
-    this->initVariables();
+    this->initVariables(std::pair<int, int>(), std::pair<int, int>());
 }
 
 Entity::~Entity() {
@@ -30,7 +30,7 @@ void Entity::setPosition(const float x, const float y) {
 }
 
 
-void Entity::initVariables() {
+void Entity::initVariables(std::pair<int, int> pair, std::pair<int, int> pair1) {
     this->hitboxComponent = nullptr;
     this->movementComponent = nullptr;
     this->animationComponent = nullptr;

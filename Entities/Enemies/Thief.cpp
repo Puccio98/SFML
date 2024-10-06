@@ -1,7 +1,8 @@
 #include "Thief.h"
 
 
-Thief::Thief(float x, float y, sf::Texture &textureSheet) : Enemy(x, y, textureSheet) {
+Thief::Thief(float x, float y, sf::Texture &textureSheet) : Enemy(x, y, textureSheet, std::pair(51, 72),
+                                                                  std::pair(51, 72)) {
     Thief::initAnimationComponent();
 }
 
@@ -48,10 +49,16 @@ void Thief::flipAnimation(std::optional<DIRECTIONS> dir) {
 }
 
 void Thief::initAnimationComponent() {
-    this->animationComponent->addAnimation("IDLE_DOWN", 10.f, 0, 0, 1, 0, 51, 72);
-    this->animationComponent->addAnimation("IDLE_UP", 5.f, 0, 1, 1, 1, 51, 72);
-    this->animationComponent->addAnimation("MOVING_DOWN", 5.f, 0, 2, 3, 2, 51, 72);
-    this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 5.f, 0, 3, 3, 3, 51, 72);
-    this->animationComponent->addAnimation("MOVING_SIDE_UP", 5.f, 0, 4, 3, 4, 51, 72);
-    this->animationComponent->addAnimation("MOVING_UP", 5.f, 0, 5, 3, 5, 51, 72);
+    this->animationComponent->addAnimation("IDLE_DOWN", 10.f, 0, 0, 1, 0, this->spriteDimension.first,
+                                           this->spriteDimension.second);
+    this->animationComponent->addAnimation("IDLE_UP", 5.f, 0, 1, 1, 1, this->spriteDimension.first,
+                                           this->spriteDimension.second);
+    this->animationComponent->addAnimation("MOVING_DOWN", 5.f, 0, 2, 3, 2, this->spriteDimension.first,
+                                           this->spriteDimension.second);
+    this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 5.f, 0, 3, 3, 3, this->spriteDimension.first,
+                                           this->spriteDimension.second);
+    this->animationComponent->addAnimation("MOVING_SIDE_UP", 5.f, 0, 4, 3, 4, this->spriteDimension.first,
+                                           this->spriteDimension.second);
+    this->animationComponent->addAnimation("MOVING_UP", 5.f, 0, 5, 3, 5, this->spriteDimension.first,
+                                           this->spriteDimension.second);
 }
