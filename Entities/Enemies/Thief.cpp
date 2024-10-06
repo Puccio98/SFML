@@ -1,8 +1,8 @@
 #include "Thief.h"
 
 
-Thief::Thief(float x, float y, sf::Texture &textureSheet) : Enemy(x, y, textureSheet) {
-    this->initVariables();
+Thief::Thief(float x, float y, sf::Texture &textureSheet) : Enemy(x, y, textureSheet, std::pair(51, 72),
+                                                                  std::pair(51, 72)) {
     Thief::initAnimationComponent();
 }
 
@@ -61,10 +61,4 @@ void Thief::initAnimationComponent() {
                                            this->spriteDimension.second);
     this->animationComponent->addAnimation("MOVING_UP", 5.f, 0, 5, 3, 5, this->spriteDimension.first,
                                            this->spriteDimension.second);
-}
-
-
-void Thief::initVariables() {
-    this->spriteDimension = std::pair(51, 72);
-    this->hitboxDimension = std::pair(51, 72);
 }

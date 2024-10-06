@@ -1,7 +1,7 @@
 #include "Player.h"
 
 Player::Player(float x, float y, sf::Texture &texture_sheet) {
-    this->initVariables();
+    this->initVariables(std::pair<int, int>(), std::pair<int, int>());
     this->setPosition(x, y);
 
     this->createHitboxComponent(0.f, 0.f, this->hitboxDimension.first, this->hitboxDimension.second);
@@ -32,7 +32,7 @@ Player::~Player() {
 
 //Initializer Functions
 
-void Player::initVariables() {
+void Player::initVariables(std::pair<int, int> pair, std::pair<int, int> pair1) {
     this->spriteDimension = std::pair(51, 72);
     this->hitboxDimension = std::pair(51, 72);
 }

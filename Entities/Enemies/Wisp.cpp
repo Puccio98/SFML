@@ -1,7 +1,7 @@
 #include "Wisp.h"
 
-Wisp::Wisp(float x, float y, sf::Texture &textureSheet) : Enemy(x, y, textureSheet) {
-    this->initVariables();
+Wisp::Wisp(float x, float y, sf::Texture &textureSheet) : Enemy(x, y, textureSheet, std::pair(51, 72),
+                                                                std::pair(51, 72)) {
     Wisp::initAnimationComponent();
 }
 
@@ -15,9 +15,4 @@ void Wisp::initAnimationComponent() {
 void Wisp::updateAnimation(const float &dt) {
     // Play the idle animation
     this->animationComponent->play("IDLE", dt);
-}
-
-void Wisp::initVariables() {
-    this->spriteDimension = std::pair(51, 72);
-    this->hitboxDimension = std::pair(51, 72);
 }

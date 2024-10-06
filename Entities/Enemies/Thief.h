@@ -15,8 +15,6 @@ public:
     void flipAnimation(std::optional<DIRECTIONS> dir);
 
     void initAnimationComponent() override;
-
-    void initVariables();
 };
 
 

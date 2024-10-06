@@ -10,7 +10,7 @@
 class Entity {
 
 private:
-    void initVariables();
+    void initVariables(std::pair<int, int> pair, std::pair<int, int> pair1);
 
 protected:
     sf::Sprite sprite;
@@ -23,6 +23,9 @@ protected:
     AnimationComponent *animationComponent{};
     AttributeComponent *attributeComponent{};
     SkillComponent *skillComponent{};
+
+    void createHitboxComponent(float offset_x, float offset_y, float width, float height);
+
 public:
     explicit Entity();
 
@@ -42,7 +45,6 @@ public:
 
     void createSkillComponent();
 
-    void createHitboxComponent(float offset_x, float offset_y, float width, float height);
 
     void createAttributeComponent();
 

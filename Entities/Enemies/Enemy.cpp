@@ -1,14 +1,10 @@
 #include "Enemy.h"
 
-Enemy::Enemy(float x, float y, sf::Texture &texture_sheet) {
-    this->initVariables();
+Enemy::Enemy(float x, float y, sf::Texture &texture_sheet, std::pair<int, int> sprite_dimension,
+             std::pair<int, int> hitbox_dimension) {
+    this->initVariables(sprite_dimension, hitbox_dimension);
     this->setPosition(x, y);
-
-    this->createHitboxComponent(0, 0, 51, 72);
-    this->createMovementComponent(100.f, 2000.f, 900.f);
-    this->createAnimationComponent(texture_sheet);
-    this->createAttributeComponent();
-    this->createSkillComponent();
+    this->initEnemyComponents(texture_sheet);
 }
 
 Enemy::~Enemy() {
@@ -34,12 +30,11 @@ void Enemy::update(const MovementData &next, const float &dt) {
     this->updateAnimation(dt);
     this->hitboxComponent->update();
     this->updateDirections(dt);
-//    std::cout << "velocita x " << this->movementComponent->getVelocity().x << std::endl;
-//    std::cout << "velocita y " << this->movementComponent->getVelocity().y << std::endl;
 }
 
-void Enemy::initVariables() {
-
+void Enemy::initVariables(std::pair<int, int> sprite_dimension, std::pair<int, int> hitbox_dimension) {
+    this->spriteDimension = sprite_dimension;
+    this->hitboxDimension = hitbox_dimension;
 }
 
 void Enemy::updateDirections(const float &dt) {
@@ -58,4 +53,12 @@ void Enemy::updateDirections(const float &dt) {
         // Restart the clock to measure the next 5 seconds
         clock.restart();
     }
+}
+
+void Enemy::initEnemyComponents(sf::Texture &texture) {
+    this->createHitboxComponent(0, 0, this->hitboxDimension.first, this->hitboxDimension.second);
+    this->createMovementComponent(100.f, 2000.f, 900.f);
+    this->createAnimationComponent(texture);
+    this->createAttributeComponent();
+    this->createSkillComponent();
 }

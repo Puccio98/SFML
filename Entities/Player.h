@@ -9,7 +9,7 @@ private:
     Sword sword;
 
     //Initializer Functions
-    void initVariables();
+    void initVariables(std::pair<int, int> pair, std::pair<int, int> pair1);
 
 public:
     Player(float x, float y, sf::Texture &texture_sheet);
