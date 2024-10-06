@@ -1,10 +1,11 @@
 #include "Player.h"
 
 Player::Player(float x, float y, sf::Texture &texture_sheet) {
-    this->initVariables(std::pair<int, int>(), std::pair<int, int>());
+    this->initVariables(std::pair(51, 72), std::pair<int, int>(51, 42));
     this->setPosition(x, y);
 
-    this->createHitboxComponent(0.f, 0.f, this->hitboxDimension.first, this->hitboxDimension.second);
+    this->createHitboxComponent(0.f, this->spriteDimension.second - this->hitboxDimension.second,
+                                this->hitboxDimension.first, this->hitboxDimension.second);
     this->createMovementComponent(300.f, 3800.f, 1800.f);
     this->createAnimationComponent(texture_sheet);
     this->createAttributeComponent();
@@ -32,9 +33,9 @@ Player::~Player() {
 
 //Initializer Functions
 
-void Player::initVariables(std::pair<int, int> pair, std::pair<int, int> pair1) {
-    this->spriteDimension = std::pair(51, 72);
-    this->hitboxDimension = std::pair(51, 72);
+void Player::initVariables(std::pair<int, int> sprite_dimension, std::pair<int, int> hitbox_dimension) {
+    this->spriteDimension = sprite_dimension;
+    this->hitboxDimension = hitbox_dimension;
     this->invincibilityDuration = 1;
 }
 
