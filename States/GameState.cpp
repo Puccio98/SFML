@@ -32,6 +32,9 @@ void GameState::update(const float &dt) {
         this->updateEntities(dt);
         this->tilemap->update(*this->stateData.window, edd, dt, entities);
         this->playerGUI->update(dt);
+        if (this->player->getCurrentHp() == 0) {
+            this->quit = true;
+        }
     } else {
         pauseMenuState.update(dt);
     }
