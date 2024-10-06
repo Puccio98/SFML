@@ -14,6 +14,8 @@ private:
 
 protected:
     sf::Sprite sprite;
+    std::pair<int, int> spriteDimension;
+    std::pair<int, int> hitboxDimension;
 
     unsigned layerIndex = 0;
     HitboxComponent *hitboxComponent{};

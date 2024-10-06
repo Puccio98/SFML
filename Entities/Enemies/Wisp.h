@@ -13,6 +13,8 @@ public:
     void updateAnimation(const float &dt) override;
 
     void initAnimationComponent() override;
+
+    void initVariables();
 };
 
 

@@ -4,19 +4,26 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
     this->initVariables();
     this->setPosition(x, y);
 
-    this->createHitboxComponent(0.f, 0.f, 51, 72);
+    this->createHitboxComponent(0.f, 0.f, this->hitboxDimension.first, this->hitboxDimension.second);
     this->createMovementComponent(300.f, 3800.f, 1800.f);
     this->createAnimationComponent(texture_sheet);
     this->createAttributeComponent();
     this->createSkillComponent();
 
-    this->animationComponent->addAnimation("IDLE_DOWN", 5.f, 0, 0, 13, 0, 51, 72);
-    this->animationComponent->addAnimation("IDLE_UP", 5.f, 0, 1, 13, 1, 51, 72);
-    this->animationComponent->addAnimation("MOVING_DOWN", 5.f, 0, 2, 3, 2, 51, 72);
-    this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 5.f, 0, 3, 3, 3, 51, 72);
-    this->animationComponent->addAnimation("MOVING_SIDE_UP", 5.f, 0, 4, 3, 4, 51, 72);
-    this->animationComponent->addAnimation("MOVING_UP", 5.f, 0, 5, 7, 5, 51, 72);
-    this->animationComponent->addAnimation("ATTACK", 5.f, 0, 0, 13, 0, 51, 72, false);
+    this->animationComponent->addAnimation("IDLE_DOWN", 5.f, 0, 0, 13, 0, this->spriteDimension.first,
+                                           this->spriteDimension.second);
+    this->animationComponent->addAnimation("IDLE_UP", 5.f, 0, 1, 13, 1, this->spriteDimension.first,
+                                           this->spriteDimension.second);
+    this->animationComponent->addAnimation("MOVING_DOWN", 5.f, 0, 2, 3, 2, this->spriteDimension.first,
+                                           this->spriteDimension.second);
+    this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 5.f, 0, 3, 3, 3, this->spriteDimension.first,
+                                           this->spriteDimension.second);
+    this->animationComponent->addAnimation("MOVING_SIDE_UP", 5.f, 0, 4, 3, 4, this->spriteDimension.first,
+                                           this->spriteDimension.second);
+    this->animationComponent->addAnimation("MOVING_UP", 5.f, 0, 5, 7, 5, this->spriteDimension.first,
+                                           this->spriteDimension.second);
+    this->animationComponent->addAnimation("ATTACK", 5.f, 0, 0, 13, 0, this->spriteDimension.first,
+                                           this->spriteDimension.second, false);
 }
 
 Player::~Player() {
@@ -26,7 +33,8 @@ Player::~Player() {
 //Initializer Functions
 
 void Player::initVariables() {
-
+    this->spriteDimension = std::pair(51, 72);
+    this->hitboxDimension = std::pair(51, 72);
 }
 
 
