@@ -35,6 +35,11 @@ Player::~Player() {
 void Player::initVariables(std::pair<int, int> pair, std::pair<int, int> pair1) {
     this->spriteDimension = std::pair(51, 72);
     this->hitboxDimension = std::pair(51, 72);
+    this->invincibilityDuration = 1;
+}
+
+bool Player::isInvincible() const {
+    return invincibilityClock.getElapsedTime().asSeconds() < invincibilityDuration;
 }
 
 
@@ -112,4 +117,10 @@ void Player::render(sf::RenderTarget &target) {
     if (this->animationComponent->getCurrentAnimationKey() == "ATTACK") {
         this->sword.render(target);
     }
+}
+
+void Player::takeDamage() {
+    std::cout << "mi son fatto male" << std::endl;
+    this->invincibilityClock.restart();
+    this->attributeComponent->applyDamage();
 }

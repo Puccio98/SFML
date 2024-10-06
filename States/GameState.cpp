@@ -156,10 +156,10 @@ void GameState::updateEntities(const float &dt) {
     }
 
     for (auto entity: this->entities) {
-        if (player != entity && player->getLayer() == entity->getLayer()) {
+        if (player != entity && player->getLayer() == entity->getLayer() && !player->isInvincible()) {
             if (player->getHitboxComponent()->checkIntersect(
                     entity->getHitboxComponent()->getHitbox().getGlobalBounds())) {
-                std::cout << "mi son fatto male " << std::endl;
+                player->takeDamage();
             }
         }
     }

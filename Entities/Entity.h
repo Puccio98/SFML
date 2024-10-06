@@ -36,7 +36,7 @@ public:
     //Accessors
     HitboxComponent *getHitboxComponent() const;
 
-    //Compoent Functons
+    //Component Functons
 
 
     void createMovementComponent(float maxVelocity, float acceleration, float deceleration);
