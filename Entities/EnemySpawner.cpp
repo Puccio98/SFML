@@ -27,7 +27,7 @@ void EnemySpawner::initTextures() {
     std::string enemy_texture_path;
     switch (type) {
         case ENEMY_TYPES::WISP:
-            enemy_texture_path = "Resources/images/sprites/entities/enemies/wisp/wisp_sheet_x3.png";
+            enemy_texture_path = "Resources/images/sprites/entities/enemies/grim_reaper/16x16 Grim Reaper.png";
             break;
         case ENEMY_TYPES::THIEF:
             enemy_texture_path = "Resources/images/sprites/entities/enemies/thief/thief_sheet_x3.png";
