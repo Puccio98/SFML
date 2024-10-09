@@ -1,29 +1,29 @@
 #include "Player.h"
 
 Player::Player(float x, float y, sf::Texture &texture_sheet) {
-    this->initVariables(std::pair(51, 72), std::pair<int, int>(51, 42));
+    this->initVariables(std::pair(70, 80), std::pair<int, int>(30, 25));
     this->setPosition(x, y);
 
-    this->createHitboxComponent(0.f, this->spriteDimension.second - this->hitboxDimension.second,
+    this->createHitboxComponent(20.f, this->spriteDimension.second - this->hitboxDimension.second,
                                 this->hitboxDimension.first, this->hitboxDimension.second);
     this->createMovementComponent(300.f, 3800.f, 1800.f);
     this->createAnimationComponent(texture_sheet);
     this->createAttributeComponent();
     this->createSkillComponent();
 
-    this->animationComponent->addAnimation("IDLE_DOWN", 5.f, 0, 0, 13, 0, this->spriteDimension.first,
+    this->animationComponent->addAnimation("IDLE_DOWN", 4.f, 0, 0, 1, 0, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("IDLE_UP", 5.f, 0, 1, 13, 1, this->spriteDimension.first,
+    this->animationComponent->addAnimation("IDLE_UP", 4.f, 0, 1, 1, 1, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("MOVING_DOWN", 5.f, 0, 2, 3, 2, this->spriteDimension.first,
+    this->animationComponent->addAnimation("MOVING_DOWN", 4.f, 0, 2, 3, 2, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 5.f, 0, 3, 3, 3, this->spriteDimension.first,
+    this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 4.f, 0, 3, 3, 3, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("MOVING_SIDE_UP", 5.f, 0, 4, 3, 4, this->spriteDimension.first,
+    this->animationComponent->addAnimation("MOVING_SIDE_UP", 4.f, 0, 4, 3, 4, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("MOVING_UP", 5.f, 0, 5, 7, 5, this->spriteDimension.first,
+    this->animationComponent->addAnimation("MOVING_UP", 4.f, 0, 5, 3, 5, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("ATTACK", 5.f, 0, 0, 13, 0, this->spriteDimension.first,
+    this->animationComponent->addAnimation("ATTACK", 4.f, 0, 0, 1, 0, this->spriteDimension.first,
                                            this->spriteDimension.second, false);
 }
 
