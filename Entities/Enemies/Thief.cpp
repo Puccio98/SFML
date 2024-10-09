@@ -43,7 +43,7 @@ void Thief::flipAnimation(std::optional<DIRECTIONS> dir) {
         sprite.setScale(1.f, 1.f);
     }
     if (dir == DIRECTIONS::LEFT) {
-        sprite.setOrigin(this->getSize().x, 0.f);
+        sprite.setOrigin(this->getHitboxSize().x, 0.f);
         sprite.setScale(-1.f, 1.f);
     }
 }

@@ -54,12 +54,20 @@ void Entity::createSkillComponent() {
     this->skillComponent = new SkillComponent();
 }
 
-const sf::Vector2f Entity::getPosition() const {
+const sf::Vector2f Entity::getHitboxPosition() const {
     return this->hitboxComponent->getPosition();
 }
 
-const sf::Vector2f Entity::getSize() const {
+const sf::Vector2f Entity::getHitboxSize() const {
     return this->hitboxComponent->getSize();
+}
+
+const sf::Vector2f Entity::getSpritePosition() const {
+    return this->sprite.getPosition();
+}
+
+const sf::Vector2f Entity::getSpriteSize() const {
+    return {static_cast<float>(this->spriteDimension.first), static_cast<float>(this->spriteDimension.second)};
 }
 
 MovementComponent *Entity::getMovementComponent() const {

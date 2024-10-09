@@ -53,9 +53,13 @@ public:
     //Functions
     virtual void setPosition(float x, float y);
 
-    virtual const sf::Vector2f getPosition() const;
+    virtual const sf::Vector2f getHitboxPosition() const;
 
-    virtual const sf::Vector2f getSize() const;
+    virtual const sf::Vector2f getHitboxSize() const;
+
+    virtual const sf::Vector2f getSpritePosition() const;
+
+    virtual const sf::Vector2f getSpriteSize() const;
 
     virtual void setDirection(sf::Vector2f direction, const float &dt);
 

@@ -21,7 +21,7 @@ GameState::~GameState() {
 }
 
 void GameState::update(const float &dt) {
-    EntityDimensionData edd(this->player->getHitboxComponent()->getPosition(), this->player->getSize());
+    EntityDimensionData edd(this->player->getHitboxComponent()->getPosition(), this->player->getHitboxSize());
 
     //per debug
     this->updateMouseDebug(this->view);
@@ -47,7 +47,7 @@ void GameState::render(sf::RenderTarget *target = nullptr) {
     // renderizziamo mappa e giocatore tramite view, poi crea una Callback function o simile per gestire cambio di view in renderizzazione
     target->setView(this->view);
     for (int layerIndex = 0; layerIndex <= this->tilemap->getMaxLayerIndex(); layerIndex++) {
-        EntityDimensionData edd(this->player->getHitboxComponent()->getPosition(), this->player->getSize());
+        EntityDimensionData edd(this->player->getHitboxComponent()->getPosition(), this->player->getHitboxSize());
         this->tilemap->renderLayer(*target, edd, layerIndex);
         this->renderEntities(layerIndex, target);
     }
@@ -123,8 +123,8 @@ void GameState::initView() {
 }
 
 void GameState::updateView(const float &dt) {
-    auto pos = this->player->getPosition();
-    auto size = this->player->getSize();
+    auto pos = this->player->getHitboxPosition();
+    auto size = this->player->getHitboxSize();
     //floor serve perchè setCenter sarebbe meglio passargli degli interi per non sminchiare il renderLayer
     this->view.setCenter(std::floor(pos.x + size.x / 2), std::floor(pos.y + size.y / 2));
 }
@@ -178,5 +178,5 @@ void GameState::renderEntities(int layerIndex, sf::RenderTarget *target) {
 }
 
 bool GameState::compareByBaseline(const Entity *a, const Entity *b) {
-    return (a->getPosition().y + a->getSize().y) < (b->getPosition().y + b->getSize().y);
+    return (a->getHitboxPosition().y + a->getHitboxSize().y) < (b->getHitboxPosition().y + b->getHitboxSize().y);
 }

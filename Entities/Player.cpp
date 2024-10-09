@@ -96,7 +96,7 @@ void Player::flipAnimation(std::optional<DIRECTIONS> dir) {
         sprite.setScale(1.f, 1.f);
     }
     if (dir == DIRECTIONS::LEFT) {
-        sprite.setOrigin(this->getSize().x, 0.f);
+        sprite.setOrigin(this->getSpriteSize().x, 0.f);
         sprite.setScale(-1.f, 1.f);
     }
 }
@@ -121,7 +121,6 @@ void Player::render(sf::RenderTarget &target) {
 }
 
 void Player::takeDamage() {
-    std::cout << "mi son fatto male" << std::endl;
     this->invincibilityClock.restart();
     this->attributeComponent->applyDamage();
 }
