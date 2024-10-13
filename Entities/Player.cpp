@@ -11,9 +11,9 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
     this->createAttributeComponent();
     this->createSkillComponent();
 
-    this->animationComponent->addAnimation("IDLE_DOWN", 4.f, 0, 0, 1, 0, this->spriteDimension.first,
+    this->animationComponent->addAnimation("IDLE_DOWN", 5.f, 0, 0, 1, 0, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("IDLE_UP", 4.f, 0, 1, 1, 1, this->spriteDimension.first,
+    this->animationComponent->addAnimation("IDLE_UP", 5.f, 0, 1, 1, 1, this->spriteDimension.first,
                                            this->spriteDimension.second);
     this->animationComponent->addAnimation("MOVING_DOWN", 4.f, 0, 2, 3, 2, this->spriteDimension.first,
                                            this->spriteDimension.second);
@@ -23,7 +23,9 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
                                            this->spriteDimension.second);
     this->animationComponent->addAnimation("MOVING_UP", 4.f, 0, 5, 3, 5, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("ATTACK", 4.f, 0, 0, 1, 0, this->spriteDimension.first,
+    this->animationComponent->addAnimation("ATTACK_DOWN", 2.f, 0, 6, 7, 6, this->spriteDimension.first,
+                                           this->spriteDimension.second, false);
+    this->animationComponent->addAnimation("ATTACK_UP", 2.f, 0, 7, 7, 7, this->spriteDimension.first,
                                            this->spriteDimension.second, false);
 }
 
@@ -102,7 +104,12 @@ void Player::flipAnimation(std::optional<DIRECTIONS> dir) {
 }
 
 void Player::attack(const float &dt) {
-    this->animationComponent->play("ATTACK", dt);
+    MovementData md = movementComponent->getMovementData();
+    if (md.facingDirection.second == DIRECTIONS::DOWN) {
+        this->animationComponent->play("ATTACK_DOWN", dt);
+    } else if (md.facingDirection.second == DIRECTIONS::UP) {
+        this->animationComponent->play("ATTACK_UP", dt);
+    }
 }
 
 float Player::getCurrentHp() {
@@ -115,7 +122,7 @@ float Player::getMaxHp() {
 
 void Player::render(sf::RenderTarget &target) {
     Entity::render(target);
-    if (this->animationComponent->getCurrentAnimationKey() == "ATTACK") {
+    if (this->animationComponent->getCurrentAnimationKey() == "ATTACK_DOWN" || this->animationComponent->getCurrentAnimationKey() == "ATTACK_UP" ) {
         this->sword.render(target);
     }
 }
