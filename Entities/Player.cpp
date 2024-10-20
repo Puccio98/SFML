@@ -11,21 +11,21 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
     this->createAttributeComponent();
     this->createSkillComponent();
 
-    this->animationComponent->addAnimation("IDLE_DOWN", 5.f, 0, 0, 1, 0, this->spriteDimension.first,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::IDLE_DOWN), 5.f, 0, 0, 1, 0, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("IDLE_UP", 5.f, 0, 1, 1, 1, this->spriteDimension.first,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::IDLE_UP), 5.f, 0, 1, 1, 1, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("MOVING_DOWN", 4.f, 0, 2, 3, 2, this->spriteDimension.first,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::MOVING_DOWN), 4.f, 0, 2, 3, 2, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 4.f, 0, 3, 3, 3, this->spriteDimension.first,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::MOVING_SIDE_DOWN), 4.f, 0, 3, 3, 3, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("MOVING_SIDE_UP", 4.f, 0, 4, 3, 4, this->spriteDimension.first,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::MOVING_SIDE_UP), 4.f, 0, 4, 3, 4, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("MOVING_UP", 4.f, 0, 5, 3, 5, this->spriteDimension.first,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::MOVING_UP), 4.f, 0, 5, 3, 5, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("ATTACK_DOWN", 2.f, 0, 6, 7, 6, this->spriteDimension.first,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::ATTACK_DOWN), 2.f, 0, 6, 7, 6, this->spriteDimension.first,
                                            this->spriteDimension.second, false);
-    this->animationComponent->addAnimation("ATTACK_UP", 2.f, 0, 7, 7, 7, this->spriteDimension.first,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::ATTACK_UP), 2.f, 0, 7, 7, 7, this->spriteDimension.first,
                                            this->spriteDimension.second, false);
 }
 
@@ -39,56 +39,64 @@ void Player::initVariables(std::pair<int, int> sprite_dimension, std::pair<int, 
     this->spriteDimension = sprite_dimension;
     this->hitboxDimension = hitbox_dimension;
     this->invincibilityDuration = 1;
+    this->nextAnimation = PLAYER_ANIMATIONS::IDLE_DOWN;
 }
 
 bool Player::isInvincible() const {
     return invincibilityClock.getElapsedTime().asSeconds() < invincibilityDuration;
 }
 
-
 void Player::update(const float &dt) {
     // Se chiamato senza i dati del movimento li calcola autonomamente assumendo che possa muoversi in quelle direzioni/punti
     MovementData next = this->movementComponent->nextMovementData(dt);
 
     this->movementComponent->update(next);
-    this->updateAnimation(dt);
+    this->updateCurrentAnimation(dt);
+    animationComponent->play(getAnimationKey(this->nextAnimation), dt);
+
     this->hitboxComponent->update();
-    this->sword.update(this->hitboxComponent->getPosition(), dt);
-}
+    if (this->animationComponent->getCurrentAnimation() == this->getAnimationKey(PLAYER_ANIMATIONS::ATTACK_DOWN) || this->animationComponent->getCurrentAnimation() == this->getAnimationKey(PLAYER_ANIMATIONS::ATTACK_UP) ) {
+        this->sword.update(this->hitboxComponent->getPosition(), this->animationComponent->getCurrentAnimation(), dt);
+    }}
 
 void Player::update(const MovementData &next, const float &dt) {
     this->movementComponent->update(next);
-    this->updateAnimation(dt);
+    this->updateCurrentAnimation(dt);
+    animationComponent->play(getAnimationKey(this->nextAnimation), dt);
+
     this->hitboxComponent->update();
-    this->sword.update(this->hitboxComponent->getPosition(), dt);
+    if (this->animationComponent->getCurrentAnimation() == this->getAnimationKey(PLAYER_ANIMATIONS::ATTACK_DOWN) || this->animationComponent->getCurrentAnimation() == this->getAnimationKey(PLAYER_ANIMATIONS::ATTACK_UP) ) {
+        this->sword.update(this->hitboxComponent->getPosition(), getAnimationKey(this->nextAnimation), dt);
+    }
 }
 
-void Player::updateAnimation(const float &dt) {
+void Player::updateCurrentAnimation(const float &dt) {
     MovementData md = movementComponent->getMovementData();
-    std::string animation;
 
     if (movementComponent->isState(MOVEMENT_STATES::IDLE)) {
         if (md.facingDirection.second == DIRECTIONS::DOWN) {
-            animation = "IDLE_DOWN";
+            this->nextAnimation = PLAYER_ANIMATIONS::IDLE_DOWN;
         } else if (md.facingDirection.second == DIRECTIONS::UP) {
-            animation = "IDLE_UP";
+            this->nextAnimation = PLAYER_ANIMATIONS::IDLE_UP;
         }
     } else if (movementComponent->isState(MOVEMENT_STATES::MOVING)) {
         if (md.facingDirection.second == DIRECTIONS::DOWN) {
-            animation = "MOVING_DOWN";
+            this->nextAnimation = PLAYER_ANIMATIONS::MOVING_DOWN;
             if (md.facingDirection.first != std::nullopt) {
-                animation = "MOVING_SIDE_DOWN";
+                this->nextAnimation = PLAYER_ANIMATIONS::MOVING_SIDE_DOWN;
             }
-
         } else if (md.facingDirection.second == DIRECTIONS::UP) {
-            animation = "MOVING_UP";
+            this->nextAnimation = PLAYER_ANIMATIONS::MOVING_UP;
             if (md.facingDirection.first != std::nullopt) {
-                animation = "MOVING_SIDE_UP";
+                this->nextAnimation = PLAYER_ANIMATIONS::MOVING_SIDE_UP;
             }
         }
         this->flipAnimation(md.facingDirection.first);
+    } else if (md.facingDirection.second == DIRECTIONS::DOWN) {
+        this->animationComponent->play(getAnimationKey(PLAYER_ANIMATIONS::ATTACK_DOWN), dt);
+    } else if (md.facingDirection.second == DIRECTIONS::UP) {
+        this->animationComponent->play(getAnimationKey(PLAYER_ANIMATIONS::ATTACK_UP), dt);
     }
-    animationComponent->play(animation, dt);
 }
 
 void Player::flipAnimation(std::optional<DIRECTIONS> dir) {
@@ -105,11 +113,8 @@ void Player::flipAnimation(std::optional<DIRECTIONS> dir) {
 
 void Player::attack(const float &dt) {
     MovementData md = movementComponent->getMovementData();
-    if (md.facingDirection.second == DIRECTIONS::DOWN) {
-        this->animationComponent->play("ATTACK_DOWN", dt);
-    } else if (md.facingDirection.second == DIRECTIONS::UP) {
-        this->animationComponent->play("ATTACK_UP", dt);
-    }
+    this->nextAnimation = md.facingDirection.second == DIRECTIONS::DOWN ? PLAYER_ANIMATIONS::ATTACK_DOWN : PLAYER_ANIMATIONS::ATTACK_UP;
+    this->animationComponent->play(getAnimationKey(nextAnimation), dt);
 }
 
 float Player::getCurrentHp() {
@@ -122,7 +127,7 @@ float Player::getMaxHp() {
 
 void Player::render(sf::RenderTarget &target) {
     Entity::render(target);
-    if (this->animationComponent->getCurrentAnimationKey() == "ATTACK_DOWN" || this->animationComponent->getCurrentAnimationKey() == "ATTACK_UP" ) {
+    if (this->animationComponent->getCurrentAnimation() == this->getAnimationKey(PLAYER_ANIMATIONS::ATTACK_DOWN) || this->animationComponent->getCurrentAnimation() == this->getAnimationKey(PLAYER_ANIMATIONS::ATTACK_UP) ) {
         this->sword.render(target);
     }
 }
@@ -130,4 +135,19 @@ void Player::render(sf::RenderTarget &target) {
 void Player::takeDamage() {
     this->invincibilityClock.restart();
     this->attributeComponent->applyDamage();
+}
+
+std::string Player::getAnimationKey(PLAYER_ANIMATIONS animation) {
+    switch (animation) {
+        case PLAYER_ANIMATIONS::IDLE_DOWN: return "IDLE_DOWN";
+        case PLAYER_ANIMATIONS::IDLE_UP: return "IDLE_UP";
+        case PLAYER_ANIMATIONS::MOVING_DOWN: return "MOVING_DOWN";
+        case PLAYER_ANIMATIONS::MOVING_SIDE_DOWN: return "MOVING_SIDE_DOWN";
+        case PLAYER_ANIMATIONS::MOVING_SIDE_UP: return "MOVING_SIDE_UP";
+        case PLAYER_ANIMATIONS::MOVING_UP: return "MOVING_UP";
+        case PLAYER_ANIMATIONS::ATTACK_DOWN: return "ATTACK_DOWN";
+        case PLAYER_ANIMATIONS::ATTACK_UP: return "ATTACK_UP";
+        default:
+            return "UNKNOWN";
+    }
 }

@@ -3,12 +3,14 @@
 
 #include "Entity.h"
 #include "../Items/Weapons/MeleeWeapon/Sword.h"
+#include "../enums/player_animations.cpp"
 
 class Player final : public Entity {
 private:
     Sword sword;
     float invincibilityDuration;
     sf::Clock invincibilityClock;
+    PLAYER_ANIMATIONS nextAnimation;
 
     //Initializer Functions
     void initVariables(std::pair<int, int> pair, std::pair<int, int> pair1);
@@ -27,7 +29,7 @@ public:
 
     void attack(const float &dt);
 
-    void updateAnimation(const float &dt);
+    void updateCurrentAnimation(const float &dt);
 
     float getCurrentHp();
 
@@ -38,6 +40,8 @@ public:
     bool isInvincible() const;
 
     void takeDamage();
+
+    std::string getAnimationKey(PLAYER_ANIMATIONS animation);
 };
 
 

@@ -10,7 +10,7 @@ public:
 
     ~Sword() override;
 
-
+    void update(const sf::Vector2f &position, std::string animation, const float &dt) override;
     void update(const sf::Vector2f &position, const float &dt) override;
 
     void render(sf::RenderTarget &target) override;
@@ -19,6 +19,8 @@ private:
     void initVariables();
 
     void initAnimationComponent();
+
+    void updateAnimation(std::string animation, const float &dt);
 
     void updateAnimation(const float &dt) override;
 

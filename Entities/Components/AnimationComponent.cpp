@@ -36,7 +36,7 @@ void AnimationComponent::addAnimation(const std::string &key,
                                           frames_x, frames_y, width, height, canBeInterrupted);
 }
 
-std::string AnimationComponent::getCurrentAnimationKey() {
+std::string AnimationComponent::getCurrentAnimation() {
     return this->lastAnimation.first;
 }
 

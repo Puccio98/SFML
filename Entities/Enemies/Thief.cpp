@@ -1,6 +1,5 @@
 #include "Thief.h"
 
-
 Thief::Thief(float x, float y, sf::Texture &textureSheet) : Enemy(x, y, textureSheet, std::pair(51, 72),
                                                                   std::pair(51, 72)) {
     Thief::initAnimationComponent();

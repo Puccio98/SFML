@@ -22,7 +22,7 @@ public:
 
     void play(const std::string &key, const float &dt, const float &mod_percent = 1.f);
 
-    std::string getCurrentAnimationKey();
+    std::string getCurrentAnimation();
 };
 
 
