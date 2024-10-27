@@ -18,17 +18,20 @@ public:
     /**
      * Durata di una singola texture dell'animazione
      */
+    const float frameDuration;
+    const float animationDuration;
+    float frameTimer;
     float animationTimer;
-    float timer;
     int width;
     int height;
     sf::IntRect startRect;
     sf::IntRect currentRect;
     sf::IntRect endRect;
     bool canBeInterrupted = true;
+    bool finished = false;
 
     Animation(sf::Sprite &sprite, sf::Texture &texture_sheet, float animation_timer, int start_frame_x,
-              int start_frame_y, int frames_x, int frames_y, int width, int height, bool canBeInterrupted);
+              int start_frame_y, int end_frames_x, int end_frames_y, int width, int height, bool canBeInterrupted);
 
     virtual ~Animation();
 

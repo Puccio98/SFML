@@ -32,6 +32,8 @@ public:
 
     virtual void updateAnimation(const float &dt) = 0;
 
+    AnimationComponent *getAnimationComponent() const;
+
 };
 
 

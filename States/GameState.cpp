@@ -25,6 +25,7 @@ void GameState::update(const float &dt) {
 
     //per debug
     this->updateMouseDebug(this->view);
+    
     if (!pauseMenuState.isPaused()) {
         State::update(dt); //, this->view
         this->updateView(dt);
