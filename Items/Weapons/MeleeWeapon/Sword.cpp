@@ -3,7 +3,7 @@
 
 Sword::Sword() {
     if (!this->weapon_texture.loadFromFile(
-            "Resources/images/sprites/entities/player/player_weapons/sword/sword_sheet_x2.png")) {
+            "Resources/images/sprites/entities/player/player_weapons/sword/sword_sheet_test.png")) {
         throw ("ERROR::PLAYER::COULD NOT LOAD WEAPON TEXTURE");
     };
     this->initVariables();
@@ -16,7 +16,7 @@ Sword::~Sword() = default;
 void Sword::update(const sf::Vector2f &position, std::string animation, const float &dt) {
     this->weapon_sprite.setPosition(position + this->offset);
     this->hitboxComponent->update();
-    this->updateAnimation(animation, dt);
+    this->animationComponent->play(animation, dt);
 }
 
 void Sword::render(sf::RenderTarget &target) {
@@ -24,16 +24,12 @@ void Sword::render(sf::RenderTarget &target) {
     this->hitboxComponent->render(target);
 }
 
-void Sword::updateAnimation(std::string animation, const float &dt) {
-    std::cout << "animation key " << animation << std::endl;
-    this->animationComponent->play(animation, dt);
-}
-
 void Sword::initAnimationComponent() {
     this->animationComponent = new AnimationComponent(this->weapon_sprite, this->weapon_texture);
-    this->animationComponent->addAnimation("ATTACK_DOWN", 2.f, 0, 0, 7, 0, this->dimensions.x, this->dimensions.y,
+    this->animationComponent->addAnimation("ATTACK_DOWN", 4.f, 0, 0, 7, 0, this->dimensions.x, this->dimensions.y,
                                            false);
-    this->animationComponent->addAnimation("ATTACK_UP", 2.f, 0, 0, 7, 0, this->dimensions.x, this->dimensions.y, false);
+    this->animationComponent->addAnimation("ATTACK_UP", 4.f, 0, 1, 7, 1, this->dimensions.x, this->dimensions.y,
+                                           false);
 }
 
 void Sword::initVariables() {

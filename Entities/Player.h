@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "../Items/Weapons/MeleeWeapon/Sword.h"
 #include "../enums/player_animations.cpp"
+#include "../enums/player_actions.cpp"
 
 class Player final : public Entity {
 private:
@@ -11,13 +12,12 @@ private:
     float invincibilityDuration;
     sf::Clock invincibilityClock;
     PLAYER_ANIMATIONS nextAnimation;
-
+    std::set<PLAYER_ACTIONS> playerActions;
+    
     //Initializer Functions
     void initVariables(std::pair<int, int> pair, std::pair<int, int> pair1);
 
-    bool isAttacking();
-
-    void commonUpdate(const MovementData &next, const float &dt);
+    void updateInternal(const MovementData &next, const float &dt);
 
 public:
 
