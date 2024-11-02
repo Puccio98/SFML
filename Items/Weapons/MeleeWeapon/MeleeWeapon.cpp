@@ -1,10 +1,16 @@
 #include "MeleeWeapon.h"
 
-MeleeWeapon::MeleeWeapon() {
+MeleeWeapon::MeleeWeapon() = default;
 
+MeleeWeapon::~MeleeWeapon() = default;
 
-}
+void MeleeWeapon::attackEnemy(Entity *pEntity) {
+    if (pEntity == nullptr) {
+        return;
+    }
 
-MeleeWeapon::~MeleeWeapon() {
-
+    if (!pEntity->isInvincible() &&
+        this->hitboxComponent->checkIntersect(pEntity->getHitboxComponent()->getHitbox().getGlobalBounds())) {
+        pEntity->takeDamage();
+    }
 }

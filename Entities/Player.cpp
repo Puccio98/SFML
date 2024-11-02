@@ -8,7 +8,7 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
                                 this->hitboxDimension.first, this->hitboxDimension.second);
     this->createMovementComponent(300.f, 3800.f, 1800.f);
     this->createAnimationComponent(texture_sheet);
-    this->createAttributeComponent();
+    this->attributeComponent = new AttributeComponent();
     this->createSkillComponent();
 
     this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::IDLE_DOWN), 5.f, 0, 0, 1, 0,
@@ -38,7 +38,7 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
 }
 
 Player::~Player() {
-
+    delete this->weapon;
 }
 
 //Initializer Functions
@@ -46,12 +46,7 @@ Player::~Player() {
 void Player::initVariables(std::pair<int, int> sprite_dimension, std::pair<int, int> hitbox_dimension) {
     this->spriteDimension = sprite_dimension;
     this->hitboxDimension = hitbox_dimension;
-    this->invincibilityDuration = 1;
     this->nextAnimation = PLAYER_ANIMATIONS::IDLE_DOWN;
-}
-
-bool Player::isInvincible() const {
-    return invincibilityClock.getElapsedTime().asSeconds() < invincibilityDuration;
 }
 
 void Player::updateInternal(const MovementData &next, const float &dt) {
@@ -60,11 +55,10 @@ void Player::updateInternal(const MovementData &next, const float &dt) {
 
     this->animationComponent->play(getAnimationKey(this->nextAnimation), dt);
 
-    if (this->animationComponent->getCurrentAnimation().first == "ATTACK_DOWN"
-        || this->animationComponent->getCurrentAnimation().first == "ATTACK_UP") {
-        std::cout << "Player attacca: " << this->animationComponent->getCurrentAnimation().second->currentRect.left
-                  << " " << std::endl;
-        this->sword.update(this->getSpritePosition(), this->animationComponent->getCurrentAnimation().first, dt);
+    if (this->isPlayerAttacking()) {
+        if (this->weapon != nullptr) {
+            this->weapon->update(this->getSpritePosition(), this->animationComponent->getCurrentAnimation().first, dt);
+        }
     };
 
     this->hitboxComponent->update();
@@ -140,16 +134,11 @@ float Player::getMaxHp() {
 void Player::render(sf::RenderTarget &target) {
     Entity::render(target);
 
-    if (this->animationComponent->getCurrentAnimation().first == "ATTACK_DOWN"
-        || this->animationComponent->getCurrentAnimation().first == "ATTACK_UP"
-            ) {
-        this->sword.render(target);
+    if (this->isPlayerAttacking()) {
+        if (this->weapon != nullptr) {
+            this->weapon->render(target);
+        }
     };
-}
-
-void Player::takeDamage() {
-    this->invincibilityClock.restart();
-    this->attributeComponent->applyDamage();
 }
 
 std::string Player::getAnimationKey(PLAYER_ANIMATIONS animation) {
@@ -173,4 +162,13 @@ std::string Player::getAnimationKey(PLAYER_ANIMATIONS animation) {
         default:
             return "UNKNOWN";
     }
+}
+
+Weapon *Player::getWeapon() const {
+    return weapon;
+}
+
+bool Player::isPlayerAttacking() {
+    return this->animationComponent->getCurrentAnimation().first == "ATTACK_DOWN" ||
+           this->animationComponent->getCurrentAnimation().first == "ATTACK_UP";
 }

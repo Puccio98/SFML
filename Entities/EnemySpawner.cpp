@@ -53,7 +53,6 @@ void EnemySpawner::update(float dt, std::vector<Entity *> &entities) {
 
 void EnemySpawner::spawn(std::vector<Entity *> &entities) {
     if (this->counter < 1) {
-        std::cout << "spawnato primo nemico" << std::endl;
         Enemy *enemy;
         switch (type) {
             case ENEMY_TYPES::WISP:

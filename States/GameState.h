@@ -5,6 +5,7 @@
 #include "../Map/Tilemap.h"
 #include "../Gui/PlayerGUI.h"
 #include "../Entities/Enemies/Enemy.h"
+#include <algorithm>
 #include <cmath>
 
 class GameState : public State {
@@ -53,6 +54,8 @@ public:
     void renderEntities(int layerIndex, sf::RenderTarget *target = nullptr);
 
     static bool compareByBaseline(const Entity *a, const Entity *b);
+
+    void deleteDyingEnemies();
 };
 
 #endif //SFML_GAMESTATE_H
