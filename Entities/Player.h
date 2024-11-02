@@ -8,7 +8,7 @@
 
 class Player final : public Entity {
 private:
-    Sword sword;
+    Weapon *weapon = new Sword();
     float invincibilityDuration;
     sf::Clock invincibilityClock;
     PLAYER_ANIMATIONS nextAnimation;
@@ -47,6 +47,14 @@ public:
     void takeDamage();
 
     std::string getAnimationKey(PLAYER_ANIMATIONS animation);
+
+    const Weapon *getWeapon() const;
+
+    const std::set<PLAYER_ACTIONS> &getPlayerActions() const {
+        return playerActions;
+    }
+
+    bool isPlayerAttacking();
 };
 
 

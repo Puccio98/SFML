@@ -161,9 +161,15 @@ void GameState::updateEntities(const float &dt) {
 
     for (auto entity: this->entities) {
         if (player != entity && player->getLayer() == entity->getLayer() && !player->isInvincible()) {
+            // Verifico se il player ha preso danno
             if (player->getHitboxComponent()->checkIntersect(
                     entity->getHitboxComponent()->getHitbox().getGlobalBounds())) {
                 player->takeDamage();
+            }
+
+            // Verifico se il player ha colpito un nemico
+            if (player->isPlayerAttacking()) {
+                std::cout << "Sto attaccando" << std::endl;
             }
         }
     }
