@@ -61,8 +61,9 @@ void Player::updateInternal(const MovementData &next, const float &dt) {
     this->animationComponent->play(getAnimationKey(this->nextAnimation), dt);
 
     if (this->animationComponent->getCurrentAnimation().first == "ATTACK_DOWN"
-        || this->animationComponent->getCurrentAnimation().first == "ATTACK_UP"
-            ) {
+        || this->animationComponent->getCurrentAnimation().first == "ATTACK_UP") {
+        std::cout << "Player attacca: " << this->animationComponent->getCurrentAnimation().second->currentRect.left
+                  << " " << std::endl;
         this->sword.update(this->getSpritePosition(), this->animationComponent->getCurrentAnimation().first, dt);
     };
 
@@ -71,11 +72,11 @@ void Player::updateInternal(const MovementData &next, const float &dt) {
 
 void Player::update(const float &dt) {
     MovementData next = this->movementComponent->nextMovementData(dt);
-    updateInternal(next, dt);
+    this->updateInternal(next, dt);
 }
 
 void Player::update(const MovementData &next, const float &dt) {
-    updateInternal(next, dt);
+    this->updateInternal(next, dt);
 }
 
 
@@ -124,9 +125,7 @@ void Player::flipAnimation(std::optional<DIRECTIONS> dir) {
     }
 }
 
-void Player::attack(const float &dt) {
-    MovementData md = movementComponent->getMovementData();
-
+void Player::attack() {
     this->playerActions.insert(PLAYER_ACTIONS::ATTACK);
 }
 

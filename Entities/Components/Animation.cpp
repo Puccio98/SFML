@@ -8,17 +8,14 @@ void Animation::play(const float &dt, float mod_percent) {
     if (mod_percent < 0.5f) mod_percent = 0.5f;
 
     // Increment timers
-    this->frameTimer += mod_percent * 30.f * dt;
-    this->animationTimer += mod_percent * 30.f * dt;
+    this->frameTimer += mod_percent * this->magicNumber * dt;
+    this->animationTimer += mod_percent * this->magicNumber * dt;
 
     // Handle entire animation duration
     if (this->animationTimer >= this->animationDuration) {
-        this->finished = true;
         this->animationTimer = 0.f;
-    } else {
-        this->finished = false;
     }
-
+    
     // Handle single frame duration
     if (this->frameTimer >= this->frameDuration) {
         // Reset frameTimer
@@ -64,7 +61,8 @@ Animation::Animation(sf::Sprite &sprite, sf::Texture &texture_sheet, float anima
     this->canBeInterrupted = canBeInterrupted;
 }
 
-bool Animation::isFinished() const {
-    return this->finished;
+bool Animation::isAnimationAboutToRestart(const float &dt, float mod_percent) const {
+    float at = this->animationTimer + mod_percent * this->magicNumber * dt;
+    return at >= this->animationDuration;
 }
 
