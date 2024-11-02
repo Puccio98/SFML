@@ -30,6 +30,8 @@ void Sword::initAnimationComponent() {
                                            false);
     this->animationComponent->addAnimation("ATTACK_UP", 4.f, 0, 1, 7, 1, this->dimensions.x, this->dimensions.y,
                                            false);
+    this->animationComponent->addAnimation("ATTACK_SIDE", 4.f, 0, 2, 7, 2, this->dimensions.x, this->dimensions.y,
+                                           false);
 }
 
 void Sword::initVariables() {

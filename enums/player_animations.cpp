@@ -8,5 +8,6 @@ enum class PLAYER_ANIMATIONS {
     MOVING_SIDE_UP,
     MOVING_UP,
     ATTACK_DOWN,
-    ATTACK_UP
+    ATTACK_UP,
+    ATTACK_SIDE
 };

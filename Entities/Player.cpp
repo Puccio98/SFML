@@ -35,6 +35,9 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
     this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::ATTACK_UP), 4.f, 0, 7, 7, 7,
                                            this->spriteDimension.first,
                                            this->spriteDimension.second, false);
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::ATTACK_SIDE), 4.f, 0, 8, 7, 8,
+                                           this->spriteDimension.first,
+                                           this->spriteDimension.second, false);
 }
 
 Player::~Player() {
@@ -78,10 +81,13 @@ void Player::setNextAnimation(const float &dt) {
     MovementData md = movementComponent->getMovementData();
     //Se sono presenti azioni avviate dal giocatore, nextAnimation viene gestita da queste
     if (this->playerActions.find(PLAYER_ACTIONS::ATTACK) != playerActions.end()) {
-        //TODO: quando sara' finita l'animazione laterale questo va rivisto
-        this->flipAnimation(DIRECTIONS::RIGHT);
-        this->nextAnimation = md.facingDirection.second == DIRECTIONS::DOWN ? PLAYER_ANIMATIONS::ATTACK_DOWN
-                                                                            : PLAYER_ANIMATIONS::ATTACK_UP;
+        this->flipAnimation(md.facingDirection.first);
+        this->nextAnimation = md.facingDirection.second == DIRECTIONS::DOWN ? PLAYER_ANIMATIONS::ATTACK_DOWN: PLAYER_ANIMATIONS::ATTACK_UP;
+
+        if (this->movementComponent->isState(MOVEMENT_STATES::MOVING) && md.facingDirection.first != std::nullopt) {
+            this->nextAnimation = PLAYER_ANIMATIONS::ATTACK_SIDE;
+        }
+
         this->playerActions.erase(PLAYER_ACTIONS::ATTACK);
     } else {
         if (movementComponent->isState(MOVEMENT_STATES::IDLE)) {
@@ -159,6 +165,8 @@ std::string Player::getAnimationKey(PLAYER_ANIMATIONS animation) {
             return "ATTACK_DOWN";
         case PLAYER_ANIMATIONS::ATTACK_UP:
             return "ATTACK_UP";
+        case PLAYER_ANIMATIONS::ATTACK_SIDE:
+            return "ATTACK_SIDE";
         default:
             return "UNKNOWN";
     }
@@ -170,5 +178,6 @@ Weapon *Player::getWeapon() const {
 
 bool Player::isPlayerAttacking() {
     return this->animationComponent->getCurrentAnimation().first == "ATTACK_DOWN" ||
-           this->animationComponent->getCurrentAnimation().first == "ATTACK_UP";
+           this->animationComponent->getCurrentAnimation().first == "ATTACK_UP" ||
+            this->animationComponent->getCurrentAnimation().first == "ATTACK_SIDE";
 }
