@@ -26,11 +26,11 @@ void Sword::render(sf::RenderTarget &target) {
 
 void Sword::initAnimationComponent() {
     this->animationComponent = new AnimationComponent(this->weapon_sprite, this->weapon_texture);
-    this->animationComponent->addAnimation("ATTACK_DOWN", 4.f, 0, 0, 7, 0, this->dimensions.x, this->dimensions.y,
+    this->animationComponent->addAnimation("ATTACK_DOWN", 12.f, 0, 0, 7, 0, this->dimensions.x, this->dimensions.y,
                                            false);
-    this->animationComponent->addAnimation("ATTACK_UP", 4.f, 0, 1, 7, 1, this->dimensions.x, this->dimensions.y,
+    this->animationComponent->addAnimation("ATTACK_UP", 12.f, 0, 1, 7, 1, this->dimensions.x, this->dimensions.y,
                                            false);
-    this->animationComponent->addAnimation("ATTACK_SIDE", 4.f, 0, 2, 7, 2, this->dimensions.x, this->dimensions.y,
+    this->animationComponent->addAnimation("ATTACK_SIDE", 12.f, 0, 2, 7, 2, this->dimensions.x, this->dimensions.y,
                                            false);
 }
 

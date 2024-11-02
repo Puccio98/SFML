@@ -11,31 +11,31 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
     this->attributeComponent = new AttributeComponent();
     this->createSkillComponent();
 
-    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::IDLE_DOWN), 5.f, 0, 0, 1, 0,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::IDLE_DOWN), 10.f, 0, 0, 1, 0,
                                            this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::IDLE_UP), 5.f, 0, 1, 1, 1,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::IDLE_UP), 10.f, 0, 1, 1, 1,
                                            this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::MOVING_DOWN), 4.f, 0, 2, 3, 2,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::MOVING_DOWN), 16.f, 0, 2, 3, 2,
                                            this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::MOVING_SIDE_DOWN), 4.f, 0, 3, 3, 3,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::MOVING_SIDE_DOWN), 16.f, 0, 3, 3, 3,
                                            this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::MOVING_SIDE_UP), 4.f, 0, 4, 3, 4,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::MOVING_SIDE_UP), 16.f, 0, 4, 3, 4,
                                            this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::MOVING_UP), 4.f, 0, 5, 3, 5,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::MOVING_UP), 16.f, 0, 5, 3, 5,
                                            this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::ATTACK_DOWN), 4.f, 0, 6, 7, 6,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::ATTACK_DOWN), 12.f, 0, 6, 7, 6,
                                            this->spriteDimension.first,
                                            this->spriteDimension.second, false);
-    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::ATTACK_UP), 4.f, 0, 7, 7, 7,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::ATTACK_UP), 12.f, 0, 7, 7, 7,
                                            this->spriteDimension.first,
                                            this->spriteDimension.second, false);
-    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::ATTACK_SIDE), 4.f, 0, 8, 7, 8,
+    this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::ATTACK_SIDE), 12.f, 0, 8, 7, 8,
                                            this->spriteDimension.first,
                                            this->spriteDimension.second, false);
 }

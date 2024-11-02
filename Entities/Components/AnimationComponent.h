@@ -16,7 +16,7 @@ public:
 
     virtual ~AnimationComponent();
 
-    void addAnimation(const std::string &key, float animation_timer,
+    void addAnimation(const std::string &key, float animation_duration,
                       int start_frame_x, int start_frame_y, int end_frame_x, int end_frame_y, int width,
                       int height, bool canBeInterrupted = true);
 
@@ -27,6 +27,8 @@ public:
     const std::pair<std::string, Animation *> &getCurrentAnimation() const;
 
     void setCurrentAnimation(const std::pair<std::string, Animation *> &currentAnimation);
+
+    float getAnimationProgress() const;
 
     void reset();
 };

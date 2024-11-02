@@ -29,9 +29,9 @@ void AnimationComponent::play(const std::string &key, const float &dt, const flo
 }
 
 void AnimationComponent::addAnimation(const std::string &key,
-                                      float animation_timer, int start_frame_x, int start_frame_y, int end_frame_x,
+                                      float animation_duration, int start_frame_x, int start_frame_y, int end_frame_x,
                                       int end_frame_y, int width, int height, bool canBeInterrupted) {
-    this->animations[key] = new Animation(this->sprite, this->texture_sheet, animation_timer, start_frame_x,
+    this->animations[key] = new Animation(this->sprite, this->texture_sheet, animation_duration, start_frame_x,
                                           start_frame_y,
                                           end_frame_x, end_frame_y, width, height, canBeInterrupted);
 }
@@ -42,4 +42,8 @@ std::string AnimationComponent::getCurrentAnimationKey() const {
 
 const std::pair<std::string, Animation *> &AnimationComponent::getCurrentAnimation() const {
     return currentAnimation;
+}
+
+float AnimationComponent::getAnimationProgress() const {
+    return this->currentAnimation.second->getAnimationProgress();
 }

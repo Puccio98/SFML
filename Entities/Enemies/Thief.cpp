@@ -50,14 +50,14 @@ void Thief::flipAnimation(std::optional<DIRECTIONS> dir) {
 void Thief::initAnimationComponent() {
     this->animationComponent->addAnimation("IDLE_DOWN", 10.f, 0, 0, 1, 0, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("IDLE_UP", 5.f, 0, 1, 1, 1, this->spriteDimension.first,
+    this->animationComponent->addAnimation("IDLE_UP", 10.f, 0, 1, 1, 1, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("MOVING_DOWN", 5.f, 0, 2, 3, 2, this->spriteDimension.first,
+    this->animationComponent->addAnimation("MOVING_DOWN", 20.f, 0, 2, 3, 2, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 5.f, 0, 3, 3, 3, this->spriteDimension.first,
+    this->animationComponent->addAnimation("MOVING_SIDE_DOWN", 20.f, 0, 3, 3, 3, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("MOVING_SIDE_UP", 5.f, 0, 4, 3, 4, this->spriteDimension.first,
+    this->animationComponent->addAnimation("MOVING_SIDE_UP", 20.f, 0, 4, 3, 4, this->spriteDimension.first,
                                            this->spriteDimension.second);
-    this->animationComponent->addAnimation("MOVING_UP", 5.f, 0, 5, 3, 5, this->spriteDimension.first,
+    this->animationComponent->addAnimation("MOVING_UP", 20.f, 0, 5, 3, 5, this->spriteDimension.first,
                                            this->spriteDimension.second);
 }

@@ -41,11 +41,11 @@ void Animation::reset() {
     this->currentRect = this->startRect;
 }
 
-Animation::Animation(sf::Sprite &sprite, sf::Texture &texture_sheet, float animation_timer,
+Animation::Animation(sf::Sprite &sprite, sf::Texture &texture_sheet, float animation_duration,
                      int start_frame_x, int start_frame_y, int end_frames_x, int end_frames_y,
-                     int width, int height, bool canBeInterrupted) : sprite(sprite), textureSheet(texture_sheet),
-                                                                     frameDuration(animation_timer), animationDuration(
-                animation_timer * (end_frames_x - start_frame_x + 1)) {
+                     int width, int height, bool canBeInterrupted) : sprite(sprite), textureSheet(texture_sheet), animationLength(end_frames_x - start_frame_x + 1),
+                                                                     frameDuration(animation_duration / animationLength), animationDuration(
+                animation_duration) {
     this->width = width;
     this->height = height;
 
@@ -64,5 +64,9 @@ Animation::Animation(sf::Sprite &sprite, sf::Texture &texture_sheet, float anima
 bool Animation::isAnimationAboutToRestart(const float &dt, float mod_percent) const {
     float at = this->animationTimer + mod_percent * this->magicNumber * dt;
     return at >= this->animationDuration;
+}
+
+float Animation::getAnimationProgress() const {
+    return (this->currentRect.left / this->width) / (this->animationLength);
 }
 

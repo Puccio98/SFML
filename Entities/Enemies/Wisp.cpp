@@ -8,7 +8,7 @@ Wisp::Wisp(float x, float y, sf::Texture &textureSheet) : Enemy(x, y, textureShe
 Wisp::~Wisp() = default;
 
 void Wisp::initAnimationComponent() {
-    this->animationComponent->addAnimation("IDLE", 5.f, 0, 0, 4, 0, this->spriteDimension.first,
+    this->animationComponent->addAnimation("IDLE", 25.f, 0, 0, 4, 0, this->spriteDimension.first,
                                            this->spriteDimension.second);
 }
 
