@@ -17,7 +17,8 @@ void AnimationComponent::play(const std::string &key, const float &dt, const flo
     }
 
     // if different animation, handle animation priority (animazione cambiata)
-    if (!this->currentAnimation.second->canBeInterrupted && !this->currentAnimation.second->isFinished()) {
+    if (!this->currentAnimation.second->canBeInterrupted && !this->currentAnimation.second->isAnimationAboutToRestart(
+            dt)) {
         return this->animations[this->currentAnimation.first]->play(dt, (mod_percent));
     }
 

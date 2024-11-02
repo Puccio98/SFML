@@ -25,7 +25,7 @@ void GameState::update(const float &dt) {
 
     //per debug
     this->updateMouseDebug(this->view);
-    
+
     if (!pauseMenuState.isPaused()) {
         State::update(dt); //, this->view
         this->updateView(dt);
@@ -99,7 +99,7 @@ void GameState::handleEvent(sf::Event &event, const float &dt) {
     }
 
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-        this->player->attack(dt);
+        this->player->attack();
     }
 }
 

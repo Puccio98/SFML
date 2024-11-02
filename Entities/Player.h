@@ -13,7 +13,7 @@ private:
     sf::Clock invincibilityClock;
     PLAYER_ANIMATIONS nextAnimation;
     std::set<PLAYER_ACTIONS> playerActions;
-    
+
     //Initializer Functions
     void initVariables(std::pair<int, int> pair, std::pair<int, int> pair1);
 
@@ -32,7 +32,7 @@ public:
 
     void render(sf::RenderTarget &target);
 
-    void attack(const float &dt);
+    void attack();
 
     void setNextAnimation(const float &dt);
 

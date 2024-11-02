@@ -28,7 +28,8 @@ public:
     sf::IntRect currentRect;
     sf::IntRect endRect;
     bool canBeInterrupted = true;
-    bool finished = false;
+    float magicNumber = 30.f;
+
 
     Animation(sf::Sprite &sprite, sf::Texture &texture_sheet, float animation_timer, int start_frame_x,
               int start_frame_y, int end_frames_x, int end_frames_y, int width, int height, bool canBeInterrupted);
@@ -40,7 +41,7 @@ public:
 
     void reset();
 
-    bool isFinished() const;
+    bool isAnimationAboutToRestart(const float &dt, float mod_percent = 1.f) const;
 };
 
 
