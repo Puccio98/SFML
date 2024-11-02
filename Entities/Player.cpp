@@ -62,8 +62,6 @@ void Player::updateInternal(const MovementData &next, const float &dt) {
 
     if (this->animationComponent->getCurrentAnimation().first == "ATTACK_DOWN"
         || this->animationComponent->getCurrentAnimation().first == "ATTACK_UP") {
-        std::cout << "Player attacca: " << this->animationComponent->getCurrentAnimation().second->currentRect.left
-                  << " " << std::endl;
         this->sword.update(this->getSpritePosition(), this->animationComponent->getCurrentAnimation().first, dt);
     };
 
