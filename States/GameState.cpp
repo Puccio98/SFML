@@ -31,6 +31,7 @@ void GameState::update(const float &dt) {
         this->updateView(dt);
         this->updateInput(dt);
         this->updateEntities(dt);
+        this->deleteDyingEnemies();
         this->tilemap->update(*this->stateData.window, edd, dt, entities);
         this->playerGUI->update(dt);
         if (this->player->getCurrentHp() == 0) {
@@ -167,9 +168,12 @@ void GameState::updateEntities(const float &dt) {
                 player->takeDamage();
             }
 
-            // Verifico se il player ha colpito un nemico
+            // Player attacca nemico
             if (player->isPlayerAttacking()) {
-                std::cout << "Sto attaccando" << std::endl;
+                Weapon *weapon = player->getWeapon();
+                if (weapon != nullptr) {
+                    weapon->attackEnemy(entity);
+                }
             }
         }
     }
@@ -186,4 +190,22 @@ void GameState::renderEntities(int layerIndex, sf::RenderTarget *target) {
 
 bool GameState::compareByBaseline(const Entity *a, const Entity *b) {
     return (a->getHitboxPosition().y + a->getHitboxSize().y) < (b->getHitboxPosition().y + b->getHitboxSize().y);
+}
+
+void GameState::deleteDyingEnemies() {
+    for (auto it = this->entities.begin(); it != this->entities.end();) {
+        Entity *entity = *it;
+
+        // Verifico lo stato del nemico, se morto lo tolgo dalla lista di entità.
+        if (entity != player && entity->getAttributeComponent()->isDead()) {
+            // First, delete the entity
+            delete entity;
+
+            // Remove the deleted entity from the vector
+            it = this->entities.erase(it); // erase returns the next valid iterator
+            continue;  // Skip incrementing the iterator
+        }
+
+        ++it;  // Only increment if no entity was deleted
+    }
 }

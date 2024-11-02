@@ -12,6 +12,8 @@ public:
     MeleeWeapon();
 
     ~MeleeWeapon() override;
+
+    void attackEnemy(Entity *pEntity) override;
 };
 
 

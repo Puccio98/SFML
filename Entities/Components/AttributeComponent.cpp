@@ -1,8 +1,12 @@
 #include "AttributeComponent.h"
 
-AttributeComponent::AttributeComponent() {
-    this->hpMax = 24.f;
-    this->hp = 24.f;
+AttributeComponent::AttributeComponent()
+        : AttributeComponent(24.f) { // Delegate to the parameterized constructor
+}
+
+AttributeComponent::AttributeComponent(float hp) {
+    this->hpMax = hp;
+    this->hp = hp;
 }
 
 AttributeComponent::~AttributeComponent() {
@@ -30,4 +34,8 @@ void AttributeComponent::restoreHealth(float amount) {
     if (this->hp > this->hpMax) {
         this->hp = this->hpMax;
     }
+}
+
+bool AttributeComponent::isDead() const {
+    return this->hp <= 0.f;
 }

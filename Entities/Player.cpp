@@ -8,7 +8,7 @@ Player::Player(float x, float y, sf::Texture &texture_sheet) {
                                 this->hitboxDimension.first, this->hitboxDimension.second);
     this->createMovementComponent(300.f, 3800.f, 1800.f);
     this->createAnimationComponent(texture_sheet);
-    this->createAttributeComponent();
+    this->attributeComponent = new AttributeComponent();
     this->createSkillComponent();
 
     this->animationComponent->addAnimation(getAnimationKey(PLAYER_ANIMATIONS::IDLE_DOWN), 5.f, 0, 0, 1, 0,
@@ -46,12 +46,7 @@ Player::~Player() {
 void Player::initVariables(std::pair<int, int> sprite_dimension, std::pair<int, int> hitbox_dimension) {
     this->spriteDimension = sprite_dimension;
     this->hitboxDimension = hitbox_dimension;
-    this->invincibilityDuration = 1;
     this->nextAnimation = PLAYER_ANIMATIONS::IDLE_DOWN;
-}
-
-bool Player::isInvincible() const {
-    return invincibilityClock.getElapsedTime().asSeconds() < invincibilityDuration;
 }
 
 void Player::updateInternal(const MovementData &next, const float &dt) {
@@ -146,11 +141,6 @@ void Player::render(sf::RenderTarget &target) {
     };
 }
 
-void Player::takeDamage() {
-    this->invincibilityClock.restart();
-    this->attributeComponent->applyDamage();
-}
-
 std::string Player::getAnimationKey(PLAYER_ANIMATIONS animation) {
     switch (animation) {
         case PLAYER_ANIMATIONS::IDLE_DOWN:
@@ -174,7 +164,7 @@ std::string Player::getAnimationKey(PLAYER_ANIMATIONS animation) {
     }
 }
 
-const Weapon *Player::getWeapon() const {
+Weapon *Player::getWeapon() const {
     return weapon;
 }
 

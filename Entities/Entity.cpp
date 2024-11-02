@@ -31,6 +31,8 @@ void Entity::setPosition(const float x, const float y) {
 
 
 void Entity::initVariables(std::pair<int, int> pair, std::pair<int, int> pair1) {
+    this->invincibilityDuration = 1;
+
     this->hitboxComponent = nullptr;
     this->movementComponent = nullptr;
     this->animationComponent = nullptr;
@@ -91,7 +93,7 @@ unsigned int Entity::getLayer() const {
 }
 
 void Entity::createAttributeComponent() {
-    this->attributeComponent = new AttributeComponent();
+    this->attributeComponent = new AttributeComponent(3.f);
 }
 
 AttributeComponent *Entity::getAttributeComponent() const {
@@ -100,6 +102,15 @@ AttributeComponent *Entity::getAttributeComponent() const {
 
 const sf::Sprite &Entity::getSprite() const {
     return sprite;
+}
+
+bool Entity::isInvincible() const {
+    return invincibilityClock.getElapsedTime().asSeconds() < invincibilityDuration;
+}
+
+void Entity::takeDamage() {
+    this->invincibilityClock.restart();
+    this->attributeComponent->applyDamage();
 }
 
 

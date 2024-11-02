@@ -20,10 +20,12 @@ private:
     void initVariables();
 
     void initAnimationComponent();
-    
+
     void updateAnimation(const float &dt) override;
 
     void initHitboxComponent();
+
+public:
 
 private:
 };

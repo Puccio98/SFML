@@ -6,6 +6,8 @@ class AttributeComponent {
 public:
     AttributeComponent();
 
+    explicit AttributeComponent(float hp);
+
     virtual ~AttributeComponent();
 
 private:
@@ -20,6 +22,8 @@ public:
     void applyDamage(float damage = 1.f);
 
     void restoreHealth(float amount);
+
+    bool isDead() const;
 
 private:
 

@@ -10,6 +10,8 @@
 class Entity {
 
 private:
+    float invincibilityDuration;
+
     void initVariables(std::pair<int, int> pair, std::pair<int, int> pair1);
 
 protected:
@@ -26,6 +28,7 @@ protected:
 
     void createHitboxComponent(float offset_x, float offset_y, float width, float height);
 
+    sf::Clock invincibilityClock;
 public:
     explicit Entity();
 
@@ -69,9 +72,13 @@ public:
 
     virtual void render(sf::RenderTarget &target);
 
+    virtual void takeDamage();
+
     AttributeComponent *getAttributeComponent() const;
 
     const sf::Sprite &getSprite() const;
+
+    bool isInvincible() const;
 };
 
 #endif //SFML_ENTITY_H
