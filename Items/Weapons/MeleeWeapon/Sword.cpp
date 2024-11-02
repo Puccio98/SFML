@@ -3,7 +3,7 @@
 
 Sword::Sword() {
     if (!this->weapon_texture.loadFromFile(
-            "Resources/images/sprites/entities/player/player_weapons/sword/sword_sheet_test.png")) {
+            "Resources/images/sprites/entities/player/player_weapons/sword/sword_sheet_x2.png")) {
         throw ("ERROR::PLAYER::COULD NOT LOAD WEAPON TEXTURE");
     };
     this->initVariables();
@@ -34,7 +34,7 @@ void Sword::initAnimationComponent() {
 
 void Sword::initVariables() {
     this->dimensions = sf::Vector2i(200, 200);
-    this->offset = sf::Vector2f(20, 0);
+    this->offset = sf::Vector2f(0, 0);
 }
 
 void Sword::initHitboxComponent() {
