@@ -61,7 +61,6 @@ Animation::Animation(sf::Sprite &sprite, sf::Texture &texture_sheet, float anima
     this->sprite.setTextureRect(this->startRect);
 }
 
-
 bool Animation::isAnimationAboutToRestart(const float &dt, float mod_percent) const {
     float at = this->animationTimer + mod_percent * this->magicNumber * dt;
     return at >= this->animationDuration;

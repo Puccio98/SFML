@@ -1,5 +1,4 @@
 #include "EditorState.h"
-#include "../Gui/PushButton.h"
 #include "../Gui/SwitchButton.h"
 #include "../Gui/Utils.h"
 
@@ -20,6 +19,7 @@ EditorState::~EditorState() {
     delete this->sideBar;
     delete this->tileMap;
     delete this->tileTextureSelector;
+    delete this->elementTextureSelector;
     delete this->enemyTextureSelector;
 }
 
@@ -43,6 +43,7 @@ void EditorState::render(sf::RenderTarget *target) {
 
     if (!pauseMenuState.isPaused() && !this->tileTextureSelector->isActive() &&
         !this->enemyTextureSelector->isActive() &&
+        !this->elementTextureSelector->isActive() &&
         !this->sideBar->getGlobalBounds().contains(this->mousePosView.x, this->mousePosView.y)) {
         target->draw(this->mouseDebug);
 
@@ -60,6 +61,7 @@ void EditorState::render(sf::RenderTarget *target) {
 
 void EditorState::initButtonsKeyLabel() {
     this->buttonsKeyLabel.emplace_back("OPEN_TEXTURE_SELECTOR", "TS", true);
+    this->buttonsKeyLabel.emplace_back("OPEN_ELEMENT_SELECTOR", "EL", true);
     this->buttonsKeyLabel.emplace_back("OPEN_ENEMY_TEXTURE_SELECTOR", "ES", true);
     this->buttonsKeyLabel.emplace_back("TOGGLE_TILES", "T", true);
     this->buttonsKeyLabel.emplace_back("SAVE_TEXTURE_MAP", "SV", false);
@@ -67,6 +69,7 @@ void EditorState::initButtonsKeyLabel() {
     this->buttonsKeyLabel.emplace_back("CLEAR_MAP", "R", false);
 
     this->singleChoiceButtons.emplace_back("OPEN_TEXTURE_SELECTOR");
+    this->singleChoiceButtons.emplace_back("OPEN_ELEMENT_SELECTOR");
     this->singleChoiceButtons.emplace_back("OPEN_ENEMY_TEXTURE_SELECTOR");
     this->singleChoiceButtons.emplace_back("TOGGLE_TILES");
 }
@@ -77,6 +80,11 @@ void EditorState::updateSidebar(float dt) {
     if (this->sideBar->isButtonClicked("OPEN_TEXTURE_SELECTOR")) {
         this->tileTextureSelector->restartTimer();
         this->disableSingleChoiceButtons("OPEN_TEXTURE_SELECTOR");
+    }
+
+    if (this->sideBar->isButtonClicked("OPEN_ELEMENT_SELECTOR")) {
+        this->elementTextureSelector->restartTimer();
+        this->disableSingleChoiceButtons("OPEN_ELEMENT_SELECTOR");
     }
 
     if (this->sideBar->isButtonClicked("OPEN_ENEMY_TEXTURE_SELECTOR")) {
@@ -163,6 +171,7 @@ void EditorState::openTextureSelector() {
     this->disableSingleChoiceButtons("OPEN_TEXTURE_SELECTOR");
 }
 
+
 /**
  * Chiude EditorState se è stata richiesta la chiusura del gioco da menu di pausa o direttamente da gamestate
  * @return
@@ -181,6 +190,11 @@ void EditorState::initGui() {
             this->dvm.width - enemySelectorTexture.getSize().x -
             this->sideBar->getSize().x, 0.f, this->stateData.gridSize,
             "Resources/images/tiles/enemy_texture_selector.png");
+    this->elementSelectorTexture.loadFromFile("Resources/images/tiles/enemy_texture_selector.png");
+    this->elementTextureSelector = new TextureSelector(
+            this->dvm.width - elementSelectorTexture.getSize().x -
+            this->sideBar->getSize().x, 0.f, this->stateData.gridSize,
+            "Resources/images/tiles/enemy_texture_selector.png");
     this->previewTexture.setSize(sf::Vector2f(this->stateData.gridSize, this->stateData.gridSize));
     this->previewTexture.setFillColor(sf::Color(255, 255, 255, 100));
     this->previewTexture.setOutlineThickness(1.f);
@@ -193,6 +207,10 @@ void EditorState::initGui() {
 void EditorState::updateGui() {
     if (this->isSwitchButtonActive("OPEN_TEXTURE_SELECTOR")) {
         this->tileTextureSelector->update(this->mousePosView);
+    }
+
+    if (this->isSwitchButtonActive("OPEN_ELEMENT_SELECTOR")) {
+        this->elementTextureSelector->update(this->mousePosView);
     }
 
     if (this->isSwitchButtonActive("OPEN_ENEMY_TEXTURE_SELECTOR")) {
@@ -220,6 +238,9 @@ void EditorState::renderGui(sf::RenderTarget *target) {
         this->tileTextureSelector->render(*target);
     }
 
+    if (this->isSwitchButtonActive("OPEN_ELEMENT_SELECTOR") && !this->elementTextureSelector->isTimerOver()) {
+        this->elementTextureSelector->render(*target);
+    }
 
     if (this->isSwitchButtonActive("OPEN_ENEMY_TEXTURE_SELECTOR") && !this->enemyTextureSelector->isTimerOver()) {
         this->enemyTextureSelector->render(*target);
@@ -238,6 +259,8 @@ void EditorState::updateInput(const float &dt) {
                 this->setSelectedTexture(mousePosView);
             } else if (this->enemyTextureSelector->isActive()) {
                 this->setSelectedEnemy(mousePosView);
+            } else if (this->elementTextureSelector->isActive()) {
+                this->setSelectedElement(mousePosView);
             } else {
                 for (const auto &key: this->singleChoiceButtons) {
                     GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(key));
@@ -317,6 +340,8 @@ void EditorState::setSelectedTile(int dir_x, int dir_y) {
 void EditorState::executeButton(const std::string &key) {
     if (key == "OPEN_TEXTURE_SELECTOR") {
         this->addTexture();
+    } else if (key == "OPEN_ELEMENT_SELECTOR") {
+        this->addTile(TILE_TYPES::ELEMENT);
     } else if (key == "TOGGLE_TILES") {
         this->addTile(TILE_TYPES::DEFAULT);
     } else if (key == "OPEN_ENEMY_TEXTURE_SELECTOR") {
@@ -338,4 +363,8 @@ void EditorState::disableSingleChoiceButtons(const std::string &activeButtonKey)
 bool EditorState::isSwitchButtonActive(std::string buttonKey) {
     GUI::SwitchButton *switchBtn = dynamic_cast<GUI::SwitchButton *>(this->sideBar->getButton(buttonKey));
     return switchBtn->isActive();
+}
+
+void EditorState::setSelectedElement(sf::Vector2f &mousePos) {
+    this->elementTextureSelector->setSelectedTile(mousePos);
 }

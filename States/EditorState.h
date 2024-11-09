@@ -31,8 +31,10 @@ private:
     sf::RectangleShape previewTexture;
     GUI::Sidebar *sideBar;
     std::string tileTexturePath;
+    sf::Texture elementSelectorTexture;
     sf::Texture enemySelectorTexture;
     TextureSelector *tileTextureSelector;
+    TextureSelector *elementTextureSelector;
     TextureSelector *enemyTextureSelector;
     sf::View view;
     float cameraSpeed;
@@ -109,6 +111,10 @@ private:
     bool isSwitchButtonActive(std::string buttonKey);
 
     void setSelectedEnemy(sf::Vector2f &mousePos);
+
+    void setSelectedElement(sf::Vector2f &mousePos);
+
+    void openElementSelector();
 };
 
 

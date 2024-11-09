@@ -83,8 +83,8 @@ add_executable(SFML
         Entities/Enemies/Enemy.cpp
         Entities/Enemies/Enemy.h
         Entities/EntityDimensionData.h
-        Entities/EnemySpawner.cpp
-        Entities/EnemySpawner.h
+        Tile/EnemySpawner.cpp
+        Tile/EnemySpawner.h
         Helper/Json/Serializable.h
         Helper/Json/Struct/MapData.h
         enums/enemy_types.cpp
@@ -95,7 +95,9 @@ add_executable(SFML
         Entities/Enemies/Thief.cpp
         Entities/Enemies/Thief.h
         enums/player_animations.cpp Items/Weapons/Weapon.cpp Items/Weapons/Weapon.h
-        enums/player_actions.cpp)
+        enums/player_actions.cpp
+        Tile/CoffeMachine.cpp
+        Tile/CoffeMachine.h)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/libs/SFML-2.6.1/lib/cmake/SFML)

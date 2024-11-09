@@ -1,4 +1,4 @@
-#include "../../../Entities/EnemySpawner.h"
+#include "../../../Tile/EnemySpawner.h"
 
 #ifndef SFML_MAPDATA_H
 #define SFML_MAPDATA_H
