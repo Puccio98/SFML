@@ -1,5 +1,4 @@
-#ifndef SFML_PUSHBUTTON_H
-#define SFML_PUSHBUTTON_H
+#pragma once
 
 #include "Button.h"
 
@@ -20,5 +19,3 @@ namespace GUI {
     private:
     };
 }
-
-#endif //SFML_PUSHBUTTON_H

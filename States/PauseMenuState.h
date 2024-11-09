@@ -1,6 +1,4 @@
-#ifndef SFML_PAUSEMENUSTATE_H
-#define SFML_PAUSEMENUSTATE_H
-
+#pragma once
 
 #include "State.h"
 #include "../Gui/Button.h"
@@ -36,6 +34,3 @@ private:
 
     void updateButtons();
 };
-
-
-#endif //SFML_PAUSEMENUSTATE_H

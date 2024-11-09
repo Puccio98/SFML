@@ -1,6 +1,4 @@
-#ifndef SFML_RANGEDWEAPON_H
-#define SFML_RANGEDWEAPON_H
-
+#pragma once
 
 #include "../../Item.h"
 
@@ -10,6 +8,3 @@ public:
 
     ~RangedWeapon() override;
 };
-
-
-#endif //SFML_RANGEDWEAPON_H

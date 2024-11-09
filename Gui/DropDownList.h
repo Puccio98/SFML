@@ -1,5 +1,4 @@
-#ifndef SFML_DROPDOWNLIST_H
-#define SFML_DROPDOWNLIST_H
+#pragma once
 
 #include "Button.h"
 
@@ -27,5 +26,3 @@ namespace GUI {
         unsigned int selectedElementId;
     };
 }
-
-#endif //SFML_DROPDOWNLIST_H

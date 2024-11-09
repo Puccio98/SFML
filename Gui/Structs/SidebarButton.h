@@ -1,5 +1,4 @@
-#ifndef SFML_SIDEBARBUTTON_H
-#define SFML_SIDEBARBUTTON_H
+#pragma once
 
 #include <string>
 #include <utility>
@@ -12,5 +11,3 @@ struct SidebarButton {
     SidebarButton(std::string key, std::string label, bool isSwitch) : key(std::move(key)), label(std::move(label)),
                                                                        isSwitch(isSwitch) {}
 };
-
-#endif //SFML_SIDEBARBUTTON_H

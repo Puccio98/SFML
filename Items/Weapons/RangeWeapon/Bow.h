@@ -1,6 +1,4 @@
-#ifndef SFML_BOW_H
-#define SFML_BOW_H
-
+#pragma once
 
 #include "RangedWeapon.h"
 
@@ -11,4 +9,4 @@ public:
     ~Bow() override;
 };
 
-#endif
+

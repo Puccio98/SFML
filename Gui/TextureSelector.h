@@ -1,6 +1,4 @@
-#ifndef SFML_TEXTURESELECTOR_H
-#define SFML_TEXTURESELECTOR_H
-
+#pragma once
 
 #include <Graphics/RectangleShape.hpp>
 #include <Graphics/Sprite.hpp>
@@ -79,6 +77,3 @@ public:
 
     sf::Texture LoadTexture(const std::string &texturePath);
 };
-
-
-#endif //SFML_TEXTURESELECTOR_H

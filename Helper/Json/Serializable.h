@@ -1,5 +1,4 @@
-#ifndef SFML_SERIALIZABLE_H
-#define SFML_SERIALIZABLE_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -26,5 +25,3 @@ public:
      */
     virtual void from_json(const json &j) = 0;
 };
-
-#endif //SFML_SERIALIZABLE_H

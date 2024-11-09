@@ -1,5 +1,4 @@
-#ifndef SFML_MAINMENUSTATE_H
-#define SFML_MAINMENUSTATE_H
+#pragma once
 
 #include "GameState.h"
 #include "EditorState.h"
@@ -38,6 +37,3 @@ private:
 public:
     void handleEvent(sf::Event &event, const float &dt) override;
 };
-
-
-#endif //SFML_MAINMENUSTATE_H

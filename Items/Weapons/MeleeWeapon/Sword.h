@@ -1,6 +1,4 @@
-#ifndef SFML_SWORD_H
-#define SFML_SWORD_H
-
+#pragma once
 
 #include "MeleeWeapon.h"
 
@@ -28,6 +26,6 @@ private:
 public:
 
 private:
+    void flipAnimation();
 };
 
-#endif //SFML_SWORD_H

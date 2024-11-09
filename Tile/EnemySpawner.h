@@ -1,6 +1,4 @@
-#ifndef SFML_ENEMYSPAWNER_H
-#define SFML_ENEMYSPAWNER_H
-
+#pragma once
 
 #include <System/Vector2.hpp>
 #include "../Entities/Enemies/Enemy.h"
@@ -39,6 +37,3 @@ public:
 
     void initTextures();
 };
-
-
-#endif //SFML_ENEMYSPAWNER_H

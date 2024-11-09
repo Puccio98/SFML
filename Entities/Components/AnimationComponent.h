@@ -1,5 +1,4 @@
-#ifndef SFML_ANIMATIONCOMPONENT_H
-#define SFML_ANIMATIONCOMPONENT_H
+#pragma once
 
 #include "Animation.h"
 
@@ -32,6 +31,3 @@ public:
 
     void reset();
 };
-
-
-#endif //SFML_ANIMATIONCOMPONENT_H

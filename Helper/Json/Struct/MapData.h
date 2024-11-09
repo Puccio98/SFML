@@ -1,9 +1,6 @@
+#pragma once
+
 #include "../../../Tile/EnemySpawner.h"
-
-#ifndef SFML_MAPDATA_H
-#define SFML_MAPDATA_H
-
-#endif //SFML_MAPDATA_H
 
 struct MapData : Serializable {
     // Base Data

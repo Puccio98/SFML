@@ -1,10 +1,4 @@
-//
-// Created by malte on 25/02/2024.
-//
-
-#ifndef SFML_GRAPHICSSETTINGS_H
-#define SFML_GRAPHICSSETTINGS_H
-
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -38,6 +32,3 @@ public:
 private:
     std::string path;
 };
-
-
-#endif //SFML_GRAPHICSSETTINGS_H

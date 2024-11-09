@@ -1,5 +1,4 @@
-#ifndef SFML_PROGRESSBAR_H
-#define SFML_PROGRESSBAR_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include "Structs/ProgressBarData.h"
@@ -29,5 +28,3 @@ namespace GUI {
         float calculateProgress(float maxValue, float currentValue) const;
     };
 }
-
-#endif //SFML_PROGRESSBAR_H

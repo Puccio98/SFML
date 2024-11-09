@@ -1,5 +1,4 @@
-#ifndef SFML_TILEMAP_H
-#define SFML_TILEMAP_H
+#pragma once
 
 #include "../Tile/Tile.h"
 #include "../Entities/EntityDimensionData.h"
@@ -68,6 +67,3 @@ public:
 
     sf::IntRect getInteractiveArea(sf::RenderTarget &target, EntityDimensionData &halfSizeGrid);
 };
-
-
-#endif //SFML_TILEMAP_H

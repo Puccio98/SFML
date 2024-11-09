@@ -1,5 +1,4 @@
-#ifndef SFML_HEALTHBAR_H
-#define SFML_HEALTHBAR_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include "Structs/ProgressBarData.h"
@@ -31,5 +30,3 @@ namespace GUI {
         void updateContainer(int containerIndex, const ProgressBarData &progressBarData);
     };
 }
-
-#endif //SFML_HEALTHBAR_H

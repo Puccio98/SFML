@@ -1,5 +1,4 @@
-#ifndef SFML_PLAYERGUI_H
-#define SFML_PLAYERGUI_H
+#pragma once
 
 #include "../Entities/Player.h"
 #include "HealthBar.h"
@@ -27,4 +26,3 @@ namespace GUI {
     };
 
 }
-#endif //SFML_PLAYERGUI_H

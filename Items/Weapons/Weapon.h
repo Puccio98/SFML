@@ -1,5 +1,4 @@
-#ifndef SFML_WEAPON_H
-#define SFML_WEAPON_H
+#pragma once
 
 #include "../Item.h"
 #include "../../Entities/Entity.h"
@@ -11,6 +10,8 @@ private:
 protected:
     sf::Sprite weapon_sprite;
     sf::Texture weapon_texture;
+    std::pair<std::optional<DIRECTIONS>, DIRECTIONS> playerFacingDirection;
+
 public:
     Weapon();
 
@@ -23,7 +24,6 @@ public:
     void render(sf::RenderTarget &target) override = 0;
 
     virtual void attackEnemy(Entity *pEntity) = 0;
+
+    void setPlayerFacingDirection(const std::pair<std::optional<DIRECTIONS>, DIRECTIONS> &facingDirection);
 };
-
-
-#endif //SFML_WEAPON_H

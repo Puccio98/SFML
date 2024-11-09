@@ -1,5 +1,4 @@
-#ifndef SFML_ANIMATION_H
-#define SFML_ANIMATION_H
+#pragma once
 
 #include<map>
 #include<iostream>
@@ -46,6 +45,3 @@ public:
 
     float getAnimationProgress() const;
 };
-
-
-#endif //SFML_ANIMATION_H

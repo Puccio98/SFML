@@ -1,5 +1,4 @@
-#ifndef SFML_GAMESTATE_H
-#define SFML_GAMESTATE_H
+#pragma once
 
 #include "PauseMenuState.h"
 #include "../Map/Tilemap.h"
@@ -57,5 +56,3 @@ public:
 
     void deleteDyingEnemies();
 };
-
-#endif //SFML_GAMESTATE_H

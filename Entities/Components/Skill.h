@@ -1,5 +1,4 @@
-#ifndef SFML_SKILL_H
-#define SFML_SKILL_H
+#pragma once
 
 #include "../../enums/skill_enum.cpp"
 
@@ -17,6 +16,3 @@ public:
 
     void update() const;
 };
-
-
-#endif //SFML_SKILL_H

@@ -1,5 +1,4 @@
-#ifndef SFML_ENTITY_H
-#define SFML_ENTITY_H
+#pragma once
 
 #include "Components/HitboxComponent.h"
 #include "Components/MovementComponent.h"
@@ -80,5 +79,3 @@ public:
 
     bool isInvincible() const;
 };
-
-#endif //SFML_ENTITY_H
