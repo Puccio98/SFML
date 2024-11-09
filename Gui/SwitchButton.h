@@ -1,10 +1,4 @@
-//
-// Created by malte on 02/06/2024.
-//
-
-#ifndef SFML_SWITCHBUTTON_H
-#define SFML_SWITCHBUTTON_H
-
+#pragma once
 
 #include "Button.h"
 
@@ -33,5 +27,3 @@ namespace GUI {
         bool active = false;
     };
 }
-
-#endif //SFML_SWITCHBUTTON_H

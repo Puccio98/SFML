@@ -1,10 +1,4 @@
-//
-// Created by malte on 28/01/2024.
-//
-
-#ifndef SFML_SETTINGSSTATE_H
-#define SFML_SETTINGSSTATE_H
-
+#pragma once
 
 #include "State.h"
 #include "../Gui/DropDownList.h"
@@ -49,5 +43,3 @@ public:
 
     void updateDropDownLists();
 };
-
-#endif //SFML_SETTINGSSTATE_H

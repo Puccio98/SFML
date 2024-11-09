@@ -1,5 +1,4 @@
-#ifndef SFML_WEAPON_H
-#define SFML_WEAPON_H
+#pragma once
 
 #include "../Item.h"
 #include "../../Entities/Entity.h"
@@ -16,7 +15,7 @@ public:
 
     ~Weapon() override;
 
-    void update(const sf::Vector2f &position, const float &dt) override = 0;
+    void update(const sf::Vector2f &position, std::pair<std::optional<DIRECTIONS>, DIRECTIONS> facingDirection, const float &dt) override = 0;
 
     virtual void update(const sf::Vector2f &position, std::string animation, const float &dt) = 0;
 
@@ -24,6 +23,3 @@ public:
 
     virtual void attackEnemy(Entity *pEntity) = 0;
 };
-
-
-#endif //SFML_WEAPON_H

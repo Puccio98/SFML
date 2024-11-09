@@ -1,5 +1,4 @@
-#ifndef SFML_PLAYER_H
-#define SFML_PLAYER_H
+#pragma once
 
 #include "Entity.h"
 #include "../Items/Weapons/MeleeWeapon/Sword.h"
@@ -48,4 +47,4 @@ public:
 };
 
 
-#endif //SFML_PLAYER_H
+ //SFML_PLAYER_H

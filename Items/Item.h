@@ -1,5 +1,4 @@
-#ifndef SFML_ITEM_H
-#define SFML_ITEM_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -10,6 +9,7 @@
 #include<iostream>
 #include<ctime>
 #include<cstdlib>
+#include <optional>
 #include "../Entities/Components/AnimationComponent.h"
 #include "../Entities/Components/HitboxComponent.h"
 
@@ -26,7 +26,7 @@ public:
 
     virtual ~Item();
 
-    virtual void update(const sf::Vector2f &position, const float &dt) = 0;
+    virtual void update(const sf::Vector2f &position, std::pair<std::optional<DIRECTIONS>, DIRECTIONS> facingDirection, const float &dt) = 0;
 
     virtual void render(sf::RenderTarget &target) = 0;
 
@@ -35,6 +35,3 @@ public:
     AnimationComponent *getAnimationComponent() const;
 
 };
-
-
-#endif //SFML_ITEM_H

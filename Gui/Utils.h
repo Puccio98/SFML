@@ -1,10 +1,4 @@
-//
-// Created by malte on 23/06/2024.
-//
-
-#ifndef SFML_UTILS_H
-#define SFML_UTILS_H
-
+#pragma once
 
 #include <Window/VideoMode.hpp>
 #include <cmath>
@@ -25,5 +19,3 @@ namespace GUI {
                                            const std::function<void(sf::RenderTarget *)> &customFunction);
     };
 }
-
-#endif //SFML_UTILS_H

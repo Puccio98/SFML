@@ -1,6 +1,4 @@
-#ifndef SFML_THIEF_H
-#define SFML_THIEF_H
-
+#pragma once
 
 #include "Enemy.h"
 
@@ -16,6 +14,3 @@ public:
 
     void initAnimationComponent() override;
 };
-
-
-#endif //SFML_THIEF_H

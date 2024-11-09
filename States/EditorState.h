@@ -1,5 +1,4 @@
-#ifndef SFML_EDITORSTATE_H
-#define SFML_EDITORSTATE_H
+#pragma once
 
 #include "State.h"
 #include "PauseMenuState.h"
@@ -110,6 +109,3 @@ private:
 
     void setSelectedEnemy(sf::Vector2f &mousePos);
 };
-
-
-#endif //SFML_EDITORSTATE_H

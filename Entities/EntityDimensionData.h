@@ -1,5 +1,4 @@
-#ifndef SFML_ENTITYDIMENSIONDATA_H
-#define SFML_ENTITYDIMENSIONDATA_H
+#pragma once
 
 #include <System/Vector2.hpp>
 
@@ -11,8 +10,3 @@ struct EntityDimensionData {
     sf::Vector2f size;
 
 };
-
-#endif //SFML_ENTITYDIMENSIONDATA_H
-
-
-

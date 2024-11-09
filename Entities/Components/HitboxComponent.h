@@ -1,5 +1,4 @@
-#ifndef SFML_HITBOXCOMPONENT_H
-#define SFML_HITBOXCOMPONENT_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -46,5 +45,3 @@ public:
     const sf::RectangleShape &getHitbox() const;
 
 };
-
-#endif //SFML_HITBOXCOMPONENT_H

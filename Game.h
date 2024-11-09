@@ -1,8 +1,6 @@
-#ifndef SFML_GAME_H
-#define SFML_GAME_H
+#pragma once
 
 #include "States/MainMenuState.h"
-
 
 class Game {
 private:
@@ -51,6 +49,3 @@ public:
     //Core
     void run();
 };
-
-
-#endif //SFML_GAME_H

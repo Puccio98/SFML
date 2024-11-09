@@ -1,5 +1,4 @@
-#ifndef SFML_MELEEWEAPON_H
-#define SFML_MELEEWEAPON_H
+#pragma once
 
 #include "../Weapon.h"
 
@@ -17,4 +16,4 @@ public:
 };
 
 
-#endif
+

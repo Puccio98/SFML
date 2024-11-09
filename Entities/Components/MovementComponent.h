@@ -1,5 +1,4 @@
-#ifndef SFML_MOVEMENTCOMPONENT_H
-#define SFML_MOVEMENTCOMPONENT_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -61,6 +60,3 @@ public:
 
     static MovementData &updateFacingDirection(MovementData &next);
 };
-
-
-#endif //SFML_MOVEMENTCOMPONENT_H

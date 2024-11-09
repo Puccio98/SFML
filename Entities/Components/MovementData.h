@@ -1,10 +1,9 @@
-#ifndef SFML_MOVEMENTDATA_H
-#define SFML_MOVEMENTDATA_H
+#pragma once
 
 #include <System/Vector2.hpp>
 #include <valarray>
 #include <optional>
-#include "../../enums/directions.cpp"
+#include "../enums/directions.cpp"
 
 struct MovementData {
 
@@ -46,7 +45,3 @@ struct MovementData {
     sf::Vector2f position;
     sf::Vector2f velocity;
 };
-
-#endif //SFML_MOVEMENTDATA_H
-
-

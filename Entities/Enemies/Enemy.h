@@ -1,5 +1,4 @@
-#ifndef SFML_ENEMY_H
-#define SFML_ENEMY_H
+#pragma once
 
 #include "../Entity.h"
 
@@ -29,6 +28,3 @@ public:
 
     void initEnemyComponents(sf::Texture &texture);
 };
-
-
-#endif //SFML_ENEMY_H

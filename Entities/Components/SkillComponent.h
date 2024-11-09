@@ -1,6 +1,4 @@
-#ifndef SFML_SKILLCOMPONENT_H
-#define SFML_SKILLCOMPONENT_H
-
+#pragma once
 
 #include <string>
 #include <map>
@@ -18,6 +16,3 @@ public:
 
     const Skill &getSkill(const SKILL skill);
 };
-
-
-#endif

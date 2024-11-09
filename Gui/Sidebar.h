@@ -1,5 +1,4 @@
-#ifndef SFML_SIDEBAR_H
-#define SFML_SIDEBAR_H
+#pragma once
 
 #include <Graphics/RectangleShape.hpp>
 #include <Window/VideoMode.hpp>
@@ -43,6 +42,3 @@ namespace GUI {
         Sidebar(sf::VideoMode &vm, sf::Font &font, std::vector<SidebarButton> &buttonsKeyLabel);
     };
 }
-
-
-#endif //SFML_SIDEBAR_H

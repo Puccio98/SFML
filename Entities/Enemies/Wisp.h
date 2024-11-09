@@ -1,6 +1,4 @@
-#ifndef SFML_WISP_H
-#define SFML_WISP_H
-
+#pragma once
 
 #include "Enemy.h"
 
@@ -14,6 +12,3 @@ public:
 
     void initAnimationComponent() override;
 };
-
-
-#endif //SFML_WISP_H

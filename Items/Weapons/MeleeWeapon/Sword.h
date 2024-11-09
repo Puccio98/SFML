@@ -1,6 +1,4 @@
-#ifndef SFML_SWORD_H
-#define SFML_SWORD_H
-
+#pragma once
 
 #include "MeleeWeapon.h"
 
@@ -10,9 +8,9 @@ public:
 
     ~Sword() override;
 
-    void update(const sf::Vector2f &position, std::string animation, const float &dt) override;
+    void update(const sf::Vector2f &position, std::pair<std::optional<DIRECTIONS>, DIRECTIONS> facingDirection, std::string animation, const float &dt) override;
 
-    void update(const sf::Vector2f &position, const float &dt) override;
+    void update(const sf::Vector2f &position, std::pair<std::optional<DIRECTIONS>, DIRECTIONS> facingDirection, const float &dt) override;
 
     void render(sf::RenderTarget &target) override;
 
@@ -30,4 +28,3 @@ public:
 private:
 };
 
-#endif //SFML_SWORD_H

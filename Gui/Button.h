@@ -1,5 +1,4 @@
-#ifndef SFML_BUTTON_H
-#define SFML_BUTTON_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -57,6 +56,3 @@ namespace GUI {
         unsigned short getId() const;
     };
 }
-
-
-#endif //SFML_BUTTON_H

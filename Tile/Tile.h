@@ -1,5 +1,4 @@
-#ifndef SFML_TILE_H
-#define SFML_TILE_H
+#pragma once
 
 #include<iostream>
 #include<fstream>
@@ -61,5 +60,3 @@ public:
 
     void setCollisionOutline(sf::RectangleShape &texture);
 };
-
-#endif //SFML_TILE_H

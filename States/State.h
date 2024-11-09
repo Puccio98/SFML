@@ -1,5 +1,4 @@
-#ifndef SFML_STATE_H
-#define SFML_STATE_H
+#pragma once
 
 #include "../Entities/Player.h"
 #include "../Settings/GraphicsSettings.h"
@@ -63,7 +62,3 @@ protected:
 
     sf::Vector2i getPosGrid(VIEW_TYPES viewType, sf::View view) const;
 };
-
-
-#endif //SFML_STATE_H
-

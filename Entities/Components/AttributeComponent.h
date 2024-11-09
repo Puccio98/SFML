@@ -1,6 +1,4 @@
-#ifndef SFML_ATTRIBUTECOMPONENT_H
-#define SFML_ATTRIBUTECOMPONENT_H
-
+#pragma once
 
 class AttributeComponent {
 public:
@@ -29,6 +27,3 @@ private:
 
     float hp;
 };
-
-
-#endif //SFML_ATTRIBUTECOMPONENT_H

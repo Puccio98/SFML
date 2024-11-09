@@ -1,5 +1,4 @@
-#ifndef SFML_CSSCOLOR_H
-#define SFML_CSSCOLOR_H
+#pragma once
 
 #include <System/Vector2.hpp>
 #include <Graphics/Color.hpp>
@@ -25,5 +24,3 @@ struct CssColor {
                 sf::Color(202, 240, 248, 255)};
     }
 };
-
-#endif //SFML_CSSCOLOR_H
