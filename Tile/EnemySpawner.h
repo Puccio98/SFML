@@ -1,9 +1,9 @@
 #pragma once
 
 #include <System/Vector2.hpp>
-#include "Enemies/Enemy.h"
-#include "EntityDimensionData.h"
-#include "../Tile/Tile.h"
+#include "../Entities/Enemies/Enemy.h"
+#include "../Entities/EntityDimensionData.h"
+#include "Tile.h"
 #include <utility>
 
 
@@ -14,7 +14,6 @@ private:
     int counter;
     int timeToSpawn;
     float maxDistance;
-    sf::RectangleShape shape;
     std::map<std::string, sf::Texture> textures;
 
     std::string getEnemyName();

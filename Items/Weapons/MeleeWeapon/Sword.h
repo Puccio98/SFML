@@ -8,9 +8,9 @@ public:
 
     ~Sword() override;
 
-    void update(const sf::Vector2f &position, std::pair<std::optional<DIRECTIONS>, DIRECTIONS> facingDirection, std::string animation, const float &dt) override;
+    void update(const sf::Vector2f &position, std::string animation, const float &dt) override;
 
-    void update(const sf::Vector2f &position, std::pair<std::optional<DIRECTIONS>, DIRECTIONS> facingDirection, const float &dt) override;
+    void update(const sf::Vector2f &position, const float &dt) override;
 
     void render(sf::RenderTarget &target) override;
 
@@ -26,5 +26,6 @@ private:
 public:
 
 private:
+    void flipAnimation();
 };
 

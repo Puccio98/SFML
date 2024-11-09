@@ -26,7 +26,8 @@ public:
 
     virtual ~Item();
 
-    virtual void update(const sf::Vector2f &position, std::pair<std::optional<DIRECTIONS>, DIRECTIONS> facingDirection, const float &dt) = 0;
+    virtual void update(const sf::Vector2f &position,
+                        const float &dt) = 0;
 
     virtual void render(sf::RenderTarget &target) = 0;
 

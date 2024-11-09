@@ -12,7 +12,8 @@ Sword::Sword() {
 
 Sword::~Sword() = default;
 
-void Sword::update(const sf::Vector2f &position, std::pair<std::optional<DIRECTIONS>, DIRECTIONS> facingDirection, std::string animation, const float &dt) {
+void Sword::update(const sf::Vector2f &position, std::string animation, const float &dt) {
+    this->flipAnimation();
     this->weapon_sprite.setPosition(position + this->offset);
     this->hitboxComponent->update();
     this->animationComponent->play(animation, dt);
@@ -43,8 +44,21 @@ void Sword::initHitboxComponent() {
                                                 this->dimensions.y);
 }
 
-void Sword::update(const sf::Vector2f &position, std::pair<std::optional<DIRECTIONS>, DIRECTIONS> facingDirection, const float &dt) {
+void Sword::update(const sf::Vector2f &position, const float &dt) {
 }
 
 void Sword::updateAnimation(const float &dt) {
+}
+
+void Sword::flipAnimation() {
+    auto dir = this->playerFacingDirection.first;
+    if (dir == std::nullopt) { return; }
+    if (dir == DIRECTIONS::RIGHT) {
+        this->weapon_sprite.setOrigin(0.f, 0.f);
+        this->weapon_sprite.setScale(1.f, 1.f);
+    }
+    if (dir == DIRECTIONS::LEFT) {
+        this->weapon_sprite.setOrigin(this->dimensions.x + offset.x, 0.f);
+        this->weapon_sprite.setScale(-1.f, 1.f);
+    }
 }

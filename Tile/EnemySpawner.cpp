@@ -1,6 +1,6 @@
 #include "EnemySpawner.h"
-#include "Enemies/Thief.h"
-#include "Enemies/Wisp.h"
+#include "../Entities/Enemies/Thief.h"
+#include "../Entities/Enemies/Wisp.h"
 
 
 EnemySpawner::~EnemySpawner() = default;
@@ -13,8 +13,6 @@ EnemySpawner::EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &fo
     this->initTextures();
     this->layerText.setString(this->layerText.getString() + "\n" + this->getEnemyName());
     this->layerText.setFillColor(sf::Color(200, 200, 30));
-    this->shape.setSize(edd.size);
-    this->shape.setPosition(edd.position);
 }
 
 EnemySpawner::EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font,

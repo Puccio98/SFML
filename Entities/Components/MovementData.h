@@ -3,7 +3,7 @@
 #include <System/Vector2.hpp>
 #include <valarray>
 #include <optional>
-#include "../enums/directions.cpp"
+#include "../../enums/directions.cpp"
 
 struct MovementData {
 

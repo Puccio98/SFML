@@ -15,7 +15,7 @@ void Animation::play(const float &dt, float mod_percent) {
     if (this->animationTimer >= this->animationDuration) {
         this->animationTimer = 0.f;
     }
-    
+
     // Handle single frame duration
     if (this->frameTimer >= this->frameDuration) {
         // Reset frameTimer
@@ -43,22 +43,22 @@ void Animation::reset() {
 
 Animation::Animation(sf::Sprite &sprite, sf::Texture &texture_sheet, float animation_duration,
                      int start_frame_x, int start_frame_y, int end_frames_x, int end_frames_y,
-                     int width, int height, bool canBeInterrupted) : sprite(sprite), textureSheet(texture_sheet), animationLength(end_frames_x - start_frame_x + 1),
-                                                                     frameDuration(animation_duration / (end_frames_x - start_frame_x + 1)), animationDuration(
-                animation_duration) {
-    this->width = width;
-    this->height = height;
-
-    this->frameTimer = 0.f;
-    this->animationTimer = 0.f;
-    this->startRect = sf::IntRect(start_frame_x * width, start_frame_y * height, width, height);
-    this->currentRect = this->startRect;
-    this->endRect = sf::IntRect(end_frames_x * width, end_frames_y * height, width, height);
-
+                     int width, int height, bool canBeInterrupted)
+        : sprite(sprite),
+          textureSheet(texture_sheet),
+          animationLength(end_frames_x - start_frame_x + 1),
+          frameDuration(animation_duration / (end_frames_x - start_frame_x + 1)),
+          animationDuration(animation_duration),
+          width(width),
+          height(height),
+          frameTimer(0.f),
+          animationTimer(0.f),
+          startRect(start_frame_x * width, start_frame_y * height, width, height),
+          currentRect(startRect),
+          endRect(end_frames_x * width, end_frames_y * height, width, height),
+          canBeInterrupted(canBeInterrupted) {
     this->sprite.setTexture(this->textureSheet, true);
     this->sprite.setTextureRect(this->startRect);
-
-    this->canBeInterrupted = canBeInterrupted;
 }
 
 bool Animation::isAnimationAboutToRestart(const float &dt, float mod_percent) const {

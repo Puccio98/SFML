@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../Entities/EnemySpawner.h"
+#include "../../../Tile/EnemySpawner.h"
 
 struct MapData : Serializable {
     // Base Data

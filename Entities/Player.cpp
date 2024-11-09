@@ -60,6 +60,7 @@ void Player::updateInternal(const MovementData &next, const float &dt) {
 
     if (this->isPlayerAttacking()) {
         if (this->weapon != nullptr) {
+            this->weapon->setPlayerFacingDirection(this->movementComponent->md.facingDirection);
             this->weapon->update(this->getSpritePosition(), this->animationComponent->getCurrentAnimation().first, dt);
         }
     };
@@ -82,7 +83,8 @@ void Player::setNextAnimation(const float &dt) {
     //Se sono presenti azioni avviate dal giocatore, nextAnimation viene gestita da queste
     if (this->playerActions.find(PLAYER_ACTIONS::ATTACK) != playerActions.end()) {
         this->flipAnimation(md.facingDirection.first);
-        this->nextAnimation = md.facingDirection.second == DIRECTIONS::DOWN ? PLAYER_ANIMATIONS::ATTACK_DOWN: PLAYER_ANIMATIONS::ATTACK_UP;
+        this->nextAnimation = md.facingDirection.second == DIRECTIONS::DOWN ? PLAYER_ANIMATIONS::ATTACK_DOWN
+                                                                            : PLAYER_ANIMATIONS::ATTACK_UP;
 
         if (this->movementComponent->isState(MOVEMENT_STATES::MOVING) && md.facingDirection.first != std::nullopt) {
             this->nextAnimation = PLAYER_ANIMATIONS::ATTACK_SIDE;
@@ -179,5 +181,5 @@ Weapon *Player::getWeapon() const {
 bool Player::isPlayerAttacking() {
     return this->animationComponent->getCurrentAnimation().first == "ATTACK_DOWN" ||
            this->animationComponent->getCurrentAnimation().first == "ATTACK_UP" ||
-            this->animationComponent->getCurrentAnimation().first == "ATTACK_SIDE";
+           this->animationComponent->getCurrentAnimation().first == "ATTACK_SIDE";
 }
