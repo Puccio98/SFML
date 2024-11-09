@@ -97,7 +97,8 @@ add_executable(SFML
         enums/player_animations.cpp Items/Weapons/Weapon.cpp Items/Weapons/Weapon.h
         enums/player_actions.cpp
         Tile/CoffeMachine.cpp
-        Tile/CoffeMachine.h)
+        Tile/CoffeMachine.h
+        States/TextureSelectorManager.cpp)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/libs/SFML-2.6.1/lib/cmake/SFML)
