@@ -1,6 +1,4 @@
-#ifndef SFML_COFFEMACHINE_H
-#define SFML_COFFEMACHINE_H
-
+#pragma once
 
 #include "Tile.h"
 
@@ -14,6 +12,3 @@ public:
 
     void initTextures();
 };
-
-
-#endif //SFML_COFFEMACHINE_H
