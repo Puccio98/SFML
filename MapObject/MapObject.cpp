@@ -64,3 +64,21 @@ int MapObject::mapToRange(int value, int minVal, int maxVal) {
     return std::min(std::max(value, minVal), maxVal);
 }
 
+MapObjectData *MapObject::getData() const {
+    return data;
+}
+
+void MapObject::update(float dt, std::vector<Entity *> &entities) {
+
+}
+
+void MapObject::render(sf::RenderTarget &target) {
+    if (this->data->sprites.empty()) {
+        target.draw(defaultSprite);
+    }
+
+    for (const auto &sprite: this->data->sprites) {
+        target.draw(sprite);
+    }
+}
+

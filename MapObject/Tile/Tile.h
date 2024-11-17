@@ -10,7 +10,6 @@
 #include"SFML/Window.hpp"
 #include"SFML/Graphics.hpp"
 #include "TileData.h"
-#include "../../Entities/Enemies/Enemy.h"
 #include "../MapObject.h"
 
 class Tile : public MapObject {
@@ -20,6 +19,10 @@ private:
     std::string getSpritesAsString() const;
 
     void initShapes(sf::Texture &textureSheet) override;
+
+    void initLayerText(sf::Font &font);
+
+    void setCollisionOutline(sf::RectangleShape &texture);
 
 protected:
     sf::Text layerText;
@@ -34,17 +37,13 @@ public:
 
     const TileData *getTiledata() const;
 
-    virtual void update(float dt, std::vector<Entity *> &entities);
+    void update(float dt, std::vector<Entity *> &entities) override;
 
-    virtual void render(sf::RenderTarget &target);
+    void render(sf::RenderTarget &target) override;
 
     std::string getAsString(unsigned x, unsigned y, unsigned z) const;
 
     bool hasBehaviour(TILE_BEHAVIOURS type);
-
-    void initLayerText(sf::Font &font);
-
-    void setCollisionOutline(sf::RectangleShape &texture);
 
     void addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition) override;
 

@@ -4,6 +4,8 @@
 #include "../../Helper/Json/Serializable.h"
 
 struct MapObjectData : Serializable {
+    // deve diventare map object type
+    TILE_TYPES type;
     int index_x;
     int index_y;
     int index_z;

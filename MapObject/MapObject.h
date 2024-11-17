@@ -1,9 +1,12 @@
 #pragma once
 
 #include "Tile/MapObjectData.h"
+#include "../Entities/Entity.h"
 
 class MapObject {
 private:
+    static int mapToRange(int value, int minVal, int maxVal);
+
 protected:
     MapObjectData *data;
     sf::RectangleShape defaultSprite;
@@ -13,12 +16,17 @@ protected:
 
     virtual sf::Color setDefaultColor(int value, int minIntensity);
 
-    int mapToRange(int value, int minVal, int maxVal);
+public:
+    MapObjectData *getData() const;
 
 public:
     explicit MapObject(MapObjectData *data, bool hud);
 
     virtual ~MapObject();
+
+    virtual void update(float dt, std::vector<Entity *> &entities);
+
+    virtual void render(sf::RenderTarget &target);
 
     float get_x();
 

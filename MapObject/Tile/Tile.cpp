@@ -13,13 +13,7 @@ Tile::Tile(TileData tileData, sf::Texture &texture,
 Tile::~Tile() = default;
 
 void Tile::render(sf::RenderTarget &target) {
-    if (this->data->sprites.empty()) {
-        target.draw(defaultSprite);
-    }
-
-    for (const auto &sprite: this->data->sprites) {
-        target.draw(sprite);
-    }
+    MapObject::render(target);
 
     if (this->hud) {
         target.draw(this->layerText);

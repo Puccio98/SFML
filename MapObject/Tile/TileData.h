@@ -7,7 +7,6 @@
 #include "MapObjectData.h"
 
 struct TileData : public MapObjectData {
-    TILE_TYPES type;
     ENEMY_TYPES enemy_type;
     std::vector<TILE_BEHAVIOURS> behaviours;
 
