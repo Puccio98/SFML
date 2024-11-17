@@ -10,26 +10,18 @@
 #include"SFML/Window.hpp"
 #include"SFML/Graphics.hpp"
 #include "TileData.h"
-#include "../Entities/Enemies/Enemy.h"
+#include "../../Entities/Enemies/Enemy.h"
+#include "../MapObject.h"
 
-class Tile {
+class Tile : public MapObject {
 private:
     std::string getTypesAsString() const;
 
     std::string getSpritesAsString() const;
 
-    void initShapes(sf::Texture &textureSheet);
-
-
-    float get_x();
-
-    float get_y();
-
-    bool hud = false;
+    void initShapes(sf::Texture &textureSheet) override;
 
 protected:
-    TileData tiledata;
-    sf::RectangleShape defaultSprite;
     sf::Text layerText;
 
 public:
@@ -40,7 +32,7 @@ public:
 
     virtual ~Tile();
 
-    const TileData &getTiledata() const;
+    const TileData *getTiledata() const;
 
     virtual void update(float dt, std::vector<Entity *> &entities);
 
@@ -48,15 +40,13 @@ public:
 
     std::string getAsString(unsigned x, unsigned y, unsigned z) const;
 
-    bool isOfType(TILE_BEHAVIOURS type);
+    bool hasBehaviour(TILE_BEHAVIOURS type);
 
     void initLayerText(sf::Font &font);
 
-    sf::Color setGreyColor(int value, int minIntensity);
-
-    int mapToRange(int value, int minVal, int maxVal);
-
-    void addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition);
-
     void setCollisionOutline(sf::RectangleShape &texture);
+
+    void addTexture(sf::Texture &textureSheet, const sf::Vector2f &texturePosition) override;
+
+    void initTile(sf::Font &font, sf::Texture &texture);
 };

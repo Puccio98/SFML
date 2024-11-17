@@ -218,7 +218,7 @@ Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf
                 auto tileLayers = this->mapData.tiles[x][y];
                 if (tileLayers.size() > layer) {
                     Tile *tile = this->mapData.tiles[x][y][layer];
-                    if (tile != nullptr && tile->isOfType(TILE_BEHAVIOURS::COLLISION)) {
+                    if (tile != nullptr && tile->hasBehaviour(TILE_BEHAVIOURS::COLLISION)) {
                         if (isVertical) {
                             forbidden_directions = std::make_tuple(std::get<0>(forbidden_directions), true);
                         } else {

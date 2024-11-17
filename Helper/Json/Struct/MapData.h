@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../Tile/EnemySpawner.h"
+#include "../../../MapObject/Tile/EnemySpawner.h"
 
 struct MapData : Serializable {
     // Base Data
@@ -37,7 +37,7 @@ struct MapData : Serializable {
         for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
             for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
                 for (size_t z = 0; z < this->tiles[x][y].size(); z++) {
-                    j["tiles"].push_back(this->tiles[x][y][z]->getTiledata().to_json());
+                    j["tiles"].push_back(this->tiles[x][y][z]->getTiledata()->to_json());
                 }
             }
         }
