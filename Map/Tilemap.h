@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Tile/Tile.h"
+#include "../MapObject/Tile/Tile.h"
 #include "../Entities/EntityDimensionData.h"
 #include "../Helper/Json/Struct/MapData.h"
 

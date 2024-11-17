@@ -1,11 +1,10 @@
 #pragma once
 
 #include <System/Vector2.hpp>
-#include "../Entities/Enemies/Enemy.h"
-#include "../Entities/EntityDimensionData.h"
+#include "../../Entities/Enemies/Enemy.h"
+#include "../../Entities/EntityDimensionData.h"
 #include "Tile.h"
 #include <utility>
-
 
 class EnemySpawner : public Tile {
 private:

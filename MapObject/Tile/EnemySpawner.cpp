@@ -1,6 +1,6 @@
 #include "EnemySpawner.h"
-#include "../Entities/Enemies/Thief.h"
-#include "../Entities/Enemies/Wisp.h"
+#include "../../Entities/Enemies/Thief.h"
+#include "../../Entities/Enemies/Wisp.h"
 
 
 EnemySpawner::~EnemySpawner() = default;
@@ -54,13 +54,13 @@ void EnemySpawner::spawn(std::vector<Entity *> &entities) {
         Enemy *enemy;
         switch (type) {
             case ENEMY_TYPES::WISP:
-                enemy = new Wisp(this->tiledata.gridSize * this->tiledata.index_x,
-                                 this->tiledata.gridSize * this->tiledata.index_y,
+                enemy = new Wisp(this->data->gridSize * this->data->index_x,
+                                 this->data->gridSize * this->data->index_y,
                                  this->textures["ENEMY_SHEET"]);
                 break;
             case ENEMY_TYPES::THIEF:
-                enemy = new Thief(this->tiledata.gridSize * this->tiledata.index_x,
-                                  this->tiledata.gridSize * this->tiledata.index_y,
+                enemy = new Thief(this->data->gridSize * this->data->index_x,
+                                  this->data->gridSize * this->data->index_y,
                                   this->textures["ENEMY_SHEET"]);
                 break;
             default:
