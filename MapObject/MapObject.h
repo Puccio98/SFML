@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Tile/MapObjectData.h"
+#include "MapObjectData.h"
 #include "../Entities/Entity.h"
 
 class MapObject {

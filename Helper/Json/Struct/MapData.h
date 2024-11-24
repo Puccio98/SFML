@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../../../MapObject/Tile/EnemySpawner.h"
+#include "../../../MapObject/EnemySpawner/EnemySpawner.h"
+#include "../../../MapObject/EnemySpawner/EnemySpawnerData.h"
 
 struct MapData : Serializable {
     // Base Data
@@ -35,14 +36,30 @@ struct MapData : Serializable {
         j["texturePath"] = this->texturePath;
 
         j["tiles"] = nlohmann::json::array();
+        j["objects"] = nlohmann::json::array();
 
         for (size_t x = 0; x < this->maxSizeGrid.x; x++) {
             for (size_t y = 0; y < this->maxSizeGrid.y; y++) {
                 for (size_t z = 0; z < this->tiles[x][y].size(); z++) {
+                    // Push tile data to JSON
                     j["tiles"].push_back(this->tiles[x][y][z]->getTiledata()->to_json());
+
+                    // Check if the object exists in the map at (x, y, z)
+                    auto itX = this->objects.find(x);
+                    if (itX != this->objects.end()) {
+                        auto itY = itX->second.find(y);
+                        if (itY != itX->second.end()) {
+                            auto itZ = itY->second.find(z);
+                            if (itZ != itY->second.end() && itZ->second != nullptr) {
+                                auto pippo = itZ->second;
+                                j["objects"].push_back(pippo->getData()->to_json());
+                            }
+                        }
+                    }
                 }
             }
         }
+
         return j;
     };
 
@@ -115,32 +132,45 @@ struct MapData : Serializable {
         this->tiles[tileData.index_x][tileData.index_y].push_back(this->GetTile(tileData));
     }
 
+
+    void addObject(MapObjectData *data) {
+        // Access or create the nested map for index_x
+        auto &level_x = this->objects[data->index_x];
+
+        // Access or create the nested map for index_y
+        auto &level_y = level_x[data->index_y];
+
+        // Replace the MapObject pointer at index_z
+        level_y[data->index_z] = this->GetObject(data);
+    }
+
+
 private:
     Tile *GetTile(const TileData &tileData) {
-//        switch (tileData.type) {
-//            case MAP_OBJECTS::DEFAULT:
-//                return new Tile(tileData,
-//                                this->tileTextureSheet,
-//                                this->font,
-//                                this->hud);
-//            case MAP_OBJECTS::SPAWNER:
-//                return new EnemySpawner(tileData, this->tileTextureSheet, this->font, this->hud,
-//                                        EntityDimensionData(sf::Vector2f(tileData.gridSize * tileData.index_x,
-//                                                                         tileData.gridSize * tileData.index_y),
-//                                                            sf::Vector2(tileData.gridSize, tileData.gridSize)
-//                                        ),
-//                                        tileData.enemy_type, 0, 0, 0);
-//                break;
-//            case MAP_OBJECTS::WARP:
-//                break;
-//            case MAP_OBJECTS::ELEMENT:
-//                break;
-//        }
-//
-//        return nullptr;
         return new Tile(tileData,
                         this->tileTextureSheet,
                         this->font,
                         this->hud);
+    }
+
+
+    MapObject *GetObject(MapObjectData *pObject) {
+        switch (pObject->type) {
+            case MAP_OBJECTS::SPAWNER: {
+                auto ptr = dynamic_cast<EnemySpawnerData *>(pObject);
+                return new EnemySpawner(ptr, this->tileTextureSheet, this->font,
+                                        this->hud,
+                                        EntityDimensionData(sf::Vector2f(pObject->gridSize * pObject->index_x,
+                                                                         pObject->gridSize * pObject->index_y),
+                                                            sf::Vector2(pObject->gridSize, pObject->gridSize)
+                                        ),
+                                        ptr->enemy_type, 0, 0, 0);
+            }
+            case MAP_OBJECTS::ELEMENT:
+                break;
+            default:
+                throw ("ERROR::MAPDATA COULD NOT DETERMINE OBJECT TYPE");
+        };
+        return nullptr;
     }
 };

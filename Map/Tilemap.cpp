@@ -123,6 +123,15 @@ void Tilemap::addTile(const TileData &tileData) {
 }
 
 
+void Tilemap::addMapObject(MapObjectData *moData) {
+    if (moData->index_x < this->mapData.maxSizeGrid.x &&
+        moData->index_y < this->mapData.maxSizeGrid.y) {
+        this->mapData.addObject(moData);
+    }
+
+}
+
+
 const sf::Texture &Tilemap::getTileTextureSheet() const {
     return this->mapData.tileTextureSheet;
 }
@@ -302,6 +311,10 @@ std::vector<Tile *> *Tilemap::getTileLayers(int x, int y) {
 
 const std::vector<std::vector<std::vector<Tile *>>> &Tilemap::getMap() const {
     return this->mapData.tiles;
+}
+
+const std::map<int, std::map<int, std::map<int, MapObject *>>> &Tilemap::getMapObject() const {
+    return this->mapData.objects;
 }
 
 void Tilemap::addTexture(int index_x, int index_y, const sf::Vector2f &texturePosition) {

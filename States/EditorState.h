@@ -84,6 +84,8 @@ private:
 
     void addTile();
 
+    void addMapObject(MAP_OBJECTS objectType);
+
     void addTexture();
 
     /**
