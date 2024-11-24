@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "../../Helper/Json/Serializable.h"
+#include "../../enums/tile_types.cpp"
 
 struct MapObjectData : Serializable {
     // deve diventare map object type

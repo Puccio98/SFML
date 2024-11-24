@@ -2,7 +2,6 @@
 
 #include <vector>
 #include"../../enums/behaviour_types.cpp"
-#include "../../enums/tile_types.cpp"
 #include "../../enums/enemy_types.cpp"
 #include "MapObjectData.h"
 
