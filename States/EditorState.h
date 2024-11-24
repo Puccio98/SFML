@@ -82,7 +82,7 @@ private:
         }
     }
 
-    void addTile(TILE_TYPES type);
+    void addTile();
 
     void addTexture();
 

@@ -89,7 +89,7 @@ add_executable(SFML
         Helper/Json/Serializable.h
         Helper/Json/Struct/MapData.h
         enums/enemy_types.cpp
-        enums/tile_types.cpp
+        enums/map_objects.cpp
         enums/directions.cpp
         Entities/Enemies/Wisp.cpp
         Entities/Enemies/Wisp.h

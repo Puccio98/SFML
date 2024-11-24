@@ -287,16 +287,16 @@ void EditorState::updateInput(const float &dt) {
     }
 }
 
-void EditorState::addTile(TILE_TYPES type) {
+void EditorState::addTile() {
     TileData tileData;
     tileData.gridSize = stateData.gridSize;
     tileData.index_x = getPosGrid(VIEW_TYPES::VIEW, this->view).x;
     tileData.index_y = getPosGrid(VIEW_TYPES::VIEW, this->view).y;
     tileData.index_z = tileMap->getMap()[tileData.index_x][tileData.index_y].size();
     tileData.behaviours = tileTypes; // Copia contenuto del vettore :D
-    tileData.type = type;
+    tileData.type = MAP_OBJECTS::DEFAULT;
     sf::Vector2i enemyGridPos = this->enemyTextureSelector->getSelectedGridPosition();
-    tileData.enemy_type = enemyGridPos.x == 0 ? ENEMY_TYPES::WISP : ENEMY_TYPES::THIEF;
+    //tileData.enemy_type = enemyGridPos.x == 0 ? ENEMY_TYPES::WISP : ENEMY_TYPES::THIEF;
 
     if (!positionMap[{tileData.index_x, tileData.index_y}]) {
         tileMap->addTile(tileData);
@@ -341,11 +341,11 @@ void EditorState::executeButton(const std::string &key) {
     if (key == "OPEN_TEXTURE_SELECTOR") {
         this->addTexture();
     } else if (key == "OPEN_ELEMENT_SELECTOR") {
-        this->addTile(TILE_TYPES::ELEMENT);
+//        this->addTile(MAP_OBJECTS::ELEMENT);
     } else if (key == "TOGGLE_TILES") {
-        this->addTile(TILE_TYPES::DEFAULT);
+        this->addTile();
     } else if (key == "OPEN_ENEMY_TEXTURE_SELECTOR") {
-        this->addTile(TILE_TYPES::SPAWNER);
+//        this->addTile(MAP_OBJECTS::SPAWNER);
     } else {
         return;
     }

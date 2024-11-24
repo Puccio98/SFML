@@ -12,6 +12,8 @@ struct MapData : Serializable {
 
     // Tiles
     std::vector<std::vector<std::vector<Tile *>>> tiles;
+    // Mappa degli oggetti
+    std::map<int, std::map<int, std::map<int, MapObject *>>> objects;
 
     // non serializza
     sf::Vector2f maxSizeWorld;
@@ -115,24 +117,30 @@ struct MapData : Serializable {
 
 private:
     Tile *GetTile(const TileData &tileData) {
-        switch (tileData.type) {
-            case TILE_TYPES::DEFAULT:
-                return new Tile(tileData,
-                                this->tileTextureSheet,
-                                this->font,
-                                this->hud);
-            case TILE_TYPES::SPAWNER:
-                return new EnemySpawner(tileData, this->tileTextureSheet, this->font, this->hud,
-                                        EntityDimensionData(sf::Vector2f(tileData.gridSize * tileData.index_x,
-                                                                         tileData.gridSize * tileData.index_y),
-                                                            sf::Vector2(tileData.gridSize, tileData.gridSize)
-                                        ),
-                                        tileData.enemy_type, 0, 0, 0);
-                break;
-            case TILE_TYPES::WARP:
-                break;
-        }
-
-        return nullptr;
+//        switch (tileData.type) {
+//            case MAP_OBJECTS::DEFAULT:
+//                return new Tile(tileData,
+//                                this->tileTextureSheet,
+//                                this->font,
+//                                this->hud);
+//            case MAP_OBJECTS::SPAWNER:
+//                return new EnemySpawner(tileData, this->tileTextureSheet, this->font, this->hud,
+//                                        EntityDimensionData(sf::Vector2f(tileData.gridSize * tileData.index_x,
+//                                                                         tileData.gridSize * tileData.index_y),
+//                                                            sf::Vector2(tileData.gridSize, tileData.gridSize)
+//                                        ),
+//                                        tileData.enemy_type, 0, 0, 0);
+//                break;
+//            case MAP_OBJECTS::WARP:
+//                break;
+//            case MAP_OBJECTS::ELEMENT:
+//                break;
+//        }
+//
+//        return nullptr;
+        return new Tile(tileData,
+                        this->tileTextureSheet,
+                        this->font,
+                        this->hud);
     }
 };

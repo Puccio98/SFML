@@ -116,7 +116,7 @@ void Tilemap::removeTile(const unsigned index_x, const unsigned index_y) {
 
 void Tilemap::addTile(const TileData &tileData) {
     if (tileData.index_x < this->mapData.maxSizeGrid.x &&
-        tileData.index_y < this->mapData.maxSizeGrid.y //&& tileData.index_z < this->mapData.maxLayerIndex
+        tileData.index_y < this->mapData.maxSizeGrid.y
             ) {
         this->mapData.addTile(tileData);
     }

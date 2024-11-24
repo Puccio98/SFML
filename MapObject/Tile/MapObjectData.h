@@ -2,11 +2,11 @@
 
 #include <SFML/Graphics.hpp>
 #include "../../Helper/Json/Serializable.h"
-#include "../../enums/tile_types.cpp"
+#include "../../enums/map_objects.cpp"
 
 struct MapObjectData : Serializable {
     // deve diventare map object type
-    TILE_TYPES type;
+    MAP_OBJECTS type;
     int index_x;
     int index_y;
     int index_z;

@@ -20,7 +20,7 @@ struct TileData : public MapObjectData {
 
         // Tile type
         j["type"] = this->type;             // Tile type
-        if (this->type == TILE_TYPES::SPAWNER) {
+        if (this->type == MAP_OBJECTS::SPAWNER) {
             j["enemy_type"] = this->enemy_type;
         }
         return j;
