@@ -66,4 +66,8 @@ public:
     std::vector<Tile *> *getTileLayers(int x, int y);
 
     sf::IntRect getInteractiveArea(sf::RenderTarget &target, EntityDimensionData &halfSizeGrid);
+
+    const std::map<int, std::map<int, std::map<int, MapObject *>>> &getMapObject() const;
+
+    void addMapObject(MapObjectData *moData);
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Tile.h"
+#include "../Tile/Tile.h"
 
 class CoffeMachine : public Tile {
 private:

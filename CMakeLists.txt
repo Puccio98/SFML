@@ -31,7 +31,7 @@ add_executable(SFML
         MapObject/Tile/Tile.cpp
         MapObject/Tile/Tile.h
         MapObject/Tile/TileData.h
-        MapObject/Tile/MapObjectData.h
+        MapObject/MapObjectData.h
         States/PauseMenuState.cpp
         States/PauseMenuState.h
         States/SettingsState.cpp
@@ -84,12 +84,12 @@ add_executable(SFML
         Entities/Enemies/Enemy.cpp
         Entities/Enemies/Enemy.h
         Entities/EntityDimensionData.h
-        MapObject/Tile/EnemySpawner.cpp
-        MapObject/Tile/EnemySpawner.h
+        MapObject/EnemySpawner/EnemySpawner.cpp
+        MapObject/EnemySpawner/EnemySpawner.h
         Helper/Json/Serializable.h
         Helper/Json/Struct/MapData.h
         enums/enemy_types.cpp
-        enums/tile_types.cpp
+        enums/map_objects.cpp
         enums/directions.cpp
         Entities/Enemies/Wisp.cpp
         Entities/Enemies/Wisp.h
@@ -97,11 +97,12 @@ add_executable(SFML
         Entities/Enemies/Thief.h
         enums/player_animations.cpp Items/Weapons/Weapon.cpp Items/Weapons/Weapon.h
         enums/player_actions.cpp
-        MapObject/Tile/CoffeMachine.cpp
-        MapObject/Tile/CoffeMachine.h
+        MapObject/Element/CoffeMachine.cpp
+        MapObject/Element/CoffeMachine.h
         States/TextureSelectorManager.cpp
         MapObject/MapObject.cpp
-        MapObject/MapObject.h)
+        MapObject/MapObject.h
+        MapObject/EnemySpawner/EnemySpawnerData.h)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/libs/SFML-2.6.1/lib/cmake/SFML)

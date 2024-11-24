@@ -1,11 +1,12 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "../../Helper/Json/Serializable.h"
+#include "../Helper/Json/Serializable.h"
+#include "../enums/map_objects.cpp"
 
 struct MapObjectData : Serializable {
     // deve diventare map object type
-    TILE_TYPES type;
+    MAP_OBJECTS type;
     int index_x;
     int index_y;
     int index_z;
@@ -29,6 +30,8 @@ struct MapObjectData : Serializable {
             j["textures"].push_back({{"x", pos.getTextureRect().left},
                                      {"y", pos.getTextureRect().top}});
         }
+        // Tile type
+        j["type"] = this->type;// Tile type
         return j;
     };
 
@@ -48,5 +51,6 @@ struct MapObjectData : Serializable {
             textureJson.at("y").get_to(pos.y);
             texturePositions.push_back(pos);
         }
+        j.at("type").get_to(type);
     };
 };

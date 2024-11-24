@@ -1,23 +1,22 @@
 #include "EnemySpawner.h"
 #include "../../Entities/Enemies/Thief.h"
 #include "../../Entities/Enemies/Wisp.h"
+#include "EnemySpawnerData.h"
 
 
 EnemySpawner::~EnemySpawner() = default;
 
-EnemySpawner::EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font, bool hud,
+EnemySpawner::EnemySpawner(EnemySpawnerData *enemySpawnerData, sf::Texture &texture, sf::Font &font, bool hud,
                            EntityDimensionData edd, ENEMY_TYPES type, int amount, int timeToSpawn, float maxDistance)
-        : Tile(std::move(tileData), texture, font, hud), edd(edd), type(type), counter(amount),
+        : MapObject(enemySpawnerData, hud), edd(edd), type(type), counter(amount),
           maxDistance(maxDistance),
           timeToSpawn(timeToSpawn) {
     this->initTextures();
-    this->layerText.setString(this->layerText.getString() + "\n" + this->getEnemyName());
-    this->layerText.setFillColor(sf::Color(200, 200, 30));
 }
 
-EnemySpawner::EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font,
+EnemySpawner::EnemySpawner(EnemySpawnerData *enemySpawnerData, sf::Texture &texture, sf::Font &font,
                            EntityDimensionData edd, ENEMY_TYPES type, int amount, int timeToSpawn, float maxDistance)
-        : EnemySpawner(std::move(tileData), texture, font, false, edd, type, amount, timeToSpawn, maxDistance) {
+        : EnemySpawner(enemySpawnerData, texture, font, false, edd, type, amount, timeToSpawn, maxDistance) {
 }
 
 
@@ -41,11 +40,11 @@ void EnemySpawner::initTextures() {
 }
 
 void EnemySpawner::render(sf::RenderTarget &target) {
-    Tile::render(target);
+    MapObject::render(target);
 }
 
 void EnemySpawner::update(float dt, std::vector<Entity *> &entities) {
-    Tile::update(dt, entities);
+    MapObject::update(dt, entities);
     this->spawn(entities);
 }
 
