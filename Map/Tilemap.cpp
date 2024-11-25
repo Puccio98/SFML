@@ -116,10 +116,19 @@ void Tilemap::removeTile(const unsigned index_x, const unsigned index_y) {
 
 void Tilemap::addTile(const TileData &tileData) {
     if (tileData.index_x < this->mapData.maxSizeGrid.x &&
-        tileData.index_y < this->mapData.maxSizeGrid.y //&& tileData.index_z < this->mapData.maxLayerIndex
+        tileData.index_y < this->mapData.maxSizeGrid.y
             ) {
         this->mapData.addTile(tileData);
     }
+}
+
+
+void Tilemap::addMapObject(MapObjectData *moData) {
+    if (moData->index_x < this->mapData.maxSizeGrid.x &&
+        moData->index_y < this->mapData.maxSizeGrid.y) {
+        this->mapData.addObject(moData);
+    }
+
 }
 
 
@@ -218,7 +227,7 @@ Tilemap::getForbiddenDirections(const sf::RectangleShape &currentShape, const sf
                 auto tileLayers = this->mapData.tiles[x][y];
                 if (tileLayers.size() > layer) {
                     Tile *tile = this->mapData.tiles[x][y][layer];
-                    if (tile != nullptr && tile->isOfType(TILE_BEHAVIOURS::COLLISION)) {
+                    if (tile != nullptr && tile->hasBehaviour(TILE_BEHAVIOURS::COLLISION)) {
                         if (isVertical) {
                             forbidden_directions = std::make_tuple(std::get<0>(forbidden_directions), true);
                         } else {
@@ -302,6 +311,10 @@ std::vector<Tile *> *Tilemap::getTileLayers(int x, int y) {
 
 const std::vector<std::vector<std::vector<Tile *>>> &Tilemap::getMap() const {
     return this->mapData.tiles;
+}
+
+const std::map<int, std::map<int, std::map<int, MapObject *>>> &Tilemap::getMapObject() const {
+    return this->mapData.objects;
 }
 
 void Tilemap::addTexture(int index_x, int index_y, const sf::Vector2f &texturePosition) {

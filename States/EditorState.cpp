@@ -1,6 +1,7 @@
 #include "EditorState.h"
 #include "../Gui/SwitchButton.h"
 #include "../Gui/Utils.h"
+#include "../MapObject/EnemySpawner/EnemySpawnerData.h"
 
 EditorState::EditorState(StateData &stateData) :
         State(stateData),
@@ -287,21 +288,60 @@ void EditorState::updateInput(const float &dt) {
     }
 }
 
-void EditorState::addTile(TILE_TYPES type) {
+void EditorState::addTile() {
     TileData tileData;
     tileData.gridSize = stateData.gridSize;
     tileData.index_x = getPosGrid(VIEW_TYPES::VIEW, this->view).x;
     tileData.index_y = getPosGrid(VIEW_TYPES::VIEW, this->view).y;
     tileData.index_z = tileMap->getMap()[tileData.index_x][tileData.index_y].size();
     tileData.behaviours = tileTypes; // Copia contenuto del vettore :D
-    tileData.type = type;
-    sf::Vector2i enemyGridPos = this->enemyTextureSelector->getSelectedGridPosition();
-    tileData.enemy_type = enemyGridPos.x == 0 ? ENEMY_TYPES::GRIMREAPER : ENEMY_TYPES::THIEF;
+    tileData.type = MAP_OBJECTS::TILE;
 
     if (!positionMap[{tileData.index_x, tileData.index_y}]) {
         tileMap->addTile(tileData);
     }
     positionMap[{tileData.index_x, tileData.index_y}] = true;
+}
+
+
+void EditorState::addMapObject(MAP_OBJECTS objectType) {
+    int index_x = getPosGrid(VIEW_TYPES::VIEW, this->view).x;
+    int index_y = getPosGrid(VIEW_TYPES::VIEW, this->view).y;
+
+    //Controllo esistenza tile su cui posizionare l'oggetto
+    if (tileMap->getMap()[index_x].empty()) {
+        return;
+    }
+    if (tileMap->getMap()[index_x][index_y].empty()) {
+        return;
+    }
+
+    int index_z = tileMap->getMap()[index_x][index_y].size() - 1;
+    if (tileMap->getMap()[index_x][index_y][index_z] == nullptr) {
+        return;
+    }
+
+    MapObjectData *moData = nullptr;
+
+    switch (objectType) {
+        case MAP_OBJECTS::ELEMENT:
+            break;
+        case MAP_OBJECTS::SPAWNER: {
+            sf::Vector2i enemyGridPos = this->enemyTextureSelector->getSelectedGridPosition();
+            ENEMY_TYPES enemy = enemyGridPos.x == 0 ? ENEMY_TYPES::WISP : ENEMY_TYPES::THIEF;
+            moData = new EnemySpawnerData(enemy);
+            break;
+        }
+        default:
+            throw ("ERROR::COULD NOT DETERMINE TYPE OF MAP_OBJECT");
+    }
+    moData->gridSize = stateData.gridSize;
+    moData->index_x = index_x;
+    moData->index_y = index_y;
+    moData->index_z = index_z;
+    moData->type = objectType;
+
+    tileMap->addMapObject(moData);
 }
 
 void EditorState::addTexture() {
@@ -341,11 +381,11 @@ void EditorState::executeButton(const std::string &key) {
     if (key == "OPEN_TEXTURE_SELECTOR") {
         this->addTexture();
     } else if (key == "OPEN_ELEMENT_SELECTOR") {
-        this->addTile(TILE_TYPES::ELEMENT);
+        this->addMapObject(MAP_OBJECTS::ELEMENT);
     } else if (key == "TOGGLE_TILES") {
-        this->addTile(TILE_TYPES::DEFAULT);
+        this->addTile();
     } else if (key == "OPEN_ENEMY_TEXTURE_SELECTOR") {
-        this->addTile(TILE_TYPES::SPAWNER);
+        this->addMapObject(MAP_OBJECTS::SPAWNER);
     } else {
         return;
     }

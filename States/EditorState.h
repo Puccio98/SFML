@@ -82,7 +82,9 @@ private:
         }
     }
 
-    void addTile(TILE_TYPES type);
+    void addTile();
+
+    void addMapObject(MAP_OBJECTS objectType);
 
     void addTexture();
 

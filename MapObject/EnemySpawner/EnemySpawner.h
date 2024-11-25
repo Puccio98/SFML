@@ -1,13 +1,13 @@
 #pragma once
 
 #include <System/Vector2.hpp>
-#include "../Entities/Enemies/Enemy.h"
-#include "../Entities/EntityDimensionData.h"
-#include "Tile.h"
+#include "../../Entities/Enemies/Enemy.h"
+#include "../../Entities/EntityDimensionData.h"
+#include "../Tile/Tile.h"
+#include "EnemySpawnerData.h"
 #include <utility>
 
-
-class EnemySpawner : public Tile {
+class EnemySpawner : public MapObject {
 private:
     ENEMY_TYPES type;
     EntityDimensionData edd;
@@ -19,10 +19,10 @@ private:
     std::string getEnemyName();
 
 public:
-    EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font, bool hud,
+    EnemySpawner(EnemySpawnerData *enemySpawnerData, sf::Texture &texture, sf::Font &font, bool hud,
                  EntityDimensionData edd, ENEMY_TYPES type, int amount, int timeToSpawn, float maxDistance);
 
-    EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &font,
+    EnemySpawner(EnemySpawnerData *enemySpawnerData, sf::Texture &texture, sf::Font &font,
                  EntityDimensionData edd, ENEMY_TYPES type, int amount, int timeToSpawn, float maxDistance);
 
     virtual ~EnemySpawner();

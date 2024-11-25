@@ -28,9 +28,10 @@ add_executable(SFML
         States/EditorState.h
         Entities/Components/HitboxComponent.cpp
         Entities/Components/HitboxComponent.h
-        Tile/Tile.cpp
-        Tile/Tile.h
-        Tile/TileData.h
+        MapObject/Tile/Tile.cpp
+        MapObject/Tile/Tile.h
+        MapObject/Tile/TileData.h
+        MapObject/MapObjectData.h
         States/PauseMenuState.cpp
         States/PauseMenuState.h
         States/SettingsState.cpp
@@ -83,12 +84,12 @@ add_executable(SFML
         Entities/Enemies/Enemy.cpp
         Entities/Enemies/Enemy.h
         Entities/EntityDimensionData.h
-        Tile/EnemySpawner.cpp
-        Tile/EnemySpawner.h
+        MapObject/EnemySpawner/EnemySpawner.cpp
+        MapObject/EnemySpawner/EnemySpawner.h
         Helper/Json/Serializable.h
         Helper/Json/Struct/MapData.h
         enums/enemy_types.cpp
-        enums/tile_types.cpp
+        enums/map_objects.cpp
         enums/directions.cpp
         Entities/Enemies/GrimReaper.cpp
         Entities/Enemies/GrimReaper.h
@@ -96,9 +97,12 @@ add_executable(SFML
         Entities/Enemies/Thief.h
         enums/player_animations.cpp Items/Weapons/Weapon.cpp Items/Weapons/Weapon.h
         enums/player_actions.cpp
-        Tile/CoffeMachine.cpp
-        Tile/CoffeMachine.h
-        States/TextureSelectorManager.cpp)
+        MapObject/Element/CoffeMachine.cpp
+        MapObject/Element/CoffeMachine.h
+        States/TextureSelectorManager.cpp
+        MapObject/MapObject.cpp
+        MapObject/MapObject.h
+        MapObject/EnemySpawner/EnemySpawnerData.h)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/libs/SFML-2.6.1/lib/cmake/SFML)
@@ -116,7 +120,8 @@ add_custom_command(
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Fonts $<TARGET_FILE_DIR:SFML>/Fonts
         COMMAND ${CMAKE_COMMAND} -E remove_directory $<TARGET_FILE_DIR:SFML>/Resources/images
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources/images $<TARGET_FILE_DIR:SFML>/Resources/images
-        #        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources/map $<TARGET_FILE_DIR:SFML>/Resources/map
+        COMMAND ${CMAKE_COMMAND} -E remove_directory $<TARGET_FILE_DIR:SFML>/Resources/map
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources/map $<TARGET_FILE_DIR:SFML>/Resources/map
 )
 
 # Link the nlohmann json library
