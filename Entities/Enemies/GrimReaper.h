@@ -2,11 +2,11 @@
 
 #include "Enemy.h"
 
-class Wisp : public Enemy {
+class GrimReaper : public Enemy {
 public:
-    Wisp(float x, float y, sf::Texture &textureSheet);
+    GrimReaper(float x, float y, sf::Texture &textureSheet);
 
-    ~Wisp() override;
+    ~GrimReaper() override;
 
     void updateAnimation(const float &dt) override;
 

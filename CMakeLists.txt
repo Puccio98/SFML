@@ -90,8 +90,8 @@ add_executable(SFML
         enums/enemy_types.cpp
         enums/tile_types.cpp
         enums/directions.cpp
-        Entities/Enemies/Wisp.cpp
-        Entities/Enemies/Wisp.h
+        Entities/Enemies/GrimReaper.cpp
+        Entities/Enemies/GrimReaper.h
         Entities/Enemies/Thief.cpp
         Entities/Enemies/Thief.h
         enums/player_animations.cpp Items/Weapons/Weapon.cpp Items/Weapons/Weapon.h

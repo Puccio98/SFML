@@ -1,6 +1,6 @@
 #include "EnemySpawner.h"
 #include "../Entities/Enemies/Thief.h"
-#include "../Entities/Enemies/Wisp.h"
+#include "../Entities/Enemies/GrimReaper.h"
 
 
 EnemySpawner::~EnemySpawner() = default;
@@ -24,8 +24,8 @@ EnemySpawner::EnemySpawner(TileData tileData, sf::Texture &texture, sf::Font &fo
 void EnemySpawner::initTextures() {
     std::string enemy_texture_path;
     switch (type) {
-        case ENEMY_TYPES::WISP:
-            enemy_texture_path = "Resources/images/sprites/entities/enemies/grim_reaper/16x16 Grim Reaper.png";
+        case ENEMY_TYPES::GRIMREAPER:
+            enemy_texture_path = "Resources/images/sprites/entities/enemies/grim_reaper/grim_reaper_sheet_x2.png";
             break;
         case ENEMY_TYPES::THIEF:
             enemy_texture_path = "Resources/images/sprites/entities/enemies/thief/thief_sheet_x3.png";
@@ -53,10 +53,10 @@ void EnemySpawner::spawn(std::vector<Entity *> &entities) {
     if (this->counter < 1) {
         Enemy *enemy;
         switch (type) {
-            case ENEMY_TYPES::WISP:
-                enemy = new Wisp(this->tiledata.gridSize * this->tiledata.index_x,
+            case ENEMY_TYPES::GRIMREAPER:
+                enemy = new GrimReaper(this->tiledata.gridSize * this->tiledata.index_x,
                                  this->tiledata.gridSize * this->tiledata.index_y,
-                                 this->textures["ENEMY_SHEET"]);
+                                       this->textures["ENEMY_SHEET"]);
                 break;
             case ENEMY_TYPES::THIEF:
                 enemy = new Thief(this->tiledata.gridSize * this->tiledata.index_x,
@@ -76,7 +76,7 @@ void EnemySpawner::spawn(std::vector<Entity *> &entities) {
 std::string EnemySpawner::getEnemyName() {
     std::string enemyName;
     switch (this->type) {
-        case ENEMY_TYPES::WISP:
+        case ENEMY_TYPES::GRIMREAPER:
             enemyName = "wisp";
             break;
         case ENEMY_TYPES::THIEF:

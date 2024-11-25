@@ -8,6 +8,8 @@ private:
 
     // Create a static clock to track the time
     sf::Clock clock;
+protected:
+    void flipAnimation(std::optional<DIRECTIONS> dir);
 public:
     Enemy(float x, float y, sf::Texture &texture_sheet, std::pair<int, int> sprite_dimension,
           std::pair<int, int> hitbox_dimension);

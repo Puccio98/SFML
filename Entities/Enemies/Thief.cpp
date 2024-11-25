@@ -35,18 +35,6 @@ void Thief::updateAnimation(const float &dt) {
     animationComponent->play(animation, dt);
 }
 
-void Thief::flipAnimation(std::optional<DIRECTIONS> dir) {
-    if (dir == std::nullopt) { return; }
-    if (dir == DIRECTIONS::RIGHT) {
-        sprite.setOrigin(0.f, 0.f);
-        sprite.setScale(1.f, 1.f);
-    }
-    if (dir == DIRECTIONS::LEFT) {
-        sprite.setOrigin(this->getHitboxSize().x, 0.f);
-        sprite.setScale(-1.f, 1.f);
-    }
-}
-
 void Thief::initAnimationComponent() {
     this->animationComponent->addAnimation("IDLE_DOWN", 10.f, 0, 0, 1, 0, this->spriteDimension.first,
                                            this->spriteDimension.second);

@@ -62,3 +62,15 @@ void Enemy::initEnemyComponents(sf::Texture &texture) {
     this->createAttributeComponent();
     this->createSkillComponent();
 }
+
+void Enemy::flipAnimation(std::optional<DIRECTIONS> dir) {
+    if (dir == std::nullopt) { return; }
+    if (dir == DIRECTIONS::RIGHT) {
+        sprite.setOrigin(0.f, 0.f);
+        sprite.setScale(1.f, 1.f);
+    }
+    if (dir == DIRECTIONS::LEFT) {
+        sprite.setOrigin(this->getHitboxSize().x, 0.f);
+        sprite.setScale(-1.f, 1.f);
+    }
+}

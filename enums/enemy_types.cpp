@@ -1,4 +1,5 @@
 enum class ENEMY_TYPES {
-    WISP = 0,
-    THIEF = 1
+    GRIMREAPER = 0,
+    THIEF = 1,
+    WISP = 2
 };
