@@ -16,6 +16,23 @@ struct MapData : Serializable {
     // Mappa degli oggetti
     std::map<int, std::map<int, std::map<int, MapObject *>>> objects;
 
+    static MapObject *findMapObject(
+            const std::map<int, std::map<int, std::map<int, MapObject *>>> &objects,
+            int i, int j, int layerIndex) {
+        auto iIt = objects.find(i);
+        if (iIt != objects.end()) {
+            auto jIt = iIt->second.find(j);
+            if (jIt != iIt->second.end()) {
+                auto layerIt = jIt->second.find(layerIndex);
+                if (layerIt != jIt->second.end()) {
+                    return layerIt->second; // Return the MapObject* if found
+                }
+            }
+        }
+        return nullptr; // Return nullptr if not found
+    }
+
+
     // non serializza
     sf::Vector2f maxSizeWorld;
     sf::Texture tileTextureSheet;
@@ -74,24 +91,30 @@ struct MapData : Serializable {
         this->gridSizeF = static_cast<float>(this->gridSizeU);
         this->maxSizeWorld.x = static_cast<float>(this->maxSizeGrid.x * this->gridSizeU);
         this->maxSizeWorld.y = static_cast<float>(this->maxSizeGrid.y * this->gridSizeU);
-        // Clear existing tiles to avoid memory leaks
-        for (auto &row: this->tiles) {
+
+        this->load_tiles_from_json(j);
+        this->load_objects_from_json(j);
+    }
+
+    void load_tiles_from_json(const json &j) {// Clear existing tiles to avoid memory leaks
+        for (auto &row: tiles) {
             for (auto &column: row) {
                 for (auto &tile: column) {
                     delete tile;
                 }
             }
         }
-        this->tiles.clear();
+        tiles.clear();
+
 
         // Initialize tiles based on the grid size
-        this->tiles.resize(this->maxSizeGrid.x);
-        for (auto &row: this->tiles) {
-            row.resize(this->maxSizeGrid.y);
+        tiles.resize(maxSizeGrid.x);
+        for (auto &row: tiles) {
+            row.resize(maxSizeGrid.y);
         }
 
-        if (!this->tileTextureSheet.loadFromFile(this->texturePath)) {
-            std::cout << "ERROR::TILEMAP::FAILED TO LOAD TILETEXTURESHEET::FILENAME:" << this->texturePath << "\n";
+        if (!tileTextureSheet.loadFromFile(texturePath)) {
+            std::cout << "ERROR::TILEMAP::FAILED TO LOAD TILETEXTURESHEET::FILENAME:" << texturePath << "\n";
         }
 
         // Populate tiles from JSON
@@ -103,20 +126,50 @@ struct MapData : Serializable {
             int x = tileData.index_x;
             int y = tileData.index_y;
             int z = tileData.index_z;
-            tileData.gridSize = this->gridSizeF;
+            tileData.gridSize = gridSizeF;
 
             // Ensure the vector is large enough
-            if (x >= this->tiles.size() || y >= this->tiles[x].size()) {
+            if (x >= tiles.size() || y >= tiles[x].size()) {
                 continue; // Handle out-of-bounds safely
             }
 
-            if (z >= this->tiles[x][y].size()) {
-                this->tiles[x][y].resize(z + 1);
+            if (z >= tiles[x][y].size()) {
+                tiles[x][y].resize(z + 1);
             }
 
-            this->tiles[x][y][z] = GetTile(tileData);
+            tiles[x][y][z] = GetTile(tileData);
         }
     };
+
+
+    void load_objects_from_json(const json &j) {
+        for (auto &[key1, innerMap1]: objects) {
+            for (auto &[key2, innerMap2]: innerMap1) {
+                for (auto &[key3, objPtr]: innerMap2) {
+                    delete objPtr;
+                }
+                innerMap2.clear();
+            }
+            innerMap1.clear();
+        }
+        objects.clear();
+
+        // Populate objects from JSON
+        const auto &json_objects = j.at("objects");
+        for (const auto &object_json: json_objects) {
+            MAP_OBJECTS type = object_json.at("type");
+            // check is not null
+
+            MapObjectData *mpData = getMapObjectData(type);
+            mpData->from_json(object_json);
+            int x = mpData->index_x;
+            int y = mpData->index_y;
+            int z = mpData->index_z;
+            mpData->gridSize = gridSizeF;
+
+            this->objects[x][y][z] = GetObject(mpData);
+        }
+    }
 
     virtual ~MapData() {
         for (auto &row: this->tiles) {
@@ -165,6 +218,19 @@ private:
                                                             sf::Vector2(pObject->gridSize, pObject->gridSize)
                                         ),
                                         ptr->enemy_type, 0, 0, 0);
+            }
+            case MAP_OBJECTS::ELEMENT:
+                break;
+            default:
+                throw ("ERROR::MAPDATA COULD NOT DETERMINE OBJECT TYPE");
+        };
+        return nullptr;
+    }
+
+    MapObjectData *getMapObjectData(MAP_OBJECTS objects) {
+        switch (objects) {
+            case MAP_OBJECTS::SPAWNER: {
+                return new EnemySpawnerData();
             }
             case MAP_OBJECTS::ELEMENT:
                 break;

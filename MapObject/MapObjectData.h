@@ -17,6 +17,16 @@ struct MapObjectData : Serializable {
     std::vector<sf::Vector2f> texturePositions;
     std::vector<sf::RectangleShape> sprites;
 
+    explicit MapObjectData(MAP_OBJECTS type) : type(type) {
+        this->index_x = 0;
+        this->index_y = 0;
+        this->index_z = 0;
+        this->gridSize = 0;
+
+        this->texturePositions = std::vector<sf::Vector2f>();
+        this->sprites = std::vector<sf::RectangleShape>();
+    }
+
     json to_json() const override {
         json j;
         // Posizione tile nella mappa

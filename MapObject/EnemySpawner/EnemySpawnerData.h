@@ -5,7 +5,9 @@
 struct EnemySpawnerData : MapObjectData {
     ENEMY_TYPES enemy_type;
 
-    explicit EnemySpawnerData(ENEMY_TYPES enemyType) : enemy_type(enemyType) {}
+    EnemySpawnerData() : MapObjectData(MAP_OBJECTS::SPAWNER) {}
+
+    EnemySpawnerData(ENEMY_TYPES enemy_type) : MapObjectData(MAP_OBJECTS::SPAWNER), enemy_type(enemy_type) {}
 
     json to_json() const override {
         json j = MapObjectData::to_json();

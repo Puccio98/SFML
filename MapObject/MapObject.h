@@ -11,10 +11,15 @@ protected:
     MapObjectData *data;
     sf::RectangleShape defaultSprite;
     bool hud = false;
+    sf::Text layerText;
+
+    void initLayerText(sf::Font &font);
 
     virtual void initShapes(sf::Texture &textureSheet);
 
     virtual sf::Color setDefaultColor(int value, int minIntensity);
+
+    virtual std::string getLayerTextString();
 
 public:
     MapObjectData *getData() const;

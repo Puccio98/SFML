@@ -18,6 +18,9 @@ private:
 
     std::string getEnemyName();
 
+protected:
+    virtual std::string getLayerTextString() override;
+
 public:
     EnemySpawner(EnemySpawnerData *enemySpawnerData, sf::Texture &texture, sf::Font &font, bool hud,
                  EntityDimensionData edd, ENEMY_TYPES type, int amount, int timeToSpawn, float maxDistance);
@@ -36,4 +39,6 @@ public:
     void clear();
 
     void initTextures();
+
+    void initEnemySpawner(sf::Font &font);
 };

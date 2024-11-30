@@ -20,12 +20,7 @@ private:
 
     void initShapes(sf::Texture &textureSheet) override;
 
-    void initLayerText(sf::Font &font);
-
     void setCollisionOutline(sf::RectangleShape &texture);
-
-protected:
-    sf::Text layerText;
 
 public:
 

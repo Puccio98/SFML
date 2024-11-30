@@ -74,16 +74,6 @@ void Tile::setCollisionOutline(sf::RectangleShape &texture) {
     }
 }
 
-void Tile::initLayerText(sf::Font &font) {
-    this->layerText.setFont(font);
-    this->layerText.setString(std::to_string(this->data->index_z));
-    this->layerText.setFillColor(sf::Color::White);
-    this->layerText.setCharacterSize(12);
-    this->layerText.setOutlineColor(sf::Color::Black);
-    this->layerText.setOutlineThickness(-1.f);
-    this->layerText.setPosition(get_x() + 2, get_y() + 2);
-}
-
 const TileData *Tile::getTiledata() const {
     return dynamic_cast<TileData *>(this->data);
 }

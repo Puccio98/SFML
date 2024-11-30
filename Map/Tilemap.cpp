@@ -32,8 +32,16 @@ void Tilemap::update(sf::RenderTarget &target, EntityDimensionData &entity, floa
 
     for (int i = area.left; i <= end_x && i < this->mapData.tiles.size(); ++i) {
         for (int j = area.top; j <= end_y && j < this->mapData.tiles[i].size(); ++j) {
-            for (auto &k: this->mapData.tiles[i][j]) {
-                k->update(dt, entities);
+            for (int k = 0; k < this->mapData.tiles[i][j].size(); k++) {
+                if (this->mapData.tiles[i][j][k] != nullptr) {
+                    this->mapData.tiles[i][j][k]->update(dt, entities);
+
+                    std::map<int, std::map<int, std::map<int, MapObject *>>> objects = this->getMapObject();
+                    if (MapObject *obj = MapData::findMapObject(objects, i, j, k)) {
+                        obj->update(dt, entities);
+                    }
+                }
+
             }
         }
     }
@@ -50,6 +58,11 @@ void Tilemap::renderLayer(sf::RenderTarget &target, EntityDimensionData &entity,
             if (layers > layerIndex) {
                 Tile *z = this->mapData.tiles[i][j][layerIndex];
                 z->render(target);
+
+                std::map<int, std::map<int, std::map<int, MapObject *>>> objects = this->getMapObject();
+                if (MapObject *obj = MapData::findMapObject(objects, i, j, layerIndex)) {
+                    obj->render(target);
+                }
             }
         }
     }
@@ -97,9 +110,14 @@ void Tilemap::render(sf::RenderTarget &target) {
 }
 
 void Tilemap::renderTileLayer(int i, int j, sf::RenderTarget &target) {
-    for (auto z: this->mapData.tiles[i][j]) {
-        if (z != nullptr) {
-            z->render(target);
+    for (int z = 0; z < this->mapData.tiles[i][j].size(); z++) {
+        if (this->mapData.tiles[i][j][z] != nullptr) {
+            this->mapData.tiles[i][j][z]->render(target);
+
+            std::map<int, std::map<int, std::map<int, MapObject *>>> objects = this->getMapObject();
+            if (MapObject *obj = MapData::findMapObject(objects, i, j, z)) {
+                obj->render(target);
+            }
         }
     }
 };
