@@ -295,7 +295,6 @@ void EditorState::addTile() {
     tileData.index_y = getPosGrid(VIEW_TYPES::VIEW, this->view).y;
     tileData.index_z = tileMap->getMap()[tileData.index_x][tileData.index_y].size();
     tileData.behaviours = tileTypes; // Copia contenuto del vettore :D
-    tileData.type = MAP_OBJECTS::TILE;
 
     if (!positionMap[{tileData.index_x, tileData.index_y}]) {
         tileMap->addTile(tileData);
@@ -328,7 +327,7 @@ void EditorState::addMapObject(MAP_OBJECTS objectType) {
             break;
         case MAP_OBJECTS::SPAWNER: {
             sf::Vector2i enemyGridPos = this->enemyTextureSelector->getSelectedGridPosition();
-            ENEMY_TYPES enemy = enemyGridPos.x == 0 ? ENEMY_TYPES::WISP : ENEMY_TYPES::THIEF;
+            ENEMY_TYPES enemy = enemyGridPos.x == 0 ? ENEMY_TYPES::GRIMREAPER : ENEMY_TYPES::THIEF;
             moData = new EnemySpawnerData(enemy);
             break;
         }
@@ -339,7 +338,6 @@ void EditorState::addMapObject(MAP_OBJECTS objectType) {
     moData->index_x = index_x;
     moData->index_y = index_y;
     moData->index_z = index_z;
-    moData->type = objectType;
 
     tileMap->addMapObject(moData);
 }

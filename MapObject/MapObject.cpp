@@ -21,6 +21,16 @@ void MapObject::initShapes(sf::Texture &textureSheet) {
     }
 }
 
+void MapObject::initLayerText(sf::Font &font) {
+    this->layerText.setFont(font);
+    this->layerText.setString(this->getLayerTextString());
+    this->layerText.setFillColor(sf::Color::White);
+    this->layerText.setCharacterSize(12);
+    this->layerText.setOutlineColor(sf::Color::Black);
+    this->layerText.setOutlineThickness(-1.f);
+    this->layerText.setPosition(get_x() + 2, get_y() + 2);
+}
+
 float MapObject::get_x() {
     return this->data->index_x * this->data->gridSize;
 }
@@ -80,5 +90,9 @@ void MapObject::render(sf::RenderTarget &target) {
     for (const auto &sprite: this->data->sprites) {
         target.draw(sprite);
     }
+}
+
+std::string MapObject::getLayerTextString() {
+    return std::to_string(this->data->index_z);
 }
 

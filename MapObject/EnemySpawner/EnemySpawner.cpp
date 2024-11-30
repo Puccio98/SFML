@@ -3,7 +3,6 @@
 #include "../../Entities/Enemies/GrimReaper.h"
 #include "EnemySpawnerData.h"
 
-
 EnemySpawner::~EnemySpawner() = default;
 
 EnemySpawner::EnemySpawner(EnemySpawnerData *enemySpawnerData, sf::Texture &texture, sf::Font &font, bool hud,
@@ -11,14 +10,13 @@ EnemySpawner::EnemySpawner(EnemySpawnerData *enemySpawnerData, sf::Texture &text
         : MapObject(enemySpawnerData, hud), edd(edd), type(type), counter(amount),
           maxDistance(maxDistance),
           timeToSpawn(timeToSpawn) {
-    this->initTextures();
+    this->initEnemySpawner(font);
 }
 
 EnemySpawner::EnemySpawner(EnemySpawnerData *enemySpawnerData, sf::Texture &texture, sf::Font &font,
                            EntityDimensionData edd, ENEMY_TYPES type, int amount, int timeToSpawn, float maxDistance)
         : EnemySpawner(enemySpawnerData, texture, font, false, edd, type, amount, timeToSpawn, maxDistance) {
 }
-
 
 void EnemySpawner::initTextures() {
     std::string enemy_texture_path;
@@ -39,8 +37,19 @@ void EnemySpawner::initTextures() {
     }
 }
 
+void EnemySpawner::initEnemySpawner(sf::Font &font) {
+    this->initTextures();
+    this->initLayerText(font);
+    //this->layerText.setString(this->layerText.getString() + "\n" + this->getEnemyName());
+    this->layerText.setFillColor(sf::Color(200, 200, 30));
+}
+
 void EnemySpawner::render(sf::RenderTarget &target) {
     MapObject::render(target);
+
+    if (this->hud) {
+        target.draw(this->layerText);
+    }
 }
 
 void EnemySpawner::update(float dt, std::vector<Entity *> &entities) {
@@ -54,8 +63,8 @@ void EnemySpawner::spawn(std::vector<Entity *> &entities) {
         switch (type) {
             case ENEMY_TYPES::GRIMREAPER:
                 enemy = new GrimReaper(this->data->gridSize * this->data->index_x,
-                                 this->data->gridSize * this->data->index_y,
-                                 this->textures["ENEMY_SHEET"]);
+                                       this->data->gridSize * this->data->index_y,
+                                       this->textures["ENEMY_SHEET"]);
                 break;
             case ENEMY_TYPES::THIEF:
                 enemy = new Thief(this->data->gridSize * this->data->index_x,
@@ -76,7 +85,7 @@ std::string EnemySpawner::getEnemyName() {
     std::string enemyName;
     switch (this->type) {
         case ENEMY_TYPES::GRIMREAPER:
-            enemyName = "wisp";
+            enemyName = "grim_reaper";
             break;
         case ENEMY_TYPES::THIEF:
             enemyName = "thief";
@@ -87,4 +96,8 @@ std::string EnemySpawner::getEnemyName() {
 
 void EnemySpawner::clear() {
 
+}
+
+std::string EnemySpawner::getLayerTextString() {
+    return getEnemyName();
 }

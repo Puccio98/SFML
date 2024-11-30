@@ -8,6 +8,10 @@
 struct TileData : public MapObjectData {
     std::vector<TILE_BEHAVIOURS> behaviours;
 
+    explicit TileData() : MapObjectData(MAP_OBJECTS::TILE) {
+        this->behaviours = std::vector<TILE_BEHAVIOURS>();
+    }
+
     json to_json() const override {
         json j = MapObjectData::to_json();
 
